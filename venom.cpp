@@ -1,11 +1,20 @@
+#include <iostream>
+#include <fstream>
 #include "lexer.h"
 
+using namespace std;
+
+void lexer(char *file_name);
+
+Token *head = NULL;
+int main() {
+
+	
+	lexer("new.vnm");
 
 
-
-
-
-
+	return 0;
+}
 
 void lexer(char *file_name) {
 	char data;
@@ -17,14 +26,14 @@ void lexer(char *file_name) {
 		
 
 		if(data == '{') {
-			tk *new_tok = new tk;
+			Token *new_tok = new Token;
 			new_tok->TYPE  = "RBRACE";
 			new_tok->VALUE = '{';
 			new_tok->NEXT  = head;
 			head           = new_tok;
 		}
 		else if(data == 'a') {
-			tk *new_tok = new tk;
+			Token *new_tok = new Token;
 			new_tok->TYPE  = "CHAR";
 			new_tok->VALUE = 'a';
 			new_tok->NEXT  = head;
@@ -33,6 +42,6 @@ void lexer(char *file_name) {
 	}
 	in_file.close();
 
-	cout << head << endl;
+	cout << head->VALUE << head->NEXT->VALUE << endl;
 
 }

@@ -1,10 +1,11 @@
 #pragma once 
 
-struct STRLIST {
-	int  len;
-	char string[len];
-	STRLIST *next;
+struct Token {
+	char  *TYPE;
+	char   VALUE;
+	Token *NEXT;
 };
 
 
-void lexer(char *file_name);
+
+
