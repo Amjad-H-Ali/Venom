@@ -3,9 +3,13 @@
 struct Token {
 	char  *TYPE;
 	char   VALUE;
-	Token *NEXT;
+	Token *NEXT = NULL;
 };
 
+struct Statement {
+	Token      *VALUE = NULL;
+	Statement  *NEXT  = NULL;
+};
 
 
 

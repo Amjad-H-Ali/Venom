@@ -1,1 +1,7 @@
-Hello "World" Bye! {abc}
+str = "Hello";
+
+do (x < 3) {
+	while(v>10) {
+
+	}
+};
