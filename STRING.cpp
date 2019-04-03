@@ -4,6 +4,9 @@ STRING::STRING(char *str, int len):Token(STR) {
 	this->set_len(len);
 	this->set_value(str);
 };
+STRING::~STRING() {
+	delete this->value;
+};
 int STRING::get_len() const {
 	return this->len;
 };

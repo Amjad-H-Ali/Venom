@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "STRING.h"
+#include "VAR.h"
 
 
 using namespace std;
@@ -15,10 +16,19 @@ int main() {
 
 	STRING str((char *)"Hello", 5);
 
+	VAR var((char *)"foo", 3);
+
+	var.set_tok_value(&str);
+
+	char *str_val = (var.get_tok_value())->get_value();
+
+	for(int i =0, n = (var.get_tok_value())->get_len(); i < n; i ++)
+		cout << str_val[i]<< endl;
+
 	for(int i = 0; i < str.get_len(); i ++)
 		cout << *(str.get_value() + i);
 	
-	if(str.get_type() == VAR )
+	if(str.get_type() == VARIABLE )
 		cout << '\n' << "Yes!"<< '\n';
 	else
 		cout << '\n' << "No!"<< '\n';

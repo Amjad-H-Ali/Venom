@@ -1,7 +1,7 @@
 #pragma once
 
 enum Type {
-		VAR,
+		VARIABLE,
 		EQ,
 		STR,
 };
@@ -14,6 +14,8 @@ protected:
 public:
 	Type get_type() const;
 	void set_type(Type type);
+	virtual char *get_value() const = 0;
+	virtual int  get_len() const = 0;
 };
 // struct STRING {
 // 	int LEN;
