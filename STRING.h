@@ -6,10 +6,10 @@ private:
 	int  len;
 	char *value;
 public:
-	STRING(char *str, int len);
+	STRING(char *str);
 	~STRING();
 	int get_len() const;
-	void set_len(int len);
+	void set_len(char *str);
 	char *get_value() const;
 	void set_value(char *str);
 };

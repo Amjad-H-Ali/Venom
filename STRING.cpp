@@ -1,7 +1,7 @@
 #include "STRING.h"
 
-STRING::STRING(char *str, int len):Token(STR) {
-	this->set_len(len);
+STRING::STRING(char *str):Token(STR) {
+	this->set_len(str);
 	this->set_value(str);
 };
 STRING::~STRING() {
@@ -10,8 +10,12 @@ STRING::~STRING() {
 int STRING::get_len() const {
 	return this->len;
 };
-void STRING::set_len(int len) {
-	this->len = len;
+void STRING::set_len(char *str) {
+	int count = 0;
+	while(str[count] != '"') {
+		count ++;
+	};
+	this->len = count;
 };
 char *STRING::get_value() const {
 

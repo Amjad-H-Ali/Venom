@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include "STRING.h"
 #include "VAR.h"
 
@@ -13,25 +14,26 @@ using namespace std;
 
 int main() {
 
+	ifstream in("new.vnm");
+	string s;
+	STRING *ptr;
 
-	STRING str((char *)"Hello", 5);
+	while(in >> s){
+		if(s[0] == '"') {
+			STRING str(&s[1]);
+			
+			ptr = &str;
+		}
+	};
 
-	VAR var((char *)"foo", 3);
+	for(int i = 0; ptr->get_value()[i]; i ++)
+		cout << ptr->get_value()[i];
+	cout << endl
+		<< ptr->get_len() << endl;
 
-	var.set_tok_value(&str);
 
-	char *str_val = (var.get_tok_value())->get_value();
-
-	for(int i =0, n = (var.get_tok_value())->get_len(); i < n; i ++)
-		cout << str_val[i]<< endl;
-
-	for(int i = 0; i < str.get_len(); i ++)
-		cout << *(str.get_value() + i);
 	
-	if(str.get_type() == VARIABLE )
-		cout << '\n' << "Yes!"<< '\n';
-	else
-		cout << '\n' << "No!"<< '\n';
+	
 	return 0;
 }
 
