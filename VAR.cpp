@@ -1,7 +1,12 @@
 #include "VAR.h"
+#include <iostream>
 
-VAR::VAR(char *name, int len):Token(VARIABLE) {
-	this->set_name_len(len);
+using namespace std;
+
+
+
+VAR::VAR(char *name):Token(VARIABLE) {
+	this->set_name_len(name);
 	this->set_name(name);
 };
 VAR::~VAR() {
@@ -19,8 +24,11 @@ void VAR::set_name(char *name) {
 int	VAR::get_len() const {
 	return this->len;
 };
-void VAR::set_name_len(int len) {
-	this->len = len;
+void VAR::set_name_len(char *name) {
+	int count = 0;
+	while(name[count] != '\0')
+		count ++;
+	this->len = count;
 };
 Token *VAR::get_tok_value() const {
 	return this->value;

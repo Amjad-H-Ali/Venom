@@ -8,12 +8,12 @@ private:
 	char  *name;
 	Token *value;
 public:
-	VAR(char *name, int len);
+	VAR(char *name);
 	~VAR();
 	char  *get_value() const;
 	void  set_name(char *name);
 	int   get_len() const;
-	void  set_name_len(int len);
+	void  set_name_len(char *name);
 	Token *get_tok_value() const;
 	void  set_tok_value(Token *tok_ptr);
 

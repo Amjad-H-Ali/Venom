@@ -12,9 +12,9 @@ int STRING::get_len() const {
 };
 void STRING::set_len(char *str) {
 	int count = 0;
-	while(str[count] != '"') {
+	while(str[count] != '"')
 		count ++;
-	};
+	
 	this->len = count;
 };
 char *STRING::get_value() const {

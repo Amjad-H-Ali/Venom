@@ -16,22 +16,50 @@ int main() {
 
 	ifstream in("new.vnm");
 	string s;
-	STRING *ptr;
+	STRING *ptr1;
+	VAR    *ptr2;
+
 
 	while(in >> s){
 		if(s[0] == '"') {
-			STRING str(&s[1]);
+						//Address to (H)ello
 			
-			ptr = &str;
+			ptr1 = new STRING(&s[1]);
+
+			//0x7ffeeb3a02f8 -- That's OK
+			cout << ptr1 << endl;
+		}
+		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
+					//Address to (f)oo
+
+			ptr2 = new VAR(&s[0]);
+
+			// 0x7ffeeb3a02d8 -- This is OK.
+			cout << ptr2 << endl;
+
+			// Value stored at ptr2 -- Prints foo -- That's OK.
+			for(int i = 0; ptr2->get_value()[i]; i ++)
+				cout << ptr2->get_value()[i];
+			cout << endl;
 		}
 	};
 
-	for(int i = 0; ptr->get_value()[i]; i ++)
-		cout << ptr->get_value()[i];
-	cout << endl
-		<< ptr->get_len() << endl;
+	// 0x7ffeeb3a02d8 -- That's OK
+	cout << ptr2 << endl;
 
 
+	// Printing Value stored at ptr2 -- Hello -- This is NOT OK!
+	for(int i = 0; ptr2->get_value()[i]; i ++)
+		cout << ptr2->get_value()[i];
+	cout << endl;
+
+	// Printing Value stored at ptr1 -- That's OK.
+	for(int i = 0; ptr1->get_value()[i]; i ++)
+		cout << ptr1->get_value()[i];
+	cout << endl;
+
+	delete ptr1
+	delete ptr2;
 	
 	
 	return 0;
