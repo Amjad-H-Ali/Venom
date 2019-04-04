@@ -22,8 +22,8 @@ char *STRING::get_value() const {
 	return this->value;
 };
 void STRING::set_value(char *str) {
-	this->value = new char[this->len + 1];
+	this->value = new char[this->len+1];
 	for(int i = 0; i < this->len; i ++) 
 		this->value[i] = str[i];
-	this->value[this->len + 1] = '\0';
+	this->value[this->len] = '\0';
 };	

@@ -19,7 +19,7 @@ void VAR::set_name(char *name) {
 	this->name = new char[this->len+1];
 	for(int i = 0; i < len; i ++)
 		this->name[i] = name[i];
-	this->name[this->len+1] = '\0';
+	this->name[this->len] = '\0';
 };
 int	VAR::get_len() const {
 	return this->len;

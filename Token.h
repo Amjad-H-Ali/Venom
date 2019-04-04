@@ -2,7 +2,7 @@
 
 enum Type {
 		VARIABLE,
-		EQ,
+		OPER,
 		STR,
 };
 

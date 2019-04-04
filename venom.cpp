@@ -3,6 +3,7 @@
 #include <iomanip>
 #include "STRING.h"
 #include "VAR.h"
+#include "OPERATOR.h"
 
 
 using namespace std;
@@ -58,7 +59,7 @@ int main() {
 		cout << ptr1->get_value()[i];
 	cout << endl;
 
-	delete ptr1
+	delete ptr1;
 	delete ptr2;
 	
 	
