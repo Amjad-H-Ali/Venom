@@ -12,4 +12,6 @@ public:
 	void set_len(char *str);
 	char *get_value() const;
 	void set_value(char *str);
+	Token *next();
+	void set_next(Token *tok_ptr);
 };

@@ -38,3 +38,13 @@ Token *OPERATOR::get_right() const {
 void OPERATOR::set_right(Token *tok_ptr) {
 	this->right = tok_ptr;
 };
+
+Token *OPERATOR::next() {
+	
+	
+	return this->Next;
+
+};
+void OPERATOR::set_next(Token *tok_ptr){
+	this->Next = tok_ptr;
+};

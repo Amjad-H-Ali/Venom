@@ -36,5 +36,15 @@ Token *VAR::get_tok_value() const {
 void VAR::set_tok_value(Token *tok_ptr) {
 	this->value = tok_ptr;
 };
+Token *VAR::next() {
+	
+	
+	return this->Next;
+
+};
+void VAR::set_next(Token *tok_ptr){
+	this->Next = tok_ptr;
+};
+
 
 

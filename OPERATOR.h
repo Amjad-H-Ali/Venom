@@ -17,4 +17,6 @@ public:
 	void set_left(Token *tok_ptr);
 	Token *get_right() const;
 	void set_right(Token *tok_ptr);
+	Token *next();
+	void set_next(Token *tok_ptr);
 };

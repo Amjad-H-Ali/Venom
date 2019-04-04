@@ -27,3 +27,14 @@ void STRING::set_value(char *str) {
 		this->value[i] = str[i];
 	this->value[this->len] = '\0';
 };	
+
+Token *STRING::next() {
+	
+	
+	return this->Next;
+
+};
+
+void STRING::set_next(Token *tok_ptr){
+	this->Next = tok_ptr;
+};
