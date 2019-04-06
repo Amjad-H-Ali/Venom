@@ -43,8 +43,10 @@ void lexer(char *file_name) {
 	for(Stmnt *ptr = stmnt_node; ptr != NULL; ptr = stmnt_node->next) {
 		for(Token *ptr2 = ptr->value; ptr2 != NULL; ptr2 = ptr2->next()) {
 			// cout << ptr2->get_value() << endl;
-			if(ptr2->get_type() == OPER)
+			if(ptr2->get_type() == OPER) {
 				cout << ptr2->get_left()->get_value() << endl;
+				cout << ptr2->get_right()->get_value() << endl;
+			}
 			// 	eq_count ++;
 			// else if(ptr2->get_type() == VARIABLE)
 			// 	var_count++;
@@ -63,10 +65,15 @@ void parser(Token *node) {
 
 	Token *next = node->next();
 
+
 	parser(next);
+
+	if(next && next->get_type()== OPER)
+		next->set_right(node);
 
 	if(node->get_type() == OPER)
 		node->set_left(next);
+
 
 };
 

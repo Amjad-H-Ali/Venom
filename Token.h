@@ -20,6 +20,8 @@ public:
 	virtual void set_next(Token *tok_ptr) = 0;
 	virtual Token *get_left() const {};
 	virtual void set_left(Token *tok_ptr) {};
+	virtual void set_right(Token *tok_ptr) {};
+	virtual Token *get_right() const {};
 };
 // struct STRING {
 // 	int LEN;

@@ -1,6 +1,9 @@
 foo = "Hello";
 
-bar = "No";
+bar = "World";
+
+name = "MJ";
+
 
 
 
