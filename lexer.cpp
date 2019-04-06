@@ -68,11 +68,11 @@ void parser(Token *node) {
 
 	parser(next);
 
-	if(next && next->get_type()== OPER)
+	if(next && next->get_type()== OPER) {
 		next->set_right(node);
+		next->set_left(next->next());
+	}
 
-	if(node->get_type() == OPER)
-		node->set_left(next);
 
 
 };
