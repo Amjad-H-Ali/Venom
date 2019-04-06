@@ -22,6 +22,8 @@ public:
 	virtual void set_left(Token *tok_ptr) {};
 	virtual void set_right(Token *tok_ptr) {};
 	virtual Token *get_right() const {};
+	virtual Token *get_tok_value() const {};
+	virtual void  set_tok_value(Token *tok_ptr){};
 };
 // struct STRING {
 // 	int LEN;
