@@ -69,8 +69,10 @@ void parser(Token *node) {
 	parser(next);
 
 	if(next && next->get_type()== OPER) {
+		Token *var_ptr = next->next();
 		next->set_right(node);
-		next->set_left(next->next());
+		next->set_left(var_ptr);
+		var_ptr->set_tok_value(node);
 	}
 
 
