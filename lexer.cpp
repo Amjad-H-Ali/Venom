@@ -3,6 +3,7 @@
 
 Stmnt *stmnt_node = new Stmnt;
 
+void parser(Token *node);
 
 void lexer(char *file_name) {
 	stmnt_node->value = NULL;
@@ -34,20 +35,45 @@ void lexer(char *file_name) {
 		}
 	};
 
-	int eq_count = 0,
-		str_count = 0,
-		var_count = 0;
+	parser(stmnt_node->value);
+
+	// int eq_count = 0,
+	// 	str_count = 0,
+	// 	var_count = 0;
 	for(Stmnt *ptr = stmnt_node; ptr != NULL; ptr = stmnt_node->next) {
 		for(Token *ptr2 = ptr->value; ptr2 != NULL; ptr2 = ptr2->next()) {
-			cout << ptr2->get_value() << endl;
+			// cout << ptr2->get_value() << endl;
 			if(ptr2->get_type() == OPER)
-
-				eq_count ++;
-			else if(ptr2->get_type() == VARIABLE)
-				var_count++;
-			else if(ptr2->get_type()== STR)
-				str_count++;
+				cout << ptr2->get_left()->get_value() << endl;
+			// 	eq_count ++;
+			// else if(ptr2->get_type() == VARIABLE)
+			// 	var_count++;
+			// else if(ptr2->get_type()== STR)
+			// 	str_count++;
 		}
 	}
-	cout << "EQ: " << eq_count << " STR: " << str_count << " VAR: " << var_count << endl;
+	// cout << "EQ: " << eq_count << " STR: " << str_count << " VAR: " << var_count << endl;
 };
+
+
+void parser(Token *node) {
+
+	if(!node)
+		return;
+
+	Token *next = node->next();
+
+	parser(next);
+
+	if(node->get_type() == OPER)
+		node->set_left(next);
+
+};
+
+
+
+
+
+
+
+

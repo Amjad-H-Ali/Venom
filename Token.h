@@ -17,7 +17,9 @@ public:
 	virtual char *get_value() const = 0;
 	virtual int  get_len() const = 0;
 	virtual Token *next() = 0;
-	virtual void set_next(Token *tok_ptr)=0;
+	virtual void set_next(Token *tok_ptr) = 0;
+	virtual Token *get_left() const {};
+	virtual void set_left(Token *tok_ptr) {};
 };
 // struct STRING {
 // 	int LEN;
