@@ -1,7 +1,5 @@
 #include "VAR.h"
-#include <iostream>
 
-using namespace std;
 
 
 

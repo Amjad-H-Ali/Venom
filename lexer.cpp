@@ -1,4 +1,9 @@
+#include <iostream>
+#include <fstream>
 #include "lexer.h"
+
+
+using namespace std;
 
 
 Stmnt *stmnt_node = new Stmnt;
@@ -80,7 +85,6 @@ void parser(Token *node) {
 		delete next;
 		// next->set_right(node);
 		// next->set_left(var_ptr);
-		
 	}
 
 

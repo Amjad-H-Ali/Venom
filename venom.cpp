@@ -1,9 +1,9 @@
 #include <iostream>
-#include <iomanip>
-#include "STRING.h"
+#include <string.h>
+#include <fstream>
 #include "lexer.h"
 
-
+using namespace std;
 // void lexer(char *file_name);
 
 // Statement *stmnts = new Statement;
