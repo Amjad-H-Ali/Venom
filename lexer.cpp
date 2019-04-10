@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "lexer.h"
+#include "Definitions.h"
 
 
 using namespace std;
@@ -28,7 +29,13 @@ void lexer(char *file_name) {
 
 		}
 		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
-			new_tok_node = new VAR(&s[0]);
+			Token *var_exists;
+			//TODO
+			if(var_exists = is_defined(&s[0])) 
+				new_tok_node = var_exists;
+			else
+				new_tok_node = new VAR(&s[0]);
+
 			new_tok_node->set_next(stmnt_node->value);
 			stmnt_node->value = new_tok_node;
 
@@ -88,6 +95,7 @@ void parser(Token *node) {
 		// next->set_right(node);
 		// next->set_left(var_ptr);
 	}
+
 
 
 
