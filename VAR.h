@@ -2,6 +2,7 @@
 #include "Token.h"
 
 
+
 class VAR: public Token {
 private:
 	int   len;

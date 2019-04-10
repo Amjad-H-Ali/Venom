@@ -1,9 +1,11 @@
 #pragma once
 
+
 enum Type {
 		VARIABLE,
 		OPER,
 		STR,
+		WRITE
 };
 
 class Token {
@@ -11,7 +13,9 @@ protected:
 	Type type;
 	Token *Next;
 	Token(Type type);
+	Token(){};
 public:
+	virtual ~Token(){};
 	Type get_type() const;
 	void set_type(Type type);
 	virtual char *get_value() const = 0;

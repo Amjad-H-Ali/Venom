@@ -1,9 +1,13 @@
 #include "VAR.h"
+#include <string.h>
 
 
+VAR::VAR(char *name){
+	if(strcmp(name, "write") == 0) 
+		set_type(WRITE);
+	else
+		this->set_type(VARIABLE);
 
-
-VAR::VAR(char *name):Token(VARIABLE) {
 	this->set_name_len(name);
 	this->set_name(name);
 };

@@ -78,6 +78,8 @@ void parser(Token *node) {
 
 	parser(next);
 
+	// If next node equal operator, set this node to variable on the other side of the equal.
+	// Then this node should point at variable and now safely delete equal operator from LL.
 	if(next && next->get_type()== OPER) {
 		Token *var_ptr = next->next();
 		var_ptr->set_tok_value(node);
