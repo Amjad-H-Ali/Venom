@@ -2,6 +2,10 @@ message = "Hello!"
 
 write message
 
+myName = "Amjad"
+
+write myName
+
 
 
 

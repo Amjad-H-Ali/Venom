@@ -2,6 +2,7 @@
 #include <fstream>
 #include "lexer.h"
 #include "Definitions.h"
+// #include <string>
 
 
 using namespace std;
@@ -9,9 +10,12 @@ using namespace std;
 
 Stmnt *stmnt_node = new Stmnt;
 
+
 void parser(Token *node);
 
 void lexer(char *file_name) {
+	cout << "Size: " << sizeof(Stmnt) << endl;
+
 	stmnt_node->value = NULL;
 	stmnt_node->next = NULL;
 
@@ -24,21 +28,24 @@ void lexer(char *file_name) {
 		
 		if(s[0] == '"') {
 			new_tok_node = new STRING(&s[1]);
-			new_tok_node->set_next(stmnt_node->value);
-			stmnt_node->value = new_tok_node;
+			// new_tok_node->set_next(stmnt_node->value);
+			// stmnt_node->value = new_tok_node;
 
 		}
 		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
 			new_tok_node = new VAR(&s[0]);
-			new_tok_node->set_next(stmnt_node->value);
-			stmnt_node->value = new_tok_node;
+			// new_tok_node->set_next(stmnt_node->value);
+			// stmnt_node->value = new_tok_node;
 
 		}
 		else if(s[0] == '=') {
 			new_tok_node = new OPERATOR(&s[0]);
-			new_tok_node->set_next(stmnt_node->value);
-			stmnt_node->value = new_tok_node;
+			// new_tok_node->set_next(stmnt_node->value);
+			// stmnt_node->value = new_tok_node;
 		}
+		
+		new_tok_node->set_next(stmnt_node->value);
+		stmnt_node->value = new_tok_node;
 	};
 
 	parser(stmnt_node->value);
