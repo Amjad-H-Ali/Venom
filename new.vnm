@@ -1,8 +1,9 @@
-foo = "Hello";
+message = "Hello!"
 
-bar = "World";
+write message
 
-name = "MJ";
+
+
 
 
 

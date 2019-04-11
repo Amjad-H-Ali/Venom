@@ -9,8 +9,13 @@ struct Defined {
 	Defined():paths(){};
 };
 
+
+
 void define(Token *token_ptr);
 
 Token *is_defined(char *name);
 
 int hash(char letter);
+
+
+

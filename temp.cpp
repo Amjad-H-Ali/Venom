@@ -1,30 +1,30 @@
-#include <iostream>
+// #include <iostream>
 
-using namespace std;
-int arr[3] = {1,2,3};
-class node {
-public:
-	int id;
-	int *arr_ptr;
-};
+// using namespace std;
+// int arr[3] = {1,2,3};
+// class node {
+// public:
+// 	int id;
+// 	int *arr_ptr;
+// };
 
-int main() {
+// int main() {
 
-	node n;
-	n.id= 567;
-	n.arr_ptr= arr;
+// 	node n;
+// 	n.id= 567;
+// 	n.arr_ptr= arr;
 
-	node *ptr = &n;
-
-	
-
+// 	node *ptr = &n;
 
 	
 
 
+	
 
-	cout << n.arr_ptr[0] << "\n";
+
+
+// 	cout << n.arr_ptr[0] << "\n";
 
 
 	
-}
+// }

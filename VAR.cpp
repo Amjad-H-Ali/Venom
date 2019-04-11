@@ -5,12 +5,11 @@
 VAR::VAR(char *name){
 	if(strcmp(name, "write") == 0) 
 		set_type(WRITE);
-	else {
+	else
 		this->set_type(VARIABLE);
-		this->set_name_len(name);
-		this->set_name(name);
-		define(this);
-	}
+
+	this->set_name_len(name);
+	this->set_name(name);
 	
 };
 VAR::~VAR() {
