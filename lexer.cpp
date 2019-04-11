@@ -43,7 +43,7 @@ void lexer(char *file_name) {
 			// new_tok_node->set_next(stmnt_node->value);
 			// stmnt_node->value = new_tok_node;
 		}
-		
+
 		new_tok_node->set_next(stmnt_node->value);
 		stmnt_node->value = new_tok_node;
 	};
@@ -93,11 +93,13 @@ void parser(Token *node) {
 		if(!is_defined(node->get_value())) define(node);
 	}
 	if(next && next->get_type() == WRITE) {
-		Token *var_ptr;
-		if(node->get_type()==VARIABLE)
-			var_ptr = is_defined(node->get_value());
-		if(var_ptr)
+		// Token *var_ptr;
+		if(node->get_type()==VARIABLE) {
+			Token *var_ptr = is_defined(node->get_value()); // Where defined?
 			next->set_tok_value(var_ptr);
+		}
+		// if(var_ptr)
+		// 	next->set_tok_value(var_ptr);
 		else
 			next->set_tok_value(node);
 	}
@@ -105,14 +107,14 @@ void parser(Token *node) {
 	// If next node equal operator, set this node to variable on the other side of the equal.
 	// Then this node should point at variable and now safely delete equal operator from LL.
 	if(next && next->get_type()== OPER) {
-		Token *var_ptr = next->next(),
-		      *exists = is_defined(var_ptr->get_value());
+		Token *var_ptr = next->next();
+		      // *exists = is_defined(var_ptr->get_value());
 
-		if(exists) 
-			exists->set_tok_value(node);
+		// if(exists) 
+		// 	exists->set_tok_value(node);
 		
-		else 
-			var_ptr->set_tok_value(node);
+		// else 
+		var_ptr->set_tok_value(node);
 			
 
 		node->set_next(var_ptr);
