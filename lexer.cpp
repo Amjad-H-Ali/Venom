@@ -1,140 +1,105 @@
 #include <iostream>
 #include <fstream>
 #include "lexer.h"
-#include "Definitions.h"
-// #include <string>
-
+#include "parser.h"
 
 using namespace std;
 
 
-Stmnt *stmnt_node = new Stmnt;
+Tokens *node = new Tokens;
 
 
-void parser(Token *node);
+
 
 void lexer(char *file_name) {
-	cout << "Size: " << sizeof(Stmnt) << endl;
 
-	stmnt_node->value = NULL;
-	stmnt_node->next = NULL;
+	node->token_head = NULL;
+	node->next = NULL;
 
 	ifstream in;
 	in.open(file_name);
 	string s;
-	Token *new_tok_node;
+	Token *new_token_node;
+
 
 	while(in >> s){
 		
-		if(s[0] == '"') {
-			cout << "String: " << s << endl; 
-			new_tok_node = new STRING(&s[1]);
-			// new_tok_node->set_next(stmnt_node->value);
-			// stmnt_node->value = new_tok_node;
+		if(s[0] == '"' || s[0] == '\'') {
+			get_string(s, in);
 
-		}
-		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
-			cout << "Var: " << s << endl;
-			new_tok_node = new VAR(&s[0]);
-			// new_tok_node->set_next(stmnt_node->value);
-			// stmnt_node->value = new_tok_node;
 
-		}
-		else if(s[0] == '=') {
-			new_tok_node = new OPERATOR(&s[0]);
-			// new_tok_node->set_next(stmnt_node->value);
-			// stmnt_node->value = new_tok_node;
+			new_token_node = new Token(&s[1], STRING);
 		}
 
-		new_tok_node->set_next(stmnt_node->value);
-		stmnt_node->value = new_tok_node;
+		else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')) {
+
+			new_token_node = new Identifier(&s[0], which_identifier(s));
+		}
+		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') {
+			new_token_node = new Token(&s[0], which_operator(s));
+		}
+
+		new_token_node->set_next(node->token_head);
+		node->token_head = new_token_node;
 	};
 
-	parser(stmnt_node->value);
+	parser(node->token_head, NULL);
 
-	// int eq_count = 0,
-	// 	str_count = 0,
-	// 	var_count = 0;
-	for(Stmnt *ptr = stmnt_node; ptr; ptr = stmnt_node->next) {
-		for(Token *ptr2 = ptr->value; ptr2; ptr2 = ptr2->next()) {
-			// cout << ptr2->get_value() << endl;
-			// if(ptr2->get_type() == VARIABLE) {
-			// 	cout << ptr2->get_tok_value()<< endl;
-			// 	// cout << ptr2->get_tok_value()->get_value()<< endl;
-			// }
-			if(ptr2->get_type()==WRITE) {
-				cout << ptr2->get_tok_value()->get_tok_value()->get_value() << endl;
-			}
-			// 
-			// if(ptr2->get_type() == OPER) {
-			// 	cout << ptr2->get_left()->get_value() << endl;
-			// 	cout << ptr2->get_right()->get_value() << endl;
-			// }
-			// 	eq_count ++;
-			// else if(ptr2->get_type() == VARIABLE)
-			// 	var_count++;
-			// else if(ptr2->get_type()== STR)
-			// 	str_count++;
-		}
-	}
-	// cout << "EQ: " << eq_count << " STR: " << str_count << " VAR: " << var_count << endl;
-};
-
-
-void parser(Token *node) {
-
-	if(!node)
-		return;
-
-	Token *next = node->next();
-
-
-	parser(next);
-
-	if(node->get_type()== VARIABLE) {
-		if(!is_defined(node->get_value())) define(node);
-	}
-	if(next && next->get_type() == WRITE) {
-		// Token *var_ptr;
-		if(node->get_type()==VARIABLE) {
-			Token *var_ptr = is_defined(node->get_value()); // Where defined?
-			next->set_tok_value(var_ptr);
-		}
-		// if(var_ptr)
-		// 	next->set_tok_value(var_ptr);
-		else
-			next->set_tok_value(node);
-	}
-
-	// If next node equal operator, set this node to variable on the other side of the equal.
-	// Then this node should point at variable and now safely delete equal operator from LL.
-	if(next && next->get_type()== OPER) {
-		Token *var_ptr = next->next();
-		      // *exists = is_defined(var_ptr->get_value());
-
-		// if(exists) 
-		// 	exists->set_tok_value(node);
-		
-		// else 
-		var_ptr->set_tok_value(node);
+	for(Tokens *ptr = node; ptr; ptr = node->next) {
+		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
+			if(ptr2->get_type()== WRITE)  
+				cout << ptr2->get_value()->get_value()->get_name() << endl;
 			
-
-		node->set_next(var_ptr);
-		delete next;
-
-
-		// Token *var_ptr = next->next();
-		// var_ptr->set_tok_value(node);
-		
-		// next->set_right(node);
-		// next->set_left(var_ptr);
+		}
 	}
-
-
-
-
 };
 
+
+
+
+void get_string(string &s, ifstream &in) {
+	string left_over;
+	int last_indx = s.length() - 1;
+	while(s[last_indx] != '\'' && s[last_indx] != '"') {
+		in >> left_over;
+		s+= (' ' + left_over);
+		last_indx = s.length() - 1;
+	}
+};
+
+bool strings_match(string &s1, char *s2) {
+	int indx = 0;
+	while(s1[indx] == s2[indx]) {
+		if(s1[indx] == '\0') 
+			return true;
+		indx++;
+	}
+	return false;
+};
+
+Type which_identifier(string &s) {
+	if(strings_match(s, (char*)"write"))
+		return WRITE;
+	else
+		return VARIABLE;
+};
+Type which_operator(string &s) {
+	if(strings_match(s, (char*)"="))
+		return ASSIGNMENT;
+	else if(s[0] == '+' || strings_match(s, (char*)"++")) 
+		return ADDITION;
+	else if(s[0] || strings_match(s, (char*)'-')) 
+		return SUBTRACTION;
+	else if(strings_match(s, (char*)"*")) 
+		return MULTIPLICATION;
+	else if(strings_match(s, (char*)"/"))
+		return DIVISION;
+	else if(strings_match(s, (char*)"%"))
+		return MODULO;
+	else if(strings_match(s, (char*)"==")) 
+		return COMPARISON;
+
+};
 
 
 

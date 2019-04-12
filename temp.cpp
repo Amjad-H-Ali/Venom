@@ -1,30 +1,18 @@
 // #include <iostream>
+// #include <fstream>
 
 // using namespace std;
-// int arr[3] = {1,2,3};
-// class node {
-// public:
-// 	int id;
-// 	int *arr_ptr;
-// };
 
 // int main() {
+//  char s[];
 
-// 	node n;
-// 	n.id= 567;
-// 	n.arr_ptr= arr;
+//  ifstream in;
+//  in.open("new.vnm");
 
-// 	node *ptr = &n;
+//  getline(in,s);
 
-	
+//  // in>>s;
 
-
-	
-
-
-
-// 	cout << n.arr_ptr[0] << "\n";
-
-
+//  cout << sizeof(buffer) << '\n';
 	
 // }
