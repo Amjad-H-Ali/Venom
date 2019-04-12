@@ -2,4 +2,4 @@
 #include "Declarations.h"
 
 
-void parser(Token *node);
+void parser(Token *current, Token *previous);

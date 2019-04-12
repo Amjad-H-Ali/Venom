@@ -4,8 +4,10 @@ message = "Hello, World! This is a long string that I am testing out."
 
 write message
 
+message_2 = 'You can also write strings like this.'
 
 
+write message_2
 
 
 

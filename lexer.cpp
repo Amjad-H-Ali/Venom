@@ -39,12 +39,12 @@ void lexer(char *file_name) {
 		node->token_head = new_token_node;
 	};
 
-	parser(node->token_head);
+	parser(node->token_head, NULL);
 
 	for(Tokens *ptr = node; ptr; ptr = node->next) {
 		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
-			if(ptr2->get_type()==ADDITION) {
-				cout << ptr2->get_name() << endl;
+			if(ptr2->get_type()== WRITE) {
+				cout << ptr2->get_value()->get_value()->get_name() << endl;
 			}
 		}
 	}
