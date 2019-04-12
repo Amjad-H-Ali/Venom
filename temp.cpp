@@ -2,29 +2,23 @@
 // #include <fstream>
 
 // using namespace std;
-
-// void parse_string(string &s, ifstream &in) {
-// 	string left_over;
-// 	int last_indx = s.length() - 1;
-
-// 	while(s[last_indx] != '\'' && s[last_indx] != '"') {
-// 		in >> left_over;
-// 		s+= left_over;
-// 		last_indx = s.length() - 1;
-// 	}
+// enum Type {
+// 	op,
+// 	dop
+// };
+// int foo(Type t) {
+// 	if(t == op)
+// 		return op;
+// 	return -1;
 // };
 // int main() {
+//  	int ty;
+// 	if (((ty=foo(op))) != -1) {
+// 		cout << "Yes\n" << ty << "---\n";
+// 	}
+// 	else
+// 		cout << "No\n";
+// 	Type t = ty;
 
-// 	ifstream in;
-
-// 	in.open("new.vnm");
-
-// 	string c;
-
-// 	in >> c;
-
-// 	parse_string(c, in);
-
-// 	cout << c << endl;
-
+	
 // }

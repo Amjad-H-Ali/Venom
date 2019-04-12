@@ -10,10 +10,10 @@ enum Type {
 	MULTIPLICATION,
 	MODULO,
 	ASSIGNMENT,
+	COMPARISON,
 	VARIABLE,
 	FUNCTION,
-	WRITE
-		
+	WRITE	
 };	
 
 class Token {

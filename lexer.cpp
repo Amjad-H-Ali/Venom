@@ -35,13 +35,13 @@ void lexer(char *file_name) {
 
 		}
 		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
-			new_token_node = new VAR(&s[0]);
+			new_token_node = new Identifier(&s[0], which_identifier(s));
 			// new_token_node->set_next(node->token_node);
 			// node->token_node = new_token_node;
 
 		}
-		else if(s[0] == '=') {
-			new_token_node = new OPERATOR(&s[0]);
+		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') {
+			new_token_node = new Token(&s[0], which_operator(s));
 			// new_token_node->set_next(node->token_node);
 			// node->token_node = new_token_node;
 		}
@@ -146,6 +146,37 @@ void parse_string(string &s, ifstream &in) {
 	}
 };
 
+bool strings_match(string &s1, char *s2) {
+	int indx = 0;
+	while((s1[indx] == s2[indx])) {
+		if(s1[indx] == '\0') 
+			return true;
+	}
+	return false;
+};
+
+Type which_identifier(string &s) {
+	if(strings_match(s, (char*)"write"))
+		return WRITE;
+	else
+		return VARIABLE;
+};
+Type which_operator(string &s) {
+	if(s[0] == '=')
+		return ASSIGNMENT;
+	else if(s[0] == '+') 
+		return ADDITION;
+	else if(s[0] == '-') 
+		return SUBTRACTION;
+	else if(s[0] == '*') 
+		return MULTIPLICATION;
+	else if(s[0] == '/')
+		return DIVISION;
+	else if(s[0] == '%')
+		return MODULO;
+	else if(strings_match(s, "==")) 
+		return COMPARISON;
+};
 
 
 
