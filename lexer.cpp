@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "lexer.h"
-#include "Definitions.h"
+#include "parser.h"
 
 using namespace std;
 
@@ -9,7 +9,7 @@ using namespace std;
 Tokens *node = new Tokens;
 
 
-void parser(Token *node);
+
 
 void lexer(char *file_name) {
 
@@ -43,52 +43,15 @@ void lexer(char *file_name) {
 
 	for(Tokens *ptr = node; ptr; ptr = node->next) {
 		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
-			if(ptr2->get_type()==WRITE) {
-				cout << ptr2->get_value()->get_value()->get_name() << endl;
+			if(ptr2->get_type()==ADDITION) {
+				cout << ptr2->get_name() << endl;
 			}
 		}
 	}
 };
 
 
-void parser(Token *node) {
 
-	if(!node)
-		return;
-
-	Token *next = node->get_next();
-
-
-	parser(next);
-
-	if(node->get_type()== VARIABLE) {
-		if(!is_defined(node->get_name())) define(node);
-	}
-	if(next && next->get_type() == WRITE) {
-		if(node->get_type()==VARIABLE) {
-			Token *var_ptr = is_defined(node->get_name()); // Where defined?
-			next->set_value(var_ptr);
-		}
-		else
-			next->set_value(node);
-	}
-
-	// If next node equal operator, set this node to variable on the other side of the equal.
-	// Then this node should point at variable and now safely delete equal operator from LL.
-	if(next && next->get_type()== ASSIGNMENT) {
-		Token *var_ptr = next->get_next();
-
-		var_ptr->set_value(node);
-			
-
-		node->set_next(var_ptr);
-		delete next;
-	}
-
-
-
-
-};
 
 void get_string(string &s, ifstream &in) {
 	string left_over;
@@ -118,17 +81,17 @@ Type which_identifier(string &s) {
 		return VARIABLE;
 };
 Type which_operator(string &s) {
-	if(s[0] == '=')
+	if(strings_match(s, (char*)"="))
 		return ASSIGNMENT;
-	else if(s[0] == '+') 
+	else if(s[0] == '+' || strings_match(s, (char*)"++")) 
 		return ADDITION;
-	else if(s[0] == '-') 
+	else if(s[0] || strings_match(s, (char*)'-')) 
 		return SUBTRACTION;
-	else if(s[0] == '*') 
+	else if(strings_match(s, (char*)"*")) 
 		return MULTIPLICATION;
-	else if(s[0] == '/')
+	else if(strings_match(s, (char*)"/"))
 		return DIVISION;
-	else if(s[0] == '%')
+	else if(strings_match(s, (char*)"%"))
 		return MODULO;
 	else if(strings_match(s, (char*)"==")) 
 		return COMPARISON;
