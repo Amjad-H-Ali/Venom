@@ -1,12 +1,9 @@
 
-i ++
+
 message = "Hello, World! This is a long string that I am testing out."
 
 write message
 
-myName = "Amjad"
-
-write myName
 
 
 

@@ -1,19 +1,19 @@
 #pragma once
 #include "Token.h"
 
-struct Defined {
+struct Declared {
 	Token *token_address;
-	Defined *paths[26];
+	Declared *paths[26];
 
 	// Initialize all pointers in array to NULL.
-	Defined():paths(){};
+	Declared():paths(){};
 };
 
 
 
-void define(Token *token_ptr);
+void declare(Token *token_ptr);
 
-Token *is_defined(char *name);
+Token *is_declared(char *name);
 
 int hash(char letter);
 

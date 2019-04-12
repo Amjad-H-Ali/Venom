@@ -1,5 +1,5 @@
 #pragma once
-#include "Definitions.h"
+#include "Declarations.h"
 
 
 void parser(Token *node);

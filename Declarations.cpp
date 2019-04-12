@@ -1,33 +1,36 @@
 #include <iostream>
-#include "Definitions.h"
+#include "Declarations.h"
 
 
-Defined *head = new Defined;
+Declared *head = new Declared;
 
-void define(Token *token_ptr) {
+void declare(Token *token_ptr) {
 	char *name = token_ptr->get_name();
 	int i = 0;
-	Defined *current_ptr = head;
+	Declared *current_ptr = head;
 	while(name[i] != '\0') {
 		int indx = hash(name[i]);
-		current_ptr->paths[indx] = new Defined;
+		current_ptr->paths[indx] = new Declared;
 		current_ptr = current_ptr->paths[indx];
 		i ++;
 	}
 	current_ptr->token_address = token_ptr;
 };
 
-Token *is_defined(char *name) {
+Token *is_declared(char *name) {
 	int i = 0;
-	Defined *current_ptr = head;
+	Declared *current_ptr = head;
 
 	while(name[i] != '\0') {
 		int indx = hash(name[i]);
-		if(!current_ptr->paths[indx])
+		if(!current_ptr->paths[indx]) {
+			std::cout << "Not declared\n";
 			return NULL;
+		}
 		current_ptr = current_ptr->paths[indx];
 		i++;
 	}
+	std::cout << "Is declared\n";
 	return current_ptr->token_address;
 };
 

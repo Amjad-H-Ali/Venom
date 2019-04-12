@@ -13,11 +13,11 @@ void parser(Token *node) {
 	parser(next);
 
 	if(node->get_type()== VARIABLE) {
-		if(!is_defined(node->get_name())) define(node);
+		if(!is_declared(node->get_name())) declare(node);
 	}
 	if(next && next->get_type() == WRITE) {
 		if(node->get_type()==VARIABLE) {
-			Token *var_ptr = is_defined(node->get_name()); // Where defined?
+			Token *var_ptr = is_declared(node->get_name()); // Where defined?
 			next->set_value(var_ptr);
 		}
 		else
