@@ -27,16 +27,9 @@ void lexer(char *file_name) {
 	while(in >> s){
 		
 		if(s[0] == '"' || s[0] == "'") {
-			string whole_string = s;
-			int last_indx = s.length() - 1;
- 
-			while(s[last_indx] != "'" || s[last_indx] != '"') {
-				in >> s;
-				whole_string += s;
-				last_indx = s.length() - 1;
-			}
+			parse_string(s, in);
 
-			new_token_node = new Token(&whole_string[1], STRING);
+			new_token_node = new Token(&s[1], STRING);
 			// new_token_node->set_next(node->token_node);
 			// node->token_node = new_token_node;
 
@@ -142,9 +135,15 @@ void parser(Token *node) {
 
 };
 
-char *parseString(char* s) {
+void parse_string(string &s, ifstream &in) {
+	string left_over;
+	int last_indx = s.length() - 1;
 
-
+	while(s[last_indx] != '\'' && s[last_indx] != '"') {
+		in >> left_over;
+		s+= left_over;
+		last_indx = s.length() - 1;
+	}
 };
 
 

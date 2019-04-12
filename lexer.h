@@ -12,6 +12,5 @@ struct Tokens {
 	Tokens *next;
 };
 
-void lexer(char *file_name);
+void parse_string(string &s, ifstream &in);
 
-char *parseString(char* s);
