@@ -27,12 +27,14 @@ void lexer(char *file_name) {
 	while(in >> s){
 		
 		if(s[0] == '"') {
+			cout << "String: " << s << endl; 
 			new_tok_node = new STRING(&s[1]);
 			// new_tok_node->set_next(stmnt_node->value);
 			// stmnt_node->value = new_tok_node;
 
 		}
 		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
+			cout << "Var: " << s << endl;
 			new_tok_node = new VAR(&s[0]);
 			// new_tok_node->set_next(stmnt_node->value);
 			// stmnt_node->value = new_tok_node;

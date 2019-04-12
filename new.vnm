@@ -1,10 +1,7 @@
-message = "Hello!"
+message = "Hello World"
 
 write message
 
-myName = "Amjad"
-
-write myName
 
 
 
