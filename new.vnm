@@ -1,15 +1,11 @@
+address = "123 Main Street, New York, New York"
+
+name = 'Amjad Ali'
 
 
-message = "Hello, World! This is a long string that I am testing out."
+write name
 
-write message
-
-message_2 = 'You can also write strings like this.'
-
-
-write message_2
-
-
+write address
 
 
 

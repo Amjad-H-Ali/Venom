@@ -13,16 +13,18 @@ void parser(Token *current, Token *previous) {
 
 	Type current_type = current->get_type();
 
-	if(current_type == VARIABLE && !is_declared(current->get_name()))
+	if((current_type == VARIABLE) && (is_declared(current->get_name())== NULL )) {
 		declare(current);
+	}
 	else if(current_type == ASSIGNMENT) {
 		next->set_value(previous);
 		previous->set_next(next);
 		delete current;
+
 	}
-	else if (current_type == WRITE) {
+	else if (current_type == WRITE) 
 		current->set_value(is_declared(previous->get_name()));
-	}
+	
 
 	// if(node->get_type()== VARIABLE) {
 	// 	if(!is_declared(node->get_name())) declare(node);

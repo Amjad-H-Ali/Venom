@@ -21,6 +21,7 @@ void lexer(char *file_name) {
 	string s;
 	Token *new_token_node;
 
+
 	while(in >> s){
 		
 		if(s[0] == '"' || s[0] == '\'') {
@@ -28,7 +29,8 @@ void lexer(char *file_name) {
 
 			new_token_node = new Token(&s[1], STRING);
 		}
-		else if((s[0] > 'a' && s[0] < 'z') || (s[0] >'A' && s[0] < 'Z')) {
+		else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')) {
+
 			new_token_node = new Identifier(&s[0], which_identifier(s));
 		}
 		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') {
@@ -43,9 +45,9 @@ void lexer(char *file_name) {
 
 	for(Tokens *ptr = node; ptr; ptr = node->next) {
 		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
-			if(ptr2->get_type()== WRITE) {
+			if(ptr2->get_type()== WRITE)  
 				cout << ptr2->get_value()->get_value()->get_name() << endl;
-			}
+			
 		}
 	}
 };
@@ -56,7 +58,6 @@ void lexer(char *file_name) {
 void get_string(string &s, ifstream &in) {
 	string left_over;
 	int last_indx = s.length() - 1;
-
 	while(s[last_indx] != '\'' && s[last_indx] != '"') {
 		in >> left_over;
 		s+= (' ' + left_over);
