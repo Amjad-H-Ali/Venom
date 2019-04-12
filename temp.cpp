@@ -1,30 +1,29 @@
 // #include <iostream>
 
 // using namespace std;
-// int arr[3] = {1,2,3};
-// class node {
-// public:
-// 	int id;
-// 	int *arr_ptr;
+
+// enum Type {
+// 	VAR,
+// 	STRING;
+// 	enum OPERATOR {
+// 		PLUS,
+// 		MINUS,
+// 		DIVIDE,
+// 		MODULO,
+// 		MULTIPLY,
+// 		ASSIGNMENT
+// 	}
+	
 // };
+// void foo(Type type) {
+// 	if(type == OPERATOR)
+// 		cout << "operator\n";
+// 	else if(type == PLUS )
+// 		cout << "plus\n";
+// };		
 
 // int main() {
 
-// 	node n;
-// 	n.id= 567;
-// 	n.arr_ptr= arr;
+// 	foo(Type.OPERATOR);
 
-// 	node *ptr = &n;
-
-	
-
-
-	
-
-
-
-// 	cout << n.arr_ptr[0] << "\n";
-
-
-	
 // }

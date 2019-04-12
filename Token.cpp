@@ -12,14 +12,9 @@
 // 	this->type = type;
 // };
 
-Token::Token(char *name) {
-	if(name[0] == '"' || name[0] == "'") {
-		name = name[1];
-		this->set_type(STRING)
-	}
-	else if(name[0] == '=') {
-		this->set_type(ASSIGN);
-	}
+
+Token::Token(char *name, Type type) {
+	this->set_type(type)
 	this->set_name_len(name);
 	this->set_name(name);
 };

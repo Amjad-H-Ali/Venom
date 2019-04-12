@@ -2,11 +2,19 @@
 
 
 enum Type {
-		VARIABLE,
-		ASSIGN,
-		STRING,
-		WRITE
-};
+	STRING,
+	NUMBER,
+	ADDITION,
+	SUBTRACTION,
+	DIVISION,
+	MULTIPLICATION,
+	MODULO,
+	ASSIGNMENT,
+	VARIABLE,
+	FUNCTION,
+	WRITE
+		
+};	
 
 class Token {
 private:
@@ -15,7 +23,7 @@ private:
 	int name_len;
 	Token *next;
 public:
-	Token(char *name);
+	Token(char *name, Type type);
 	~Token();
 	void set_type(Type type);
 	Type get_type() const;

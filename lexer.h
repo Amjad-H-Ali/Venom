@@ -1,8 +1,9 @@
 #pragma once
 #include "Token.h"
-#include "STRING.h"
-#include "VAR.h"
-#include "OPERATOR.h"
+#include "Identifier.h"
+// #include "STRING.h"
+// #include "VAR.h"
+// #include "OPERATOR.h"
 
 
 struct Stmnt {
