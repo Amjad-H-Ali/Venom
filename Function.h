@@ -1,7 +1,7 @@
-#pragma once
-#include "Token.h"
+// #pragma once
+// #include "Token.h"
 
-class Function:public Token {
-public:
-	Function(char *name);
-};
+// class Function:public Token {
+// public:
+// 	Function(char *name);
+// };

@@ -1,5 +1,5 @@
-#include "Function.h"
+// #include "Function.h"
 
-Function::Function(char *name) {
+// Function::Function(char *name) {
 	
-}
+// }
