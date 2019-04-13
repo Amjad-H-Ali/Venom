@@ -18,4 +18,12 @@ Token *is_declared(char *name);
 int hash(char letter);
 
 
+// int array[10] = {1, 2, 3, 4, 5}
+
+// array |1, 2, 3, 4, 5, 6, 7|
+
+
+// int array[][10] = {{},{}, {}, {}, {}}
+
+// array |1, 2, 3, 4, 5, 6, 7|
 

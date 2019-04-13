@@ -25,7 +25,7 @@ char *Token::get_name() const {
 };
 void Token::set_name_len(char *name) {
 	int count = 0;
-	while(name[count] != '\0' && name[count] != '"' && name[count] != '\'')
+	while(name[count] != '\0' && name[count] != '"' && name[count] != '\'' && name[count] != ',')
 		count++;
 	this->name_len = count;
 };
