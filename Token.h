@@ -13,7 +13,8 @@ enum Type {
 	COMPARISON,
 	VARIABLE,
 	FUNCTION,
-	WRITE	
+	WRITE,
+	ARRAY
 };	
 
 class Token {

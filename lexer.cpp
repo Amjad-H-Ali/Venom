@@ -23,21 +23,23 @@ void lexer(char *file_name) {
 
 
 	while(in >> s){
+		if(s[s.length() - 1] == '|') {
+			in>>s;
+			new_token_node = new Identifier(get_array(s, in), &s[0], ARRAY);
+		}
 		
-		if(s[0] == '"' || s[0] == '\'') {
+		else if(s[0] == '"' || s[0] == '\'') {
 			get_string(s, in);
-
-
 			new_token_node = new Token(&s[1], STRING);
 		}
 
-		else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')) {
+		else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')) 
 
 			new_token_node = new Identifier(&s[0], which_identifier(s));
-		}
-		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') {
+		
+		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') 
 			new_token_node = new Token(&s[0], which_operator(s));
-		}
+	
 
 		new_token_node->set_next(node->token_head);
 		node->token_head = new_token_node;
@@ -49,6 +51,9 @@ void lexer(char *file_name) {
 		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
 			if(ptr2->get_type()== WRITE)  
 				cout << ptr2->get_value()->get_value()->get_name() << endl;
+			if(ptr2->get_type()==ARRAY)
+				for(Token *ptr3 = ptr2->get_value(); ptr3; ptr3=ptr3->get_next())
+					cout << "From Array: " << ptr3->get_name() << endl;
 			
 		}
 	}
@@ -99,6 +104,24 @@ Type which_operator(string &s) {
 	else if(strings_match(s, (char*)"==")) 
 		return COMPARISON;
 
+};
+
+Token *get_array(string &s, ifstream &in) {
+
+	if(s[0] == '|')
+		return NULL;
+
+	Token *new_token_in_array;
+
+	if(s[0] == '"' || s[0] == '\'' ) {
+		new_token_in_array = new Token(&s[1], STRING);
+	}
+	else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')){
+		new_token_in_array = new Identifier(&s[0], which_identifier(s));
+	}
+	in>>s;
+	new_token_in_array->set_next(get_array(s, in));
+	return new_token_in_array;
 };
 
 
