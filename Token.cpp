@@ -15,17 +15,14 @@ Type Token::get_type() const {
 	return this->type;
 };
 void Token::set_name(char *name) {
-	this->name = new char[this->name_len+1];
-	for(int i = 0; i < this->name_len; i ++) 
-		this->name[i] = name[i];
-	this->name[this->name_len] = '\0';
+	this->name = name;
 };
 char *Token::get_name() const {
 	return this->name;
 };
 void Token::set_name_len(char *name) {
 	int count = 0;
-	while(name[count] != '\0' && name[count] != '"' && name[count] != '\'')
+	while(name[count] != '\0')
 		count++;
 	this->name_len = count;
 };

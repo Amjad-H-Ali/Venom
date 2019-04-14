@@ -25,7 +25,7 @@ protected:
 	Token *next;
 public:
 	Token(char *name, Type type);
-	~Token();
+	virtual~Token();
 	void set_type(Type type);
 	Type get_type() const;
 	void set_name(char *name);
