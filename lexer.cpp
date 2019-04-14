@@ -23,11 +23,10 @@ void lexer(char *file_name) {
 
 	while(in >> c){
 		
-		if(!not_quotes(c)) {
+		if(!not_quotes(c)) 
 			
 			new_token_node = new Token(get_string(c, in), STRING);
-		}
-
+	
 		else if(is_AtoZ(c)) { 
 			char *identifier = get_identifier(c, in);
 			Type type = which_identifier(identifier, c, in);
@@ -38,8 +37,8 @@ void lexer(char *file_name) {
 				new_token_node = new Identifier(identifier, type);
 		}
 		
-		else if() 
-			new_token_node = new Token(&s[0], which_operator(s));
+		else if(is_operator(c)) 
+			new_token_node = new Token(get_operator(c, in), which_operator(c));
 	
 
 		new_token_node->set_next(node->token_head);
@@ -102,21 +101,21 @@ char *get_operator(char &c, ifstream &in) {
 }
 
 
-Token *get_array_values(string &s, ifstream &in) {
+Token *get_array_values(char *c, ifstream &in) {
 
-	if(s[0] == '|')
+	if(c == '|')
 		return NULL;
 
 	Token *new_token_in_array;
 
-	if(s[0] == '"' || s[0] == '\'' ) {
-		new_token_in_array = new Token(&s[1], STRING);
+	if(!not_quotes(c)) 
+		new_token_in_array = new Token(get_string(c, in), STRING);
+
+	else if(is_AtoZ()){
+		new_token_in_array = new Identifier(get_identifier(c, in), which_identifier(s));
 	}
-	else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')){
-		new_token_in_array = new Identifier(&s[0], which_identifier(s));
-	}
-	in>>s;
-	new_token_in_array->set_next(get_array(s, in));
+	in>>c;
+	new_token_in_array->set_next(get_array_values(c, in));
 	return new_token_in_array;
 };
 
