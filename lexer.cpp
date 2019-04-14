@@ -119,32 +119,9 @@ Token *get_array_values(char *c, ifstream &in) {
 	return new_token_in_array;
 };
 
-int length_of_type(char &c, ifstream &in, bool(*green_light)(const char)) {
-	int start_pos = in.tellg();
-		  end_pos,
-		  length;
 
-	while(green_light(c))
-		in >> c;
-	end_pos = in.tellg();
-	length = end_pos - start_pos;
-	// Reset file pointer to original position.
-	in.clear();
-	in.seekg(start_pos, in.beg);
 
-	
-	return length;
-};
 
-bool names_match(char *s1, char *s2) {
-	int indx = 0;
-	while(s1[indx] == s2[indx]) {
-		if(s1[indx] == '\0') 
-			return true;
-		indx++;
-	}
-	return false;
-};
 
 Type which_identifier(char *identifier_ptr, char &c, ifstream &in) {
 	if((in>>ws).peek() == '|') {
@@ -178,9 +155,33 @@ Type which_operator(char *c) {
 
 };
 
+int length_of_type(char &c, ifstream &in, bool(*green_light)(const char)) {
+	int start_pos = in.tellg();
+		  end_pos,
+		  length;
+
+	while(green_light(c))
+		in >> c;
+	end_pos = in.tellg();
+	length = end_pos - start_pos;
+	// Reset file pointer to original position.
+	in.clear();
+	in.seekg(start_pos, in.beg);
+
+	
+	return length;
+};
 
 
-
+bool names_match(char *s1, char *s2) {
+	int indx = 0;
+	while(s1[indx] == s2[indx]) {
+		if(s1[indx] == '\0') 
+			return true;
+		indx++;
+	}
+	return false;
+};
 
 bool is_operator(char &c, ifstream &in) {
 	if (s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%')
