@@ -96,6 +96,7 @@ char *get_operator(char &c, ifstream &in) {
 	int length = length_of_type(c, in, &is_operator);
 
 	char *_operator = new char[length];
+	_operator[length-1] = '\0';
 	in.read(_operator, length);
 	return _operator;
 }
@@ -156,21 +157,25 @@ Type which_identifier(char *identifier_ptr, char &c, ifstream &in) {
 	else
 		return VARIABLE;
 };
-Type which_operator(string &s) {
-	if(strings_match(s, (char*)"="))
+Type which_operator(char *c) {
+
+	// Why c[0]? So functions don't get called for nothing. And still need names_macth to match ops with more than 1 character
+	// and ensure something like %%% or ++++ is not Tokenized.
+	if(c[0] == '=' && names_match(c, (char *)"="))
 		return ASSIGNMENT;
-	else if(s[0] == '+' || strings_match(s, (char*)"++")) 
+	else if(c[0] == '+' && (names_match(c, (char *)"+") || names_match(c, (char*)"++"))) 
 		return ADDITION;
-	else if(s[0] || strings_match(s, (char*)'-')) 
+	else if(c[0] == '-' && (strings_match(c, (char *)"-")  || strings_match(c, (char *)"--")))
 		return SUBTRACTION;
-	else if(strings_match(s, (char*)"*")) 
+	else if(c[0] == '*' && strings_match(c, (char*)"*")) 
 		return MULTIPLICATION;
-	else if(strings_match(s, (char*)"/"))
+	else if(c[0] == '/' && strings_match(s, (char*)"/"))
 		return DIVISION;
-	else if(strings_match(s, (char*)"%"))
+	else if(c[0] == '%' && strings_match(s, (char*)"%"))
 		return MODULO;
-	else if(strings_match(s, (char*)"==")) 
+	else if(c[0] == '=' && strings_match(s, (char*)"==")) 
 		return COMPARISON;
+	//TODO: Else Syntax error.
 
 };
 
