@@ -1,15 +1,2 @@
 
-address = "123 Main Street, New York, New York"
-
-name = 'Amjad Ali'
-
-
-write name
-
-write address
-
-array| "hello" "world" name "lol" |
-
-
-
-
+   address 1234

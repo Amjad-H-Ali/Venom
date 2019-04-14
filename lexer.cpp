@@ -16,26 +16,27 @@ void lexer(char *file_name) {
 	node->token_head = NULL;
 	node->next = NULL;
 
-	ifstream in;
-	in.open(file_name);
-	string s;
+	ifstream in(file_name);
+	char c;
 	Token *new_token_node;
 
 
-	while(in >> s){
-		if(s[s.length() - 1] == '|') {
-			in>>s;
-			new_token_node = new Identifier(get_array(s, in), &s[0], ARRAY);
-		}
+	while(in >> c){
 		
-		else if(s[0] == '"' || s[0] == '\'') {
-			get_string(s, in);
-			new_token_node = new Token(&s[1], STRING);
+		if(!not_quotes(c)) {
+			
+			new_token_node = new Token(get_string(c, in), STRING);
 		}
 
-		else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')) 
+		else if(is_AtoZ(c)) { 
+			char *identifier = get_identifier(c, in);
+			Type type = which_identifier(identifier, c, in);
 
-			new_token_node = new Identifier(&s[0], which_identifier(s));
+			if(type == ARRAY)
+				new_token_node = new Identifier(get_array_values(identifier, in), identifier, type);
+			else
+				new_token_node = new Identifier(identifier, type);
+		}
 		
 		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') 
 			new_token_node = new Token(&s[0], which_operator(s));
@@ -62,17 +63,39 @@ void lexer(char *file_name) {
 
 
 
-void get_string(string &s, ifstream &in) {
-	string left_over;
-	int last_indx = s.length() - 1;
-	while(s[last_indx] != '\'' && s[last_indx] != '"') {
-		in >> left_over;
-		s+= (' ' + left_over);
-		last_indx = s.length() - 1;
-	}
+char *get_string(char &c, ifstream &in) {
+	// Skip Quotes.
+	in >> c;
+
+	int length = length_of_type(c, in, &not_quotes);
+
+	char *_string = new char[length];
+	_string[length-1] = '\0';
+
+	in.read(_string, length);
+
+	return _string;
+
 };
 
-bool strings_match(string &s1, char *s2) {
+int length_of_type(char &c, ifstream &in, bool(*green_light)(const char)) {
+	int start_pos = in.tellg();
+		  end_pos,
+		  length;
+
+	while(green_light(c))
+		in >> c;
+	end_pos = in.tellg();
+	length = end_pos - start_pos;
+	// Reset file pointer to original position.
+	in.clear();
+	in.seekg(start_pos, in.beg);
+
+	
+	return length;
+};
+
+bool names_match(char *s1, char *s2) {
 	int indx = 0;
 	while(s1[indx] == s2[indx]) {
 		if(s1[indx] == '\0') 
@@ -82,8 +105,12 @@ bool strings_match(string &s1, char *s2) {
 	return false;
 };
 
-Type which_identifier(string &s) {
-	if(strings_match(s, (char*)"write"))
+Type which_identifier(char *identifier_ptr, char &c, ifstream &in) {
+	if((in>>ws).peek() == '|') {
+		in >> c;
+		return ARRAY;
+	}
+	else if(names_match(identifier_ptr, (char*)"write"))
 		return WRITE;
 	else
 		return VARIABLE;
@@ -106,7 +133,7 @@ Type which_operator(string &s) {
 
 };
 
-Token *get_array(string &s, ifstream &in) {
+Token *get_array_values(string &s, ifstream &in) {
 
 	if(s[0] == '|')
 		return NULL;
@@ -123,6 +150,35 @@ Token *get_array(string &s, ifstream &in) {
 	new_token_in_array->set_next(get_array(s, in));
 	return new_token_in_array;
 };
+
+char *get_identifier(char &c, ifstream &in) {
+	
+	int length = length_of_type(c, in, &is_AtoZ);
+
+
+	char *identifier = new char[length];
+
+	identifier[length-1] = '\0';
+	in.read(identifier, length);
+
+	return identifier; 
+};
+
+
+
+bool is_AtoZ(const char &c) {
+	if ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z'))
+		return true;
+	else 
+		return false;
+};
+bool not_quotes(const char &c) {
+	if(c == '"' || c == '\'')
+		return false;
+	else 
+		return true;
+}
+
 
 
 
