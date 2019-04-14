@@ -20,31 +20,35 @@ void lexer(char *file_name) {
 	char c;
 	Token *new_token_node;
 
-
+	in >> noskipws;
 	while(in >> c){
 		
-		if(!not_quotes(c)) 
+		if(!not_quotes(c)) {
 			
 			new_token_node = new Token(get_string(c, in), STRING);
-	
+			new_token_node->set_next(node->token_head);
+			node->token_head = new_token_node;
+		}
 		else if(is_AtoZ(c)) { 
 			char *identifier = get_identifier(c, in);
 			Type type = which_identifier(identifier, c, in);
 
 			if(type == ARRAY)
-				new_token_node = new Identifier(get_array_values(identifier, in), identifier, type);
+				new_token_node = new Identifier(get_array_values(c, in), identifier, type);
 			else
 				new_token_node = new Identifier(identifier, type);
+			new_token_node->set_next(node->token_head);
+			node->token_head = new_token_node;
 		}
 		
-		else if(is_operator(c)) 
-			new_token_node = new Token(get_operator(c, in), which_operator(c));
-	
-
-		new_token_node->set_next(node->token_head);
-		node->token_head = new_token_node;
+		else if(is_operator(c)) {
+			char *_operator = get_operator(c, in);
+			new_token_node = new Token(_operator, which_operator(_operator));
+			new_token_node->set_next(node->token_head);
+			node->token_head = new_token_node;
+		}
+				
 	};
-
 	parser(node->token_head, NULL);
 
 	for(Tokens *ptr = node; ptr; ptr = node->next) {
@@ -72,6 +76,8 @@ char *get_string(char &c, ifstream &in) {
 	_string[length-1] = '\0';
 
 	in.read(_string, length);
+	// Skip closing Quotes
+	in>>c;
 
 	return _string;
 
@@ -87,7 +93,6 @@ char *get_identifier(char &c, ifstream &in) {
 
 	identifier[length-1] = '\0';
 	in.read(identifier, length);
-
 	return identifier; 
 };
 
@@ -101,7 +106,7 @@ char *get_operator(char &c, ifstream &in) {
 }
 
 
-Token *get_array_values(char *c, ifstream &in) {
+Token *get_array_values(char &c, ifstream &in) {
 
 	if(c == '|')
 		return NULL;
@@ -111,8 +116,9 @@ Token *get_array_values(char *c, ifstream &in) {
 	if(!not_quotes(c)) 
 		new_token_in_array = new Token(get_string(c, in), STRING);
 
-	else if(is_AtoZ()){
-		new_token_in_array = new Identifier(get_identifier(c, in), which_identifier(s));
+	else if(is_AtoZ(c)){
+		char *identifier = get_identifier(c, in);
+		new_token_in_array = new Identifier(identifier, which_identifier(identifier, c, in));
 	}
 	in>>c;
 	new_token_in_array->set_next(get_array_values(c, in));
@@ -141,32 +147,34 @@ Type which_operator(char *c) {
 		return ASSIGNMENT;
 	else if(c[0] == '+' && (names_match(c, (char *)"+") || names_match(c, (char*)"++"))) 
 		return ADDITION;
-	else if(c[0] == '-' && (strings_match(c, (char *)"-")  || strings_match(c, (char *)"--")))
+	else if(c[0] == '-' && (names_match(c, (char *)"-")  || names_match(c, (char *)"--")))
 		return SUBTRACTION;
-	else if(c[0] == '*' && strings_match(c, (char*)"*")) 
+	else if(c[0] == '*' && names_match(c, (char*)"*")) 
 		return MULTIPLICATION;
-	else if(c[0] == '/' && strings_match(s, (char*)"/"))
+	else if(c[0] == '/' && names_match(c, (char*)"/"))
 		return DIVISION;
-	else if(c[0] == '%' && strings_match(s, (char*)"%"))
+	else if(c[0] == '%' && names_match(c, (char*)"%"))
 		return MODULO;
-	else if(c[0] == '=' && strings_match(s, (char*)"==")) 
+	else if(c[0] == '=' && names_match(c, (char*)"==")) 
 		return COMPARISON;
 	//TODO: Else Syntax error.
 
 };
 
-int length_of_type(char &c, ifstream &in, bool(*green_light)(const char)) {
-	int start_pos = in.tellg();
+int length_of_type(char &c, ifstream &in, bool(*green_light)(const char &)) {
+	int start_pos = in.tellg(),
 		  end_pos,
 		  length;
-
-	while(green_light(c))
+	while(green_light(c)) {
 		in >> c;
+
+	}
+
 	end_pos = in.tellg();
 	length = end_pos - start_pos;
 	// Reset file pointer to original position.
 	in.clear();
-	in.seekg(start_pos, in.beg);
+	in.seekg(start_pos-1, in.beg);
 
 	
 	return length;
@@ -183,8 +191,8 @@ bool names_match(char *s1, char *s2) {
 	return false;
 };
 
-bool is_operator(char &c, ifstream &in) {
-	if (s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%')
+bool is_operator(const char &c) {
+	if (c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
 		return true;
 	return false;
 };

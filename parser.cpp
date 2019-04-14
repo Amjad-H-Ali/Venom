@@ -3,7 +3,6 @@
 using namespace std;
 
 void parser(Token *current, Token *previous) {
-
 	if(!current)
 		return;
 
@@ -12,7 +11,6 @@ void parser(Token *current, Token *previous) {
 	parser(next, current);
 
 	Type current_type = current->get_type();
-
 	if((current_type == VARIABLE) && (is_declared(current->get_name())== NULL )) {
 		declare(current);
 	}
