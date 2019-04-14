@@ -38,7 +38,7 @@ void lexer(char *file_name) {
 				new_token_node = new Identifier(identifier, type);
 		}
 		
-		else if(s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%') 
+		else if() 
 			new_token_node = new Token(&s[0], which_operator(s));
 	
 
@@ -76,6 +76,35 @@ char *get_string(char &c, ifstream &in) {
 
 	return _string;
 
+};
+char *get_identifier(char &c, ifstream &in) {
+	
+	int length = length_of_type(c, in, &is_AtoZ);
+
+
+	char *identifier = new char[length];
+
+	identifier[length-1] = '\0';
+	in.read(identifier, length);
+
+	return identifier; 
+};
+Token *get_array_values(string &s, ifstream &in) {
+
+	if(s[0] == '|')
+		return NULL;
+
+	Token *new_token_in_array;
+
+	if(s[0] == '"' || s[0] == '\'' ) {
+		new_token_in_array = new Token(&s[1], STRING);
+	}
+	else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')){
+		new_token_in_array = new Identifier(&s[0], which_identifier(s));
+	}
+	in>>s;
+	new_token_in_array->set_next(get_array(s, in));
+	return new_token_in_array;
 };
 
 int length_of_type(char &c, ifstream &in, bool(*green_light)(const char)) {
@@ -133,50 +162,25 @@ Type which_operator(string &s) {
 
 };
 
-Token *get_array_values(string &s, ifstream &in) {
 
-	if(s[0] == '|')
-		return NULL;
 
-	Token *new_token_in_array;
 
-	if(s[0] == '"' || s[0] == '\'' ) {
-		new_token_in_array = new Token(&s[1], STRING);
-	}
-	else if((s[0] >= 'a' && s[0] <= 'z') || (s[0] >='A' && s[0] <= 'Z')){
-		new_token_in_array = new Identifier(&s[0], which_identifier(s));
-	}
-	in>>s;
-	new_token_in_array->set_next(get_array(s, in));
-	return new_token_in_array;
+
+bool is_operator(char &c, ifstream &in) {
+	if (s[0] == '=' || s[0] == '+' || s[0] == '-' || s[0] == '*' || s[0] == '/' || s[0] == '%')
+		return true;
+	return false;
 };
-
-char *get_identifier(char &c, ifstream &in) {
-	
-	int length = length_of_type(c, in, &is_AtoZ);
-
-
-	char *identifier = new char[length];
-
-	identifier[length-1] = '\0';
-	in.read(identifier, length);
-
-	return identifier; 
-};
-
-
 
 bool is_AtoZ(const char &c) {
 	if ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z'))
 		return true;
-	else 
-		return false;
+	return false;
 };
 bool not_quotes(const char &c) {
 	if(c == '"' || c == '\'')
 		return false;
-	else 
-		return true;
+	return true;
 }
 
 
