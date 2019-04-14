@@ -77,6 +77,8 @@ char *get_string(char &c, ifstream &in) {
 	return _string;
 
 };
+
+
 char *get_identifier(char &c, ifstream &in) {
 	
 	int length = length_of_type(c, in, &is_AtoZ);
@@ -89,6 +91,16 @@ char *get_identifier(char &c, ifstream &in) {
 
 	return identifier; 
 };
+
+char *get_operator(char &c, ifstream &in) {
+	int length = length_of_type(c, in, &is_operator);
+
+	char *_operator = new char[length];
+	in.read(_operator, length);
+	return _operator;
+}
+
+
 Token *get_array_values(string &s, ifstream &in) {
 
 	if(s[0] == '|')
