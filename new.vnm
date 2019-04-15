@@ -1,13 +1,5 @@
 name = "amjad"
 
-address = '123 Main St, New York, New York. This is a very very very very very very long string to test out my program'
+write name 
 
-write name
-
-
-
-write address  
-
-message = 'I dont know what else to say so I will repeat the last sentence. I said, This is a very very very very very very long string to test out my program.'
-
-write message 
+arr|"Hello"  ,"World"|
