@@ -22,12 +22,10 @@ void Lexer::lexer(char *file_name) {
 
 	in >> noskipws;
 	while(in >> c){
-		if(!not_quotes(c)) {
+		if(!not_quotes(c))
 			
 			new_token_node = new Token(get_string(c, in), STRING);
-			new_token_node->set_next(node->token_head);
-			node->token_head = new_token_node;
-		}
+			
 		else if(is_AtoZ(c)) { 
 			char *identifier = get_identifier(c, in);
 			Type type = which_identifier(identifier, c, in);
@@ -36,16 +34,20 @@ void Lexer::lexer(char *file_name) {
 				new_token_node = new Identifier(get_array_values(c, in), identifier, type);
 			else
 				new_token_node = new Identifier(identifier, type);
-			new_token_node->set_next(node->token_head);
-			node->token_head = new_token_node;
+			
 		}
 		
 		else if(is_operator(c)) {
 			char *_operator = Lexer::get_operator(c, in);
 			new_token_node = new Token(_operator, Lexer::which_operator(_operator));
-			new_token_node->set_next(node->token_head);
-			node->token_head = new_token_node;
+			
 		}
+		else 
+			continue;
+
+		new_token_node->set_next(node->token_head);
+		node->token_head = new_token_node;
+
 				
 	};
 
