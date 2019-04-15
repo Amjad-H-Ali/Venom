@@ -167,6 +167,8 @@ Type Lexer::which_operator(char *c) {
 		return MODULO;
 	else if(c[0] == '=' && Lexer::names_match(c, (char*)"==")) 
 		return COMPARISON;
+	else 
+		return NIL;
 	//TODO: Else Syntax error.
 
 };

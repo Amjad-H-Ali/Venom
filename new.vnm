@@ -2,4 +2,8 @@ name = "amjad"
 
 write name 
 
-arr|"Hello"  ,"World"|
+arr|"Hello","World"|
+
+message='This is a message.'
+
+write message

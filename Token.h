@@ -2,6 +2,7 @@
 
 
 enum Type {
+	NIL,
 	STRING,
 	NUMBER,
 	ADDITION,
