@@ -22,7 +22,6 @@ void lexer(char *file_name) {
 
 	in >> noskipws;
 	while(in >> c){
-		
 		if(!not_quotes(c)) {
 			
 			new_token_node = new Token(get_string(c, in), STRING);
@@ -49,6 +48,7 @@ void lexer(char *file_name) {
 		}
 				
 	};
+
 	parser(node->token_head, NULL);
 
 	for(Tokens *ptr = node; ptr; ptr = node->next) {
@@ -73,9 +73,10 @@ char *get_string(char &c, ifstream &in) {
 	int length = length_of_type(c, in, &not_quotes);
 
 	char *_string = new char[length];
-	_string[length-1] = '\0';
+	
 
 	in.read(_string, length);
+	_string[length] = '\0';
 	// Skip closing Quotes
 	in>>c;
 
@@ -91,8 +92,9 @@ char *get_identifier(char &c, ifstream &in) {
 
 	char *identifier = new char[length];
 
-	identifier[length-1] = '\0';
 	in.read(identifier, length);
+	identifier[length] = '\0';
+	cout << "****Identifier**** " << identifier << endl;
 	return identifier; 
 };
 
@@ -100,8 +102,8 @@ char *get_operator(char &c, ifstream &in) {
 	int length = length_of_type(c, in, &is_operator);
 
 	char *_operator = new char[length];
-	_operator[length-1] = '\0';
 	in.read(_operator, length);
+	_operator[length] = '\0';
 	return _operator;
 }
 
@@ -163,14 +165,16 @@ Type which_operator(char *c) {
 
 int length_of_type(char &c, ifstream &in, bool(*green_light)(const char &)) {
 	int start_pos = in.tellg(),
+		   offset = 0,
 		  end_pos,
-		  length;
-	while(green_light(c)) {
-		in >> c;
-
+		   length;
+	while(green_light(c) && !in.eof()) {
+		offset++;
+		in>>c;
 	}
-
-	end_pos = in.tellg();
+	
+	end_pos = start_pos+offset;
+	cout << "END POS: " << end_pos << endl;
 	length = end_pos - start_pos;
 	// Reset file pointer to original position.
 	in.clear();
@@ -198,7 +202,7 @@ bool is_operator(const char &c) {
 };
 
 bool is_AtoZ(const char &c) {
-	if ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z'))
+	if ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z')) 
 		return true;
 	return false;
 };

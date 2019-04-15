@@ -3,13 +3,16 @@
 using namespace std;
 
 void parser(Token *current, Token *previous) {
+	// cout<<current<<endl;
 	if(!current)
 		return;
+
 
 	Token *next = current->get_next();
 
 	parser(next, current);
-
+	cout << "Good\n";
+	// cout << "Next: " << next->get_name()<< "Current: " << current->get_name()<<endl;
 	Type current_type = current->get_type();
 	if((current_type == VARIABLE) && (is_declared(current->get_name())== NULL )) {
 		declare(current);
