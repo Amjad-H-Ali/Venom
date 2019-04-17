@@ -15,7 +15,7 @@ void declare(Token *token_ptr);
 
 Token *is_declared(char *name);
 
-int hash(char letter);
+int hash(const char &letter);
 
 
 

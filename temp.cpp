@@ -1,22 +1,19 @@
 // #include <iostream>
 // #include <fstream>
+// #include <stdint.h>
 
 // using namespace std;
-// int func(int i) {
-// 	return i;
-// };
-// int func2(int i) {
-// 	return i + 9;
-// };
-// int func3(int(*some_func)(int)) {
-// 	int i = 1;
-// 	return some_func(i);
-// }
+
+// #define TOKEN_LIST(T, K)\
+// T(MJ, "Ali", 9)
+// #define T(name, string, precedence) name,
+// 	enum Value { TOKEN_LIST(T, T) NUM_TOKENS };
+
 // int main() {
 
-	
 
-// 	cout << func3(&func2) << endl;
+	
+// cout << NUM_TOKENS << endl;
 
 // }
 

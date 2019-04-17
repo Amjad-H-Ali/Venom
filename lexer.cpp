@@ -2,6 +2,7 @@
 #include <fstream>
 #include "lexer.h"
 #include "parser.h"
+#include "Declarations.h"
 
 using namespace std;
 
@@ -34,6 +35,8 @@ void Lexer::lexer(char *file_name) {
 				new_token_node = new Identifier(get_array_values(c, in), identifier, type);
 			else
 				new_token_node = new Identifier(identifier, type);
+
+			if(is_declared(new_token_node->get_name()) == NULL) declare(new_token_node);
 			
 		}
 		
@@ -123,6 +126,7 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 
 	else if(Lexer::is_AtoZ(c)){
 		char *identifier = Lexer::get_identifier(c, in);
+
 		new_token_in_array = new Identifier(identifier, Lexer::which_identifier(identifier, c, in));
 	}
 

@@ -37,7 +37,7 @@ Token *is_declared(char *name) {
 	return current_ptr->token_address;
 };
 
-int hash(char letter) {
+int hash(const char &letter) {
 	int indx = (letter >= 'A' && letter <= 'Z') ? letter - 'A' : letter - 'a';
 	return indx;
 };
