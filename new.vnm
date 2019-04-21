@@ -7,3 +7,10 @@ arr|"Hello","World"|
 message='This is a message.'
 
 write message
+
+func ->|number| 
+`
+
+`
+
+
