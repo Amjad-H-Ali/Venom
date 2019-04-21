@@ -5,6 +5,9 @@ Function::Function(char *name, Token *parameters, Token *opening, Token *closing
 	set_opening(opening);
 	set_closing(closing);
 };
+Function::~Function() {
+	delete this->name;
+};
 Token *Function::get_parameters() const {
 	return this->parameters;
 };
