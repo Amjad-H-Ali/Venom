@@ -1,6 +1,7 @@
 #pragma once
 #include "Token.h"
 #include "Identifier.h"
+#include "Function.h"
 
 // using namespace std;
 
@@ -14,6 +15,7 @@ namespace Lexer {
 	char *get_identifier(char &c, std::ifstream &in);
 	char *get_operator(char &c, std::ifstream &in);
 	Token *get_array_values(char &c, std::ifstream &in);
+	Token *get_parameters(char &c, std::ifstream &in);
 	Type which_identifier(char *identifier_ptr, char &c, std::ifstream &in);
 	Type which_operator(char *c);
 	int length_of_type(char &c, std::ifstream &in, bool(*green_light)(const char &));

@@ -24,14 +24,16 @@ void Lexer::lexer(char *file_name) {
 	while(in >> c){
 		if(!not_quotes(c))
 			
-			new_token_node = new Token(get_string(c, in), STRING);
+			new_token_node = new Token(Lexer::get_string(c, in), STRING);
 			
 		else if(is_AtoZ(c)) { 
 			char *identifier = get_identifier(c, in);
 			Type type = which_identifier(identifier, c, in);
 
 			if(type == ARRAY)
-				new_token_node = new Identifier(get_array_values(c, in), identifier, type);
+				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
+			else if(type == FUNCTION)
+				new_token_node = new Function(identifier, Lexer::get_parameters(c, in, /*TODO*\,/*TODO*\, type );
 			else
 				new_token_node = new Identifier(identifier, type);
 			
@@ -122,8 +124,8 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 		new_token_in_array = new Token(Lexer::get_string(c, in), STRING);
 
 	else if(Lexer::is_AtoZ(c)){
-		char *identifier = Lexer::get_identifier(c, in);
-		new_token_in_array = new Identifier(identifier, Lexer::which_identifier(identifier, c, in));
+		char *identifier_name = Lexer::get_identifier(c, in);
+		new_token_in_array = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in));
 	}
 
 	in>>c;
@@ -137,17 +139,28 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 	}
 };
 
-
-
-
+Token *Lexer::get_parameters(char &c, ifstream &in) {
+	// If an array of Parameters, use get_array function
+	if(c == '|') {
+		in >> c;
+		return Lexer::get_array_values(c, in);
+	}
+	Token *new_token_in_param = NULL;
+	char *identifier_name = Lexer::get_identifier(c, in);
+	new_token_in_param = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in));
+	return new_token_in_param;
+};
 
 Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in) {
 	if((in>>ws).peek() == '|') {
+		// Skip leading '|' to get into array.
 		in >> ws >> c >> ws >> c;
 		return ARRAY;
 	}
 	else if((in>>ws).peek() == '-' && multi_peek(in, 2) == '>') {
-
+		// Skip -> 
+		in >> ws >> c >> ws >> c >> ws >> c;
+		return FUNCTION;
 	}
 	else if(Lexer::names_match(identifier_ptr, (char*)"write"))
 		return WRITE;
