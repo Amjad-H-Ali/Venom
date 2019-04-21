@@ -143,8 +143,11 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 
 Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in) {
 	if((in>>ws).peek() == '|') {
-		in >> c; in >>c;
+		in >> ws >> c >> ws >> c;
 		return ARRAY;
+	}
+	else if((in>>ws).peek() == '-' && multi_peek(in, 2) == '>') {
+
 	}
 	else if(Lexer::names_match(identifier_ptr, (char*)"write"))
 		return WRITE;
@@ -218,11 +221,25 @@ bool Lexer::is_AtoZ(const char &c) {
 		return true;
 	return false;
 };
+
 bool Lexer::not_quotes(const char &c) {
 	if(c == '"' || c == '\'')
 		return false;
 	return true;
-}
+};
+
+char Lexer::multi_peek(ifstream &in, int places) {
+	char result;
+	streampos start_pos = in.tellg();
+
+	for(int i = 0; i < places; i ++) {
+		in >> ws >> result;
+	}
+	in.seekg(start_pos);
+
+	return result;
+};
+
 
 
 

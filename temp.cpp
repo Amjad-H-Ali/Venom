@@ -2,22 +2,36 @@
 // #include <fstream>
 
 // using namespace std;
-// int func(int i) {
-// 	return i;
-// };
-// int func2(int i) {
-// 	return i + 9;
-// };
-// int func3(int(*some_func)(int)) {
-// 	int i = 1;
-// 	return some_func(i);
-// }
+// char multi_peek(ifstream &in, int places);
+
 // int main() {
 
-	
 
-// 	cout << func3(&func2) << endl;
+// 	ifstream in;
+// 	in.open("new.vnm");
+// 	in >> noskipws;
+// 	char c;
+// 	in >>ws >> c >> ws>> c >> c >> c;
+// 	cout << c << endl;
+// 	char a = multi_peek(in,4);
+// 	cout << a << endl;
+
+
 
 // }
 
- 
+
+// char multi_peek(ifstream &in, int places) {
+// 	char result;
+// 	streampos start_pos = in.tellg();
+	
+// 	for(int i = 0; i < places; i ++) {
+// 		in >> ws >> result;
+// 	}
+// 	in.seekg(start_pos);
+
+// 	return result;
+// };
+
+
+//  

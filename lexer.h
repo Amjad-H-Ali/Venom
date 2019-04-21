@@ -21,4 +21,5 @@ namespace Lexer {
 	bool is_operator(const char &c);
 	bool is_AtoZ(const char &c);
 	bool not_quotes(const char &c);
+	char multi_peek(std::ifstream &in, int places);
 }

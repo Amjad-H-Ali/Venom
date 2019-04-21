@@ -8,9 +8,6 @@ message='This is a message.'
 
 write message
 
-func ->|number| 
-`
 
-`
 
 
