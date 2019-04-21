@@ -33,7 +33,7 @@ void Lexer::lexer(char *file_name) {
 			if(type == ARRAY)
 				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
 			else if(type == FUNCTION)
-				new_token_node = new Function(identifier, Lexer::get_parameters(c, in, /*TODO*\,/*TODO*\, type );
+				new_token_node = new Function(identifier, Lexer::get_parameters(c, in, /*TODO*/,/*TODO*/, type));
 			else
 				new_token_node = new Identifier(identifier, type);
 			
