@@ -10,10 +10,10 @@ write message
 
 func ->|anArray| 
 `
-	
+	write anArray
 
 `
 
-func(name, message)
+func(arr)
 
 
