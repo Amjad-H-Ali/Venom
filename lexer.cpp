@@ -59,6 +59,9 @@ Token *Lexer::get_statements(char &c, ifstream &in) {
 				cout << "Is Function\n";
 				new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
 			}
+			else if(type == FUNCTIONCALL) {
+				new_token_node = new FunctionCall(identifier, Lexer::get_arguments(c, in), type);
+			}
 			else
 				new_token_node = new Identifier(identifier, type);	
 		}
@@ -178,9 +181,15 @@ Token *Lexer::get_block(char &c, ifstream &in) {
 	return block;
 };
 
+Token *Lexer::get_arguments(char &c, ifstream &in) {
+	Token *arguments = Lexer::get_array_values(c, in);
+	return arguments;
+};
 
 Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool in_array) {
-	if((in>>ws).peek() == '|' && !in_array) {
+	if(Lexer::names_match(identifier_ptr, (char*)"write"))
+		return WRITE;
+	else if((in>>ws).peek() == '|' && !in_array) {
 		cout << "ARRAY\n";
 		// Skip leading '|' to get into array.
 		in >> ws >> c >> ws >> c;
@@ -191,8 +200,11 @@ Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool i
 		in >> ws >> c >> ws >> c >> ws >> c;
 		return FUNCTION;
 	}
-	else if(Lexer::names_match(identifier_ptr, (char*)"write"))
-		return WRITE;
+	else if((in>>ws).peek() == '(') {
+		// Skip (.
+		in >> ws >> c >> ws >> c;
+		return FUNCTIONCALL;
+	}
 	else
 		return VARIABLE;
 };

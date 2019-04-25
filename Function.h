@@ -1,7 +1,7 @@
 #pragma once
-#include "Identifier.h"
+#include "Token.h"
 
-class Function:public Identifier {
+class Function:public Token {
 private:
 	Token *parameters;
 	Token *block;

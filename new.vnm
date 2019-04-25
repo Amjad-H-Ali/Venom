@@ -8,10 +8,9 @@ message='This is a message.'
 
 write message
 
-func ->|number| 
+func ->|anArray| 
 `
-	ip = "1234.9034.2034"
-	write ip
+	
 
 `
 

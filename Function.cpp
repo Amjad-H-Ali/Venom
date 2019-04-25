@@ -1,6 +1,6 @@
 #include "Function.h"
 
-Function::Function(char *name, Token *parameters, Token *block, Type type):Identifier(name, type) {
+Function::Function(char *name, Token *parameters, Token *block, Type type):Token(name, type) {
 	set_parameters(parameters);
 	set_block(block);
 };
