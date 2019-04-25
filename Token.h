@@ -14,6 +14,7 @@ enum Type {
 	COMPARISON,
 	VARIABLE,
 	FUNCTION,
+	FUNCTIONCALL,
 	WRITE,
 	ARRAY
 };	
@@ -38,6 +39,11 @@ public:
 
 	virtual Token *get_value() const;
 	virtual void set_value(Token *tok_ptr);
+
+	virtual Token *get_parameters() const;
+	virtual Token *get_block() const;
+
+	virtual Token *get_arguments() const;
 	
 };
 

@@ -2,8 +2,20 @@ name = "amjad"
 
 write name 
 
+write "John Doe"
+
 arr|"Hello","World"|
 
 message='This is a message.'
 
 write message
+
+func ->|anArray| 
+`
+	write anArray
+
+`
+
+func(arr)
+
+

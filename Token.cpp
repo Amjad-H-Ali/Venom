@@ -38,3 +38,6 @@ Token *Token::get_next() const {
 
 Token *Token::get_value() const {return 0;};
 void Token::set_value(Token *tok_ptr) {};
+Token *Token::get_parameters() const {return 0;};
+Token *Token::get_block() const {return 0;};
+Token *Token::get_arguments() const {return 0;};
