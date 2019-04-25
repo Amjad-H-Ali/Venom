@@ -29,6 +29,12 @@ void Lexer::lexer(char *file_name) {
 				for(Token *ptr3 = ptr2->get_value(); ptr3; ptr3=ptr3->get_next())
 					cout << "From Array: " << ptr3->get_name() << endl;
 			}
+			if(ptr2->get_type()==FUNCTION) {
+				cout << "FROM FUNCTION BLOCK {\n";
+				for(Token *ptr3= ptr2->get_block(); ptr3; ptr3=ptr3->get_next())
+					cout << ptr3->get_name();
+				cout << "\n}" << endl; 
+			}
 			
 		}
 	}
@@ -41,35 +47,35 @@ Token *Lexer::get_statements(char &c, ifstream &in) {
 
 	in >> noskipws;
 	while(in >> c){
-		if(!not_quotes(c))
-			
+		if(!not_quotes(c))	
 			new_token_node = new Token(Lexer::get_string(c, in), STRING);
-			
-		else if(is_AtoZ(c)) { 
+		else if(is_AtoZ(c)) { cout << "Is IDENTIFIER\n";
 			char *identifier = get_identifier(c, in);
 			Type type = which_identifier(identifier, c, in);
-
 			if(type == ARRAY)
 				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
-			// else if(type == FUNCTION)
-			// 	new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
+			else if(type == FUNCTION) {
+				cout << "Is Function\n";
+				new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
+			}
 			else
-				new_token_node = new Identifier(identifier, type);
-			
+				new_token_node = new Identifier(identifier, type);	
 		}
-		
+		// Closing block. Retrieving statements is complete.
+		else if(c == '`') {  
+			cout << "Closing Block \n"; 
+			in >> c; // Skip it. 
+			break;
+		}
 		else if(is_operator(c)) {
 			char *_operator = Lexer::get_operator(c, in);
-			new_token_node = new Token(_operator, Lexer::which_operator(_operator));
-			
+			new_token_node = new Token(_operator, Lexer::which_operator(_operator));	
 		}
 		else 
 			continue;
-
 		new_token_node->set_next(head);
 		head = new_token_node;		
 	}
-
 	return head;
 };
 
@@ -130,7 +136,8 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 
 	else if(Lexer::is_AtoZ(c)){
 		char *identifier_name = Lexer::get_identifier(c, in);
-		new_token_in_array = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in));
+		new_token_in_array = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in, true));
+			cout << c << '\n';
 	}
 
 	in>>c;
@@ -150,11 +157,13 @@ Token *Lexer::get_parameters(char &c, ifstream &in) {
 		// Skip |
 		in >> c;
 		return Lexer::get_array_values(c, in);
+		
 	}
 	// For single parameter
 	Token *new_token_in_param = NULL;
 	char *identifier_name = Lexer::get_identifier(c, in);
 	new_token_in_param = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in));
+	cout << "Done Getting Params\n";
 	return new_token_in_param;
 };
 
@@ -162,13 +171,16 @@ Token *Lexer::get_block(char &c, ifstream &in) {
 	// Find start of block
 	while(c != '`')
 		in >> ws >> c;
-	// Current character is `.
-
+	cout << "Opening Block\n";
+	// Current character is `. Get statetements in Block. End at closing `.
+	Token *block = Lexer::get_statements(c, in);
+	return block;
 };
 
 
-Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in) {
-	if((in>>ws).peek() == '|') {
+Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool in_array) {
+	if((in>>ws).peek() == '|' && !in_array) {
+		cout << "ARRAY\n";
 		// Skip leading '|' to get into array.
 		in >> ws >> c >> ws >> c;
 		return ARRAY;
