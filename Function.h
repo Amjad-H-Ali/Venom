@@ -4,15 +4,13 @@
 class Function:public Identifier {
 private:
 	Token *parameters;
-	Token *opening;
-	Token *closing;
+	Token *block;
+	
 public:
-	Function(char *name, Token *parameters, Token *opening, Token *closing, Type type);
+	Function(char *name, Token *parameters, Token *block, Type type);
 	~Function();
 	Token *get_parameters() const;
 	void set_parameters(Token *tok_ptr);
-	Token *get_opening() const;
-	void set_opening(Token *tok_ptr);
-	Token *get_closing() const;
-	void set_closing(Token *tok_ptr);
+	Token *get_block() const;
+	void set_block(Token *tok_ptr);
 };

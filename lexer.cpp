@@ -33,7 +33,7 @@ void Lexer::lexer(char *file_name) {
 			if(type == ARRAY)
 				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
 			else if(type == FUNCTION)
-				new_token_node = new Function(identifier, Lexer::get_parameters(c, in, /*TODO*/,/*TODO*/, type));
+				new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
 			else
 				new_token_node = new Identifier(identifier, type);
 			
@@ -115,8 +115,11 @@ char *Lexer::get_operator(char &c, ifstream &in) {
 
 Token *Lexer::get_array_values(char &c, ifstream &in) {
 
-	if(c == '|')
+	if(c == '|') {
+		// Skip |
+		in >> c;
 		return NULL;
+	}
 
 	Token *new_token_in_array = NULL;
 
@@ -142,14 +145,21 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 Token *Lexer::get_parameters(char &c, ifstream &in) {
 	// If an array of Parameters, use get_array function
 	if(c == '|') {
+		// Skip |
 		in >> c;
 		return Lexer::get_array_values(c, in);
 	}
+	// For single parameter
 	Token *new_token_in_param = NULL;
 	char *identifier_name = Lexer::get_identifier(c, in);
 	new_token_in_param = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in));
 	return new_token_in_param;
 };
+
+Token *Lexer::get_block(char &c, ifstream &in) {
+	
+};
+
 
 Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in) {
 	if((in>>ws).peek() == '|') {
