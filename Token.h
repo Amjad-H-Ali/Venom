@@ -41,6 +41,8 @@ public:
 	virtual void set_value(Token *tok_ptr);
 
 	virtual Token *get_block() const;
+
+	virtual Token *get_arguments() const;
 	
 };
 

@@ -36,6 +36,12 @@ void Lexer::lexer(char *file_name) {
 						cout << ptr3->get_value()->get_value()->get_name();
 				cout << "\n}" << endl;
 			}
+			if(ptr2->get_type()==FUNCTIONCALL) {
+				cout << ptr2->get_name() << " ( ";
+				for(Token *ptr3= ptr2->get_arguments(); ptr3; ptr3=ptr3->get_next())
+					cout << ptr3->get_name() << ' ';
+				cout << ")\n";
+			}
 			
 		}
 	}
@@ -127,7 +133,7 @@ char *Lexer::get_operator(char &c, ifstream &in) {
 
 Token *Lexer::get_array_values(char &c, ifstream &in) {
 
-	if(c == '|') {
+	if(c == '|' || c == ')') {
 		// Skip |
 		in >> c;
 		return NULL;

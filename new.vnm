@@ -14,4 +14,6 @@ func ->|anArray|
 
 `
 
+func(name, message)
+
 
