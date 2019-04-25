@@ -13,45 +13,11 @@ Lexer::Tokens *node = new Lexer::Tokens;
 
 void Lexer::lexer(char *file_name) {
 
-	node->token_head = NULL;
-	node->next = NULL;
-
 	ifstream in(file_name);
 	char c;
-	Token *new_token_node;
 
-	in >> noskipws;
-	while(in >> c){
-		if(!not_quotes(c))
-			
-			new_token_node = new Token(Lexer::get_string(c, in), STRING);
-			
-		else if(is_AtoZ(c)) { 
-			char *identifier = get_identifier(c, in);
-			Type type = which_identifier(identifier, c, in);
-
-			if(type == ARRAY)
-				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
-			else if(type == FUNCTION)
-				new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
-			else
-				new_token_node = new Identifier(identifier, type);
-			
-		}
-		
-		else if(is_operator(c)) {
-			char *_operator = Lexer::get_operator(c, in);
-			new_token_node = new Token(_operator, Lexer::which_operator(_operator));
-			
-		}
-		else 
-			continue;
-
-		new_token_node->set_next(node->token_head);
-		node->token_head = new_token_node;
-
-				
-	};
+	node->next = NULL;
+	node->token_head = Lexer::get_statements(c, in);
 
 	parser(node->token_head, NULL);
 
@@ -69,7 +35,43 @@ void Lexer::lexer(char *file_name) {
 };
 
 
+Token *Lexer::get_statements(char &c, ifstream &in) {
+	Token *head = NULL;
+	Token *new_token_node;
 
+	in >> noskipws;
+	while(in >> c){
+		if(!not_quotes(c))
+			
+			new_token_node = new Token(Lexer::get_string(c, in), STRING);
+			
+		else if(is_AtoZ(c)) { 
+			char *identifier = get_identifier(c, in);
+			Type type = which_identifier(identifier, c, in);
+
+			if(type == ARRAY)
+				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
+			// else if(type == FUNCTION)
+			// 	new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
+			else
+				new_token_node = new Identifier(identifier, type);
+			
+		}
+		
+		else if(is_operator(c)) {
+			char *_operator = Lexer::get_operator(c, in);
+			new_token_node = new Token(_operator, Lexer::which_operator(_operator));
+			
+		}
+		else 
+			continue;
+
+		new_token_node->set_next(head);
+		head = new_token_node;		
+	}
+
+	return head;
+};
 
 char *Lexer::get_string(char &c, ifstream &in) {
 	// Skip Quotes.
@@ -157,7 +159,11 @@ Token *Lexer::get_parameters(char &c, ifstream &in) {
 };
 
 Token *Lexer::get_block(char &c, ifstream &in) {
-	
+	// Find start of block
+	while(c != '`')
+		in >> ws >> c;
+	// Current character is `.
+
 };
 
 
