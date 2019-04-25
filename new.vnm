@@ -11,6 +11,7 @@ write message
 func ->|number| 
 `
 	ip = "1234.9034.2034"
+	write ip
 
 `
 

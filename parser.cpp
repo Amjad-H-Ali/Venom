@@ -25,6 +25,8 @@ void parser(Token *current, Token *previous) {
 	}
 	else if (current_type == WRITE) 
 		current->set_value(is_declared(previous->get_name()));
+	else if (current_type == FUNCTION)
+		parser(current->get_block(), current);
 	
 
 	// if(node->get_type()== VARIABLE) {

@@ -25,15 +25,16 @@ void Lexer::lexer(char *file_name) {
 		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
 			if(ptr2->get_type()== WRITE)  
 				cout << ptr2->get_value()->get_value()->get_name() << endl;
-			if(ptr2->get_type()==ARRAY) {
+			if(ptr2->get_type()==ARRAY) 
 				for(Token *ptr3 = ptr2->get_value(); ptr3; ptr3=ptr3->get_next())
 					cout << "From Array: " << ptr3->get_name() << endl;
-			}
+			
 			if(ptr2->get_type()==FUNCTION) {
 				cout << "FROM FUNCTION BLOCK {\n";
 				for(Token *ptr3= ptr2->get_block(); ptr3; ptr3=ptr3->get_next())
-					cout << ptr3->get_name();
-				cout << "\n}" << endl; 
+					if(ptr3->get_type() == WRITE)
+						cout << ptr3->get_value()->get_value()->get_name();
+				cout << "\n}" << endl;
 			}
 			
 		}
