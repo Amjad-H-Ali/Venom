@@ -31,7 +31,7 @@ void parser(Token *current, Token *previous) {
 
 	}
 	else if (current_type == WRITE)
-		current->set_value(is_declared(previous->get_name()));
+		previous->get_type() == STRING ? current->set_value(previous) : current->set_value(is_declared(previous->get_name()));
 	else if (current_type == FUNCTIONCALL) {
 		Token *func_def = is_declared(current->get_name());
 		Token *params = func_def->get_parameters();
@@ -45,28 +45,4 @@ void parser(Token *current, Token *previous) {
 		parser(func_def->get_block(), current);
 	}
 	
-
-	// if(node->get_type()== VARIABLE) {
-	// 	if(!is_declared(node->get_name())) declare(node);
-	// }
-	// if(next && next->get_type() == WRITE) {
-	// 	if(node->get_type()==VARIABLE) {
-	// 		Token *var_ptr = is_declared(node->get_name()); // Where defined?
-	// 		next->set_value(var_ptr);
-	// 	}
-	// 	else
-	// 		next->set_value(node);
-	// }
-
-	// // If next node equal operator, set this node to variable on the other side of the equal.
-	// // Then this node should point at variable and now safely delete equal operator from LL.
-	// if(next && next->get_type()== ASSIGNMENT) {
-	// 	Token *var_ptr = next->get_next();
-
-	// 	var_ptr->set_value(node);
-			
-
-	// 	node->set_next(var_ptr);
-	// 	delete next;
-	// }
 };
