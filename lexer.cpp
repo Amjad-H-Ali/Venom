@@ -24,8 +24,8 @@ void Lexer::lexer(char *file_name) {
 	for(Tokens *ptr = node; ptr; ptr = node->next) {
 		for(Token *ptr2 = ptr->token_head; ptr2; ptr2 = ptr2->get_next()) {
 			if(ptr2->get_type()== WRITE)  
+				// cout << ptr2->get_value()->get_value()->get_name() << endl;
 				cout << ptr2->get_value()->get_value()->get_name() << endl;
-			
 			if(ptr2->get_type()==ARRAY) 
 				for(Token *ptr3 = ptr2->get_value(); ptr3; ptr3=ptr3->get_next())
 					cout << "From Array: " << ptr3->get_name() << endl;
