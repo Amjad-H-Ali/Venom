@@ -15,6 +15,7 @@ enum Type {
 	VARIABLE,
 	FUNCTION,
 	FUNCTIONCALL,
+	OUTPUT,
 	WRITE,
 	ARRAY
 };	

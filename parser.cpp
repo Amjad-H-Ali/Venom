@@ -33,7 +33,7 @@ void parser(Token *current, Token *previous) {
 
 	}
 
-	else if (current_type == WRITE)
+	else if (current_type == WRITE || current_type == OUTPUT)
 		previous->get_type() == STRING ? current->set_value(previous) : current->set_value(is_declared(previous->get_name()));
 	else if (current_type == FUNCTIONCALL) {
 		Token *func_def = is_declared(current->get_name());

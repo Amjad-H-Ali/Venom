@@ -35,9 +35,12 @@ void Lexer::lexer(char *file_name) {
 			
 			if(ptr2->get_type()==FUNCTION) {
 				cout << "FROM FUNCTION BLOCK {\n";
-				for(Token *ptr3= ptr2->get_block(); ptr3; ptr3=ptr3->get_next())
+				for(Token *ptr3= ptr2->get_block(); ptr3; ptr3=ptr3->get_next()) {
 					if(ptr3->get_type() == WRITE)
 						cout << ptr3->get_value()->get_value()->get_name();
+					if(ptr3->get_type() == OUTPUT)
+						cout << "OUTPUT: " << ptr3->get_value()->get_value()->get_name();
+				}
 				cout << "\n}" << endl;
 			}
 			if(ptr2->get_type()==FUNCTIONCALL) {
@@ -60,18 +63,15 @@ Token *Lexer::get_statements(char &c, ifstream &in) {
 	while(in >> c){
 		if(!not_quotes(c))	
 			new_token_node = new Token(Lexer::get_string(c, in), STRING);
-		else if(is_AtoZ(c)) { cout << "Is IDENTIFIER\n";
+		else if(is_AtoZ(c)) {
 			char *identifier = get_identifier(c, in);
 			Type type = which_identifier(identifier, c, in);
 			if(type == ARRAY)
 				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
-			else if(type == FUNCTION) {
-				cout << "Is Function\n";
+			else if(type == FUNCTION) 
 				new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
-			}
-			else if(type == FUNCTIONCALL) {
+			else if(type == FUNCTIONCALL) 
 				new_token_node = new FunctionCall(identifier, Lexer::get_arguments(c, in), type);
-			}
 			else
 				new_token_node = new Identifier(identifier, type);	
 		}
@@ -121,7 +121,6 @@ char *Lexer::get_identifier(char &c, ifstream &in) {
 
 	in.read(identifier, length);
 	identifier[length] = '\0';
-	cout << "****Identifier**** " << identifier << endl;
 	return identifier; 
 };
 
@@ -179,7 +178,6 @@ Token *Lexer::get_parameters(char &c, ifstream &in) {
 	Token *new_token_in_param = NULL;
 	char *identifier_name = Lexer::get_identifier(c, in);
 	new_token_in_param = new Identifier(identifier_name, Lexer::which_identifier(identifier_name, c, in));
-	cout << "Done Getting Params\n";
 	return new_token_in_param;
 };
 
@@ -187,7 +185,6 @@ Token *Lexer::get_block(char &c, ifstream &in) {
 	// Find start of block
 	while(c != '`')
 		in >> ws >> c;
-	cout << "Opening Block\n";
 	// Current character is `. Get statetements in Block. End at closing `.
 	Token *block = Lexer::get_statements(c, in);
 	return block;
@@ -201,6 +198,8 @@ Token *Lexer::get_arguments(char &c, ifstream &in) {
 Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool in_array) {
 	if(Lexer::names_match(identifier_ptr, (char*)"write"))
 		return WRITE;
+	else if(Lexer::names_match(identifier_ptr, (char*)"output"))
+		return OUTPUT;
 	else if((in>>ws).peek() == '|' && !in_array) {
 		cout << "ARRAY\n";
 		// Skip leading '|' to get into array.

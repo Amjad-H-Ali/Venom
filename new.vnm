@@ -12,7 +12,7 @@ write message
 
 func ->|anArray| 
 `
-	write anArray
+	output anArray
 
 `
 
