@@ -39,7 +39,7 @@ void Lexer::lexer(char *file_name) {
 					if(ptr3->get_type() == WRITE)
 						cout << ptr3->get_value()->get_value()->get_name();
 					if(ptr3->get_type() == OUTPUT)
-						cout << "OUTPUT: " << ptr3->get_value()->get_value()->get_name();
+						cout << "OUTPUT: " << ptr3->get_value()->get_value()->get_value()->get_name();
 				}
 				cout << "\n}" << endl;
 			}

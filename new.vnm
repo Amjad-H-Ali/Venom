@@ -16,6 +16,6 @@ func ->|anArray|
 
 `
 
-func(arr)
+func(name)
 
 
