@@ -36,14 +36,15 @@ public:
 
 	// Main Constructor
 	Token(char *stream) 
-		:name(), type(), next() 
+		:name(nullptr), type(), next(nullptr) 
 	{
 #define T(symbol, name) if(name) {setName(stream); setType(symbol);} // TODO: ELSE THROW EXCEPTION
 	TOKEN_LIST(T, stream)
 #undef T 
 	};
 
-
+	// Destructor
+	~Token();
 
 	// Methods
 	void setName(char *name);
