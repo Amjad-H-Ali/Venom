@@ -1,21 +1,7 @@
-name = "amjad"
+name="Amjad"
 
-write name 
+address="123 Main St"
 
-write "John Doe"
-
-arr|"Hello","World"|
-
-message='This is a message.'
-
-write message
-
-func ->|anArray| 
-`
-	output anArray
-
-`
-
-func(name)
+arr|name,address|
 
 

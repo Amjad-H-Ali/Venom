@@ -1,52 +1,31 @@
-#pragma once
+#pragma once 
+
+// TOKEN_LIST takes in a Token Macro (T) and a string (S).
+// Each Macro has the same signature M(type, func(S)), 
+// where type is a unique symbol for the Token and func(S)
+// is some Boolean function that takes in a string as an 
+// argument.
+
+// T: Token Macro
+// S: String from input stream
+#define TOKEN_LIST(T, S)								\
+	T(IF, isIF(S))										\
+	T(EQ, isEQ(S))										\
+	T(BAR, isBAR(S))									\
+	T(EQEQ, isEQEQ(S))									\
+	T(ELSE, isELSE(S))									\
+	T(COMMA, isCOMMA(S))								\
+	T(STRING, isSTRING(S))								\
+	T(OUTPUT, isOUTPUT(S))								\
+	T(BACKTICK, isBACKTICK(S))							\
+	T(IDENTIFIER, isIDENTIFIER(S))						\
+	T(SKINNYARROW, isSKINNYARROW(S))					\
 
 
-enum Type {
-	NIL,
-	STRING,
-	NUMBER,
-	ADDITION,
-	SUBTRACTION,
-	DIVISION,
-	MULTIPLICATION,
-	MODULO,
-	ASSIGNMENT,
-	COMPARISON,
-	VARIABLE,
-	FUNCTION,
-	FUNCTIONCALL,
-	OUTPUT,
-	WRITE,
-	ARRAY
-};	
-
-class Token {
-protected:
-	Type type;
-	char *name;
-	int name_len;
-	Token *next;
-public:
-	Token(char *name, Type type);
-	virtual~Token();
-	void set_type(Type type);
-	Type get_type() const;
-	void set_name(char *name);
-	char *get_name() const;
-	void set_name_len(char *name);
-	int get_name_len() const;
-	void set_next(Token *tok_ptr);
-	Token *get_next() const;
-
-	virtual Token *get_value() const;
-	virtual void set_value(Token *tok_ptr);
-
-	virtual Token *get_parameters() const;
-	virtual Token *get_block() const;
-
-	virtual Token *get_arguments() const;
 	
-};
+
+
+
 
 
 
