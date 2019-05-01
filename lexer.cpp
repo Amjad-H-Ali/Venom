@@ -268,11 +268,11 @@ int utils::length_of_type(char &c, ifstream &in, bool(*green_light)(const char &
 };
 
 
-bool utils::names_match(char *s1, char *s2) {
+
+bool utils::isMatch(char *s1, char *s2) {
 	int indx = 0;
 	while(s1[indx] == s2[indx]) {
-		if(s1[indx] == '\0') 
-			return true;
+		if(s1[indx] == s2[indx] == '\0') return true;
 		indx++;
 	}
 	return false;
@@ -296,13 +296,18 @@ bool utils::not_quotes(const char &c) {
 	return true;
 };
 
-char utils::multi_peek(ifstream &in, int places) {
+
+char utils::peekAhead(ifstream &in, int places) {
 	char result;
+
+	// To remember starting position
 	streampos start_pos = in.tellg();
 
-	for(int i = 0; i < places; i ++) {
+	// Jump ahead and peek
+	for(int i = 0; i < places; i ++)
 		in >> ws >> result;
-	}
+
+	// Return to start position
 	in.seekg(start_pos);
 
 	return result;
@@ -336,13 +341,13 @@ bool utils::isOUTPUT(char *stream) {
 	
 };	
 bool utils::isBACKTICK(char *stream) {
-	return stream == '`';
+	return isMatch(stream, "`");
 };	
 bool utils::isIDENTIFIER(char *stream) {
 	
 };
 bool utils::isSKINNYARROW(char *stream) {
-	
+	return isMatch(stream, "->");
 };
 
 
