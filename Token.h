@@ -19,9 +19,16 @@
 	T(OUTPUT, isOUTPUT(S))								\
 	T(BACKTICK, isBACKTICK(S))							\
 	T(IDENTIFIER, isIDENTIFIER(S))						\
-	T(SKINNYARROW, isSKINNYARROW(S))					\
+	T(SKINNY_ARROW, isSKINNYARROW(S))					
 
 
+// All Token Symbols
+#define T(symbol, name) symbol,
+	// In this case, only the symbol is needed
+	// and the second parameter is unused to
+	// generate the List of Token Symbols.
+	enum Type{TOKEN_LIST(T, S) NUM_OF_TOKENS};
+#undef T
 	
 
 
