@@ -1,72 +1,75 @@
+
 // #include <iostream>
-// #include <stdint.h>
+// // TOKEN_LIST takes in a Token Macro (T) and a string (S).
+// // Each Macro has the same signature M(type, func(S)), 
+// // where type is a unique symbol for the Token and func(S)
+// // is some Boolean function that takes in a string as an 
+// // argument.
+
+// // T: Token Macro
+// // S: String from input stream
+// #define TOKEN_LIST(T, S) 								\
+// 	T(STRING, isSTRING(S))								
+
+// 	// T(IF, isIF(S))										\
+// 	// T(EQ, isEQ(S))										\
+// 	// T(BAR, isBAR(S))									\
+// 	// T(EQEQ, isEQEQ(S))									\
+// 	// T(ELSE, isELSE(S))									\
+// 	// T(COMMA, isCOMMA(S))								\
+// 	// T(OUTPUT, isOUTPUT(S))								\
+// 	// T(BACKTICK, isBACKTICK(S))							\
+// 	// T(IDENTIFIER, isIDENTIFIER(S))						\
+// 	// T(SKINNY_ARROW, isSKINNYARROW(S))					
 
 
-// #define TOKEN_LIST(T, S)	   	\
-// 	T(STRING, isSTRING(S))	\
-// 	T(EQEQ, isEQEQ(S))		\
-// 	T(IF, isIF(S))			
+// // All Token Symbols
+// #define T(symbol, name) symbol,
+// 	// In this case, only the symbol is needed
+// 	// and the second parameter is unused to
+// 	// generate the List of Token Symbols.
+// 	enum Symbol{TOKEN_LIST(T, S) NUM_OF_TOKENS};
+// #undef T
 
-
-// bool isMatch (char *str1, char *str2) {
-// 	int i = 0;
-// 	std::cout << "ooo" << std::endl;
-
-// 	while(str1[i] == str2[i]) { 
-
-// 		if(str1[i] == '\0' || str2[i] == '\0' ) return true;	
-// 		i++;
-// 	}
-
+// bool isSTRING(char *stream) {
+// 	std::cout << stream << std::endl;
+// 	if(stream[0] == '"') return true;
 // 	return false;
 // };
-// bool isSTRING(char *str) {
-// 	std::cout << "ooo" << std::endl;
-// 	if(str[0] == '"') return true;
-// }
-// bool isEQEQ(char *str) {
-// 	if(isMatch(str, (char *) "==")) return true;
-// }
-// bool isIF(char *str) {
-// 	if(isMatch(str, (char *) "if")) return true;
-// }
 
-// struct Token {
-// #define T(type, name) type, 
-// 		enum Value {TOKEN_LIST(T, S) NUM_OF_TOKENS};
-// #undef T
+// class Token {
 
-// 	Token(char *str) {
-// #define T(type, name) if(name) { std::cout << #type << std::endl;}
-// 	TOKEN_LIST(T, str)
-// #undef T
+// public:
+
+// 	Token(char *stream) {
+// #define T(symbol, name) if(name) {setName((char *)#symbol); setType(symbol);}
+// 	TOKEN_LIST(T, stream) 
+// #undef T 
 // 	};
 
+// 	void setName(char *name) {
+// 		this->name = name; 
+// 	};
+	
 
-// 	Value type;
+// 	void setType(Symbol type) {
+// 		this->type = type;
+// 	};
+
 // 	char *name;
+// 	Symbol type; 
 
+
+// }; // Token
+
+
+// int main(){
+
+// 	Token token((char *)"\"");
+
+// 	std::cout << token.name << std::endl;
 
 // };
 
-// char *foo(char *str) {
-// #define T(type, name) type, 
-// 		enum Value {TOKEN_LIST(T, S) NUM_OF_TOKENS};
-// #undef T
-
-// #define T(type, name) if(name) return (char*)#type;
-// 	TOKEN_LIST(T, str)
-// #undef T
-
-// };
-
-// int main() { 
 
 
-
-// 	std::cout << foo((char *)"\"if\"") << std::endl;
-
-
-// }
-
- 

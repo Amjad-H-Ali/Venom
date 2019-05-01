@@ -27,9 +27,45 @@
 	// In this case, only the symbol is needed
 	// and the second parameter is unused to
 	// generate the List of Token Symbols.
-	enum Type{TOKEN_LIST(T, S) NUM_OF_TOKENS};
+	enum Symbol{TOKEN_LIST(T, S) NUM_OF_TOKENS};
 #undef T
+
+class Token {
+
+public:
+
+	// Main Constructor
+	Token(char *stream) 
+		:name(), type(), next() 
+	{
+#define T(symbol, name) if(name) {setName(stream); setType(symbol);} // TODO: ELSE THROW EXCEPTION
+	TOKEN_LIST(T, stream)
+#undef T 
+	};
+
+
+
+	// Methods
+	void setName(char *name);
+
+	void setType(Symbol type);
+
+	void setNext(Token *tokenPtr);
 	
+	char *getName() const;
+
+	Symbol getType() const;
+
+	Token *getNext() const;
+
+	// Data
+private:
+	char *name;
+	Symbol type; 
+	Token *next;
+
+
+} // Token
 
 
 
