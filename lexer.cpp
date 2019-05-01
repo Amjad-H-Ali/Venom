@@ -14,7 +14,7 @@ Lexer::Tokens *node = new Lexer::Tokens;
 
 
 
-void Lexer::lexer(char *file_name) {
+void utils::lexer(char *file_name) {
 
 	ifstream in(file_name);
 	char c;
@@ -58,7 +58,7 @@ void Lexer::lexer(char *file_name) {
 };
 
 
-Token *Lexer::get_statements(char &c, ifstream &in) {
+Token *utils::get_statements(char &c, ifstream &in) {
 	Token *head = NULL;
 	Token *new_token_node;
 
@@ -96,7 +96,7 @@ Token *Lexer::get_statements(char &c, ifstream &in) {
 	return head;
 };
 
-char *Lexer::get_string(char &c, ifstream &in) {
+char *utils::get_string(char &c, ifstream &in) {
 	// Skip Quotes.
 	in >> c;
 
@@ -115,7 +115,7 @@ char *Lexer::get_string(char &c, ifstream &in) {
 };
 
 
-char *Lexer::get_identifier(char &c, ifstream &in) {
+char *utils::get_identifier(char &c, ifstream &in) {
 	
 	int length = Lexer::length_of_type(c, in, &is_AtoZ);
 
@@ -127,7 +127,7 @@ char *Lexer::get_identifier(char &c, ifstream &in) {
 	return identifier; 
 };
 
-char *Lexer::get_operator(char &c, ifstream &in) {
+char *utils::get_operator(char &c, ifstream &in) {
 	int length = Lexer::length_of_type(c, in, &is_operator);
 
 	char *_operator = new char[length];
@@ -137,7 +137,7 @@ char *Lexer::get_operator(char &c, ifstream &in) {
 }
 
 
-Token *Lexer::get_array_values(char &c, ifstream &in) {
+Token *utils::get_array_values(char &c, ifstream &in) {
 
 	if(c == '|' || c == ')') {
 		// Skip |
@@ -169,7 +169,7 @@ Token *Lexer::get_array_values(char &c, ifstream &in) {
 	}
 };
 
-Token *Lexer::get_parameters(char &c, ifstream &in) {
+Token *utils::get_parameters(char &c, ifstream &in) {
 	// If an array of Parameters, use get_array function
 	if(c == '|') {
 		// Skip |
@@ -184,7 +184,7 @@ Token *Lexer::get_parameters(char &c, ifstream &in) {
 	return new_token_in_param;
 };
 
-Token *Lexer::get_block(char &c, ifstream &in) {
+Token *utils::get_block(char &c, ifstream &in) {
 	// Find start of block
 	while(c != '`')
 		in >> ws >> c;
@@ -193,12 +193,12 @@ Token *Lexer::get_block(char &c, ifstream &in) {
 	return block;
 };
 
-Token *Lexer::get_arguments(char &c, ifstream &in) {
+Token *utils::get_arguments(char &c, ifstream &in) {
 	Token *arguments = Lexer::get_array_values(c, in);
 	return arguments;
 };
 
-Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool in_array) {
+Type utils::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool in_array) {
 	if(Lexer::names_match(identifier_ptr, (char*)"write"))
 		return WRITE;
 	else if(Lexer::names_match(identifier_ptr, (char*)"output"))
@@ -222,7 +222,7 @@ Type Lexer::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool i
 	else
 		return VARIABLE;
 };
-Type Lexer::which_operator(char *c) {
+Type utils::which_operator(char *c) {
 
 	// Why c[0]? So functions don't get called for nothing. And still need names_macth to match ops with more than 1 character
 	// and ensure something like %%% or ++++ is not Tokenized.
@@ -246,7 +246,7 @@ Type Lexer::which_operator(char *c) {
 
 };
 
-int Lexer::length_of_type(char &c, ifstream &in, bool(*green_light)(const char &)) {
+int utils::length_of_type(char &c, ifstream &in, bool(*green_light)(const char &)) {
 	int start_pos = in.tellg(),
 		   offset = 0,
 		  end_pos,
@@ -268,7 +268,7 @@ int Lexer::length_of_type(char &c, ifstream &in, bool(*green_light)(const char &
 };
 
 
-bool Lexer::names_match(char *s1, char *s2) {
+bool utils::names_match(char *s1, char *s2) {
 	int indx = 0;
 	while(s1[indx] == s2[indx]) {
 		if(s1[indx] == '\0') 
@@ -278,25 +278,25 @@ bool Lexer::names_match(char *s1, char *s2) {
 	return false;
 };
 
-bool Lexer::is_operator(const char &c) {
+bool utils::is_operator(const char &c) {
 	if (c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
 		return true;
 	return false;
 };
 
-bool Lexer::is_AtoZ(const char &c) {
+bool utils::is_AtoZ(const char &c) {
 	if ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z')) 
 		return true;
 	return false;
 };
 
-bool Lexer::not_quotes(const char &c) {
+bool utils::not_quotes(const char &c) {
 	if(c == '"' || c == '\'')
 		return false;
 	return true;
 };
 
-char Lexer::multi_peek(ifstream &in, int places) {
+char utils::multi_peek(ifstream &in, int places) {
 	char result;
 	streampos start_pos = in.tellg();
 
@@ -336,7 +336,7 @@ bool utils::isOUTPUT(char *stream) {
 	
 };	
 bool utils::isBACKTICK(char *stream) {
-	
+	return stream == '`';
 };	
 bool utils::isIDENTIFIER(char *stream) {
 	
