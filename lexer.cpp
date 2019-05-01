@@ -6,6 +6,8 @@
 
 using namespace std;
 
+namespace utils = Lexer::Utility;
+
 
 Lexer::Tokens *node = new Lexer::Tokens;
 
@@ -307,6 +309,41 @@ char Lexer::multi_peek(ifstream &in, int places) {
 };
 
 
+
+// Utiltiy Functions To Help Determine Type of Tokens
+bool utils::isIF(char *stream) {
+
+};				
+bool utils::isEQ(char *stream) {
+	
+};				
+bool utils::isBAR(char *stream) {
+	
+};			
+bool utils::isEQEQ(char *stream) {
+	
+};			
+bool utils::isELSE(char *stream) {
+	
+};			
+bool utils::isCOMMA(char *stream) {
+	
+};		
+bool utils::isSTRING(char *stream) {
+	
+};		
+bool utils::isOUTPUT(char *stream) {
+	
+};	
+bool utils::isBACKTICK(char *stream) {
+	
+};	
+bool utils::isIDENTIFIER(char *stream) {
+	
+};
+bool utils::isSKINNYARROW(char *stream) {
+	
+};
 
 
 

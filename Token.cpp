@@ -7,9 +7,7 @@ Token::~Token() {
 	if(this->name != nullptr) delete [] this->name;
 };
 
-// Methods
-
-// Setters
+// Setter Methods
 // Set name to character stream 
 void Token::setName(char *name) {
 	this->name = name; 
@@ -20,13 +18,12 @@ void Token::setType(Symbol type) {
 	this->type = type;
 };
 
-// The next Token in the Linked List
+// Set next Token in the Linked List
 void Token::setNext(Token *tokenPtr) {
 	this->next = tokenPtr;
 };
 	
-// Getters
-
+// Getter Methods
 char *Token::getName() const {
 	return this->name; 
 };

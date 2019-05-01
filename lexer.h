@@ -4,13 +4,29 @@
 #include "Function.h"
 #include "FunctionCall.h"
 
-// using namespace std;
+
 
 namespace Lexer {
+
+namespace Utility	{
+		// Utiltiy Functions To Help Determine Type of Tokens
+		bool isIF(char *stream);				
+		bool isEQ(char *stream);				
+		bool isBAR(char *stream);			
+		bool isEQEQ(char *stream);			
+		bool isELSE(char *stream);			
+		bool isCOMMA(char *stream);		
+		bool isSTRING(char *stream);		
+		bool isOUTPUT(char *stream);	
+		bool isBACKTICK(char *stream);	
+		bool isIDENTIFIER(char *stream);
+		bool isSKINNYARROW(char *stream);
+}; // Utility Namespace
+
 	struct Tokens {
 		Token *token_head;
 		Tokens *next;
-	};
+	}; // Tokens Struct
 	void lexer(char *file_name);
 	Token *get_statements(char &c, std::ifstream &in);
 	char *get_string(char &c, std::ifstream &in);
@@ -28,4 +44,4 @@ namespace Lexer {
 	bool is_AtoZ(const char &c);
 	bool not_quotes(const char &c);
 	char multi_peek(std::ifstream &in, int places);
-}
+}; // Lexer Namespace
