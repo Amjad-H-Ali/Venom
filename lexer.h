@@ -37,12 +37,14 @@ namespace Utility	{
 		Token *get_arguments(char &c, std::ifstream &in);
 		Type which_identifier(char *identifier_ptr, char &c, std::ifstream &in, bool in_array=false);
 		Type which_operator(char *c);
-		int length_of_type(char &c, std::ifstream &in, bool(*green_light)(const char &));
+		int rangeToChomp(char &c, ifstream &in, bool(*greenLight)(const char));
 
 		// Checks if two strings match.
 		bool isMatch(char *s1, char *s2);
 		bool is_operator(const char &c);
-		bool is_AtoZ(const char &c);
+		bool isAtoZ(char c);
+		bool isNumeric(char c);
+		bool isAlphaNumeric(char c);
 		bool not_quotes(const char &c);
 
 		// To Peek multiple characters Ahead

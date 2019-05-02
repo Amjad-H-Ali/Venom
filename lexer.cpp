@@ -198,29 +198,10 @@ Token *utils::get_arguments(char &c, ifstream &in) {
 	return arguments;
 };
 
-Type utils::which_identifier(char *identifier_ptr, char &c, ifstream &in, bool in_array) {
-	if(Lexer::names_match(identifier_ptr, (char*)"write"))
-		return WRITE;
-	else if(Lexer::names_match(identifier_ptr, (char*)"output"))
-		return OUTPUT;
-	else if((in>>ws).peek() == '|' && !in_array) {
-		cout << "ARRAY\n";
-		// Skip leading '|' to get into array.
-		in >> ws >> c >> ws >> c;
-		return ARRAY;
+Type utils::chompAlphaNumeric(char *identifier_ptr, char &c, ifstream &in) {
+	if(utils::isAtoZ(c)) {
+		utils::rangeToChomp(c, in, )
 	}
-	else if((in>>ws).peek() == '-' && multi_peek(in, 2) == '>') {
-		// Skip -> 
-		in >> ws >> c >> ws >> c >> ws >> c;
-		return FUNCTION;
-	}
-	else if((in>>ws).peek() == '(') {
-		// Skip (.
-		in >> ws >> c >> ws >> c;
-		return FUNCTIONCALL;
-	}
-	else
-		return VARIABLE;
 };
 Type utils::which_operator(char *c) {
 
@@ -246,25 +227,24 @@ Type utils::which_operator(char *c) {
 
 };
 
-int utils::length_of_type(char &c, ifstream &in, bool(*green_light)(const char &)) {
-	int start_pos = in.tellg(),
-		   offset = 0,
-		  end_pos,
-		   length;
+// Determines the length of stream to chomp based on the Bool 
+// Function passed in as argument.  
+int utils::rangeToChomp(char &c, ifstream &in, bool(*greenLight)(const char)) {
+	int start_pos = in.tellg(), offset = 0, end_pos, range;
+
 	while(green_light(c) && !in.eof()) {
 		offset++;
 		in>>c;
 	}
-	
-	end_pos = start_pos+offset;
-	cout << "END POS: " << end_pos << endl;
-	length = end_pos - start_pos;
+
+	end_pos = start_pos + offset;
+	range = end_pos - start_pos;
+
 	// Reset file pointer to original position.
 	in.clear();
 	in.seekg(start_pos-1, in.beg);
 
-	
-	return length;
+	return range;
 };
 
 
@@ -279,16 +259,28 @@ bool utils::isMatch(char *s1, char *s2) {
 };
 
 bool utils::is_operator(const char &c) {
-	if (c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
+	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
 		return true;
 	return false;
 };
 
-bool utils::is_AtoZ(const char &c) {
-	if ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z')) 
-		return true;
+// Checks if current charachter is a number
+bool utils::isNumeric(char c) {
+	if(c >= '0' || c <= '9') return true;
+	return false;
+}
+
+// Checks if current character is a letter.
+bool utils::isAtoZ(char c) {
+	if((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z')) return true;
 	return false;
 };
+
+// Checks if character is Alphanumeric (A-Z, 0-9, or _)
+bool utils::isAlphaNumeric(char c) {
+	if(utils::isAtoZ(c) || utils::isNumeric(c) || c == '_') return true;
+	return false;
+}
 
 bool utils::not_quotes(const char &c) {
 	if(c == '"' || c == '\'')
@@ -344,14 +336,13 @@ bool utils::isBACKTICK(char *stream) {
 	return isMatch(stream, "`");
 };	
 bool utils::isIDENTIFIER(char *stream) {
-	
+
 };
 bool utils::isSKINNYARROW(char *stream) {
 	return isMatch(stream, "->");
 };
 
 
-
-
+name="sss"
 
 
