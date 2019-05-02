@@ -59,41 +59,10 @@ void utils::lexer(char *file_name) {
 
 
 Token *utils::get_statements(char &c, ifstream &in) {
-	Token *head = NULL;
-	Token *new_token_node;
 
 	in >> noskipws;
-	while(in >> c){
-		if(!not_quotes(c))	
-			new_token_node = new Token(Lexer::get_string(c, in), STRING);
-		else if(is_AtoZ(c)) {
-			char *identifier = get_identifier(c, in);
-			Type type = which_identifier(identifier, c, in);
-			if(type == ARRAY)
-				new_token_node = new Identifier(Lexer::get_array_values(c, in), identifier, type);
-			else if(type == FUNCTION) 
-				new_token_node = new Function(identifier, Lexer::get_parameters(c, in), Lexer::get_block(c, in), type);
-			else if(type == FUNCTIONCALL) 
-				new_token_node = new FunctionCall(identifier, Lexer::get_arguments(c, in), type);
-			else
-				new_token_node = new Identifier(identifier, type);	
-		}
-		// Closing block. Retrieving statements is complete.
-		else if(c == '`') {  
-			cout << "Closing Block \n"; 
-			in >> c; // Skip it. 
-			break;
-		}
-		else if(is_operator(c)) {
-			char *_operator = Lexer::get_operator(c, in);
-			new_token_node = new Token(_operator, Lexer::which_operator(_operator));	
-		}
-		else 
-			continue;
-		new_token_node->set_next(head);
-		head = new_token_node;		
-	}
-	return head;
+	while(in >> c){}
+	
 };
 
 char *utils::get_string(char &c, ifstream &in) {
@@ -127,13 +96,12 @@ char *utils::get_identifier(char &c, ifstream &in) {
 	return identifier; 
 };
 
-char *utils::get_operator(char &c, ifstream &in) {
-	int length = Lexer::length_of_type(c, in, &is_operator);
+char *utils::chompOperator(char &c, ifstream &in) {
 
-	char *_operator = new char[length];
-	in.read(_operator, length);
-	_operator[length] = '\0';
-	return _operator;
+	// Range to Chomp
+	int range = utils::rangeToChomp(c, in, utils::isOperator(c))
+
+	return utils::makeC_String(in, range);
 }
 
 
@@ -276,7 +244,7 @@ bool utils::isMatch(char *s1, char *s2) {
 	return false;
 };
 
-bool utils::is_operator(const char &c) {
+bool utils::isOperator(char c) {
 	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
 		return true;
 	return false;
