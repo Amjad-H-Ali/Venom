@@ -1,5 +1,31 @@
 #pragma once 
 
+
+namespace Token {
+
+namespace Utility {
+
+	// Checks if two strings match.
+	bool isMatch(char *s1, char *s2);
+
+	// Utiltiy Functions To Help Determine Type of Tokens
+	bool isIF(char *stream);				
+	bool isEQ(char *stream);				
+	bool isBAR(char *stream);			
+	bool isEQEQ(char *stream);			
+	bool isELSE(char *stream);			
+	bool isCOMMA(char *stream);		
+	bool isSTRING(char *stream);		
+	bool isOUTPUT(char *stream);	
+	bool isBACKTICK(char *stream);	
+	bool isIDENTIFIER(char *stream);
+	bool isSKINNYARROW(char *stream);
+
+} // Utility NameSpace
+
+
+
+
 // TOKEN_LIST takes in a Token Macro (T) and a string (S).
 // Each Macro has the same signature M(type, func(S)), 
 // where type is a unique symbol for the Token and func(S)
@@ -8,18 +34,18 @@
 
 // T: Token Macro
 // S: String from input stream
-#define TOKEN_LIST(T, S)								\
-	T(IF, isIF(S))										\
-	T(EQ, isEQ(S))										\
-	T(BAR, isBAR(S))									\
-	T(EQEQ, isEQEQ(S))									\
-	T(ELSE, isELSE(S))									\
-	T(COMMA, isCOMMA(S))								\
-	T(STRING, isSTRING(S))								\
-	T(OUTPUT, isOUTPUT(S))								\
-	T(BACKTICK, isBACKTICK(S))							\
-	T(IDENTIFIER, isIDENTIFIER(S))						\
-	T(SKINNY_ARROW, isSKINNYARROW(S))					
+#define TOKEN_LIST(T, S)								 		\
+	T(IF, Utility::isIF(S))										\
+	T(EQ, Utility::isEQ(S))										\
+	T(BAR, Utility::isBAR(S))									\
+	T(EQEQ, Utility::isEQEQ(S))									\
+	T(ELSE, Utility::isELSE(S))									\
+	T(COMMA, Utility::isCOMMA(S))								\
+	T(STRING, Utility::isSTRING(S))								\
+	T(OUTPUT, Utility::isOUTPUT(S))								\
+	T(BACKTICK, Utility::isBACKTICK(S))							\
+	T(IDENTIFIER, Utility::isIDENTIFIER(S))						\
+	T(SKINNY_ARROW, Utility::isSKINNYARROW(S))					
 
 
 // All Token Symbols
@@ -66,31 +92,11 @@ private:
 	Token *next;
 
 
-} // Token
+}; // Token
 
 
-namespace Token {
-
-namespace Utility {
-
-	// Checks if two strings match.
-	bool isMatch(char *s1, char *s2);
-
-	// Utiltiy Functions To Help Determine Type of Tokens
-	bool isIF(char *stream);				
-	bool isEQ(char *stream);				
-	bool isBAR(char *stream);			
-	bool isEQEQ(char *stream);			
-	bool isELSE(char *stream);			
-	bool isCOMMA(char *stream);		
-	bool isSTRING(char *stream);		
-	bool isOUTPUT(char *stream);	
-	bool isBACKTICK(char *stream);	
-	bool isIDENTIFIER(char *stream);
-	bool isSKINNYARROW(char *stream);
-
-} // Utility NameSpace
 } // Token NameSpace
+
 
 
 

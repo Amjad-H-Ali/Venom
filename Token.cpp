@@ -1,5 +1,6 @@
 #include "Token.h"
 
+using Token = Token::Token;
 using utils = Token::Utility;
 
 // Destructor
