@@ -73,6 +73,13 @@ char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
 	return utils::makeC_String(in, range);
 };
 
+// Chomp Single Token
+char *utils::chompSinglyNamedToken(char &c, std::ifstream &in) {
+	// No need for rangeToChomp function if it is a singly named Token.
+
+	return utils::makeC_String(in, 1);
+};
+
 // Creates a C-String. Parameters are an ifstream object
 // from which it will read in characters from current state
 // of this file object, and the range of characters to read.
@@ -87,8 +94,6 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 
 	return name;
 };  
-
-
 
 
 // Determines the length of stream to chomp based on the 
@@ -159,7 +164,7 @@ bool utils::isClosingDoubleQT(char c) {
 };
  
 // Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
-bool utils::isSinglyNamed(char c) {
+bool utils::isSinglyNamedToken(char c) {
 	if(c == '`' || c == '|' || c == '(' || c == ')' || c == ',') return true;
 	return false;
 };
