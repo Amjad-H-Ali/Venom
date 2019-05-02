@@ -202,16 +202,23 @@ Token *utils::get_arguments(char &c, ifstream &in) {
 char *utils::chompAlphaNumeric(char &c, ifstream &in) {
 
 	// Range to Chomp
-	int length = utils::rangeToChomp(c, in, utils::isAlphaNumeric(c))
+	int range = utils::rangeToChomp(c, in, utils::isAlphaNumeric(c))
 
+	return utils::makeC_String(in, range);
+};
+
+// Creates a C-String. Parameters are an ifstream object
+// from which it will read in characters from current state
+// of this file object, and the range of characters to read.
+char *utils::makeC_String(ifstream &in, int range) {
 	// Make a C String.
-	char *name = new char[length];
+	char *name = new char[range];
 
 	// Read in to name.
-	in.read(name, length)
+	in.read(name, range);
 
 	return name;
-};
+};  
 
 Type utils::which_operator(char *c) {
 
