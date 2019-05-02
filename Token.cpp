@@ -1,41 +1,42 @@
 #include "Token.h"
 
-using Token = Token::Token;
-using utils = Token::Utility;
+namespace utils = token::utility;
+namespace tk = token;
+
 
 // Destructor
-Token::~Token() {
+tk::Token::~Token() {
 	// Delete Dynamically Allocated Array
 	if(this->name != nullptr) delete [] this->name;
 };
 
 // Setter Methods
 // Set name to character stream 
-void Token::setName(char *name) {
+void tk::Token::setName(char *name) {
 	this->name = name; 
 };
 
 // Set type to appropriate symbol
-void Token::setType(Symbol type) {
+void tk::Token::setType(Symbol type) {
 	this->type = type;
 };
 
 // Set next Token in the Linked List
-void Token::setNext(Token *tokenPtr) {
+void tk::Token::setNext(Token *tokenPtr) {
 	this->next = tokenPtr;
 };
 	
 // Getter Methods
-char *Token::getName() const {
+char *tk::Token::getName() const {
 	return this->name; 
 };
 
 
-Symbol Token::getType() const {
+tk::Symbol tk::Token::getType() const {
 	return this->type;
 };
 	
-Token *Token::getNext() const {
+tk::Token *tk::Token::getNext() const {
 	return this->next;
 };
 
@@ -51,35 +52,35 @@ bool utils::isMatch(char *s1, char *s2) {
 
 // Utiltiy Functions To Help Determine Type of Tokens
 bool utils::isIF(char *stream) {
-	return isMatch(stream, "if");
+	return isMatch(stream,(char *) "if");
 };				
 bool utils::isEQ(char *stream) {
-	return isMatch(stream, "=");
+	return isMatch(stream,(char *) "=");
 };				
 bool utils::isBAR(char *stream) {
-	return isMatch(stream, "|");
+	return isMatch(stream,(char *) "|");
 };			
 bool utils::isEQEQ(char *stream) {
-	return isMatch(stream, "==");
+	return isMatch(stream,(char *) "==");
 };			
 bool utils::isELSE(char *stream) {
-	return isMatch(stream, "else");
+	return isMatch(stream,(char *) "else");
 };			
 bool utils::isCOMMA(char *stream) {
-	return isMatch(stream, ",");
+	return isMatch(stream,(char *) ",");
 };		
 bool utils::isSTRING(char *stream) {
 	
 };		
 bool utils::isOUTPUT(char *stream) {
-	return isMatch(stream, "output");
+	return isMatch(stream,(char *) "output");
 };	
 bool utils::isBACKTICK(char *stream) {
-	return isMatch(stream, "`");
+	return isMatch(stream,(char *) "`");
 };	
 bool utils::isIDENTIFIER(char *stream) {
 
 };
 bool utils::isSKINNYARROW(char *stream) {
-	return isMatch(stream, "->");
+	return isMatch(stream,(char *) "->");
 };

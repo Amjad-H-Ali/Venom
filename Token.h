@@ -1,9 +1,9 @@
 #pragma once 
 
 
-namespace Token {
+namespace token {
 
-namespace Utility {
+namespace utility {
 
 	// Checks if two strings match.
 	bool isMatch(char *s1, char *s2);
@@ -21,7 +21,7 @@ namespace Utility {
 	bool isIDENTIFIER(char *stream);
 	bool isSKINNYARROW(char *stream);
 
-} // Utility NameSpace
+}; // utility NameSpace
 
 
 
@@ -35,17 +35,17 @@ namespace Utility {
 // T: Token Macro
 // S: String from input stream
 #define TOKEN_LIST(T, S)								 		\
-	T(IF, Utility::isIF(S))										\
-	T(EQ, Utility::isEQ(S))										\
-	T(BAR, Utility::isBAR(S))									\
-	T(EQEQ, Utility::isEQEQ(S))									\
-	T(ELSE, Utility::isELSE(S))									\
-	T(COMMA, Utility::isCOMMA(S))								\
-	T(STRING, Utility::isSTRING(S))								\
-	T(OUTPUT, Utility::isOUTPUT(S))								\
-	T(BACKTICK, Utility::isBACKTICK(S))							\
-	T(IDENTIFIER, Utility::isIDENTIFIER(S))						\
-	T(SKINNY_ARROW, Utility::isSKINNYARROW(S))					
+	T(IF, utility::isIF(S))										\
+	T(EQ, utility::isEQ(S))										\
+	T(BAR, utility::isBAR(S))									\
+	T(EQEQ, utility::isEQEQ(S))									\
+	T(ELSE, utility::isELSE(S))									\
+	T(COMMA, utility::isCOMMA(S))								\
+	T(STRING, utility::isSTRING(S))								\
+	T(OUTPUT, utility::isOUTPUT(S))								\
+	T(BACKTICK, utility::isBACKTICK(S))							\
+	T(IDENTIFIER, utility::isIDENTIFIER(S))						\
+	T(SKINNY_ARROW, utility::isSKINNYARROW(S))					
 
 
 // All Token Symbols
@@ -95,7 +95,7 @@ private:
 }; // Token
 
 
-} // Token NameSpace
+} // token NameSpace
 
 
 

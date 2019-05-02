@@ -2,9 +2,11 @@
 #include "Token.h"
 
 
-namespace Lexer {
+namespace lexer {
 
-namespace Utility	{
+
+
+namespace utility	{
 		
 
 
@@ -12,6 +14,8 @@ namespace Utility	{
 	char *chompOperator(char &c, std::ifstream &in);
 	// Gets whole AlphaNumeric from beginning to end.
 	char *chompAlphaNumeric(char &c, std::ifstream &in);
+	// Chomp Single Token
+	char *chompSinglyNamedToken(char &c, std::ifstream &in);
 	// Creates a C-String. Parameters are an ifstream object
 	// from which it will read in characters from current state
 	// of this file object, and the range of characters to read.
@@ -29,6 +33,8 @@ namespace Utility	{
 	bool isAlphaNumeric(char c);
 	// Checks if character is an eligible beggining for AlphaNumeric.
 	bool isEligibleStartToAlphaNum(char c);
+	// Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
+	bool isSinglyNamedToken(char c);
 	// Checks if c is Quotes
 	bool isQuote(char c);
 	bool isClosingSingleQT(char c);
@@ -41,11 +47,13 @@ namespace Utility	{
 
 
 
-}; // Utility Namespace
+}; // utility Namespace
+
+	void lexer(char *fileName);
 
 	// struct Tokens {
 	// 	Token *token_head;
 	// 	Tokens *next;
 	// }; // Tokens Struct
 	
-}; // Lexer Namespace
+}; // lexer Namespace

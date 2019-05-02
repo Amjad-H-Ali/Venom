@@ -4,38 +4,46 @@
 // #include "parser.h"
 
 
-namespace utils = Lexer::Utility;
-
+namespace utils = lexer::utility;
 
 
 // Lexer::Tokens *node = new Lexer::Tokens;
 
+int main(){
+
+	lexer::lexer((char *) "new.vnm");
+};
 
 
+void lexer::lexer(char *fileName) {
 
-// void utils::lexer(char *file_name) {
+	std::ifstream in(fileName);
+	char c;
 
-// 	ifstream in(file_name);
-// 	char c;
+	// Read input file char by char
+	// Do not skip white space otherwise
+	// cannot differentiate between adjacent 
+	// AlphaNumeral characters belonging to 
+	// separate Tokens.
+
+	in >> std::noskipws;
+	while(in >> c) { 
+
+		if(utils::isEligibleStartToAlphaNum(c))
+			token::Token tok(utils::chompAlphaNumeric(c, in));
+	}
+
+	// node->next = NULL;
+	// node->token_head = Lexer::get_statements(c, in);
 
 
-// 	node->next = NULL;
-// 	node->token_head = Lexer::get_statements(c, in);
+	// parser(node->token_head, NULL);
 
 
-// 	parser(node->token_head, NULL);
+};
 
 
-// };
-
-
-// Token *utils::get_statements(char &c, ifstream &in) {
-
-// 	in >> noskipws;
-// 	while(in >> c){}
-	
-// };
-
+// Gets whole String from beginning to end.
 char *utils::chompString(char &c, std::ifstream &in) {
 
 	 
