@@ -9,21 +9,7 @@
 namespace Lexer {
 
 namespace Utility	{
-		// Utiltiy Functions To Help Determine Type of Tokens
-		bool isIF(char *stream);				
-		bool isEQ(char *stream);				
-		bool isBAR(char *stream);			
-		bool isEQEQ(char *stream);			
-		bool isELSE(char *stream);			
-		bool isCOMMA(char *stream);		
-		bool isSTRING(char *stream);		
-		bool isOUTPUT(char *stream);	
-		bool isBACKTICK(char *stream);	
-		bool isIDENTIFIER(char *stream);
-		bool isSKINNYARROW(char *stream);
-
-
-
+		
 
 
 		void lexer(char *file_name);
@@ -39,8 +25,6 @@ namespace Utility	{
 		Type which_operator(char *c);
 		int rangeToChomp(char &c, ifstream &in, bool(*greenLight)(const char));
 
-		// Checks if two strings match.
-		bool isMatch(char *s1, char *s2);
 		bool is_operator(const char &c);
 		bool isAtoZ(char c);
 		bool isNumeric(char c);

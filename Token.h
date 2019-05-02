@@ -73,6 +73,9 @@ namespace Token {
 
 namespace Utility {
 
+	// Checks if two strings match.
+	bool isMatch(char *s1, char *s2);
+
 	// Utiltiy Functions To Help Determine Type of Tokens
 	bool isIF(char *stream);				
 	bool isEQ(char *stream);				

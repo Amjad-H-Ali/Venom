@@ -39,6 +39,15 @@ Token *Token::getNext() const {
 };
 
 
+bool utils::isMatch(char *s1, char *s2) {
+	int indx = 0;
+	while(s1[indx] == s2[indx]) {
+		if(s1[indx] == s2[indx] == '\0') return true;
+		indx++;
+	}
+	return false;
+};
+
 // Utiltiy Functions To Help Determine Type of Tokens
 bool utils::isIF(char *stream) {
 	return isMatch(stream, "if");

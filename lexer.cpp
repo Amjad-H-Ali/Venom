@@ -65,22 +65,22 @@ Token *utils::get_statements(char &c, ifstream &in) {
 	
 };
 
-char *utils::get_string(char &c, ifstream &in) {
-	// Skip Quotes.
+char *utils::chompString(char &c, ifstream &in) {
+
+	 
+	// Either a Single Quote or Double Quote.
+	char quote = c;
+
+	// Function that will be passed into rangeToChomp.
+	bool(*func)(const char) = quote == '"' ? &isClosingDoubleQT : &isClosingSingleQT;
+
+	// Skip Quote so rangeToChomp can continue
 	in >> c;
 
-	int length = Lexer::length_of_type(c, in, &not_quotes);
+	// Range to Chomp 								
+	int range = utils::rangeToChomp(c, in, func);
 
-	char *_string = new char[length];
-	
-
-	in.read(_string, length);
-	_string[length] = '\0';
-	// Skip closing Quotes
-	in>>c;
-
-	return _string;
-
+	return utils::makeC_String(in, range);
 };
 
 
@@ -99,7 +99,7 @@ char *utils::get_identifier(char &c, ifstream &in) {
 char *utils::chompOperator(char &c, ifstream &in) {
 
 	// Range to Chomp
-	int range = utils::rangeToChomp(c, in, utils::isOperator(c))
+	int range = utils::rangeToChomp(c, in, &isOperator);
 
 	return utils::makeC_String(in, range);
 }
@@ -170,7 +170,7 @@ Token *utils::get_arguments(char &c, ifstream &in) {
 char *utils::chompAlphaNumeric(char &c, ifstream &in) {
 
 	// Range to Chomp
-	int range = utils::rangeToChomp(c, in, utils::isAlphaNumeric(c))
+	int range = utils::rangeToChomp(c, in, &isAlphaNumeric);
 
 	return utils::makeC_String(in, range);
 };
@@ -184,6 +184,8 @@ char *utils::makeC_String(ifstream &in, int range) {
 
 	// Read in to name.
 	in.read(name, range);
+
+	name[range] = '\0';
 
 	return name;
 };  
@@ -216,33 +218,24 @@ Type utils::which_operator(char *c) {
 // Bool Function passed in as argument. Restores file pointer
 // to original position when finished.
 int utils::rangeToChomp(char &c, ifstream &in, bool(*greenLight)(const char)) {
-	int start_pos = in.tellg(), offset = 0, end_pos, range;
+	int startPos = in.tellg(), offset = 0, endPos, range;
 
-	while(green_light(c) && !in.eof()) {
+	while(greenLight(c) && !in.eof()) {
 		offset++;
 		in>>c;
 	}
 
-	end_pos = start_pos + offset;
-	range = end_pos - start_pos;
+	endPos = startPos + offset;
+	range = endPos - startPos;
 
 	// Reset file pointer to original position.
 	in.clear();
-	in.seekg(start_pos-1, in.beg);
+	in.seekg(startPos-1, in.beg);
 
 	return range;
 };
 
 
-
-bool utils::isMatch(char *s1, char *s2) {
-	int indx = 0;
-	while(s1[indx] == s2[indx]) {
-		if(s1[indx] == s2[indx] == '\0') return true;
-		indx++;
-	}
-	return false;
-};
 
 bool utils::isOperator(char c) {
 	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
@@ -272,27 +265,34 @@ bool utils::isAlphaNumeric(char c) {
 bool utils::isEligibleStartToAlphaNum(char c) {
 	if(utils::isAtoZ(c) || c == '_') return true;
 	return false;
-}
-
-bool utils::not_quotes(const char &c) {
-	if(c == '"' || c == '\'')
-		return false;
-	return true;
 };
 
+// Checks if c is Quotes
+bool utils::isQuote(char c) {
+	if(c == '"' || c == '\'') return true;
+	return false;
+};
 
+bool utils::isClosingSingleQT(char c) {
+	if(c == '\'') return true;
+	return false;
+};
+bool utils::isClosingDoubleQT(char c) {
+	if(c == '"') return true;
+	return false;
+};
 char utils::peekAhead(ifstream &in, int places) {
 	char result;
 
 	// To remember starting position
-	streampos start_pos = in.tellg();
+	streampos startPos = in.tellg();
 
 	// Jump ahead and peek
 	for(int i = 0; i < places; i ++)
 		in >> ws >> result;
 
 	// Return to start position
-	in.seekg(start_pos);
+	in.seekg(startPos);
 
 	return result;
 };
