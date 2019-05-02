@@ -198,11 +198,21 @@ Token *utils::get_arguments(char &c, ifstream &in) {
 	return arguments;
 };
 
-Type utils::chompAlphaNumeric(char *identifier_ptr, char &c, ifstream &in) {
-	if(utils::isAtoZ(c)) {
-		utils::rangeToChomp(c, in, )
-	}
+// Gets whole AlphaNumeric from beginning to end.
+char *utils::chompAlphaNumeric(char &c, ifstream &in) {
+
+	// Range to Chomp
+	int length = utils::rangeToChomp(c, in, utils::isAlphaNumeric(c))
+
+	// Make a C String.
+	char *name = new char[length];
+
+	// Read in to name.
+	in.read(name, length)
+
+	return name;
 };
+
 Type utils::which_operator(char *c) {
 
 	// Why c[0]? So functions don't get called for nothing. And still need names_macth to match ops with more than 1 character
@@ -227,8 +237,9 @@ Type utils::which_operator(char *c) {
 
 };
 
-// Determines the length of stream to chomp based on the Bool 
-// Function passed in as argument.  
+// Determines the length of stream to chomp based on the 
+// Bool Function passed in as argument. Restores file pointer
+// to original position when finished.
 int utils::rangeToChomp(char &c, ifstream &in, bool(*greenLight)(const char)) {
 	int start_pos = in.tellg(), offset = 0, end_pos, range;
 
@@ -279,6 +290,12 @@ bool utils::isAtoZ(char c) {
 // Checks if character is Alphanumeric (A-Z, 0-9, or _)
 bool utils::isAlphaNumeric(char c) {
 	if(utils::isAtoZ(c) || utils::isNumeric(c) || c == '_') return true;
+	return false;
+}
+
+// Checks if character is an eligible beggining for AlphaNumeric.
+bool utils::isEligibleStartToAlphaNum(char c) {
+	if(utils::isAtoZ(c) || c == '_') return true;
 	return false;
 }
 
@@ -342,7 +359,5 @@ bool utils::isSKINNYARROW(char *stream) {
 	return isMatch(stream, "->");
 };
 
-
-name="sss"
 
 
