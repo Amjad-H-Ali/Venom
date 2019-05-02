@@ -89,6 +89,8 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 };  
 
 
+
+
 // Determines the length of stream to chomp based on the 
 // Bool Function passed in as argument. Restores file pointer
 // to original position when finished.
@@ -112,8 +114,8 @@ int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char
 
 
 bool utils::isOperator(char c) {
-	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
-		return true;
+	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' 
+		|| c == '%' || c == '>' || c == '<') return true;
 	return false;
 };
 
@@ -153,6 +155,12 @@ bool utils::isClosingSingleQT(char c) {
 };
 bool utils::isClosingDoubleQT(char c) {
 	if(c == '"') return true;
+	return false;
+};
+ 
+// Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
+bool utils::isSinglyNamed(char c) {
+	if(c == '`' || c == '|' || c == '(' || c == ')' || c == ',') return true;
 	return false;
 };
 
