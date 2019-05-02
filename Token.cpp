@@ -1,5 +1,6 @@
 #include "Token.h"
 
+using utils = Token::Utility;
 
 // Destructor
 Token::~Token() {
@@ -35,4 +36,40 @@ Symbol Token::getType() const {
 	
 Token *Token::getNext() const {
 	return this->next;
+};
+
+
+// Utiltiy Functions To Help Determine Type of Tokens
+bool utils::isIF(char *stream) {
+	return isMatch(stream, "if");
+};				
+bool utils::isEQ(char *stream) {
+	return isMatch(stream, "=");
+};				
+bool utils::isBAR(char *stream) {
+	return isMatch(stream, "|");
+};			
+bool utils::isEQEQ(char *stream) {
+	return isMatch(stream, "==");
+};			
+bool utils::isELSE(char *stream) {
+	return isMatch(stream, "else");
+};			
+bool utils::isCOMMA(char *stream) {
+	return isMatch(stream, ",");
+};		
+bool utils::isSTRING(char *stream) {
+	
+};		
+bool utils::isOUTPUT(char *stream) {
+	return isMatch(stream, "output");
+};	
+bool utils::isBACKTICK(char *stream) {
+	return isMatch(stream, "`");
+};	
+bool utils::isIDENTIFIER(char *stream) {
+
+};
+bool utils::isSKINNYARROW(char *stream) {
+	return isMatch(stream, "->");
 };

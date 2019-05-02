@@ -38,7 +38,7 @@ public:
 	Token(char *stream) 
 		:name(nullptr), type(), next(nullptr) 
 	{
-#define T(symbol, name) if(name) {setName(stream); setType(symbol);} // TODO: ELSE THROW EXCEPTION
+#define T(symbol, name) if(name) {setName(stream); setType(symbol);} // TODO: ELSE DELETE STREAM & THROW EXCEPTION
 	TOKEN_LIST(T, stream)
 #undef T 
 	};
@@ -67,6 +67,27 @@ private:
 
 
 } // Token
+
+
+namespace Token {
+
+namespace Utility {
+
+	// Utiltiy Functions To Help Determine Type of Tokens
+	bool isIF(char *stream);				
+	bool isEQ(char *stream);				
+	bool isBAR(char *stream);			
+	bool isEQEQ(char *stream);			
+	bool isELSE(char *stream);			
+	bool isCOMMA(char *stream);		
+	bool isSTRING(char *stream);		
+	bool isOUTPUT(char *stream);	
+	bool isBACKTICK(char *stream);	
+	bool isIDENTIFIER(char *stream);
+	bool isSKINNYARROW(char *stream);
+
+} // Utility NameSpace
+} // Token NameSpace
 
 
 
