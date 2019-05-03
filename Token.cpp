@@ -14,6 +14,7 @@ tk::Token::~Token() {
 // Setter Methods
 // Set name to character stream 
 void tk::Token::setName(char *name) {
+	std::cout<<"From Set: " << name << std::endl;
 	this->name = name; 
 };
 

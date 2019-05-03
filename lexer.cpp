@@ -177,7 +177,7 @@ bool utils::isOperator(char c) {
 
 // Checks if current charachter is a number
 bool utils::isNumeric(char c) {
-	if(c >= '0' || c <= '9') return true;
+	if(c >= '0' && c <= '9') return true;
 	return false;
 }
 

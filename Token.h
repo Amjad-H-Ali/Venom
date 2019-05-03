@@ -97,7 +97,7 @@ public:
 #define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream); setTypeName((char *)#symbol);}
 		TOKEN_LIST(T)
 #undef T
-
+		// If AlphaNum and not any keyword, must be Identifier.
 		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream); setTypeName((char *)"IDENTIFIER");}
 		
 		// Else Throw Exception
