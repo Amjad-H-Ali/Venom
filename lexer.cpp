@@ -4,6 +4,7 @@
 #include "Token.h"
 
 
+
 namespace utils = lexer::utility;
 
 
@@ -19,26 +20,30 @@ void lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
 	char c;
+	token::Token *tokenPtr;
 
 	// Read input file char by char
 	// Do not skip white space otherwise
 	// cannot differentiate between adjacent 
 	// AlphaNumeral characters belonging to 
 	// separate Tokens.
-
 	in >> std::noskipws;
 	while(in >> c) { 
 
-		if(utils::isQuote(c)) {
-			token::Token t(utils::chompString(c, in), &utils::isQuote);
-			std::cout << t.getName() << std::endl;
-		}
-
-		else if(utils::isSinglyNamedToken(c)) {
-			token::Token t(utils::chompSinglyNamedToken(c, in));
-			std::cout << t.getName() << std::endl;
-		}
+		// Single Character Token
+		if(utils::isSinglyNamedToken(c)) 
+			tokenPtr = new token::Token(utils::chompSinglyNamedToken(c, in));
+		// AlphaNumeric(eg. Identifier, Keyword, etc.)
+		else if(utils::isEligibleStartToAlphaNum(c)) 
+			tokenPtr = new token::Token(utils::chompAlphaNumeric(c, in), &utils::isEligibleStartToAlphaNum);
+		// Potential Operator 
+		else if(utils::isOperator(c)) 
+			tokenPtr = new token::Token(utils::chompOperator(c, in));
+		// String
+		else if(utils::isQuote(c)) 
+			tokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
 	}
+
 
 	// node->next = NULL;
 	// node->token_head = Lexer::get_statements(c, in);
@@ -57,7 +62,6 @@ char *utils::chompString(char &c, std::ifstream &in) {
 	// Either a Single Quote or Double Quote.
 	char quote = c;
 
-	std::cout << "lexer.cpp 53: " << c << std::endl;
 
 	// Function that will be passed into rangeToChomp.
 	bool(*func)(const char) = (quote == '"' ? &isNotClosingDoubleQT : &isNotClosingSingleQT);
@@ -65,7 +69,6 @@ char *utils::chompString(char &c, std::ifstream &in) {
 	// Skip Quote so rangeToChomp can continue
 	in >> c;
 
-	std::cout << "lexer.cpp 61: " << c << std::endl;
 	// Range to Chomp 								
 	int range = utils::rangeToChomp(c, in, func);
 
@@ -101,11 +104,15 @@ char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
 // Chomp Single Token
 char *utils::chompSinglyNamedToken(char &c, std::ifstream &in) {
 	// Range to Chomp
-	int range = utils::rangeToChomp(c, in, &isSinglyNamedToken);
+	// No need for rangeToChomp if Single Character Token
 
-	std::cout << "lexer.cpp 103: " << c << std::endl;
+	// Set file pointer before Character to chomp
+	// since read is not start inclusive.
+	in.seekg(in.tellg()-(std::streampos)1, in.beg);
 
-	return utils::makeC_String(in, range);
+	std::cout << "Chomp: " <<c << std::endl;
+
+	return utils::makeC_String(in, 1);
 };
 
 // Creates a C-String. Parameters are an ifstream object
@@ -120,7 +127,8 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 	in.read(name, range);
 
 	name[range] = '\0';
-	std::cout << "lexer.cpp 115: " <<  name<< std::endl;
+
+	std::cout << "MakeString: " <<range << ' ' << name << std::endl;
 
 	return name;
 };  
@@ -131,13 +139,11 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 // to original position when finished.
 int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char)) {
 	int startPos = in.tellg(), offset = 0, endPos, range;
-	std::cout << "lexer.cpp 133: " << c << std::endl;
 	while(greenLight(c) && !in.eof()) {
 		offset++;
 		in>>c;
-		std::cout << "lexer.cpp 119: " << c << std::endl;
-	}
 
+	}
 	endPos = startPos + offset;
 	range = endPos - startPos;
 
@@ -193,7 +199,6 @@ bool utils::isNotClosingSingleQT(char c) {
 };
 // Returns true if not a double Quote.
 bool utils::isNotClosingDoubleQT(char c) {
-	std::cout << "lexer.cpp 174: " << c << std::endl;
 	if(c != '"') return true;
 	return false;
 };

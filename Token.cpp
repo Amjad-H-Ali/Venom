@@ -45,7 +45,6 @@ tk::Token *tk::Token::getNext() const {
 
 // Utility function that compares two strings
 bool utils::isMatch(char *s1, char *s2) {
-	std::cout << "isMatch got called"  << s1 << ' '<< s2 << std::endl;
 	if(s1 && s2) {
 		int indx = 0;
 		while(s1[indx] == s2[indx]) {
@@ -58,46 +57,30 @@ bool utils::isMatch(char *s1, char *s2) {
 
 
 bool utils::isIF(char *stream) {
-	std::cout << "isIF got called" << std::endl;
 	return isMatch(stream,(char *) "if");
 };				
 bool utils::isEQ(char *stream) {
-	std::cout << "isEQ got called" << std::endl;
 	return isMatch(stream,(char *) "=");
 };				
 bool utils::isBAR(char *stream) {
-	std::cout << "isBAR got called" << std::endl;
 	return isMatch(stream,(char *) "|");
 };			
 bool utils::isEQEQ(char *stream) {
-	std::cout << "isEQEQ got called" << std::endl;
 	return isMatch(stream,(char *) "==");
 };			
 bool utils::isELSE(char *stream) {
-	std::cout << "isELSE got called" << std::endl;
 	return isMatch(stream,(char *) "else");
 };			
 bool utils::isCOMMA(char *stream) {
-	std::cout << "isCOMMA got called" << std::endl;
 	return isMatch(stream,(char *) ",");
 };		
-bool utils::isSTRING(char *stream) {
-	std::cout << "isSTRING got called" << std::endl;
-	
-};		
 bool utils::isOUTPUT(char *stream) {
-	std::cout << "isOUTPUT got called" << std::endl;
 	return isMatch(stream,(char *) "output");
 };	
 bool utils::isBACKTICK(char *stream) {
-	std::cout << "isBACKTICK got called" << std::endl;
 	return isMatch(stream,(char *) "`");
 };	
-bool utils::isIDENTIFIER(char *stream) {
-	std::cout << "isIDENTIFIER got called" << std::endl;
-	
-};
+
 bool utils::isSKINNYARROW(char *stream) {
-	std::cout << "isSKINNYARROW got called" << std::endl;
 	return isMatch(stream,(char *) "->");
 };

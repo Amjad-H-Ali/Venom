@@ -16,10 +16,8 @@ namespace utility {
 	bool isEQEQ(char *stream);			
 	bool isELSE(char *stream);			
 	bool isCOMMA(char *stream);		
-	bool isSTRING(char *stream);		
 	bool isOUTPUT(char *stream);	
 	bool isBACKTICK(char *stream);	
-	bool isIDENTIFIER(char *stream);
 	bool isSKINNYARROW(char *stream);
 
 }; // utility NameSpace
@@ -55,10 +53,10 @@ namespace utility {
 // 	T(EQEQ, utility::isEQEQ(S))									\
 // 	T(ELSE, utility::isELSE(S))									\
 // 	T(COMMA, utility::isCOMMA(S))								\
-// 	T(STRING, utility::isSTRING(S))								\
+// 	T(STRING, nullptr)								\
 // 	T(OUTPUT, utility::isOUTPUT(S))								\
 // 	T(BACKTICK, utility::isBACKTICK(S))							\
-// 	T(IDENTIFIER, utility::isIDENTIFIER(S))						\
+// 	T(IDENTIFIER, nullptr)						\
 // 	T(SKINNY_ARROW, utility::isSKINNYARROW(S))					
 					
 
@@ -69,7 +67,7 @@ namespace utility {
 	// In this case, only the symbol is needed
 	// and the second parameter is unused to
 	// generate the List of Token Symbols.
-	enum Symbol{UNSPECIFIED=0, TOKEN_LIST(T) NUM_OF_TOKENS};
+	enum Symbol{TOKEN_LIST(T) NUM_OF_TOKENS};
 #undef T
 
 
@@ -80,15 +78,21 @@ public:
 	// Main Constructor
 	Token(char *stream, bool(*hint)(char)=nullptr) 
 		:name(nullptr), type(), next(nullptr) 
-	{
+	{	
+		
 
 		if(hint == &lexer::utility::isQuote) {setType(STRING); setName(stream);}
+
+// #define T(symbol, name) else if(name) {setType(symbol); setName(stream);}
+// 		TOKEN_LIST(T, stream)
+// #undef T
 
 #define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream);}
 		TOKEN_LIST(T)
 #undef T
 
 		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream);}
+		
 		
 	};
 
