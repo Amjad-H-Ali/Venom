@@ -1,4 +1,5 @@
 #pragma once 
+#include "lexer.h"
 
 
 namespace token {
@@ -68,7 +69,7 @@ namespace utility {
 	// In this case, only the symbol is needed
 	// and the second parameter is unused to
 	// generate the List of Token Symbols.
-	enum Symbol{TOKEN_LIST(T) NUM_OF_TOKENS};
+	enum Symbol{UNSPECIFIED=0, TOKEN_LIST(T) NUM_OF_TOKENS};
 #undef T
 
 
@@ -77,13 +78,18 @@ class Token {
 public:
 
 	// Main Constructor
-	Token(char *stream) 
+	Token(char *stream, bool(*hint)(char)=nullptr) 
 		:name(nullptr), type(), next(nullptr) 
 	{
 
-#define T(symbol, name) if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream);}
+		if(hint == &lexer::utility::isQuote) {setType(STRING); setName(stream);}
+
+#define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream);}
 		TOKEN_LIST(T)
-#undef T		
+#undef T
+
+		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream);}
+		
 	};
 
 	// Destructor

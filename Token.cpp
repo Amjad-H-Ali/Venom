@@ -45,11 +45,11 @@ tk::Token *tk::Token::getNext() const {
 
 // Utility function that compares two strings
 bool utils::isMatch(char *s1, char *s2) {
-	std::cout << "isMatch got called"  << std::endl;
+	std::cout << "isMatch got called"  << s1 << ' '<< s2 << std::endl;
 	if(s1 && s2) {
 		int indx = 0;
 		while(s1[indx] == s2[indx]) {
-			if(s1[indx] == s2[indx] == '\0') return true;
+			if(s1[indx]== '\0' && s2[indx] == '\0') return true;
 			indx++;
 		}
 	}		

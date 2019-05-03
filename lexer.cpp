@@ -29,11 +29,15 @@ void lexer::lexer(char *fileName) {
 	in >> std::noskipws;
 	while(in >> c) { 
 
-		if(utils::isQuote(c)) 
-			token::Token t(utils::chompString(c, in));
+		if(utils::isQuote(c)) {
+			token::Token t(utils::chompString(c, in), &utils::isQuote);
+			std::cout << t.getName() << std::endl;
+		}
 
-		else if(utils::isSinglyNamedToken(c))
+		else if(utils::isSinglyNamedToken(c)) {
 			token::Token t(utils::chompSinglyNamedToken(c, in));
+			std::cout << t.getName() << std::endl;
+		}
 	}
 
 	// node->next = NULL;
