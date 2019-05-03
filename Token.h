@@ -3,7 +3,7 @@
 
 
 // Forward Declaration of lexer::utility functions.
-namespace lexer {namespace utility {
+namespace lexer { namespace utility {
 	bool isQuote(char c);
 	bool isEligibleStartToAlphaNum(char c);
 

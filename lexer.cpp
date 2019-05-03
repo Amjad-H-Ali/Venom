@@ -8,7 +8,7 @@
 namespace utils = lexer::utility;
 
 // For Linked List of Tokens.
-// lexer::Tokens *node = new lexer::Tokens;
+lexer::Tokens *node = new lexer::Tokens;
 
 int main(){
 
@@ -45,8 +45,7 @@ void lexer::lexer(char *fileName) {
 			tokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
 	} // While
 
-	std::cout << tokenPtr->getName() <<std::endl;
-
+	node->next = nullptr;
 
 
 

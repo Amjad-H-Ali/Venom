@@ -1,10 +1,12 @@
 #pragma once
 #include "Token.h"
 
+// Forward Declaration of token::Token class.
+namespace token {
+	class Token;
+} // End of forward delaration of Token class.
 
 namespace lexer {
-
-
 
 namespace utility	{
 		
@@ -54,10 +56,10 @@ namespace utility	{
 
 	void lexer(char *fileName);
 
-	// // For Linked List of Tokens.
-	// struct Tokens {
-	// 	token::Token *tokenHead;
-	// 	lexer::Tokens *next;
-	// }; // Tokens Struct
+	// For Linked List of Tokens.
+	struct Tokens {
+		token::Token *tokenHead;
+		lexer::Tokens *next;
+	}; // Tokens Struct
 	
 }; // lexer Namespace
