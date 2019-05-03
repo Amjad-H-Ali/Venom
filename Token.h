@@ -88,17 +88,17 @@ public:
 	{	
 		
 
-		if(hint == &lexer::utility::isQuote) {setType(STRING); setName(stream);}
+		if(hint == &lexer::utility::isQuote) {setType(STRING); setName(stream); setTypeName((char *)"STRING");}
 
 // #define T(symbol, name) else if(name) {setType(symbol); setName(stream);}
 // 		TOKEN_LIST(T, stream)
 // #undef T
 
-#define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream);}
+#define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream); setTypeName((char *)#symbol);}
 		TOKEN_LIST(T)
 #undef T
 
-		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream);}
+		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream); setTypeName((char *)"IDENTIFIER");}
 		
 		// Else Throw Exception
 	};
@@ -112,6 +112,8 @@ public:
 	void setType(Symbol type);
 
 	void setNext(Token *tokenPtr);
+
+	void setTypeName(char *typeName);
 	
 	char *getName() const;
 
@@ -119,11 +121,14 @@ public:
 
 	Token *getNext() const;
 
+	char *getTypeName() const;
+
 	// Data
 private:
 	char *name;
 	Symbol type; 
 	Token *next;
+	char *typeName;
 
 
 }; // Token

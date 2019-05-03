@@ -26,6 +26,11 @@ void tk::Token::setType(Symbol type) {
 void tk::Token::setNext(Token *tokenPtr) {
 	this->next = tokenPtr;
 };
+
+// Sets typeName to Symbol Type in String Form.
+void tk::Token::setTypeName(char *typeName) {
+	this->typeName = typeName;
+};
 	
 // Getter Methods
 char *tk::Token::getName() const {
@@ -39,6 +44,10 @@ tk::Symbol tk::Token::getType() const {
 	
 tk::Token *tk::Token::getNext() const {
 	return this->next;
+};
+
+char *tk::Token::getTypeName() const {
+	return this->typeName;
 };
 
 
