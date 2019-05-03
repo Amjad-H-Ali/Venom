@@ -48,6 +48,7 @@ bool utils::isMatch(char *s1, char *s2) {
 	if(s1 && s2) {
 		int indx = 0;
 		while(s1[indx] == s2[indx]) {
+			std::cout << s1[indx] << ' ' << s2[indx] << std::endl;
 			if(s1[indx]== '\0' && s2[indx] == '\0') return true;
 			indx++;
 		}

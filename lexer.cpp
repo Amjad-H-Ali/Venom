@@ -20,6 +20,9 @@ void lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
 	char c;
+
+	node->tokenHead = nullptr;
+	node->next = nullptr;
 	token::Token *tokenPtr;
 
 
@@ -43,10 +46,16 @@ void lexer::lexer(char *fileName) {
 		// String
 		else if(utils::isQuote(c)) 
 			tokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
+		else continue; // Probably throw an error here, but continue for spaces.
+
+		tokenPtr->setNext(node->tokenHead);
+		node->tokenHead = tokenPtr; 
 	} // While
 
-	node->next = nullptr;
-
+	
+	for(token::Token *ptr = node->tokenHead; ptr; ptr = ptr->getNext())
+		std::cout << ptr->getName() << ' ' << ptr->getType();
+	std::cout<< std::endl;
 
 
 	// node->next = NULL;

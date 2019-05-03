@@ -100,7 +100,7 @@ public:
 
 		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream);}
 		
-		
+		// Else Throw Exception
 	};
 
 	// Destructor
