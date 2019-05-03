@@ -2,6 +2,13 @@
 #include "lexer.h"
 
 
+// Forward Declaration of lexer::utility functions.
+namespace lexer {namespace utility {
+	bool isQuote(char c);
+	bool isEligibleStartToAlphaNum(char c);
+
+}} // End of forward Declaration of lexer::utility functions.
+
 namespace token {
 
 namespace utility {

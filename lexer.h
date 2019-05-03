@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Token.h"
 
 
 namespace lexer {
@@ -54,9 +54,10 @@ namespace utility	{
 
 	void lexer(char *fileName);
 
+	// // For Linked List of Tokens.
 	// struct Tokens {
-	// 	Token *token_head;
-	// 	Tokens *next;
+	// 	token::Token *tokenHead;
+	// 	lexer::Tokens *next;
 	// }; // Tokens Struct
 	
 }; // lexer Namespace
