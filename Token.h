@@ -39,11 +39,13 @@ namespace utility {
 
 // T: Token Macro
 #define TOKEN_LIST(T)							    \
+	T(IS, "is")									    \
 	T(IF, "if")										\
 	T(EQ, "=")										\
 	T(BAR, "|")										\
 	T(EQEQ, "==")									\
 	T(ELSE, "else")									\
+	T(ELIF, "elif")									\
 	T(COMMA, ",")									\
 	T(STRING, nullptr)								\
 	T(OUTPUT, "output")								\

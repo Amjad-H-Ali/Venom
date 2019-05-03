@@ -1,4 +1,8 @@
-else 
+func |name,address| ->
+`
+	a is name
+	output a
+` 
 
 
 
