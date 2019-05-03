@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "lexer.h"
-// #include "parser.h"
+#include "Token.h"
 
 
 namespace utils = lexer::utility;
@@ -29,8 +29,11 @@ void lexer::lexer(char *fileName) {
 	in >> std::noskipws;
 	while(in >> c) { 
 
-		if(utils::isEligibleStartToAlphaNum(c))
-			token::Token tok(utils::chompAlphaNumeric(c, in));
+		if(utils::isQuote(c)) 
+			token::Token t(utils::chompString(c, in));
+
+		else if(utils::isSinglyNamedToken(c))
+			token::Token t(utils::chompSinglyNamedToken(c, in));
 	}
 
 	// node->next = NULL;
@@ -43,26 +46,36 @@ void lexer::lexer(char *fileName) {
 };
 
 
-// Gets whole String from beginning to end.
+// Gets whole Potential String from beginning to end.
 char *utils::chompString(char &c, std::ifstream &in) {
 
 	 
 	// Either a Single Quote or Double Quote.
 	char quote = c;
 
+	std::cout << "lexer.cpp 53: " << c << std::endl;
+
 	// Function that will be passed into rangeToChomp.
-	bool(*func)(const char) = (quote == '"' ? &isClosingDoubleQT : &isClosingSingleQT);
+	bool(*func)(const char) = (quote == '"' ? &isNotClosingDoubleQT : &isNotClosingSingleQT);
 
 	// Skip Quote so rangeToChomp can continue
 	in >> c;
 
+	std::cout << "lexer.cpp 61: " << c << std::endl;
 	// Range to Chomp 								
 	int range = utils::rangeToChomp(c, in, func);
 
-	return utils::makeC_String(in, range);
+
+	char *potentialString = utils::makeC_String(in, range);
+
+	// Skip closing quote.
+	in >> c;
+
+	return potentialString;
 };
 
 
+// Gets Potential Operator
 char *utils::chompOperator(char &c, std::ifstream &in) {
 
 	// Range to Chomp
@@ -83,22 +96,27 @@ char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
 
 // Chomp Single Token
 char *utils::chompSinglyNamedToken(char &c, std::ifstream &in) {
-	// No need for rangeToChomp function if it is a singly named Token.
+	// Range to Chomp
+	int range = utils::rangeToChomp(c, in, &isSinglyNamedToken);
 
-	return utils::makeC_String(in, 1);
+	std::cout << "lexer.cpp 103: " << c << std::endl;
+
+	return utils::makeC_String(in, range);
 };
 
 // Creates a C-String. Parameters are an ifstream object
 // from which it will read in characters from current state
 // of this file object, and the range of characters to read.
 char *utils::makeC_String(std::ifstream &in, int range) {
+
 	// Make a C String.
-	char *name = new char[range];
+	char *name = new char[range+1];
 
 	// Read in to name.
 	in.read(name, range);
 
 	name[range] = '\0';
+	std::cout << "lexer.cpp 115: " <<  name<< std::endl;
 
 	return name;
 };  
@@ -109,10 +127,11 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 // to original position when finished.
 int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char)) {
 	int startPos = in.tellg(), offset = 0, endPos, range;
-
+	std::cout << "lexer.cpp 133: " << c << std::endl;
 	while(greenLight(c) && !in.eof()) {
 		offset++;
 		in>>c;
+		std::cout << "lexer.cpp 119: " << c << std::endl;
 	}
 
 	endPos = startPos + offset;
@@ -126,6 +145,7 @@ int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char
 };
 
 
+// Check if character is an eligible operator.
 bool utils::isOperator(char c) {
 	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' 
 		|| c == '%' || c == '>' || c == '<') return true;
@@ -156,18 +176,21 @@ bool utils::isEligibleStartToAlphaNum(char c) {
 	return false;
 };
 
-// Checks if c is Quotes
+// Checks if character is a Quote
 bool utils::isQuote(char c) {
 	if(c == '"' || c == '\'') return true;
 	return false;
 };
 
-bool utils::isClosingSingleQT(char c) {
-	if(c == '\'') return true;
+// Returns true if not a single Quote.
+bool utils::isNotClosingSingleQT(char c) {
+	if(c != '\'') return true;
 	return false;
 };
-bool utils::isClosingDoubleQT(char c) {
-	if(c == '"') return true;
+// Returns true if not a double Quote.
+bool utils::isNotClosingDoubleQT(char c) {
+	std::cout << "lexer.cpp 174: " << c << std::endl;
+	if(c != '"') return true;
 	return false;
 };
  

@@ -1,5 +1,5 @@
 #pragma once
-#include "Token.h"
+
 
 
 namespace lexer {
@@ -9,7 +9,7 @@ namespace lexer {
 namespace utility	{
 		
 
-
+	// Gets entire potential string.
 	char *chompString(char &c, std::ifstream &in);
 	char *chompOperator(char &c, std::ifstream &in);
 	// Gets whole AlphaNumeric from beginning to end.
@@ -37,9 +37,10 @@ namespace utility	{
 	bool isSinglyNamedToken(char c);
 	// Checks if c is Quotes
 	bool isQuote(char c);
-	bool isClosingSingleQT(char c);
-	bool isClosingDoubleQT(char c);
-
+	// Returns true if character is not a single quote.
+	bool isNotClosingSingleQT(char c);
+	// Returns true if character is not a double quote.
+	bool isNotClosingDoubleQT(char c);
 	// To Peek multiple characters Ahead
 	// Params: ifstream object and Amount 
 	// of places to Peek Ahead.

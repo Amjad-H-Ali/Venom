@@ -26,26 +26,41 @@ namespace utility {
 
 
 
-// TOKEN_LIST takes in a Token Macro (T) and a string (S).
-// Each Macro has the same signature M(type, func(S)), 
-// where type is a unique symbol for the Token and func(S)
-// is some Boolean function that takes in a string as an 
-// argument.
+// TOKEN_LIST takes in a Token Macro (T).
+// Each Macro has the same signature M(type, name), 
+// where type is a unique symbol for the Token and name
+// is a string containing the Token.
 
 // T: Token Macro
-// S: String from input stream
-#define TOKEN_LIST(T, S)								 		\
-	T(IF, utility::isIF(S))										\
-	T(EQ, utility::isEQ(S))										\
-	T(BAR, utility::isBAR(S))									\
-	T(EQEQ, utility::isEQEQ(S))									\
-	T(ELSE, utility::isELSE(S))									\
-	T(COMMA, utility::isCOMMA(S))								\
-	T(STRING, utility::isSTRING(S))								\
-	T(OUTPUT, utility::isOUTPUT(S))								\
-	T(BACKTICK, utility::isBACKTICK(S))							\
-	T(IDENTIFIER, utility::isIDENTIFIER(S))						\
-	T(SKINNY_ARROW, utility::isSKINNYARROW(S))					
+#define TOKEN_LIST(T)							    \
+	T(IF, "if")										\
+	T(EQ, "=")										\
+	T(BAR, "|")										\
+	T(EQEQ, "==")									\
+	T(ELSE, "else")									\
+	T(COMMA, ",")									\
+	T(STRING, nullptr)								\
+	T(OUTPUT, "output")								\
+	T(BACKTICK, "`")								\
+	T(IDENTIFIER, nullptr)						    \
+	T(SKINNY_ARROW, "->")
+
+
+
+// #define TOKEN_LIST(T, S)								 		\
+// 	T(IF, utility::isIF(S))										\
+// 	T(EQ, utility::isEQ(S))										\
+// 	T(BAR, utility::isBAR(S))									\
+// 	T(EQEQ, utility::isEQEQ(S))									\
+// 	T(ELSE, utility::isELSE(S))									\
+// 	T(COMMA, utility::isCOMMA(S))								\
+// 	T(STRING, utility::isSTRING(S))								\
+// 	T(OUTPUT, utility::isOUTPUT(S))								\
+// 	T(BACKTICK, utility::isBACKTICK(S))							\
+// 	T(IDENTIFIER, utility::isIDENTIFIER(S))						\
+// 	T(SKINNY_ARROW, utility::isSKINNYARROW(S))					
+					
+
 
 
 // All Token Symbols
@@ -53,8 +68,9 @@ namespace utility {
 	// In this case, only the symbol is needed
 	// and the second parameter is unused to
 	// generate the List of Token Symbols.
-	enum Symbol{TOKEN_LIST(T, S) NUM_OF_TOKENS};
+	enum Symbol{TOKEN_LIST(T) NUM_OF_TOKENS};
 #undef T
+
 
 class Token {
 
@@ -64,9 +80,10 @@ public:
 	Token(char *stream) 
 		:name(nullptr), type(), next(nullptr) 
 	{
-#define T(symbol, name) if(name) {setName(stream); setType(symbol);} // TODO: ELSE DELETE STREAM & THROW EXCEPTION
-	TOKEN_LIST(T, stream)
-#undef T 
+
+#define T(symbol, name) if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream);}
+		TOKEN_LIST(T)
+#undef T		
 	};
 
 	// Destructor
