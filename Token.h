@@ -86,7 +86,7 @@ public:
 
 	// Main Constructor
 	Token(char *stream, bool(*hint)(char)=nullptr) 
-		:name(nullptr), type(), next(nullptr) 
+		:name(nullptr), type(), next(nullptr), typeName() 
 	{	
 		
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Declarations.h"
+#include "Token.h"
 
 
-void parser(Token *current, Token *previous);
+void parser(token::Token *current, token::Token *previous);

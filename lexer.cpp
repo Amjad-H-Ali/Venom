@@ -2,6 +2,7 @@
 #include <fstream>
 #include "lexer.h"
 #include "Token.h"
+#include "parser.h"
 
 
 
@@ -58,11 +59,8 @@ void lexer::lexer(char *fileName) {
 	std::cout<< std::endl;
 
 
-	// node->next = NULL;
-	// node->token_head = Lexer::get_statements(c, in);
 
-
-	// parser(node->token_head, NULL);
+	parser(node->tokenHead, NULL);
 
 
 };
