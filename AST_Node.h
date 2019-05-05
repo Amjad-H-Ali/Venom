@@ -14,14 +14,12 @@
 
 // All AST_Node Symbols
 #define N(symbol),
-	enum AST_SYMBOLS {AST_NODE_LIST(N)};
+	enum AST_SYMBOL {AST_NODE_LIST(N)};
 #undef N
 
 
 class AST_Node {
 
-	token::Symbol type;
-
-
+	AST_SYMBOL type;
 
 };
