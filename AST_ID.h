@@ -7,5 +7,5 @@ class AST_ID : public AST_Node {
 private:
 	char *name;
 public:
-	AST_ID(token::Token &&tokenNode);
+	AST_ID(AST_SYMBOL type, token::Token &&tokenNode); 
 };

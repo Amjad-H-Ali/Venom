@@ -11,10 +11,6 @@ namespace utils = lexer::utility;
 // For Linked List of Tokens.
 lexer::Tokens *node = new lexer::Tokens;
 
-int main(){
-
-	lexer::lexer((char *) "new.vnm");
-};
 
 
 void lexer::lexer(char *fileName) {

@@ -1,21 +1,21 @@
-#pragma once
-#include "Token.h"
+// #pragma once
+// #include "Token.h"
 
-struct Declared {
-	Token *token_address;
-	Declared *paths[26];
+// struct Declared {
+// 	Token *token_address;
+// 	Declared *paths[26];
 
-	// Initialize all pointers in array to NULL.
-	Declared():paths(){};
-};
+// 	// Initialize all pointers in array to NULL.
+// 	Declared():paths(){};
+// };
 
 
 
-void declare(Token *token_ptr);
+// void declare(Token *token_ptr);
 
-Token *is_declared(char *name);
+// Token *is_declared(char *name);
 
-int hash(const char &letter);
+// int hash(const char &letter);
 
 
 

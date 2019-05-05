@@ -13,13 +13,18 @@
 	N(AST_LIST)
 
 // All AST_Node Symbols
-#define N(symbol),
+#define N(symbol) symbol,
 	enum AST_SYMBOL {AST_NODE_LIST(N)};
 #undef N
 
 
 class AST_Node {
-
+private:
 	AST_SYMBOL type;
-
+	AST_Node *next;
+public:
+	AST_Node(AST_SYMBOL type);
+	AST_SYMBOL getType() const;
+	AST_Node *getNext() const;
+	void setNext(AST_Node *AST_NodePtr);
 };

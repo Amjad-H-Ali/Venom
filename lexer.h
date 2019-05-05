@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Token.h"
 
 // Forward Declaration of token::Token class.
