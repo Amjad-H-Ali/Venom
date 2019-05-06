@@ -1,9 +1,9 @@
 #pragma once
 
-#include "AST_Node.h"
+#include "AST.h"
 #include "Token.h"
 
-class AST_ID : public AST_Node {
+class AST_ID : public AST{
 private:
 	char *name;
 public:

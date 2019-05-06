@@ -1,10 +1,10 @@
 #include "AST_List.h"
 
 
-AST_List::AST_List(AST_SYMBOL type, AST_Node *AST_NodePtr)
-	:AST_Node(type), value(AST_NodePtr)
+AST_List::AST_List(AST_SYMBOL type, AST *ASTPtr)
+	:AST(type), value(ASTPtr)
 {};
 
-AST_Node* AST_List::getValue() const {
+AST* AST_List::getValue() const {
 	return this->value;
 };

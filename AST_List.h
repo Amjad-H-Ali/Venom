@@ -1,11 +1,11 @@
 #pragma once
 
-#include "AST_Node.h"
+#include "AST.h"
 
-class AST_List : public AST_Node {
+class AST_List : public AST {
 private:
-	AST_Node *value;
+	AST *value;
 public:
-	AST_List(AST_SYMBOL type, AST_Node *AST_NodePtr);
-	AST_Node* getValue() const;
+	AST_List(AST_SYMBOL type, AST *ASTPtr);
+	AST* getValue() const;
 };
