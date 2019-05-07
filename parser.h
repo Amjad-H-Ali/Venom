@@ -5,4 +5,17 @@
 #include "Token.h"
 
 
+namespace parser {
+
+namespace utility {
+
+	bool validStartToList(token::Symbol tokenType);
+
+}; // utility
+
+
+
 void parser(token::Token *current, token::Token *previous);
+
+
+}; // parser

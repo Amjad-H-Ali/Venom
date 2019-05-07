@@ -56,7 +56,7 @@ void lexer::lexer(char *fileName) {
 
 
 
-	parser(node->tokenHead, NULL);
+	parser::parser(node->tokenHead, NULL);
 
 
 };

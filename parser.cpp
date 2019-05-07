@@ -1,8 +1,10 @@
 #include <iostream>
 #include "parser.h"
-// #include "Declarations.h"
 
-void parser(token::Token *current, token::Token *previous) {
+namespace utils = parser::utility;
+
+
+void parser::parser(token::Token *current, token::Token *previous) {
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return;
@@ -12,6 +14,14 @@ void parser(token::Token *current, token::Token *previous) {
 
 	parser(next, current);
 
-
-	
 };
+
+
+bool utils::validStartToList(token::Symbol tokenType) {
+
+	return tokenType == token::BAR;
+};
+
+
+
+
