@@ -14,10 +14,17 @@ void parser::parser(token::Token *current, token::Token *previous) {
 
 	parser(next, current);
 
+	std::cout << utils::validStartToList(current) << std::endl;
+
 };
 
 
-bool utils::validStartToList(token::Symbol tokenType) {
+
+// Utility Functions to help parse Tokens
+
+bool utils::validStartToList(token::Token *tokenPtr) {
+
+	token::Symbol tokenType = tokenPtr->getType();
 
 	return tokenType == token::BAR;
 };

@@ -9,7 +9,7 @@ namespace parser {
 
 namespace utility {
 
-	bool validStartToList(token::Symbol tokenType);
+	bool validStartToList(token::Token *tokenPtr);
 
 }; // utility
 
