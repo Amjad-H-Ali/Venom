@@ -125,6 +125,8 @@ public:
 
 	Token *getNext() const;
 
+	Token *getPrev() const;
+
 	char *getTypeName() const;
 
 	// Data

@@ -52,6 +52,10 @@ tk::Token *tk::Token::getNext() const {
 	return this->next;
 };
 
+tk::Token *tk::Token::getPrev() const {
+	return this->prev;
+};
+
 char *tk::Token::getTypeName() const {
 	return this->typeName;
 };
