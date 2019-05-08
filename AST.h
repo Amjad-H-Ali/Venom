@@ -6,7 +6,7 @@
 // an AST Node.
 
 // N: Unique Symbol of each Node in AST
-#define AST_LIST(N) 			\
+#define AST_LIST(N) 			    \
 	N(AST_ID)						\
 	N(AST_IS)						\
 	N(AST_STRING)					\

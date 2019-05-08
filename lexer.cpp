@@ -51,7 +51,7 @@ void lexer::lexer(char *fileName) {
 
 	
 	for(token::Token *ptr = node->tokenHead; ptr; ptr = ptr->getNext())
-		std::cout << ptr->getName() << ' ' << ptr->getTypeName() << ' ';
+		std::cout << ptr->getTypeName() << ' ';
 	std::cout<< std::endl;
 
 

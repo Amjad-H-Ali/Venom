@@ -28,6 +28,11 @@ void tk::Token::setNext(Token *tokenPtr) {
 	this->next = tokenPtr;
 };
 
+// Set previous Token in Linked List.
+void tk::Token::setPrev(Token *tokenPtr) {
+	this->prev = tokenPtr;
+};
+
 // Sets typeName to Symbol Type in String Form.
 void tk::Token::setTypeName(char *typeName) {
 	this->typeName = typeName;

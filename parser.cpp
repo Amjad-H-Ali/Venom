@@ -20,6 +20,8 @@ void parser::parser(token::Token *current, token::Token *previous) {
 
 
 
+// AST_List *parser::parseList()
+
 // Utility Functions to help parse Tokens
 
 bool utils::validStartToList(token::Token *tokenPtr) {
@@ -28,6 +30,8 @@ bool utils::validStartToList(token::Token *tokenPtr) {
 
 	return tokenType == token::BAR;
 };
+
+
 
 
 

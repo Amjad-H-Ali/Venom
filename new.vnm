@@ -1,4 +1,4 @@
-func |name,address| ->
+func is |name,address| ->
 `
 	a is name
 	output a
@@ -6,3 +6,4 @@ func |name,address| ->
 
 
 
+array is |"Hello", func|

@@ -7,7 +7,7 @@ namespace lexer { namespace utility {
 	bool isQuote(char c);
 	bool isEligibleStartToAlphaNum(char c);
 
-}} // End of forward Declaration of lexer::utility functions.
+}}; // End of forward Declaration of lexer::utility functions.
 
 namespace token {
 
@@ -62,10 +62,10 @@ namespace utility {
 // 	T(EQEQ, utility::isEQEQ(S))									\
 // 	T(ELSE, utility::isELSE(S))									\
 // 	T(COMMA, utility::isCOMMA(S))								\
-// 	T(STRING, nullptr)								\
+// 	T(STRING, nullptr)								            \
 // 	T(OUTPUT, utility::isOUTPUT(S))								\
 // 	T(BACKTICK, utility::isBACKTICK(S))							\
-// 	T(IDENTIFIER, nullptr)						\
+// 	T(IDENTIFIER, nullptr)						                \
 // 	T(SKINNY_ARROW, utility::isSKINNYARROW(S))					
 					
 
@@ -115,6 +115,8 @@ public:
 
 	void setNext(Token *tokenPtr);
 
+	void setPrev(Token *tokenPtr);
+
 	void setTypeName(char *typeName);
 	
 	char *getName() const;
@@ -130,13 +132,14 @@ private:
 	char *name;
 	Symbol type; 
 	Token *next;
+	Token *prev;
 	char *typeName;
 
 
 }; // Token
 
 
-} // token NameSpace
+}; // token NameSpace
 
 
 
