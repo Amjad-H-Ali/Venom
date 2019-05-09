@@ -15,7 +15,7 @@ namespace utility {
 
 
 
-void parser(token::Token *current, token::Token *previous);
+void parser(token::Token *current);
 
 
 }; // parser

@@ -109,7 +109,7 @@ public:
 	~Token();
 
 	// Methods
-	void setName(char *name);
+	void setName(char *name=nullptr);
 
 	void setType(Symbol type);
 
