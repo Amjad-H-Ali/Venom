@@ -46,6 +46,7 @@ void lexer::lexer(char *fileName) {
 		else continue; // Probably throw an error here, but continue for spaces.
 
 		tokenPtr->setNext(node->tokenHead);
+		if(node->tokenHead) tokenPtr->getNext()->setPrev(tokenPtr);
 		node->tokenHead = tokenPtr; 
 	} // While
 
