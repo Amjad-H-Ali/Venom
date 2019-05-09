@@ -11,6 +11,11 @@ tk::Token::~Token() {
 	if(this->name != nullptr) delete [] this->name;
 };
 
+// Overload == operator to compare symbol types.
+bool tk::Token::operator==(Symbol type) {
+	return (this->type == type);
+};
+
 // Setter Methods
 // Set name to character stream 
 void tk::Token::setName(char *name) {

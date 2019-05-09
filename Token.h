@@ -108,6 +108,9 @@ public:
 	// Destructor
 	~Token();
 
+	// Overload == operator to compare symbol types.
+	bool operator==(Symbol type);
+
 	// Methods
 	void setName(char *name=nullptr);
 

@@ -22,14 +22,18 @@ void parser::parser(token::Token *current) {
 
 	// Instantiate AST_ID object and return to
 	// previous Token in list.
-	if(current->getType() == token::IDENTIFIER) {
+	if(*current == token::IDENTIFIER) {
+		std::cout << "Yes" << std::endl;
+
 		// Calls R-Value Constructor to steal Dynamically allocated 
 		// data from Token Object since we will no longer need Token.
 		newAST = new class AST_ID(AST_ID, std::move(*current));
-		return newAST;
+		// return newAST;
 	}
 
-	std::cout << utils::validStartToList(current) << std::endl;
+	// Instantiate AST_BinaryOp object and set values
+	// to left and right AST Nodes.
+	// if(current->getType() == IS)
 
 };
 
