@@ -1,39 +1,65 @@
 #include <iostream>
 #include "parser.h"
-#include <utility>
+#include <utility>	// For move()
 
 namespace utils = parser::utility;
 
 
-void parser::parser(token::Token *current) {
+AST *parser::parser(token::Token *current) {
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return;
-
-	// Pointer to new AST node
-	AST *newAST = nullptr;
 
 	// Next Token in Linked List.
 	token::Token *next = current->getNext();
 	// Previous Token in Linked List.
 	token::Token *prev = current->getPrev();
 
-	parser(next);
+	// Pointer to new AST node
+	AST *newAST_Ptr = parser(next);
 
 	// Instantiate AST_ID object and return to
 	// previous Token in list.
 	if(*current == token::IDENTIFIER) {
-		std::cout << "Yes" << std::endl;
-
 		// Calls R-Value Constructor to steal Dynamically allocated 
 		// data from Token Object since we will no longer need Token.
-		newAST = new class AST_ID(AST_ID, std::move(*current));
-		// return newAST;
+		return (
+			new class AST_ID(AST_ID, std::move(*current))
+		);
 	}
 
 	// Instantiate AST_BinaryOp object and set values
-	// to left and right AST Nodes.
-	// if(current->getType() == IS)
+	// equal to left and right AST Node pointers.
+	if(*current == token::IS) {
+		return (
+			new AST_BinaryOp(		// Pass in previous Token given 
+									// Linked List's nature of LIFO
+				AST_IS, newAST_Ptr, parser::parseRightOperand(prev)
+			)
+		);
+	}
+
+	// Instantiate AST_List Object
+	// It's value will be a Linked List 
+	// of AST Nodes.
+	if(utils::validStartToList(current)) {
+		return (
+									// Pass in previous Token given 
+									// Linked List's nature of LIFO
+			new AST_List(AST_LIST, parser::parseList(prev))
+		)
+	}
+
+};
+
+
+// Parser functions
+
+AST *parser::parseRightOperand(token::Token tokenPtr) {
+
+};
+
+AST *parser::parseList(token::Token tokenPtr) {
 
 };
 

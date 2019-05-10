@@ -14,8 +14,12 @@ namespace utility {
 }; // utility
 
 
-
-void parser(token::Token *current);
+// Main parser
+AST *parser(token::Token *current);
+// Parse right operand of an AST operator node
+AST *parser::parseRightOperand(token::Token tokenPtr);
+// Parse List of an AST list node
+AST *parser::parseList(token::Token tokenPtr);
 
 
 }; // parser
