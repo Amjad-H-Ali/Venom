@@ -17,7 +17,26 @@ AST *parser::parser(token::Token *current) {
 
 	// Pointer to new AST node
 	AST *newAST_Ptr = parser(next);
+	
+	// Parse current Token and return the AST node 
+	// the function below produces.
+	return parseTokens(current, prev, next);	
 
+};
+
+
+/*
+	* Parses Tokens.
+	* Params: Current Token, Previous Token, and Next Token in Linked List
+	* Defualt Params: Previous Token and Next Token.
+	* Return: An AST Node.
+
+*/
+AST *parser::parseTokens(
+	token::Token *current, token::Token *prev=nullptr, token::Token *next=nullptr
+) 
+
+{
 	// Instantiate AST_ID object and return to
 	// previous Token in list.
 	if(*current == token::IDENTIFIER) {
@@ -49,18 +68,21 @@ AST *parser::parser(token::Token *current) {
 			new AST_List(AST_LIST, parser::parseList(prev))
 		)
 	}
-
 };
 
 
 // Parser functions
 
+// Parse right operand of an AST operator node
 AST *parser::parseRightOperand(token::Token tokenPtr) {
-
+	// SHOULD CALL SPECIAL PORTION OF PARSER
+	// PARSE LIST WILL BE CALLED, RETURNING AN AST NODE
 };
 
+// Parse List of an AST list node
 AST *parser::parseList(token::Token tokenPtr) {
-
+	// SHOULD CALL SPECIAL PORTION OF PARSER UNTIL BAR IS REACHED
+	// RETURNS  A LINKED LIST OF AST NODES
 };
 
 
