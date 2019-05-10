@@ -3,7 +3,7 @@
 // AST_LIST takes in a Macro(N).
 // Each Macro has a signature(type),
 // where type is a unique symbol of 
-// an AST Node.
+// an AST_Node.
 
 // N: Unique Symbol of each Node in AST
 #define AST_LIST(N) 			    \
@@ -18,13 +18,13 @@
 #undef N
 
 
-class AST {
+class AST_Node{
 private:
 	AST_SYMBOL type;
-	AST *next;
+	AST_Node *next;
 public:
-	AST(AST_SYMBOL type);
+	AST_Node(AST_SYMBOL type);
 	AST_SYMBOL getType() const;
-	AST *getNext() const;
-	void setNext(AST *ASTPtr);
+	AST_Node *getNext() const;
+	void setNext(AST_Node *ASTPtr);
 };

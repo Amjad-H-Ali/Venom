@@ -1,17 +1,17 @@
 #include "AST.h"
 
-AST::AST(AST_SYMBOL type) 
+AST_Node::AST_Node(AST_SYMBOL type) 
 	:type(type), next(nullptr)
 {};
 
-AST_SYMBOL AST::getType() const {
+AST_SYMBOL AST_Node::getType() const {
 	return this->type;
 };
 
-AST *AST::getNext() const {
+AST_Node *AST_Node::getNext() const {
 	return this->next;
 };
 
-void AST::setNext(AST *ASTPtr) {
+void AST_Node::setNext(AST_Node *ASTPtr) {
 	this->next = ASTPtr;
 };

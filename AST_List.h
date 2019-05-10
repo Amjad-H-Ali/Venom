@@ -2,10 +2,10 @@
 
 #include "AST.h"
 
-class AST_List : public AST {
+class AST_List : public AST_Node {
 private:
-	AST *value;
+	AST_Node *value;
 public:
-	AST_List(AST_SYMBOL type, AST *ASTPtr);
-	AST* getValue() const;
+	AST_List(AST_SYMBOL type, AST_Node *ASTPtr);
+	AST_Node *getValue() const;
 };

@@ -5,37 +5,32 @@
 namespace utils = parser::utility;
 
 
-AST *parser::parser(token::Token *current) {
+// Parser functions
+
+AST_Node *parser::parser(token::Token *current) {
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return;
 
+
+	// Pointer to new AST node
+	AST_Node *newAST_Ptr = parser(current->getNext());
+	
+	// Parse current Token and return the AST node 
+	// the function below produces.
+	return parseToken(current);	
+
+};
+
+
+// Takes in a Token from a Linked List and Parses it.
+// Returns an AST Node.
+AST_Node *parser::parseToken(token::Token *current) {
 	// Next Token in Linked List.
 	token::Token *next = current->getNext();
 	// Previous Token in Linked List.
 	token::Token *prev = current->getPrev();
 
-	// Pointer to new AST node
-	AST *newAST_Ptr = parser(next);
-	
-	// Parse current Token and return the AST node 
-	// the function below produces.
-	return parseToken(current, prev, next);	
-
-};
-
-
-/*
-	* Parses Tokens.
-	* Params: Current Token, Previous Token, and Next Token in Linked List
-	* Defualt Params: Previous Token and Next Token.
-	* Return: An AST Node.
-*/
-AST *parser::parseToken(
-	token::Token *current, token::Token *prev=nullptr, token::Token *next=nullptr
-) 
-
-{
 	// Instantiate AST_ID object and return to
 	// previous Token in list.
 	if(*current == token::IDENTIFIER) {
@@ -70,21 +65,19 @@ AST *parser::parseToken(
 };
 
 
-// Parser functions
-
 // Parse right operand of an AST operator node
-AST *parser::parseRightOperand(token::Token tokenPtr) {
+AST_Node *parser::parseRightOperand(token::Token tokenPtr) {
 	return parser::parseToken(tokenPtr);
 };
 
 // Parse List of an AST list node
-AST *parser::parseList(token::Token tokenPtr) {
+AST_Node *parser::parseList(token::Token tokenPtr) {
 	if(*tokenPtr == token::BAR) return nullptr;
 
 	// Recursively Parse each Token in List
 	// When closing BAR is reached, nextInList 
 	// is set to nullptr.
-	AST *nextInList = parser::parseList(tokenPtr->getPrev());
+	AST_Node *nextInList = parser::parseList(tokenPtr->getPrev());
 
 	// Instantiate an AST object out of  current Token
 	// and set its 'next' data member to whatever nextInList
@@ -95,7 +88,6 @@ AST *parser::parseList(token::Token tokenPtr) {
 
 
 
-// AST_List *parser::parseList()
 
 // Utility Functions to help parse Tokens
 

@@ -2,7 +2,7 @@
 
 
 AST_ID::AST_ID(AST_SYMBOL type, token::Token &&tokenNode) 
-	:AST(type), name(tokenNode.getName())  
+	:AST_Node(type), name(tokenNode.getName())  
 {	
 	// Sets Token Node's name to nullptr
 	// after stealing it.

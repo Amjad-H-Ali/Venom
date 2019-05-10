@@ -3,7 +3,7 @@
 #include "AST.h"
 #include "Token.h"
 
-class AST_ID : public AST{
+class AST_ID : public AST_Node {
 private:
 	char *name;
 public:
