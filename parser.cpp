@@ -74,8 +74,7 @@ AST *parser::parseToken(
 
 // Parse right operand of an AST operator node
 AST *parser::parseRightOperand(token::Token tokenPtr) {
-	// SHOULD CALL SPECIAL PORTION OF PARSER
-	// PARSE LIST WILL BE CALLED, RETURNING AN AST NODE
+	return parser::parseToken(tokenPtr);
 };
 
 // Parse List of an AST list node
@@ -83,13 +82,13 @@ AST *parser::parseList(token::Token tokenPtr) {
 	if(*tokenPtr == token::BAR) return nullptr;
 
 	// Recursively Parse each Token in List
-	// When closing BAR is reached, headInList 
+	// When closing BAR is reached, nextInList 
 	// is set to nullptr.
-	AST *headInList = parser::parseList(tokenPtr->getPrev());
+	AST *nextInList = parser::parseList(tokenPtr->getPrev());
 
 	// Instantiate an AST object out of  current Token
-	// and set its 'next' data member to whatever headInList
-	// is pointing to. Return the AST node (headInList).
+	// and set its 'next' data member to whatever nextInList
+	// is pointing to. Return the AST node.
 	return (parser::parseToken(tokenPtr)->setNext(headInList));
 
 };
