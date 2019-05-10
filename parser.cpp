@@ -20,7 +20,7 @@ AST *parser::parser(token::Token *current) {
 	
 	// Parse current Token and return the AST node 
 	// the function below produces.
-	return parseTokens(current, prev, next);	
+	return parseToken(current, prev, next);	
 
 };
 
@@ -30,9 +30,8 @@ AST *parser::parser(token::Token *current) {
 	* Params: Current Token, Previous Token, and Next Token in Linked List
 	* Defualt Params: Previous Token and Next Token.
 	* Return: An AST Node.
-
 */
-AST *parser::parseTokens(
+AST *parser::parseToken(
 	token::Token *current, token::Token *prev=nullptr, token::Token *next=nullptr
 ) 
 
@@ -81,8 +80,18 @@ AST *parser::parseRightOperand(token::Token tokenPtr) {
 
 // Parse List of an AST list node
 AST *parser::parseList(token::Token tokenPtr) {
-	// SHOULD CALL SPECIAL PORTION OF PARSER UNTIL BAR IS REACHED
-	// RETURNS  A LINKED LIST OF AST NODES
+	if(*tokenPtr == token::BAR) return nullptr;
+
+	// Recursively Parse each Token in List
+	// When closing BAR is reached, headInList 
+	// is set to nullptr.
+	AST *headInList = parser::parseList(tokenPtr->getPrev());
+
+	// Instantiate an AST object out of  current Token
+	// and set its 'next' data member to whatever headInList
+	// is pointing to. Return the AST node (headInList).
+	return (parser::parseToken(tokenPtr)->setNext(headInList));
+
 };
 
 
@@ -93,9 +102,7 @@ AST *parser::parseList(token::Token tokenPtr) {
 
 bool utils::validStartToList(token::Token *tokenPtr) {
 
-	token::Symbol tokenType = tokenPtr->getType();
-
-	return tokenType == token::BAR;
+	return(*tokenPtr == token::BAR);
 };
 
 
