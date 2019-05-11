@@ -57,6 +57,9 @@ namespace utility	{
 
 	void lexer(char *fileName);
 
+	// TODO: EITHER DELETE THIS TOKEN STRUCT OR
+	// REMOVE NEXT DATA MEMBERS IN TOKEN OBJECTS.
+
 	// For Linked List of Tokens.
 	struct Tokens {
 		token::Token *tokenHead;

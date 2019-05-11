@@ -12,4 +12,4 @@ public:
 	// expire. In this case we are deleting the Token 
 	// Linked List after making the AST Link.
 	AST_ID(AST_SYMBOL type, token::Token &&tokenNode); 
-};
+}; // AST_ID

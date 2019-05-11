@@ -4,21 +4,29 @@
 
 namespace utils = parser::utility;
 
+// TODO: DECIDE ON STRUCT OR THIS.
+AST_Head(nullptr);
 
 // Parser functions
 
 AST_Node *parser::parser(token::Token *current) {
 
 	// Exit code for recursive Function. (End of Linked List)
-	if(!current) return;
+	if(!current) return nullptr;
 
 
-	// Pointer to new AST node
-	AST_Node *newAST_Ptr = parser(current->getNext());
+	// Pointer to next AST node
+	AST_Node *nextNode = parser(current->getNext());
 	
 	// Parse current Token and return the AST node 
 	// the function below produces.
-	return parseToken(current);	
+
+	if(*current == token::IS) {
+		AST_Node *newNode = parseToken(current);
+		newNode->setNext(nextNode);
+		return newNode;
+	}
+	return nextNode;
 
 };
 
@@ -45,9 +53,9 @@ AST_Node *parser::parseToken(token::Token *current) {
 	// equal to left and right AST Node pointers.
 	if(*current == token::IS) {
 		return (
-			new AST_BinaryOp(		// Pass in previous Token given 
-									// Linked List's nature of LIFO
-				AST_IS, newAST_Ptr, parser::parseRightOperand(prev)
+			new AST_BinaryOp(		               // Pass in previous Token given 
+									               // Linked List's nature of LIFO
+				AST_IS, parser::parseOperand(next), parser::parseOperand(prev)
 			)
 		);
 	}
@@ -62,13 +70,15 @@ AST_Node *parser::parseToken(token::Token *current) {
 			new AST_List(AST_LIST, parser::parseList(prev))
 		)
 	}
+	return nullptr;
 };
 
 
-// Parse right operand of an AST operator node
-AST_Node *parser::parseRightOperand(token::Token tokenPtr) {
+// Parse operands of an AST operator node
+AST_Node *parser::parseOperand(token::Token tokenPtr) {
 	return parser::parseToken(tokenPtr);
 };
+
 
 // Parse List of an AST list node
 AST_Node *parser::parseList(token::Token tokenPtr) {

@@ -9,4 +9,4 @@ private:
 public:
 	AST_BinaryOp(AST_SYMBOL type, AST_Node *left, AST_Node *right);
 	
-};
+}; // AST_BinaryOp

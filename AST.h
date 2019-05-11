@@ -1,5 +1,8 @@
 #pragma once
 
+// TODO: EITHER MAKE A STRUCT OR LEAVE AST_NODES WITH NEXT DATA MEMBERS.
+extern AST *AST_Head;
+
 // AST_LIST takes in a Macro(N).
 // Each Macro has a signature(type),
 // where type is a unique symbol of 
@@ -18,13 +21,18 @@
 #undef N
 
 
-class AST_Node{
+// Base class for an AST_Node.
+class AST_Node {
 private:
 	AST_SYMBOL type;
+	// Data member that points to next AST_Node
+	// in linked list.
 	AST_Node *next;
 public:
 	AST_Node(AST_SYMBOL type);
+	// AST_Node unique symbol
 	AST_SYMBOL getType() const;
+	//Accessor and Setter for 'next' data member.
 	AST_Node *getNext() const;
 	void setNext(AST_Node *ASTPtr);
-};
+}; // AST_NODE
