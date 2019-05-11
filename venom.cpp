@@ -2,6 +2,7 @@
 #include "Token.h"
 #include "lexer.h"
 #include "parser.h"
+#include "AST.h"
 
 
 int main(){
@@ -10,7 +11,12 @@ int main(){
 
 	token::Token *head = linkedList->tokenHead;
 
-	parser::parser(head);
+	// TODO: DECIDE ON STRUCT OR THIS.
+	// Declared in AST.h
+	AST_Node *AST_Head = parser::parser(head);
+
+	for(AST_Node *ptr = AST_Head; ptr; ptr = ptr->getNext()) 
+		std::cout << ptr->getTypeName() << std::endl;
 
 
 };
