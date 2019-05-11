@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO: EITHER MAKE A STRUCT OR LEAVE AST_NODES WITH NEXT DATA MEMBERS.
-extern AST *AST_Head;
 
 // AST_LIST takes in a Macro(N).
 // Each Macro has a signature(type),
@@ -36,3 +34,8 @@ public:
 	AST_Node *getNext() const;
 	void setNext(AST_Node *ASTPtr);
 }; // AST_NODE
+
+
+
+// TODO: EITHER MAKE A STRUCT OR LEAVE AST_NODES WITH NEXT DATA MEMBERS.
+extern AST_Node *AST_Head;

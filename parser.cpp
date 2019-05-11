@@ -5,7 +5,8 @@
 namespace utils = parser::utility;
 
 // TODO: DECIDE ON STRUCT OR THIS.
-AST_Head(nullptr);
+// Declared in AST.h
+AST_Node *AST_Head(nullptr);
 
 // Parser functions
 
@@ -68,20 +69,20 @@ AST_Node *parser::parseToken(token::Token *current) {
 									// Pass in previous Token given 
 									// Linked List's nature of LIFO
 			new AST_List(AST_LIST, parser::parseList(prev))
-		)
+		);
 	}
 	return nullptr;
 };
 
 
 // Parse operands of an AST operator node
-AST_Node *parser::parseOperand(token::Token tokenPtr) {
+AST_Node *parser::parseOperand(token::Token *tokenPtr) {
 	return parser::parseToken(tokenPtr);
 };
 
 
 // Parse List of an AST list node
-AST_Node *parser::parseList(token::Token tokenPtr) {
+AST_Node *parser::parseList(token::Token *tokenPtr) {
 	if(*tokenPtr == token::BAR) return nullptr;
 
 	// Recursively Parse each Token in List
@@ -92,7 +93,9 @@ AST_Node *parser::parseList(token::Token tokenPtr) {
 	// Instantiate an AST object out of  current Token
 	// and set its 'next' data member to whatever nextInList
 	// is pointing to. Return the AST node.
-	return (parser::parseToken(tokenPtr)->setNext(headInList));
+	AST_Node *newNode = parser::parseToken(tokenPtr);
+	newNode->setNext(nextInList);
+	return newNode;
 
 };
 
