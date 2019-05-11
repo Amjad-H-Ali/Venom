@@ -11,7 +11,7 @@
 	N(AST_ID)						\
 	N(AST_IS)						\
 	N(AST_STRING)					\
-	N(AST_LIST)
+	N(AST_LIST)						
 
 // All AST Symbols
 #define N(symbol) symbol,
@@ -24,8 +24,7 @@ class AST_Node {
 private:
 	// Unique Symbol for AST_Node
 	AST_SYMBOL type;
-	// Unique String
-	char *typeName;
+	
 	// Data member that points to next AST_Node in linked list.
 	AST_Node *next;
 public:
@@ -33,7 +32,7 @@ public:
 	// AST_Node unique symbol
 	AST_SYMBOL getType() const;
 	// AST_Node unique String
-	char *getTypeName() const;
+	char *getTypeName(AST_SYMBOL type) const;
 	//Accessor and Setter for 'next' data member.
 	AST_Node *getNext() const;
 	void setNext(AST_Node *ASTPtr);
