@@ -38,8 +38,8 @@ public:
 	void setNext(AST_Node *ASTPtr);
 
 	// For BinaryOp
-	AST_Node *getLeftOperand() const {return nullptr;};
-	AST_Node *getRightOperand() const {return nullptr;};
+	virtual AST_Node *getLeftOperand() const {return nullptr;};
+	virtual AST_Node *getRightOperand() const {return nullptr;};
 
 }; // AST_NODE
 
