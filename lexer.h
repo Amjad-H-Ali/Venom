@@ -54,9 +54,6 @@ namespace utility	{
 }; // utility Namespace
 
 
-
-	void lexer(char *fileName);
-
 	// TODO: EITHER DELETE THIS TOKEN STRUCT OR
 	// REMOVE NEXT DATA MEMBERS IN TOKEN OBJECTS.
 
@@ -65,5 +62,9 @@ namespace utility	{
 		token::Token *tokenHead;
 		lexer::Tokens *next;
 	}; // Tokens Struct
+	
+
+	// Tokenizes input file and adds to Linked List.
+	Tokens *lexer(char *fileName);
 	
 }; // lexer Namespace

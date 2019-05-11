@@ -15,15 +15,17 @@ AST_Node *parser::parser(token::Token *current) {
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return nullptr;
 
-
 	// Pointer to next AST node
 	AST_Node *nextNode = parser(current->getNext());
+
 	
 	// Parse current Token and return the AST node 
 	// the function below produces.
 
 	if(*current == token::IS) {
+
 		AST_Node *newNode = parseToken(current);
+
 		newNode->setNext(nextNode);
 		return newNode;
 	}
@@ -40,6 +42,8 @@ AST_Node *parser::parseToken(token::Token *current) {
 	// Previous Token in Linked List.
 	token::Token *prev = current->getPrev();
 
+
+
 	// Instantiate AST_ID object and return to
 	// previous Token in list.
 	if(*current == token::IDENTIFIER) {
@@ -49,6 +53,7 @@ AST_Node *parser::parseToken(token::Token *current) {
 			new class AST_ID(AST_ID, std::move(*current))
 		);
 	}
+
 
 	// Instantiate AST_BinaryOp object and set values
 	// equal to left and right AST Node pointers.
@@ -85,17 +90,24 @@ AST_Node *parser::parseOperand(token::Token *tokenPtr) {
 AST_Node *parser::parseList(token::Token *tokenPtr) {
 	if(*tokenPtr == token::BAR) return nullptr;
 
+
 	// Recursively Parse each Token in List
 	// When closing BAR is reached, nextInList 
 	// is set to nullptr.
 	AST_Node *nextInList = parser::parseList(tokenPtr->getPrev());
 
+
+
 	// Instantiate an AST object out of  current Token
 	// and set its 'next' data member to whatever nextInList
 	// is pointing to. Return the AST node.
-	AST_Node *newNode = parser::parseToken(tokenPtr);
-	newNode->setNext(nextInList);
-	return newNode;
+	if(*tokenPtr == token::IDENTIFIER || *tokenPtr == token::STRING) {
+		AST_Node *newNode = parser::parseToken(tokenPtr);
+		newNode->setNext(nextInList);
+		return newNode;
+	}
+
+	return nextInList;
 
 };
 

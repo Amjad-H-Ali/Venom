@@ -12,8 +12,8 @@ namespace utils = lexer::utility;
 lexer::Tokens *node = new lexer::Tokens;
 
 
-
-void lexer::lexer(char *fileName) {
+// Tokenizes input file and adds to Linked List.
+lexer::Tokens *lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
 	char c;
@@ -45,22 +45,18 @@ void lexer::lexer(char *fileName) {
 			tokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
 		else continue; // Probably throw an error here, but continue for spaces.
 
+		// Insert Token into Linked List
 		tokenPtr->setNext(node->tokenHead);
 		if(node->tokenHead) tokenPtr->getNext()->setPrev(tokenPtr);
 		node->tokenHead = tokenPtr; 
 	} // While
 
-	
-	for(token::Token *ptr = node->tokenHead; ptr; ptr = ptr->getNext())
-		std::cout << ptr->getTypeName() << ' ';
-	std::cout<< std::endl;
 
 
+	return node;
 
-	parser::parser(node->tokenHead);
 
-
-};
+}; // Lexer
 
 
 // Gets whole Potential String from beginning to end.

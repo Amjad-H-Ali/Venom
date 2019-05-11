@@ -1,30 +1,19 @@
 // #include <iostream>
 
-// class Foo {
-// 	public:
-// 	std::string word = "Foo";
-// 	void say() {
-// 		std::cout << this->word << std::endl;
-// 	};
-// 	class Boo {
-// 		public:
-// 		std::string word = "Boo";
-// 		void say() {
-// 			std::cout << this->word << std::endl;
-// 		};
-// 	};
-// };
+
 
 // int main(){
-// 	Foo f;
-// 	Foo::Boo b;
 
-// 	Foo *fPtr = &b;
+// 	int i = 9;
 
-// 	fPtr->say();
+// 	int &refVal = i;
 
-// 	f.say();
-// 	b.say();
+// 	int *p = &refVal;
+
+// 	refVal = 3.1459;
+
+
+// 	std::cout << refVal << ' ' << *p << std::endl;
 
 
 // };

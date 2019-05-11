@@ -1,9 +1,1 @@
-func is |name,address| ->
-`
-	a is name
-	output a
-` 
-
-
-
-array is |"Hello", func|
+array is |boo, func|
