@@ -24,7 +24,7 @@ class AST_Node {
 private:
 	// Unique Symbol for AST_Node
 	AST_SYMBOL type;
-	
+
 	// Data member that points to next AST_Node in linked list.
 	AST_Node *next;
 public:
@@ -36,6 +36,11 @@ public:
 	//Accessor and Setter for 'next' data member.
 	AST_Node *getNext() const;
 	void setNext(AST_Node *ASTPtr);
+
+	// For BinaryOp
+	AST_Node *getLeftOperand() const {return nullptr;};
+	AST_Node *getRightOperand() const {return nullptr;};
+
 }; // AST_NODE
 
 
