@@ -41,6 +41,9 @@ public:
 	virtual AST_Node *getLeftOperand() const {return nullptr;};
 	virtual AST_Node *getRightOperand() const {return nullptr;};
 
+	// For List
+	virtual AST_Node *getValue() const {return nullptr;};
+
 }; // AST_NODE
 
 
