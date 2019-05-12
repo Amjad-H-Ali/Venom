@@ -12,7 +12,7 @@ tk::Token::~Token() {
 };
 
 // Overload == operator to compare symbol types.
-bool tk::Token::operator==(Symbol type) {
+bool tk::Token::operator==(Symbol type) const {
 	return (this->type == type);
 };
 

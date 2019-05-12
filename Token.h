@@ -109,7 +109,7 @@ public:
 	~Token();
 
 	// Overload == operator to compare symbol types.
-	bool operator==(Symbol type);
+	bool operator==(Symbol type) const;
 
 	// Methods
 	void setName(char *name=nullptr);

@@ -4,9 +4,6 @@
 
 namespace utils = parser::utility;
 
-// TODO: DECIDE ON STRUCT OR THIS.
-// Declared in AST.h
-AST_Node *AST_Head(nullptr);
 
 // Parser functions
 

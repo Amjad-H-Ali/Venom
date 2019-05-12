@@ -16,6 +16,7 @@ int main(){
 	AST_Node *AST_Head = parser::parser(head);
 
 	for(AST_Node *ptr = AST_Head; ptr; ptr = ptr->getNext()) {
+		std::cout << ptr->getTypeName(ptr->getLeftOperand()->getType()) << std::endl;
 	}
 
 
