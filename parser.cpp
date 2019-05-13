@@ -26,6 +26,14 @@ AST_Node *parser::parser(token::Token *current) {
 		newNode->setNext(nextNode);
 		return newNode;
 	}
+
+	else if(*current == token::SKINNY_ARROW) {
+		AST_Node *newNode = parseToken(current);
+
+		newNode->setNext(nextNode);
+		return newNode;
+	}
+
 	return nextNode;
 
 };
@@ -53,8 +61,9 @@ AST_Node *parser::parseToken(token::Token *current) {
 
 
 	// Instantiate AST_BinaryOp object and set values
-	// equal to left and right AST Node pointers.
+	// and parse right and left operands.
 	if(*current == token::IS) {
+
 		return (
 			new AST_BinaryOp(		               // Pass in previous Token given 
 									               // Linked List's nature of LIFO
@@ -63,16 +72,35 @@ AST_Node *parser::parseToken(token::Token *current) {
 		);
 	}
 
+	// Instantiate AST_FUNCTION object and parse parameter
+	// list and statement block
+	if(*current == token::SKINNY_ARROW) {
+
+		//func|name, address|->` `
+		//   ``-> |address,name| func
+
+		return (
+			new AST_Function(
+
+				AST_FUNCTION, parser::parseParams(next), parser::parseBlock(prev) 
+			)
+		);
+	}
+
+
 	// Instantiate AST_List Object
 	// It's value will be a Linked List 
 	// of AST Nodes.
 	if(utils::validStartToList(current)) {
+
 		return (
 									// Pass in previous Token given 
 									// Linked List's nature of LIFO
 			new AST_List(AST_LIST, parser::parseList(prev))
 		);
 	}
+
+
 	return nullptr;
 };
 
@@ -80,6 +108,7 @@ AST_Node *parser::parseToken(token::Token *current) {
 // Parse operands of an AST operator node
 AST_Node *parser::parseOperand(token::Token *tokenPtr) {
 	return parser::parseToken(tokenPtr);
+
 };
 
 
