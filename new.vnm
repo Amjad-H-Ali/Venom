@@ -1,4 +1,4 @@
-func |name,address| -> 
+func is |name,address| -> 
 `
-	
+	name is "MJ"	
 `

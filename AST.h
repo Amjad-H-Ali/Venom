@@ -12,7 +12,7 @@
 	N(AST_IS)						\
 	N(AST_STRING)					\
 	N(AST_LIST)						\
-	n(AST_FUNCTION)					
+	N(AST_FUNCTION)					
 
 // All AST Symbols
 #define N(symbol) symbol,

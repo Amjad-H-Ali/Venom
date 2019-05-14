@@ -13,7 +13,7 @@ int main(){
 
 	// TODO: DECIDE ON STRUCT OR THIS.
 	// Declared in AST.h
-	AST_Node *AST_Head = parser::parser(head);
+	AST_Node *AST_Head = parser::wrapperParser(head);
 
 	for(AST_Node *ptr = AST_Head; ptr; ptr = ptr->getNext()) {
 		std::cout << ptr->getTypeName(ptr->getLeftOperand()->getType()) << std::endl;

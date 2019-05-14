@@ -3,6 +3,7 @@
 #include "AST_List.h"
 #include "AST_ID.h"
 #include "AST_BinaryOp.h"
+#include "AST_Function.h"
 #include "Token.h"
 
 
@@ -36,7 +37,7 @@ namespace utility {
 	AST_Node *parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&startToBlock);
 
 	// Parse List
-	AST_Node *parseList();
+	AST_Node *parseList(token::Token *tokenPtr);
 
 	// Parse parameters
 	AST_Node *parseParams(token::Token *tokenPtr);
