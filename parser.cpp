@@ -5,6 +5,10 @@
 namespace utils = parser::utility;
 
 
+
+// IMPLEMENT PARSE PARAMS AND PARSE BLOCK FUNCTIONS
+
+
 // Parser functions
 
 AST_Node *parser::parser(token::Token *current) {
@@ -21,13 +25,6 @@ AST_Node *parser::parser(token::Token *current) {
 
 	if(*current == token::IS) {
 
-		AST_Node *newNode = parseToken(current);
-
-		newNode->setNext(nextNode);
-		return newNode;
-	}
-
-	else if(*current == token::SKINNY_ARROW) {
 		AST_Node *newNode = parseToken(current);
 
 		newNode->setNext(nextNode);
@@ -93,11 +90,14 @@ AST_Node *parser::parseToken(token::Token *current) {
 	// of AST Nodes.
 	if(utils::validStartToList(current)) {
 
-		return (
-									// Pass in previous Token given 
-									// Linked List's nature of LIFO
-			new AST_List(AST_LIST, parser::parseList(prev))
-		);
+		bool isParams = false;
+		token::Token *endOfList = nullptr;
+
+
+		AST_Node *listValue = parser::parseListOrParams(prev, isParams, endOfList);
+		
+		AST_Node *list = new AST_List(AST_LIST, listValue);
+
 	}
 
 
@@ -113,30 +113,59 @@ AST_Node *parser::parseOperand(token::Token *tokenPtr) {
 
 
 // Parse List of an AST list node
-AST_Node *parser::parseList(token::Token *tokenPtr) {
+AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&endOfList) {
+
+	if(*tokenPtr == token::BAR && *(tokenPtr->getPrev()) == token::SKINNY_ARROW) {
+		isParams = true;
+		endOfList = token	
+	} 
+
 	if(*tokenPtr == token::BAR) return nullptr;
+		
 
 
 	// Recursively Parse each Token in List
 	// When closing BAR is reached, nextInList 
 	// is set to nullptr.
-	AST_Node *nextInList = parser::parseList(tokenPtr->getPrev());
-
-
+	AST_Node *nextInList = parser::parseListOrParams(tokenPtr->getPrev());
 
 	// Instantiate an AST object out of  current Token
 	// and set its 'next' data member to whatever nextInList
 	// is pointing to. Return the AST node.
-	if(*tokenPtr == token::IDENTIFIER || *tokenPtr == token::STRING) {
-		AST_Node *newNode = parser::parseToken(tokenPtr);
-		newNode->setNext(nextInList);
-		return newNode;
-	}
+	AST_Node *newNode = nullptr;
 
-	return nextInList;
+	if(*tokenPtr == token::COMMA)
+		return nextInList;
+
+	if(isParams)
+		newNode = parser::parseParams(tokenPtr);
+	else
+		newNode = parser::parseList(tokenPtr);
+
+	newNode->setNext(nextInList);
+
+	return newNode;
+
 
 };
 
+// Parse List
+AST_Node *parser::parseList() {
+	if(*tokenPtr == token::IDENTIFIER || *tokenPtr == token::STRING)
+		return parser::parseToken(tokenPtr);
+	else
+		//throw error: illegal object in array.
+		return nullptr;
+}
+
+// Parse parameters
+AST_Node *parser::parseParams(token::Token *tokenPtr) {
+	if(*tokenPtr == token::IDENTIFIER)
+		return parser::parseToken(tokenPtr);
+	else
+		//throw error: illegal object in params.
+		return nullptr;
+};	
 
 
 
