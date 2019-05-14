@@ -168,8 +168,6 @@ AST_Node *parser::parseParams(token::Token *tokenPtr) {
 		return nullptr;
 };
 
-//funct is |num, age| -> ` num is 5 `
-// `5 is num ` -> |age, num| is funct 
 
 
 // Parse statement block
@@ -202,7 +200,7 @@ bool utils::validStartToListOrParams(token::Token *tokenPtr) {
 
 bool utils::validStartToFunctionBlock(token::Token *tokenPtr) {
 	return(
-		(*tokenPtr == token::SKINNY_ARROW) && (*(tokenPtr->getNext()) == token::BACKTICK)
+		(*tokenPtr == token::SKINNY_ARROW) && (*(tokenPtr->getPrev()) == token::BACKTICK)
 	);
 }
 

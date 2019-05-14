@@ -16,7 +16,7 @@ int main(){
 	AST_Node *AST_Head = parser::wrapperParser(head);
 
 	for(AST_Node *ptr = AST_Head; ptr; ptr = ptr->getNext()) {
-		std::cout << ptr->getTypeName(ptr->getLeftOperand()->getType()) << std::endl;
+		std::cout << ptr->getTypeName(ptr->getRightOperand()->getType()) << std::endl;
 	}
 
 
