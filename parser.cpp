@@ -85,16 +85,16 @@ AST_Node *parser::parseToken(token::Token *current) {
 	if(utils::validStartToListOrParams(current)) {
 
 		bool isParams = false;
-		token::Token *arrow = nullptr;
+		token::Token *startToBlock = nullptr;
 
 
-		AST_Node *listValue = parser::parseListOrParams(prev, isParams, arrow);
+		AST_Node *listValue = parser::parseListOrParams(prev, isParams, startToBlock);
 		
 		AST_Node *list = new AST_List(AST_LIST, listValue);
 
 		if(isParams) {
 			return AST_Function(
-				AST_FUNCTION, list, parser::parseBlock(arrow->getPrev())
+				AST_FUNCTION, list, parser::parseBlock(startToBlock->getPrev())
 			);
 		}
 		else
@@ -116,16 +116,15 @@ AST_Node *parser::parseOperand(token::Token *tokenPtr) {
 
 
 // Parse List of an AST list node
-AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&arrow) {
+AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&startToBlock) {
 
-	if(*tokenPtr == token::BAR && *(tokenPtr->getPrev()) == token::SKINNY_ARROW) {
-		isParams = true;
-		arrow = token->getPrev();	
+	if(*tokenPtr == token::BAR) {
+		if(utils::validStartToFunctionBlock(tokenPtr->getPrev())) {
+			isParams = true;
+			startToBlock = token->getPrev()->getPrev();
+		}
+		return nullptr;	
 	} 
-
-	if(*tokenPtr == token::BAR) return nullptr;
-		
-
 
 	// Recursively Parse each Token in List
 	// When closing BAR is reached, nextInList 
@@ -170,10 +169,25 @@ AST_Node *parser::parseParams(token::Token *tokenPtr) {
 		return nullptr;
 };
 
+//funct is |num, age| -> ` num is 5 `
+// `5 is num ` -> |age, num| is funct 
+
+
 // Parse statement block
 AST_Node *parser::parseBlock(token::Token *tokenPtr) {
-	if(*tokenPtr == token::BACKTICK)
-		return parser::parser()
+	// Exit code for recursive Function. (End of Linked List)
+	if(*tokenPtr == token::BACKTICK) return nullptr;
+
+	// Pointer to next AST node
+	AST_Node *nextNode = wrapperParser(current->getNext());
+
+	AST_Node *newNode = parser::parser(current);
+
+	if(!newNode) return nextNode;
+
+	newNode->setNext(nextNode);
+
+	return newNode;
 };
 
 
@@ -184,6 +198,12 @@ bool utils::validStartToListOrParams(token::Token *tokenPtr) {
 
 	return(*tokenPtr == token::BAR);
 };
+
+bool utils::validStartToFunctionBlock(token::Token *tokenPtr) {
+	return(
+		(*tokenPtr == token::ARROW) && (*(tokenPtr->getNext()) == token::BACKTICK)
+	);
+}
 
 
 
