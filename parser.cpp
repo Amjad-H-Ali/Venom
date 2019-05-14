@@ -11,28 +11,35 @@ namespace utils = parser::utility;
 
 // Parser functions
 
-AST_Node *parser::parser(token::Token *current) {
+AST_Node *parser::wrapperParser(token::Token *current) {
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return nullptr;
 
 	// Pointer to next AST node
-	AST_Node *nextNode = parser(current->getNext());
+	AST_Node *nextNode = wrapperParser(current->getNext());
 
-	
-	// Parse current Token and return the AST node 
+	AST_Node *newNode = parser::parser(current);
+
+	if(!newNode) return nextNode;
+
+	newNode->setNext(nextNode);
+
+	return newNode;
+
+};
+
+AST_Node *parser::parser(token::Token *tokenPtr) {
+
+	// Parse Token and return the AST node 
 	// the function below produces.
 
-	if(*current == token::IS) {
+	AST_Node *newNode = nullptr;
 
-		AST_Node *newNode = parseToken(current);
+	if(*tokenPtr == token::IS) 
+		newNode = parseToken(tokenPtr);
 
-		newNode->setNext(nextNode);
-		return newNode;
-	}
-
-	return nextNode;
-
+	return newNode;
 };
 
 
@@ -69,34 +76,30 @@ AST_Node *parser::parseToken(token::Token *current) {
 		);
 	}
 
-	// Instantiate AST_FUNCTION object and parse parameter
-	// list and statement block
-	if(*current == token::SKINNY_ARROW) {
 
-		//func|name, address|->` `
-		//   ``-> |address,name| func
-
-		return (
-			new AST_Function(
-
-				AST_FUNCTION, parser::parseParams(next), parser::parseBlock(prev) 
-			)
-		);
-	}
-
+	// Return List or Function
 
 	// Instantiate AST_List Object
 	// It's value will be a Linked List 
 	// of AST Nodes.
-	if(utils::validStartToList(current)) {
+	if(utils::validStartToListOrParams(current)) {
 
 		bool isParams = false;
-		token::Token *endOfList = nullptr;
+		token::Token *arrow = nullptr;
 
 
-		AST_Node *listValue = parser::parseListOrParams(prev, isParams, endOfList);
+		AST_Node *listValue = parser::parseListOrParams(prev, isParams, arrow);
 		
 		AST_Node *list = new AST_List(AST_LIST, listValue);
+
+		if(isParams) {
+			return AST_Function(
+				AST_FUNCTION, list, parser::parseBlock(arrow->getPrev())
+			);
+		}
+		else
+			return list;
+
 
 	}
 
@@ -113,11 +116,11 @@ AST_Node *parser::parseOperand(token::Token *tokenPtr) {
 
 
 // Parse List of an AST list node
-AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&endOfList) {
+AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&arrow) {
 
 	if(*tokenPtr == token::BAR && *(tokenPtr->getPrev()) == token::SKINNY_ARROW) {
 		isParams = true;
-		endOfList = token	
+		arrow = token->getPrev();	
 	} 
 
 	if(*tokenPtr == token::BAR) return nullptr;
@@ -165,13 +168,19 @@ AST_Node *parser::parseParams(token::Token *tokenPtr) {
 	else
 		//throw error: illegal object in params.
 		return nullptr;
-};	
+};
+
+// Parse statement block
+AST_Node *parser::parseBlock(token::Token *tokenPtr) {
+	if(*tokenPtr == token::BACKTICK)
+		return parser::parser()
+};
 
 
 
 // Utility Functions to help parse Tokens
 
-bool utils::validStartToList(token::Token *tokenPtr) {
+bool utils::validStartToListOrParams(token::Token *tokenPtr) {
 
 	return(*tokenPtr == token::BAR);
 };
