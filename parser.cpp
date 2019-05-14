@@ -175,17 +175,19 @@ AST_Node *parser::parseParams(token::Token *tokenPtr) {
 
 // Parse statement block
 AST_Node *parser::parseBlock(token::Token *tokenPtr) {
-	// Exit code for recursive Function. (End of Linked List)
+
+	// Exit code for recursive Function. (End of Block)
 	if(*tokenPtr == token::BACKTICK) return nullptr;
 
-	// Pointer to next AST node
-	AST_Node *nextNode = wrapperParser(current->getNext());
+	AST_Node *newNode = parser::parser(tokenPtr);
 
-	AST_Node *newNode = parser::parser(current);
+	// Pointer to next AST node
+	AST_Node *nextNode = parseBlock(tokenPtr->getPrev());
 
 	if(!newNode) return nextNode;
 
 	newNode->setNext(nextNode);
+
 
 	return newNode;
 };
