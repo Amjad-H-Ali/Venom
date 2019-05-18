@@ -2,7 +2,7 @@
 #include <fstream>
 #include "lexer.h"
 #include "Token.h"
-#include "parser.h"
+#include "ActionMap.h"
 
 
 
@@ -15,8 +15,9 @@ token::TokenNode *lexer::lexer(char *fileName) {
 	std::ifstream in(fileName);
 	char c;
 
-	// Head of Doubly-Linked-List of Tokens.
+	// Head to Doubly-Linked-List of Token Nodes.
 	token::TokenNode *headNode = nullptr;
+
 
 	// Pointer to new Token object
 	// that may be Instantiated soon.
@@ -47,7 +48,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		else continue; // Probably throw an error here, but continue for spaces.
 
 
-		// Insert new TokenNode in Doubly-Linked-List
+		// Insert new TokenNode in Doubly-Linked-List...
 		// After setting its value to point to new Token Object.
 		token::TokenNode *newNode = new token::TokenNode;
 
@@ -55,6 +56,8 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		newNode->next = headNode;
 		if(headNode) newNode->next->prev = newNode; // Access prev property of neighbor node and point it to this newNode.
 		headNode = newNode;
+
+		if(utils::qualifiesForActionMap(newNode)) lexer::setMap(newNode);
 
 		
 	} // While
@@ -65,6 +68,31 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 
 }; // Lexer
+
+// Inserts address of newNode in Link-List of ActionMaps 
+void lexer::setMap(const token::TokenNode *node) {
+
+	// Head and Tail to Doubly-Linked-List of ActionMap Nodes.
+	actMap::ActionMap *head = nullptr;
+	actMap::ActionMap *tail = nullptr; 
+
+	actMap::ActionMap *newNode = new actMap::ActionMap;
+
+	// Map to node.
+	newNode->mapValue = node;
+
+	// Insert newNode in Linked-List
+	newNode->next = head;
+
+	// If head points to nullptr, then let tail point to newNode ...
+	// because newNode will be pushed to the end (LIFO or FILO).
+	if(!head) tail = newNode;
+	// Access prev property of neighbor node and point it to this newNode.
+	else newNode->next->prev = newNode;
+
+	head = newNode;
+
+}
 
 
 // Gets whole Potential String from beginning to end.

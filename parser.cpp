@@ -5,16 +5,14 @@
 namespace utils = parser::utility;
 
 
-
-// IMPLEMENT PARSE PARAMS AND PARSE BLOCK FUNCTIONS
-
-
 // Parser functions
 
 AST_Node *parser::wrapperParser(tNode current) {
 
+	current = nullptr;
+
 	// Exit code for recursive Function. (End of Linked List)
-	if(!current) return nullptr;
+	if(!current) return nullptr; 
 
 	// Pointer to next AST node
 	AST_Node *nextNode = wrapperParser(current->next);

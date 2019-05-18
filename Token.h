@@ -122,6 +122,7 @@ private:
 
 // Token Node In Linked-List
 struct TokenNode {
+	
 	token::Token *tokenPtr;
 	token::TokenNode *next, *prev;
 
