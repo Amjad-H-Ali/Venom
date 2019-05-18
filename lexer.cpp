@@ -94,6 +94,10 @@ void lexer::setMap(const token::TokenNode *node) {
 
 }
 
+// Checks if Token is valid ActionMap node.
+bool utils::qualifiesForActionMap(const token::TokenNode *node) {
+	return(*node == token::IS); // Much more coming soon.
+}
 
 // Gets whole Potential String from beginning to end.
 char *utils::chompString(char &c, std::ifstream &in) {
