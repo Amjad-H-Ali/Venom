@@ -11,9 +11,9 @@ namespace parser {
 
 namespace utility {
 
-	bool validStartToListOrParams(token::Token *tokenPtr);
+	bool validStartToListOrParams(token::TokenNode *node);
 
-	bool validStartToFunctionBlock(token::Token *tokenPtr);
+	bool validStartToFunctionBlock(token::TokenNode *node);
 
 }; // utility
 
@@ -21,29 +21,29 @@ namespace utility {
 
 	// Parser functions
 
-	// Main parser
-	AST_Node *wrapperParser(token::Token *current);
+	// Main parser. Params: Linked-List Of Tokens.
+	AST_Node *wrapperParser(token::TokenNode *current);
 
-	AST_Node *parser(token::Token *tokenPtr) ;
+	AST_Node *parser(token::TokenNode *node) ;
 
 	// Takes in a Token from a Linked List and Parses it.
 	// Returns an AST Node.
-	AST_Node *parseToken(token::Token *current);
+	AST_Node *parseToken(token::TokenNode *current);
 
 	// Parse operands of an AST operator node
-	AST_Node *parseOperand(token::Token *tokenPtr);
+	AST_Node *parseOperand(token::TokenNode *node);
 
 	// Parse List of an AST list node
-	AST_Node *parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&startToBlock);
+	AST_Node *parseListOrParams(token::TokenNode *node, bool &isParams, token::TokenNode *&startToBlock);
 
 	// Parse List
-	AST_Node *parseList(token::Token *tokenPtr);
+	AST_Node *parseList(token::TokenNode *node);
 
 	// Parse parameters
-	AST_Node *parseParams(token::Token *tokenPtr);
+	AST_Node *parseParams(token::TokenNode *node);
 
 	// Parse statement block
-	AST_Node *parseBlock(token::Token *tokenPtr);
+	AST_Node *parseBlock(token::TokenNode *node);
 
 
 }; // parser

@@ -16,17 +16,6 @@ namespace utility {
 	// Checks if two strings match.
 	bool isMatch(char *s1, char *s2);
 
-	// Utiltiy Functions To Help Determine Type of Tokens
-	bool isIF(char *stream);				
-	bool isEQ(char *stream);				
-	bool isBAR(char *stream);			
-	bool isEQEQ(char *stream);			
-	bool isELSE(char *stream);			
-	bool isCOMMA(char *stream);		
-	bool isOUTPUT(char *stream);	
-	bool isBACKTICK(char *stream);	
-	bool isSKINNYARROW(char *stream);
-
 }; // utility NameSpace
 
 
@@ -86,7 +75,6 @@ public:
 
 	// Main Constructor
 	Token(char *stream, bool(*hint)(char)=nullptr) 
-		:next(nullptr), prev(nullptr)
 	{	
 		
 
@@ -116,32 +104,39 @@ public:
 
 	void setType(Symbol type);
 
-	void setNext(Token *tokenPtr);
-
-	void setPrev(Token *tokenPtr);
-
 	void setTypeName(char *typeName);
 	
 	char *getName() const;
 
 	Symbol getType() const;
 
-	Token *getNext() const;
-
-	Token *getPrev() const;
-
 	char *getTypeName() const;
 
 	// Data
 private:
-	char *name;
+	char *name, *typeName;
 	Symbol type; 
-	Token *next;
-	Token *prev;
-	char *typeName;
-
 
 }; // Token
+
+
+// Token Node In Linked-List
+struct TokenNode {
+	token::Token *tokenPtr;
+	token::TokenNode *next, *prev;
+
+	TokenNode()
+		:tokenPtr(nullptr), next(nullptr), prev(nullptr)
+	{};
+
+	~TokenNode() {
+		if(this->tokenPtr != nullptr) {
+			delete this->tokenPtr;
+			this->tokenPtr = nullptr;
+		}
+	}
+
+}; // TokenNode Struct
 
 
 }; // token NameSpace

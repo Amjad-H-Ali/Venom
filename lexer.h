@@ -2,9 +2,10 @@
 #include <iostream>
 #include "Token.h"
 
-// Forward Declaration of token::Token class.
+// Forward Declaration of token::Token and token::TokenNode classes.
 namespace token {
 	class Token;
+	struct TokenNode;
 } // End of forward delaration of Token class.
 
 namespace lexer {
@@ -52,19 +53,9 @@ namespace utility	{
 
 
 }; // utility Namespace
-
-
-	// TODO: EITHER DELETE THIS TOKEN STRUCT OR
-	// REMOVE NEXT DATA MEMBERS IN TOKEN OBJECTS.
-
-	// For Linked List of Tokens.
-	struct Tokens {
-		token::Token *tokenHead;
-		lexer::Tokens *next;
-	}; // Tokens Struct
 	
 
-	// Tokenizes input file and adds to Linked List.
-	Tokens *lexer(char *fileName);
+	// Tokenizes input file and adds to Linked List of Tokens.
+	token::TokenNode *lexer(char *fileName);
 	
 }; // lexer Namespace

@@ -11,13 +11,13 @@ namespace utils = parser::utility;
 
 // Parser functions
 
-AST_Node *parser::wrapperParser(token::Token *current) {
+AST_Node *parser::wrapperParser(token::TokenNode *current) {
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return nullptr;
 
 	// Pointer to next AST node
-	AST_Node *nextNode = wrapperParser(current->getNext());
+	AST_Node *nextNode = wrapperParser(current->next);
 
 	AST_Node *newNode = parser::parser(current);
 
@@ -29,15 +29,15 @@ AST_Node *parser::wrapperParser(token::Token *current) {
 
 };
 
-AST_Node *parser::parser(token::Token *tokenPtr) {
+AST_Node *parser::parser(token::TokenNode *node) {
 
 	// Parse Token and return the AST node 
 	// the function below produces.
 
 	AST_Node *newNode = nullptr;
 
-	if(*tokenPtr == token::IS) 
-		newNode = parseToken(tokenPtr);
+	if(*(node->tokenPtr) == token::IS) 
+		newNode = parseToken(node);
 
 	return newNode;
 };
@@ -45,32 +45,32 @@ AST_Node *parser::parser(token::Token *tokenPtr) {
 
 // Takes in a Token from a Linked List and Parses it.
 // Returns an AST Node.
-AST_Node *parser::parseToken(token::Token *current) {
+AST_Node *parser::parseToken(token::TokenNode *current) {
 	// Next Token in Linked List.
-	token::Token *next = current->getNext();
+	token::TokenNode *next = current->next;
 	// Previous Token in Linked List.
-	token::Token *prev = current->getPrev();
+	token::TokenNode *prev = current->prev;
 
 
 
 	// Instantiate AST_ID object and return to
 	// previous Token in list.
-	if(*current == token::IDENTIFIER) {
+	if(*(current->tokenPtr) == token::IDENTIFIER) {
 		// Calls R-Value Constructor to steal Dynamically allocated 
 		// data from Token Object since we will no longer need Token.
 		return (
-			new class AST_ID(AST_ID, std::move(*current))
+			new class AST_ID(AST_ID, std::move(*(current->tokenPtr)))
 		);
 	}
 
 
 	// Instantiate AST_BinaryOp object and set values
 	// and parse right and left operands.
-	if(*current == token::IS) {
+	if(*(current->tokenPtr) == token::IS) {
 
 		return (
-			new AST_BinaryOp(		               // Pass in previous Token given 
-									               // Linked List's nature of LIFO
+			new AST_BinaryOp(		                         // Pass in previous Token given 
+									                        // Linked List's nature of LIFO
 				AST_IS, parser::parseOperand(next), parser::parseOperand(prev)
 			)
 		);
@@ -85,7 +85,7 @@ AST_Node *parser::parseToken(token::Token *current) {
 	if(utils::validStartToListOrParams(current)) {
 
 		bool isParams = false;
-		token::Token *startToBlock = nullptr;
+		token::TokenNode *startToBlock = nullptr;
 
 
 		AST_Node *listValue = parser::parseListOrParams(prev, isParams, startToBlock);
@@ -94,7 +94,7 @@ AST_Node *parser::parseToken(token::Token *current) {
 
 		if(isParams) {
 			return new AST_Function(
-				AST_FUNCTION, list, parser::parseBlock(startToBlock->getPrev())
+				AST_FUNCTION, list, parser::parseBlock(startToBlock->prev)
 			);
 		}
 		else
@@ -108,19 +108,19 @@ AST_Node *parser::parseToken(token::Token *current) {
 
 
 // Parse operands of an AST operator node
-AST_Node *parser::parseOperand(token::Token *tokenPtr) {
-	return parser::parseToken(tokenPtr);
+AST_Node *parser::parseOperand(token::TokenNode *node) {
+	return parser::parseToken(node);
 
 };
 
 
 // Parse List of an AST list node
-AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, token::Token *&startToBlock) {
+AST_Node *parser::parseListOrParams(token::TokenNode *node, bool &isParams, token::TokenNode *&startToBlock) {
 
-	if(*tokenPtr == token::BAR) {
-		if(utils::validStartToFunctionBlock(tokenPtr->getPrev())) {
+	if(*(node->tokenPtr) == token::BAR) {
+		if(utils::validStartToFunctionBlock(node->prev)) {
 			isParams = true;
-			startToBlock = tokenPtr->getPrev()->getPrev();
+			startToBlock = node->prev->prev;
 		}
 		return nullptr;	
 	} 
@@ -128,20 +128,20 @@ AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, toke
 	// Recursively Parse each Token in List
 	// When closing BAR is reached, nextInList 
 	// is set to nullptr.
-	AST_Node *nextInList = parser::parseListOrParams(tokenPtr->getPrev(), isParams, startToBlock);
+	AST_Node *nextInList = parser::parseListOrParams(node->prev, isParams, startToBlock);
 
 	// Instantiate an AST object out of  current Token
 	// and set its 'next' data member to whatever nextInList
 	// is pointing to. Return the AST node.
 	AST_Node *newNode = nullptr;
 
-	if(*tokenPtr == token::COMMA)
+	if(*(node->tokenPtr) == token::COMMA)
 		return nextInList;
 
 	if(isParams)
-		newNode = parser::parseParams(tokenPtr);
+		newNode = parser::parseParams(node);
 	else
-		newNode = parser::parseList(tokenPtr);
+		newNode = parser::parseList(node);
 
 	newNode->setNext(nextInList);
 
@@ -151,18 +151,18 @@ AST_Node *parser::parseListOrParams(token::Token *tokenPtr, bool &isParams, toke
 };
 
 // Parse List
-AST_Node *parser::parseList(token::Token *tokenPtr) {
-	if(*tokenPtr == token::IDENTIFIER || *tokenPtr == token::STRING)
-		return parser::parseToken(tokenPtr);
+AST_Node *parser::parseList(token::TokenNode *node) {
+	if(*(node->tokenPtr) == token::IDENTIFIER || *(node->tokenPtr) == token::STRING)
+		return parser::parseToken(node);
 	else
 		//throw error: illegal object in array.
 		return nullptr;
 }
 
 // Parse parameters
-AST_Node *parser::parseParams(token::Token *tokenPtr) {
-	if(*tokenPtr == token::IDENTIFIER)
-		return parser::parseToken(tokenPtr);
+AST_Node *parser::parseParams(token::TokenNode *node) {
+	if(*(node->tokenPtr) == token::IDENTIFIER)
+		return parser::parseToken(node);
 	else
 		//throw error: illegal object in params.
 		return nullptr;
@@ -171,15 +171,15 @@ AST_Node *parser::parseParams(token::Token *tokenPtr) {
 
 
 // Parse statement block
-AST_Node *parser::parseBlock(token::Token *tokenPtr) {
+AST_Node *parser::parseBlock(token::TokenNode *node) {
 
 	// Exit code for recursive Function. (End of Block)
-	if(*tokenPtr == token::BACKTICK) return nullptr;
+	if(*(node->tokenPtr) == token::BACKTICK) return nullptr;
 
-	AST_Node *newNode = parser::parser(tokenPtr);
+	AST_Node *newNode = parser::parser(node);
 
 	// Pointer to next AST node
-	AST_Node *nextNode = parseBlock(tokenPtr->getPrev());
+	AST_Node *nextNode = parseBlock(node->prev);
 
 	if(!newNode) return nextNode;
 
@@ -193,14 +193,14 @@ AST_Node *parser::parseBlock(token::Token *tokenPtr) {
 
 // Utility Functions to help parse Tokens
 
-bool utils::validStartToListOrParams(token::Token *tokenPtr) {
+bool utils::validStartToListOrParams(token::TokenNode *node) {
 
-	return(*tokenPtr == token::BAR);
+	return(*(node->tokenPtr) == token::BAR);
 };
 
-bool utils::validStartToFunctionBlock(token::Token *tokenPtr) {
+bool utils::validStartToFunctionBlock(token::TokenNode *node) {
 	return(
-		(*tokenPtr == token::SKINNY_ARROW) && (*(tokenPtr->getPrev()) == token::BACKTICK)
+		(*(node->tokenPtr) == token::SKINNY_ARROW) && (*(node->prev->tokenPtr) == token::BACKTICK)
 	);
 }
 

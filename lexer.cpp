@@ -8,19 +8,20 @@
 
 namespace utils = lexer::utility;
 
-// For Linked List of Tokens.
-lexer::Tokens *node = new lexer::Tokens;
-
 
 // Tokenizes input file and adds to Linked List.
-lexer::Tokens *lexer::lexer(char *fileName) {
+token::TokenNode *lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
 	char c;
 
-	node->tokenHead = nullptr;
-	node->next = nullptr;
-	token::Token *tokenPtr;
+	// Head of Doubly-Linked-List of Tokens.
+	token::TokenNode *headNode = nullptr;
+
+	// Pointer to new Token object
+	// that may be Instantiated soon.
+	token::Token *newTokenPtr;
+
 
 
 	// Read input file char by char
@@ -33,27 +34,34 @@ lexer::Tokens *lexer::lexer(char *fileName) {
 
 		// Single Character Token
 		if(utils::isSinglyNamedToken(c)) 
-			tokenPtr = new token::Token(utils::chompSinglyNamedToken(c, in));
+			newTokenPtr = new token::Token(utils::chompSinglyNamedToken(c, in));
 		// AlphaNumeric(eg. Identifier, Keyword, etc.)
 		else if(utils::isEligibleStartToAlphaNum(c)) 
-			tokenPtr = new token::Token(utils::chompAlphaNumeric(c, in), &utils::isEligibleStartToAlphaNum);
+			newTokenPtr = new token::Token(utils::chompAlphaNumeric(c, in), &utils::isEligibleStartToAlphaNum);
 		// Potential Operator 
 		else if(utils::isOperator(c)) 
-			tokenPtr = new token::Token(utils::chompOperator(c, in));
+			newTokenPtr = new token::Token(utils::chompOperator(c, in));
 		// String
 		else if(utils::isQuote(c)) 
-			tokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
+			newTokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
 		else continue; // Probably throw an error here, but continue for spaces.
 
-		// Insert Token into Linked List
-		tokenPtr->setNext(node->tokenHead);
-		if(node->tokenHead) tokenPtr->getNext()->setPrev(tokenPtr);
-		node->tokenHead = tokenPtr; 
+
+		// Insert new TokenNode in Doubly-Linked-List
+		// After setting its value to point to new Token Object.
+		token::TokenNode *newNode = new token::TokenNode;
+
+		newNode->tokenPtr = newTokenPtr;
+		newNode->next = headNode;
+		if(headNode) newNode->next->prev = newNode; // Access prev property of neighbor node and point it to this newNode.
+		headNode = newNode;
+
+		
 	} // While
 
 
 
-	return node;
+	return headNode;
 
 
 }; // Lexer

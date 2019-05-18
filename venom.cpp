@@ -7,16 +7,14 @@
 
 int main(){
 
-	lexer::Tokens *linkedList = lexer::lexer((char *) "new.vnm");
+	token::TokenNode *head = lexer::lexer((char *) "new.vnm");
 
-	token::Token *head = linkedList->tokenHead;
-
-	// TODO: DECIDE ON STRUCT OR THIS.
-	// Declared in AST.h
 	AST_Node *AST_Head = parser::wrapperParser(head);
 
 	for(AST_Node *ptr = AST_Head; ptr; ptr = ptr->getNext()) {
-		std::cout << ptr->getTypeName(ptr->getRightOperand()->getType()) << std::endl;
+		if(ptr->getRightOperand()->getType() == AST_FUNCTION)
+
+			std::cout << ptr->getTypeName(ptr->getRightOperand()->getParams()->getType()) << std::endl;
 	}
 
 

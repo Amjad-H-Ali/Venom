@@ -59,6 +59,10 @@ public:
 	// For List
 	virtual AST_Node *getValue() const {return nullptr;};
 
+	// For Function
+	virtual AST_Node *getParams() const {return nullptr;};
+	virtual AST_Node *getBlock() const {return nullptr;};
+
 }; // AST_NODE
 
 
