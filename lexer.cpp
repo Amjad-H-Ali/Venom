@@ -9,6 +9,8 @@
 namespace utils = lexer::utility;
 
 
+// LEXER FUNCTIONS
+
 // Tokenizes input file and adds to Linked List.
 token::TokenNode *lexer::lexer(char *fileName) {
 
@@ -70,7 +72,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 }; // Lexer
 
 // Inserts address of newNode in Link-List of ActionMaps 
-void lexer::setMap(const token::TokenNode *node) {
+void lexer::setMap(token::TokenNode *node) {
 
 	// Head and Tail to Doubly-Linked-List of ActionMap Nodes.
 	actMap::ActionMap *head = nullptr;
@@ -93,6 +95,8 @@ void lexer::setMap(const token::TokenNode *node) {
 	head = newNode;
 
 }
+
+// UTILITY FUNCTIONS
 
 // Checks if Token is valid ActionMap node.
 bool utils::qualifiesForActionMap(const token::TokenNode *node) {

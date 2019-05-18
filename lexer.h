@@ -11,8 +11,12 @@ namespace token {
 namespace lexer {
 
 namespace utility	{
-		
 
+
+	// UTILITY FUNCTIONS
+		
+	// Checks if Token is valid ActionMap node.
+	bool qualifiesForActionMap(const token::TokenNode *node);
 	// Gets entire potential string.
 	char *chompString(char &c, std::ifstream &in);
 	char *chompOperator(char &c, std::ifstream &in);
@@ -54,8 +58,11 @@ namespace utility	{
 
 }; // utility Namespace
 	
+	// LEXER FUNCTIONS
 
 	// Tokenizes input file and adds to Linked List of Tokens.
 	token::TokenNode *lexer(char *fileName);
+	// Inserts address of newNode in Link-List of ActionMaps 
+	void setMap(token::TokenNode *node);
 	
 }; // lexer Namespace
