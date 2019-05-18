@@ -137,7 +137,7 @@ struct TokenNode {
 	};
 
 	// Overload Operator to compare symbols of objects.
-	bool operator==(token::Symbol type) {
+	bool operator==(token::Symbol type) const {
 		// Call overloaded operator of Token Object.
 		return (*(this->tokenPtr) == type);
 	}

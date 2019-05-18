@@ -4,8 +4,6 @@
 
 namespace utils = parser::utility;
 
-#define  NODE *node
-
 
 
 // IMPLEMENT PARSE PARAMS AND PARSE BLOCK FUNCTIONS
@@ -13,7 +11,7 @@ namespace utils = parser::utility;
 
 // Parser functions
 
-AST_Node *parser::wrapperParser(token::TokenNode *current) {
+AST_Node *parser::wrapperParser(tNode current) {
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return nullptr;
@@ -31,14 +29,14 @@ AST_Node *parser::wrapperParser(token::TokenNode *current) {
 
 };
 
-AST_Node *parser::parser(token::TokenNode NODE) {
+AST_Node *parser::parser(tNode node) {
 
 	// Parse Token and return the AST node 
 	// the function below produces.
 
 	AST_Node *newNode = nullptr;
 
-	if(NODE == token::IS) 
+	if(*node == token::IS) 
 		newNode = parseToken(node);
 
 	return newNode;
@@ -47,11 +45,11 @@ AST_Node *parser::parser(token::TokenNode NODE) {
 
 // Takes in a Token from a Linked List and Parses it.
 // Returns an AST Node.
-AST_Node *parser::parseToken(token::TokenNode *current) {
+AST_Node *parser::parseToken(tNode current) {
 	// Next Token in Linked List.
-	token::TokenNode *next = current->next;
+	tNode next = current->next;
 	// Previous Token in Linked List.
-	token::TokenNode *prev = current->prev;
+	tNode prev = current->prev;
 
 
 
@@ -87,7 +85,7 @@ AST_Node *parser::parseToken(token::TokenNode *current) {
 	if(utils::validStartToListOrParams(current)) {
 
 		bool isParams = false;
-		token::TokenNode *startToBlock = nullptr;
+		tNode startToBlock = nullptr;
 
 
 		AST_Node *listValue = parser::parseListOrParams(prev, isParams, startToBlock);
@@ -110,16 +108,16 @@ AST_Node *parser::parseToken(token::TokenNode *current) {
 
 
 // Parse operands of an AST operator node
-AST_Node *parser::parseOperand(token::TokenNode NODE) {
+AST_Node *parser::parseOperand(tNode node) {
 	return parser::parseToken(node);
 
 };
 
 
 // Parse List of an AST list node
-AST_Node *parser::parseListOrParams(token::TokenNode NODE, bool &isParams, token::TokenNode *&startToBlock) {
+AST_Node *parser::parseListOrParams(tNode node, bool &isParams, tNode &startToBlock) {
 
-	if(NODE == token::BAR) {
+	if(*node == token::BAR) {
 		if(utils::validStartToFunctionBlock(node->prev)) {
 			isParams = true;
 			startToBlock = node->prev->prev;
@@ -137,7 +135,7 @@ AST_Node *parser::parseListOrParams(token::TokenNode NODE, bool &isParams, token
 	// is pointing to. Return the AST node.
 	AST_Node *newNode = nullptr;
 
-	if(NODE == token::COMMA)
+	if(*node == token::COMMA)
 		return nextInList;
 
 	if(isParams)
@@ -153,8 +151,8 @@ AST_Node *parser::parseListOrParams(token::TokenNode NODE, bool &isParams, token
 };
 
 // Parse List
-AST_Node *parser::parseList(token::TokenNode NODE) {
-	if(NODE == token::IDENTIFIER || NODE == token::STRING)
+AST_Node *parser::parseList(tNode node) {
+	if(*node == token::IDENTIFIER || *node == token::STRING)
 		return parser::parseToken(node);
 	else
 		//throw error: illegal object in array.
@@ -162,8 +160,8 @@ AST_Node *parser::parseList(token::TokenNode NODE) {
 }
 
 // Parse parameters
-AST_Node *parser::parseParams(token::TokenNode NODE) {
-	if(NODE == token::IDENTIFIER)
+AST_Node *parser::parseParams(tNode node) {
+	if(*node == token::IDENTIFIER)
 		return parser::parseToken(node);
 	else
 		//throw error: illegal object in params.
@@ -173,10 +171,10 @@ AST_Node *parser::parseParams(token::TokenNode NODE) {
 
 
 // Parse statement block
-AST_Node *parser::parseBlock(token::TokenNode NODE) {
+AST_Node *parser::parseBlock(tNode node) {
 
 	// Exit code for recursive Function. (End of Block)
-	if(NODE == token::BACKTICK) return nullptr;
+	if(*node == token::BACKTICK) return nullptr;
 
 	AST_Node *newNode = parser::parser(node);
 
@@ -195,19 +193,18 @@ AST_Node *parser::parseBlock(token::TokenNode NODE) {
 
 // Utility Functions to help parse Tokens
 
-bool utils::validStartToListOrParams(token::TokenNode NODE) {
+bool utils::validStartToListOrParams(tNode node) {
 
-	return(NODE == token::BAR);
+	return(*node == token::BAR);
 };
 
-bool utils::validStartToFunctionBlock(token::TokenNode NODE) {
+bool utils::validStartToFunctionBlock(tNode node) {
 	return(
-		(NODE == token::SKINNY_ARROW) && (NODE->prev == token::BACKTICK)
+		(*node == token::SKINNY_ARROW) && (*node->prev == token::BACKTICK)
 	);
 }
 
 
-#undef NODE
 
 
 

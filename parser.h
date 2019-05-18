@@ -6,14 +6,17 @@
 #include "AST_Function.h"
 #include "Token.h"
 
+// Alias for const token::TokenNode *
+typedef const token::TokenNode *tNode;
+
 
 namespace parser {
 
 namespace utility {
 
-	bool validStartToListOrParams(token::TokenNode *node);
+	bool validStartToListOrParams(tNode node);
 
-	bool validStartToFunctionBlock(token::TokenNode *node);
+	bool validStartToFunctionBlock(tNode node);
 
 }; // utility
 
@@ -22,28 +25,28 @@ namespace utility {
 	// Parser functions
 
 	// Main parser. Params: Linked-List Of Tokens.
-	AST_Node *wrapperParser(token::TokenNode *current);
+	AST_Node *wrapperParser(tNode current);
 
-	AST_Node *parser(token::TokenNode *node) ;
+	AST_Node *parser(tNode node) ;
 
 	// Takes in a Token from a Linked List and Parses it.
 	// Returns an AST Node.
-	AST_Node *parseToken(token::TokenNode *current);
+	AST_Node *parseToken(tNode current);
 
 	// Parse operands of an AST operator node
-	AST_Node *parseOperand(token::TokenNode *node);
+	AST_Node *parseOperand(tNode node);
 
 	// Parse List of an AST list node
-	AST_Node *parseListOrParams(token::TokenNode *node, bool &isParams, token::TokenNode *&startToBlock);
+	AST_Node *parseListOrParams(tNode node, bool &isParams, tNode &startToBlock);
 
 	// Parse List
-	AST_Node *parseList(token::TokenNode *node);
+	AST_Node *parseList(tNode node);
 
 	// Parse parameters
-	AST_Node *parseParams(token::TokenNode *node);
+	AST_Node *parseParams(tNode node);
 
 	// Parse statement block
-	AST_Node *parseBlock(token::TokenNode *node);
+	AST_Node *parseBlock(tNode node);
 
 
 }; // parser
