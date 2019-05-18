@@ -134,6 +134,12 @@ struct TokenNode {
 			delete this->tokenPtr;
 			this->tokenPtr = nullptr;
 		}
+	};
+
+	// Overload Operator to compare symbols of objects.
+	bool operator==(token::Symbol type) {
+		// Call overloaded operator of Token Object.
+		return (*(this->tokenPtr) == type);
 	}
 
 }; // TokenNode Struct
