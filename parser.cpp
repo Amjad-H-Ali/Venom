@@ -1,5 +1,6 @@
 #include <iostream>
 #include "parser.h"
+#include "ActionMap.h"
 #include <utility>	// For move()
 
 namespace utils = parser::utility;
@@ -9,7 +10,8 @@ namespace utils = parser::utility;
 
 AST_Node *parser::wrapperParser(tNode current) {
 
-	current = nullptr;
+	std::cout << actMap::head->mapValue->tokenPtr->getTypeName() << std::endl;
+
 
 	// Exit code for recursive Function. (End of Linked List)
 	if(!current) return nullptr; 

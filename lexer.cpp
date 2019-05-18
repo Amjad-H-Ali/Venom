@@ -9,6 +9,12 @@
 namespace utils = lexer::utility;
 
 
+// Head and Tail to Doubly-Linked-List of ActionMap Nodes.
+// See lexer::setMap
+actMap::ActionMap *actMap::head = nullptr;
+actMap::ActionMap *actMap::tail = nullptr; 
+
+
 // LEXER FUNCTIONS
 
 // Tokenizes input file and adds to Linked List.
@@ -74,9 +80,6 @@ token::TokenNode *lexer::lexer(char *fileName) {
 // Inserts address of newNode in Link-List of ActionMaps 
 void lexer::setMap(token::TokenNode *node) {
 
-	// Head and Tail to Doubly-Linked-List of ActionMap Nodes.
-	actMap::ActionMap *head = nullptr;
-	actMap::ActionMap *tail = nullptr; 
 
 	actMap::ActionMap *newNode = new actMap::ActionMap;
 
@@ -84,15 +87,15 @@ void lexer::setMap(token::TokenNode *node) {
 	newNode->mapValue = node;
 
 	// Insert newNode in Linked-List
-	newNode->next = head;
+	newNode->next = actMap::head;
 
 	// If head points to nullptr, then let tail point to newNode ...
 	// because newNode will be pushed to the end (LIFO or FILO).
-	if(!head) tail = newNode;
+	if(!actMap::head) actMap::tail = newNode;
 	// Access prev property of neighbor node and point it to this newNode.
 	else newNode->next->prev = newNode;
 
-	head = newNode;
+	actMap::head = newNode;
 
 }
 
