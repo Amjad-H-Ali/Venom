@@ -9,6 +9,8 @@
 namespace utils = lexer::utility;
 
 
+
+
 // Head and Tail to Doubly-Linked-List of ActionMap Nodes.
 // See lexer::setMap
 actMap::ActionMap *actMap::head = nullptr;
@@ -124,7 +126,7 @@ char *utils::chompString(char &c, std::ifstream &in) {
 	in >> c;
 
 	// Range to Chomp 								
-	int range = utils::rangeToChomp(c, in, func);
+	auto range = utils::rangeToChomp(c, in, func);
 
 
 	char *potentialString = utils::makeC_String(in, range);
@@ -140,7 +142,7 @@ char *utils::chompString(char &c, std::ifstream &in) {
 char *utils::chompOperator(char &c, std::ifstream &in) {
 
 	// Range to Chomp
-	int range = utils::rangeToChomp(c, in, &isOperator);
+	auto range = utils::rangeToChomp(c, in, &isOperator);
 
 	return utils::makeC_String(in, range);
 }
@@ -150,7 +152,7 @@ char *utils::chompOperator(char &c, std::ifstream &in) {
 char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
 
 	// Range to Chomp
-	int range = utils::rangeToChomp(c, in, &isAlphaNumeric);
+	auto range = utils::rangeToChomp(c, in, &isAlphaNumeric);
 
 	return utils::makeC_String(in, range);
 };
@@ -162,7 +164,7 @@ char *utils::chompSingleChar(char &c, std::ifstream &in) {
 
 	// Set file pointer before Character to chomp
 	// since read is not start inclusive.
-	in.seekg(in.tellg()-(std::streampos)1, in.beg);
+	in.seekg(in.tellg()-(decltype(in.tellg()))1, in.beg);
 
 	std::cout << "Chomp: " << c << std::endl;
 
@@ -173,10 +175,10 @@ char *utils::chompSingleChar(char &c, std::ifstream &in) {
 // Creates a C-String. Parameters are an ifstream object
 // from which it will read in characters from current state
 // of this file object, and the range of characters to read.
-char *utils::makeC_String(std::ifstream &in, int range) {
+char *utils::makeC_String(std::ifstream &in, std::streampos range) {
 
 	// Make a C String.
-	char *name = new char[range+1];
+	char *name = new char[range+(decltype(in.tellg()))1];
 
 	// Read in to name.
 	in.read(name, range);
@@ -191,10 +193,10 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 // Determines the length of stream to chomp based on the 
 // Bool Function passed in as argument. Restores file pointer
 // to original position when finished.
-int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char)) {
-	int startPos = in.tellg(), offset = 0, endPos, range;
+std::streampos utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char)) {
+	decltype(in.tellg()) startPos = in.tellg(), offset = 0, endPos, range;
 	while(greenLight(c) && !in.eof()) {
-		offset++;
+		offset+= (decltype(in.tellg()))1;
 		in>>c;
 
 	}
@@ -203,7 +205,7 @@ int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char
 
 	// Reset file pointer to original position.
 	in.clear();
-	in.seekg(startPos-1, in.beg);
+	in.seekg(startPos-(decltype(in.tellg()))1, in.beg);
 
 	return range;
 };
@@ -266,7 +268,7 @@ char utils::peekAhead(std::ifstream &in, int places) {
 	char result;
 
 	// To remember starting position
-	std::streampos startPos = in.tellg();
+	auto startPos = in.tellg();
 
 	// Jump ahead and peek
 	for(int i = 0; i < places; i ++)

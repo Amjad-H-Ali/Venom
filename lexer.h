@@ -27,11 +27,12 @@ namespace utility	{
 	// Creates a C-String. Parameters are an ifstream object
 	// from which it will read in characters from current state
 	// of this file object, and the range of characters to read.
-	char *makeC_String(std::ifstream &in, int range);
+	char *makeC_String(std::ifstream &in, std::streampos range);
 	// Determines the length of stream to chomp based on the 
 	// Bool Function passed in as argument. Restores file pointer
 	// to original position when finished.
-	int rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char));
+	std::streampos rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char));
+	// Checks if char is one of the operators.
 	bool isOperator(char c);
 	// Checks if current charachter is a number
 	bool isNumeric(char c);
