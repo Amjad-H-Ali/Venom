@@ -28,10 +28,8 @@ private:
 	AST_SYMBOL type;
 
 
-protected:
-
 	// Protected Constructor. Only inherited Classes can call.
-	AST_Node(AST_SYMBOL type);
+	AST(AST_SYMBOL type);
 
 public:
 
@@ -46,24 +44,35 @@ public:
 	char *getTypeName(AST_SYMBOL type) const;
 
 	//Accessor and Setter for 'next' data member.
-	AST_Node *getNext() const;
+	AST *getNext() const;
 
-	void setNext(AST_Node *ASTPtr);
+	void setNext(AST *ASTPtr);
 
-	// For BinaryOp
-	virtual AST_Node *getLeftOperand() const {return nullptr;};
-	virtual AST_Node *getRightOperand() const {return nullptr;};
+	// // For BinaryOp
+	// virtual AST_Node *getLeftOperand() const {return nullptr;};
+	// virtual AST_Node *getRightOperand() const {return nullptr;};
 
-	// For List
-	virtual AST_Node *getValue() const {return nullptr;};
+	// // For List
+	// virtual AST_Node *getValue() const {return nullptr;};
 
-	// For Function
-	virtual AST_Node *getParams() const {return nullptr;};
-	virtual AST_Node *getBlock() const {return nullptr;};
+	// // For Function
+	// virtual AST_Node *getParams() const {return nullptr;};
+	// virtual AST_Node *getBlock() const {return nullptr;};
 
 }; // AST_NODE
 
 
 
 // TODO: EITHER MAKE A STRUCT OR LEAVE AST_NODES WITH NEXT DATA MEMBERS.
-extern AST_Node *AST_Head;
+struct ASTNode {
+
+	AST *value;
+
+	ASTNode *next, *prev;
+
+	ASTNode()
+		:value(nullptr), next(nullptr), prev(nullptr)
+	{};
+};
+
+

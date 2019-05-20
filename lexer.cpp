@@ -13,8 +13,8 @@ namespace utils = lexer::utility;
 
 // Head and Tail to Doubly-Linked-List of ActionMap Nodes.
 // See lexer::setMap
-actMap::ActionMap *actMap::head = nullptr;
-actMap::ActionMap *actMap::tail = nullptr; 
+// actMap::ActionMap *actMap::head = nullptr;
+// actMap::ActionMap *actMap::tail = nullptr; 
 
 
 // LEXER FUNCTIONS
@@ -82,34 +82,34 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 }; // Lexer
 
-// Inserts address of newNode in Link-List of ActionMaps 
-void lexer::setMap(token::TokenNode *node) {
+// // Inserts address of newNode in Link-List of ActionMaps 
+// void lexer::setMap(token::TokenNode *node) {
 
 
-	actMap::ActionMap *newNode = new actMap::ActionMap;
+// 	actMap::ActionMap *newNode = new actMap::ActionMap;
 
-	// Map to node.
-	newNode->mapValue = node;
+// 	// Map to node.
+// 	newNode->mapValue = node;
 
-	// Insert newNode in Linked-List
-	newNode->next = actMap::head;
+// 	// Insert newNode in Linked-List
+// 	newNode->next = actMap::head;
 
-	// If head points to nullptr, then let tail point to newNode ...
-	// because newNode will be pushed to the end (LIFO or FILO).
-	if(!actMap::head) actMap::tail = newNode;
-	// Access prev property of neighbor node and point it to this newNode.
-	else newNode->next->prev = newNode;
+// 	// If head points to nullptr, then let tail point to newNode ...
+// 	// because newNode will be pushed to the end (LIFO or FILO).
+// 	if(!actMap::head) actMap::tail = newNode;
+// 	// Access prev property of neighbor node and point it to this newNode.
+// 	else newNode->next->prev = newNode;
 
-	actMap::head = newNode;
+// 	actMap::head = newNode;
 
-}
+// }
 
-// UTILITY FUNCTIONS
+// // UTILITY FUNCTIONS
 
-// Checks if Token is valid ActionMap node.
-bool utils::qualifiesForActionMap(const token::TokenNode *node) {
-	return(*node == token::IS); // Much more coming soon.
-}
+// // Checks if Token is valid ActionMap node.
+// bool utils::qualifiesForActionMap(const token::TokenNode *node) {
+// 	return(*node == token::IS); // Much more coming soon.
+// }
 
 // Gets whole Potential String from beginning to end.
 char *utils::chompString(char &c, INFILE in) {

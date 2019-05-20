@@ -117,7 +117,7 @@ ASTNode *parser::parseTNode(tNode tn) {
 
 // Takes in a Token from a Linked List and Parses it.
 // Returns an AST Node.
-AST_Node *parser::parseToken(tNode current) {
+ASTNode *parser::parseToken(tNode current) {
 	// Next Token in Linked List.
 	tNode next = current->next;
 	// Previous Token in Linked List.
