@@ -40,7 +40,8 @@ namespace utility {
 	T(OUTPUT, "output")								\
 	T(BACKTICK, "`")								\
 	T(IDENTIFIER, nullptr)						    \
-	T(SKINNY_ARROW, "->")
+	T(SKINNY_ARROW, "->")							\
+	T(TAB, "\t")
 
 
 
@@ -122,7 +123,7 @@ private:
 
 // Token Node In Linked-List
 struct TokenNode {
-	
+
 	token::Token *tokenPtr;
 	token::TokenNode *next, *prev;
 

@@ -23,7 +23,7 @@ namespace utility	{
 	// Gets whole AlphaNumeric from beginning to end.
 	char *chompAlphaNumeric(char &c, std::ifstream &in);
 	// Chomp Single Token
-	char *chompSinglyNamedToken(char &c, std::ifstream &in);
+	char *chompSingleChar(char &c, std::ifstream &in);
 	// Creates a C-String. Parameters are an ifstream object
 	// from which it will read in characters from current state
 	// of this file object, and the range of characters to read.
@@ -49,6 +49,8 @@ namespace utility	{
 	bool isNotClosingSingleQT(char c);
 	// Returns true if character is not a double quote.
 	bool isNotClosingDoubleQT(char c);
+	// Checks if character is a relevant Escape Sequence.
+	bool isEscSeq(char c);
 	// To Peek multiple characters Ahead
 	// Params: ifstream object and Amount 
 	// of places to Peek Ahead.

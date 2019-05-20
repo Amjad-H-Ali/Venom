@@ -22,6 +22,12 @@ struct ActionMap {
 	ActionMap() 
 		:mapValue(nullptr)
 	{};
+
+	~ActionMap() {
+		// Detach from Link
+		if(prev) prev->next = nullptr;
+		if(next) next->prev = nullptr;
+	}
 };
 
 

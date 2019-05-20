@@ -1,5 +1,2 @@
-func is |name,address| -> 
-`
+func is |name,address|->
 	name is foo
-			
-`

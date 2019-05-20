@@ -43,7 +43,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 		// Single Character Token
 		if(utils::isSinglyNamedToken(c)) 
-			newTokenPtr = new token::Token(utils::chompSinglyNamedToken(c, in));
+			newTokenPtr = new token::Token(utils::chompSingleChar(c, in));
 		// AlphaNumeric(eg. Identifier, Keyword, etc.)
 		else if(utils::isEligibleStartToAlphaNum(c)) 
 			newTokenPtr = new token::Token(utils::chompAlphaNumeric(c, in), &utils::isEligibleStartToAlphaNum);
@@ -53,6 +53,9 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		// String
 		else if(utils::isQuote(c)) 
 			newTokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
+		// TAB
+		else if(utils::isEscSeq(c))
+			newTokenPtr = new token::Token(utils::chompSingleChar(c, in));
 		else continue; // Probably throw an error here, but continue for spaces.
 
 
@@ -153,7 +156,7 @@ char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
 };
 
 // Chomp Single Token
-char *utils::chompSinglyNamedToken(char &c, std::ifstream &in) {
+char *utils::chompSingleChar(char &c, std::ifstream &in) {
 	// Range to Chomp
 	// No need for rangeToChomp if Single Character Token
 
@@ -161,10 +164,11 @@ char *utils::chompSinglyNamedToken(char &c, std::ifstream &in) {
 	// since read is not start inclusive.
 	in.seekg(in.tellg()-(std::streampos)1, in.beg);
 
-	std::cout << "Chomp: " <<c << std::endl;
+	std::cout << "Chomp: " << c << std::endl;
 
 	return utils::makeC_String(in, 1);
 };
+
 
 // Creates a C-String. Parameters are an ifstream object
 // from which it will read in characters from current state
@@ -179,7 +183,6 @@ char *utils::makeC_String(std::ifstream &in, int range) {
 
 	name[range] = '\0';
 
-	std::cout << "MakeString: " <<range << ' ' << name << std::endl;
 
 	return name;
 };  
@@ -208,56 +211,52 @@ int utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char
 
 // Check if character is an eligible operator.
 bool utils::isOperator(char c) {
-	if(c == '=' || c == '+' || c == '-' || c == '*' || c == '/' 
-		|| c == '%' || c == '>' || c == '<') return true;
-	return false;
+	return (c == '=' || c == '+' || c == '-' || c == '*' || c == '/' 
+		|| c == '%' || c == '>' || c == '<');
 };
 
 // Checks if current charachter is a number
 bool utils::isNumeric(char c) {
-	if(c >= '0' && c <= '9') return true;
-	return false;
+	return (c >= '0' && c <= '9');
 }
 
 // Checks if current character is a letter.
 bool utils::isAtoZ(char c) {
-	if((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z')) return true;
-	return false;
+	return ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z'));
 };
 
 // Checks if character is Alphanumeric (A-Z, 0-9, or _)
 bool utils::isAlphaNumeric(char c) {
-	if(utils::isAtoZ(c) || utils::isNumeric(c) || c == '_') return true;
-	return false;
-}
+	return (utils::isAtoZ(c) || utils::isNumeric(c) || c == '_');
+};
 
 // Checks if character is an eligible beggining for AlphaNumeric.
 bool utils::isEligibleStartToAlphaNum(char c) {
-	if(utils::isAtoZ(c) || c == '_') return true;
-	return false;
+	return (utils::isAtoZ(c) || c == '_');
 };
 
 // Checks if character is a Quote
 bool utils::isQuote(char c) {
-	if(c == '"' || c == '\'') return true;
-	return false;
+	return (c == '"' || c == '\'');
 };
 
 // Returns true if not a single Quote.
 bool utils::isNotClosingSingleQT(char c) {
-	if(c != '\'') return true;
-	return false;
+	return (c != '\'');
 };
 // Returns true if not a double Quote.
 bool utils::isNotClosingDoubleQT(char c) {
-	if(c != '"') return true;
-	return false;
+	return (c != '"');
 };
  
 // Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
 bool utils::isSinglyNamedToken(char c) {
-	if(c == '`' || c == '|' || c == '(' || c == ')' || c == ',') return true;
-	return false;
+	return (c == '`' || c == '|' || c == '(' || c == ')' || c == ',');
+};
+
+// Checks if character is one of the relevant Escape Sequences.
+bool utils::isEscSeq(char c) {
+	return (c == '\t' || c == '\n'); // To Add To Soon.
 };
 
 // To Peek multiple characters Ahead
