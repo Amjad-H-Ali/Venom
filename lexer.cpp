@@ -112,7 +112,7 @@ bool utils::qualifiesForActionMap(const token::TokenNode *node) {
 }
 
 // Gets whole Potential String from beginning to end.
-char *utils::chompString(char &c, std::ifstream &in) {
+char *utils::chompString(char &c, INFILE in) {
 
 	 
 	// Either a Single Quote or Double Quote.
@@ -139,7 +139,7 @@ char *utils::chompString(char &c, std::ifstream &in) {
 
 
 // Gets Potential Operator
-char *utils::chompOperator(char &c, std::ifstream &in) {
+char *utils::chompOperator(char &c, INFILE in) {
 
 	// Range to Chomp
 	auto range = utils::rangeToChomp(c, in, &isOperator);
@@ -149,7 +149,7 @@ char *utils::chompOperator(char &c, std::ifstream &in) {
 
 
 // Gets whole AlphaNumeric from beginning to end.
-char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
+char *utils::chompAlphaNumeric(char &c, INFILE in) {
 
 	// Range to Chomp
 	auto range = utils::rangeToChomp(c, in, &isAlphaNumeric);
@@ -158,7 +158,7 @@ char *utils::chompAlphaNumeric(char &c, std::ifstream &in) {
 };
 
 // Chomp Single Token
-char *utils::chompSingleChar(char &c, std::ifstream &in) {
+char *utils::chompSingleChar(char &c, INFILE in) {
 	// Range to Chomp
 	// No need for rangeToChomp if Single Character Token
 
@@ -175,7 +175,7 @@ char *utils::chompSingleChar(char &c, std::ifstream &in) {
 // Creates a C-String. Parameters are an ifstream object
 // from which it will read in characters from current state
 // of this file object, and the range of characters to read.
-char *utils::makeC_String(std::ifstream &in, std::streampos range) {
+char *utils::makeC_String(INFILE in, std::streampos range) {
 
 	// Make a C String.
 	char *name = new char[range+(decltype(in.tellg()))1];
@@ -193,7 +193,7 @@ char *utils::makeC_String(std::ifstream &in, std::streampos range) {
 // Determines the length of stream to chomp based on the 
 // Bool Function passed in as argument. Restores file pointer
 // to original position when finished.
-std::streampos utils::rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char)) {
+std::streampos utils::rangeToChomp(char &c, INFILE in, bool(*greenLight)(const char)) {
 	decltype(in.tellg()) startPos = in.tellg(), offset = 0, endPos, range;
 	while(greenLight(c) && !in.eof()) {
 		offset+= (decltype(in.tellg()))1;
@@ -264,7 +264,7 @@ bool utils::isEscSeq(char c) {
 // To Peek multiple characters Ahead
 // Params: ifstream object and Amount 
 // of places to Peek Ahead.
-char utils::peekAhead(std::ifstream &in, int places) {
+char utils::peekAhead(INFILE in, int places) {
 	char result;
 
 	// To remember starting position

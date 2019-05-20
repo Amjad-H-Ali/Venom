@@ -2,6 +2,9 @@
 #include <iostream>
 #include "Token.h"
 
+// Alias for ifstream&
+typedef std::ifstream &INFILE;
+
 // Forward Declaration of token::Token and token::TokenNode classes.
 namespace token {
 	class Token;
@@ -18,20 +21,20 @@ namespace utility	{
 	// Checks if Token is valid ActionMap node.
 	bool qualifiesForActionMap(const token::TokenNode *node);
 	// Gets entire potential string.
-	char *chompString(char &c, std::ifstream &in);
-	char *chompOperator(char &c, std::ifstream &in);
+	char *chompString(char &c, INFILE in);
+	char *chompOperator(char &c, INFILE in);
 	// Gets whole AlphaNumeric from beginning to end.
-	char *chompAlphaNumeric(char &c, std::ifstream &in);
+	char *chompAlphaNumeric(char &c, INFILE in);
 	// Chomp Single Token
-	char *chompSingleChar(char &c, std::ifstream &in);
+	char *chompSingleChar(char &c, INFILE in);
 	// Creates a C-String. Parameters are an ifstream object
 	// from which it will read in characters from current state
 	// of this file object, and the range of characters to read.
-	char *makeC_String(std::ifstream &in, std::streampos range);
+	char *makeC_String(INFILE in, std::streampos range);
 	// Determines the length of stream to chomp based on the 
 	// Bool Function passed in as argument. Restores file pointer
 	// to original position when finished.
-	std::streampos rangeToChomp(char &c, std::ifstream &in, bool(*greenLight)(const char));
+	std::streampos rangeToChomp(char &c, INFILE in, bool(*greenLight)(const char));
 	// Checks if char is one of the operators.
 	bool isOperator(char c);
 	// Checks if current charachter is a number
@@ -55,7 +58,7 @@ namespace utility	{
 	// To Peek multiple characters Ahead
 	// Params: ifstream object and Amount 
 	// of places to Peek Ahead.
-	char peekAhead(std::ifstream &in, int places);
+	char peekAhead(INFILE in, int places);
 
 
 
