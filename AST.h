@@ -51,11 +51,17 @@ public:
 	// symbols of AST_Node
 	bool operator==(AST_SYMBOL type) const;
 
+	// ACCESSORS
+
 	// AST_Node unique symbol
 	AST_SYMBOL getType() const;
 
 	// AST_Node unique String
 	char *getTypeName(AST_SYMBOL type) const;
+
+	char *getName() const;
+
+	char *getValue() const;
 
 
 	// // For BinaryOp
@@ -69,7 +75,7 @@ public:
 	// virtual AST_Node *getParams() const {return nullptr;};
 	// virtual AST_Node *getBlock() const {return nullptr;};
 
-}; // AST_NODE
+}; // AST
 
 
 

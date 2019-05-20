@@ -44,4 +44,13 @@ char *AST::getTypeName(AST_SYMBOL type) const {
 };
 
 
+char *AST::getName() const {
+	return name;
+};
+
+char *AST::getValue() const {
+	return value;
+};
+
+
 
