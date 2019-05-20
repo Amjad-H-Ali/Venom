@@ -36,7 +36,7 @@ ASTNode *parser::parse(tNode tn) {
 	// Next node in Linked-List of Tokens.
 	ASTNode *head = parse(tn->next);
 
-	AST *newAST = parser::parseNode(tn);
+	AST *newAST = parser::parseTNode(tn);
 
 	if(!newAST) return head; // Probably throw error?
 
@@ -56,15 +56,17 @@ ASTNode *parser::parse(tNode tn) {
 
 };
 
-
-
-
+ASTNode *parser::parseTNode(tNode tn) {
 	if(*tn == token::IDENTIFIER)
 		parser::parseID(tn);
 	else if(*tn == token::IS)
 		return parser::parseBinOp(tn);
 	else if(*tn == token::NEWLINE && *peek(tn, 1) == token::TAB)
 		return parser::parseBlock(tn);
+};
+
+
+
 
 
 
