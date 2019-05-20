@@ -23,15 +23,29 @@
 // Base class for an AST_Node.
 class AST {
 private:
-	
-	// Unique Symbol for AST_Node
+
+	// Unique Symbol for AST_Node.
 	AST_SYMBOL type;
 
+	// May or may not have value.
+	// (LISTS and BLOCKS have value)
+	AST *value;
 
-	// Protected Constructor. Only inherited Classes can call.
-	AST(AST_SYMBOL type);
+	// May or may not have a name. 
+	// (AST STRINGS and IDs have names)
+	char *name;
 
 public:
+
+	AST(AST_SYMBOL type);
+
+	// STRINGS and IDs will use this
+	// Since they have unique names.
+	AST(AST_SYMBOL type, token::Token &&tokenObj);
+
+	// LIST and BLOCKs will use this since they have 
+	// a Linked-List of their own.
+	AST(AST_SYMBOL type, AST *value);
 
 	// Overload comparison operator to compare unique 
 	// symbols of AST_Node
@@ -43,10 +57,6 @@ public:
 	// AST_Node unique String
 	char *getTypeName(AST_SYMBOL type) const;
 
-	//Accessor and Setter for 'next' data member.
-	AST *getNext() const;
-
-	void setNext(AST *ASTPtr);
 
 	// // For BinaryOp
 	// virtual AST_Node *getLeftOperand() const {return nullptr;};
