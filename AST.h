@@ -21,14 +21,12 @@
 
 
 // Base class for an AST_Node.
-class AST_Node {
+class AST {
 private:
 	
 	// Unique Symbol for AST_Node
 	AST_SYMBOL type;
 
-	// Data member that points to next AST_Node in linked list.
-	AST_Node *next;
 
 protected:
 

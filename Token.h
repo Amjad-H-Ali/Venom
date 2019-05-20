@@ -41,7 +41,8 @@ namespace utility {
 	T(BACKTICK, "`")								\
 	T(IDENTIFIER, nullptr)						    \
 	T(SKINNY_ARROW, "->")							\
-	T(TAB, "\t")
+	T(TAB, "\t")									\
+	T(NEWLINE, "\n")
 
 
 

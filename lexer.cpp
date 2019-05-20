@@ -31,7 +31,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 	// Pointer to new Token object
 	// that may be Instantiated soon.
-	token::Token *newTokenPtr;
+	token::Token *newTokenPtr = nullptr;
 
 
 
