@@ -23,6 +23,7 @@ namespace utils = lexer::utility;
 token::TokenNode *lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
+	bool inBlock;
 	char c;
 
 	// Head to Doubly-Linked-List of Token Nodes.
@@ -70,7 +71,11 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		if(headNode) newNode->next->prev = newNode; // Access prev property of neighbor node and point it to this newNode.
 		headNode = newNode;
 
-		if(utils::qualifiesForActionMap(newNode)) lexer::setMap(newNode);
+		// Tag the end-of-block Esc character to identify where a block ends.
+		if(newNode == token::SKINNY_ARROW) inBlock = true;
+		if(utils::peekAhead(in,1) != '\t') newNode->endOfBlock = true;
+
+		// if(utils::qualifiesForActionMap(newNode)) lexer::setMap(newNode);
 
 		
 	} // While
@@ -258,7 +263,7 @@ bool utils::isSinglyNamedToken(char c) {
 
 // Checks if character is one of the relevant Escape Sequences.
 bool utils::isEscSeq(char c) {
-	return (c == '\t' || c == '\n'); // To Add To Soon.
+	return (c == '\t' || c == '\n'); // To Add, Soon.
 };
 
 // To Peek multiple characters Ahead

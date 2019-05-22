@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Token.h"
+
 
 // AST_LIST takes in a Macro(N).
 // Each Macro has a signature(type),
@@ -39,8 +41,10 @@ public:
 
 	AST(AST_SYMBOL type);
 
-	// STRINGS and IDs will use this
+	// STRINGS and IDs will probably use this...
 	// Since they have unique names.
+	// This constructor highjacks the name from an 
+	// expiring object of type Token.
 	AST(AST_SYMBOL type, token::Token &&tokenObj);
 
 	// LIST and BLOCKs will use this since they have 
@@ -79,7 +83,6 @@ public:
 
 
 
-// TODO: EITHER MAKE A STRUCT OR LEAVE AST_NODES WITH NEXT DATA MEMBERS.
 struct ASTNode {
 
 	AST *value;

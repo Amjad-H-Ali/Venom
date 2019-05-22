@@ -127,9 +127,10 @@ struct TokenNode {
 
 	token::Token *tokenPtr;
 	token::TokenNode *next, *prev;
+	bool endOfBlock;
 
 	TokenNode()
-		:tokenPtr(nullptr), next(nullptr), prev(nullptr)
+		:tokenPtr(nullptr), next(nullptr), prev(nullptr), endOfBlock(false)
 	{};
 
 	~TokenNode() {

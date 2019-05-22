@@ -1,19 +1,21 @@
 // #include <iostream>
 // #include <fstream>
 
+// int summation(int x, int y) {
+// 	if(x == y) return x;
+
+// 	int next = (x == 10) ? 15 : x+1;
+
+// 	int sum = x + summation(next,y);
+
+
+// 	return sum;
+
+// }
 
 // int main(){
 
-// 	std::ifstream in("new.vnm");
-// 	char c;
-// 	in >> std::noskipws;
-// 	while(in>>c) {
-// 		if(c == '\t')
-// 			std::cout << "\\t" << std::endl;
-// 		else if(c=='\n')
-// 			std::cout << "\\n" << std::endl;
-// 		std::cout << c << std::endl;
-// 	}
+// 	std::cout << summation(1,20) << std::endl;
 
 // };
 

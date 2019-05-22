@@ -6,8 +6,10 @@ AST::AST(AST_SYMBOL type)
 {};
 
 
-// STRINGS and IDs will probably use this
+// STRINGS and IDs will probably use this...
 // Since they have unique names.
+// This constructor highjacks the name from an 
+// expiring object of type Token.
 AST::AST(AST_SYMBOL type, token::Token &&tokenObj)
 	:type(type), name(tokenObj.getName()), value(nullptr)
 {};
