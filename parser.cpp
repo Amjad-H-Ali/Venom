@@ -33,12 +33,12 @@ ASTNode *parser::parse(tNode tn) {
 
 	if(!tn) return nullptr;
 
-	tNode *next = tn->next;
+	tNode *next = (tn->endOfBlock) skipTo(token::SKINNY_ARROW) ? tn->next;
 
-	if(tn == token::SKINNY_ARROW)  skipTo(token::SKINNY_ARROW)// skip block
+	tNode  // skip block
 
 	// Next node in Linked-List of Tokens.
-	ASTNode *head = parse(tn->next);
+	ASTNode *head = parse(next);
 
 	AST *newAST = parser::parseTNode(tn);
 
