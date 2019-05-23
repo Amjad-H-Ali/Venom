@@ -33,8 +33,9 @@ ASTNode *parser::parse(tNode tn, bool parseBlock=false) {
 
 	if(!tn || (parseBlock && tn->endOfBlock)) return nullptr;
 
-	// Skip block if endOfBlock node is detected.
-	tNode *next = (tn->endOfBlock) ? utils::skipTo(token::SKINNY_ARROW) : (parseBlock ? tn->prev : tn->next );
+	// Skip BLOCK or LIST if end node is detected.
+	tNode *next = (tn->end) ? utils::skipTo(tn) : (parseBlock ? tn->prev : tn->next);
+
 
 	// Next node in Linked-List of Tokens.
 	ASTNode *head = parse(next, parseBlock);
@@ -83,6 +84,16 @@ ASTNode *parser::parseBlock(tNode tn) {
 	return parser::parse(tn, true);
 };
 
+
+ASTNode *utils::skipTo(tNode tn) {
+	tNode begining;
+	if(tn == token::BAR)
+		for(begining = tn->next; begining != token::BAR; begining = begining->next);
+	else
+		for(begining = tn->next; begining != token::SKINNY_ARROW; begining = begining->next);
+
+	return begining;
+};
 
 // AST_Node *parser::wrapperParser(tNode current) {
 // 	AST_Node *AST_Head = nullptr;
