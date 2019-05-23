@@ -127,8 +127,8 @@ struct TokenNode {
 
 	token::Token *tokenPtr;
 	token::TokenNode *next, *prev;
-	// Only for NEWLINE Token: Signifies that this is End Of a Block.
-	bool endOfBlock;
+	// Indicates that this node is an end to a BLOCK or LIST.
+	bool end;
 
 	TokenNode()
 		:tokenPtr(nullptr), next(nullptr), prev(nullptr), endOfBlock(false)

@@ -24,6 +24,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
 	bool inBlock;
+	bool inList;
 	char c;
 
 	// Head to Doubly-Linked-List of Token Nodes.
@@ -63,7 +64,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 
 		// Insert new TokenNode in Doubly-Linked-List...
-		// After setting its value to point to new Token Object.
+		// after setting its value to point to new Token Object.
 		token::TokenNode *newNode = new token::TokenNode;
 
 		newNode->tokenPtr = newTokenPtr;
@@ -71,14 +72,20 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		if(headNode) newNode->next->prev = newNode; // Access prev property of neighbor node and point it to this newNode.
 		headNode = newNode;
 
-		// Tag the end-of-block Esc character to identify where a block ends.
+		// Tag the end-of-block Esc character or the BAR
+		// to identify where a BLOCK or LIST ends.
 		if(newNode == token::SKINNY_ARROW) inBlock = true;
 		if(inBlock && newNode == token::NEWLINE && utils::peekAhead(in,1) != '\t') {
-			newNode->endOfBlock = true;
+			newNode->end = true;
 			inBlock = false;
 		}
 
-		// if(utils::qualifiesForActionMap(newNode)) lexer::setMap(newNode);
+		if(newNode == token::BAR && !inList) inList = true;
+		if(newNode == token::BAR && inList) {
+			newNode->end = true;
+			inList = false;
+		}
+
 
 		
 	} // While
