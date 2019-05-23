@@ -10,11 +10,11 @@
 
 // N: Unique Symbol of each Node in AST
 #define AST_LIST(N) 			    \
-	N(AST_ID)						\
-	N(AST_IS)						\
-	N(AST_STRING)					\
-	N(AST_LIST)						\
-	N(AST_FUNCTION)					
+	N(ID)							\
+	N(ASSIGN)						\
+	N(STR)							\
+	N(LIST)							\
+	N(BLOCK)					
 
 // All AST Symbols
 #define N(symbol) symbol,

@@ -33,9 +33,8 @@ ASTNode *parser::parse(tNode tn) {
 
 	if(!tn) return nullptr;
 
-	tNode *next = (tn->endOfBlock) skipTo(token::SKINNY_ARROW) ? tn->next;
-
-	tNode  // skip block
+	// Skip block if endOfBlock node is detected.
+	tNode *next = (tn->endOfBlock) ? utils::skipTo(token::SKINNY_ARROW) : tn->next;
 
 	// Next node in Linked-List of Tokens.
 	ASTNode *head = parse(next);
@@ -64,11 +63,17 @@ ASTNode *parser::parse(tNode tn) {
 
 ASTNode *parser::parseTNode(tNode tn) {
 	if(*tn == token::IDENTIFIER)
-		parser::parseID(tn);
+		// Steal the name of IDENTIFIER that will be Deleted soon.
+		return AST(ID, move(*(tn->tokenPtr)));
 	else if(*tn == token::IS)
-		return parser::parseBinOp(tn);
-	else if(*tn == token::NEWLINE && *peek(tn, 1) == token::TAB)
-		return parser::parseBlock(tn);
+		return AST(ASSIGN);
+	else if(*tn == token::SKINNY_ARROW)
+		return AST(BLOCK, parser::parseBlock(tn));
+	else if(*tn == token::BAR)
+		return AST(LIST, parser::parseList(tn));
+	else if(*tn == token::STRING)
+		// Steal the name of STRING that will be Deleted soon.
+		return AST(STR, move((*tn->tokenPtr)));
 };
 
 
