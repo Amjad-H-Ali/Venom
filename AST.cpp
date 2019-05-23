@@ -17,7 +17,7 @@ AST::AST(AST_SYMBOL type, token::Token &&tokenObj)
 
 // LIST and BLOCKs will use this since they have 
 // a Linked-List of their own.
-AST::AST(AST_SYMBOL type, AST *value)
+AST::AST(AST_SYMBOL type, ASTNode *value)
 	:type(type), value(value), name(nullptr)
 {};
 
@@ -50,7 +50,7 @@ char *AST::getName() const {
 	return name;
 };
 
-char *AST::getValue() const {
+char *ASTNode::getValue() const {
 	return value;
 };
 

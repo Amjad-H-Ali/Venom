@@ -31,7 +31,7 @@ private:
 
 	// May or may not have value.
 	// (LISTS and BLOCKS have value)
-	AST *value;
+	ASTNode *value;
 
 	// May or may not have a name. 
 	// (AST STRINGS and IDs have names)
@@ -49,7 +49,7 @@ public:
 
 	// LIST and BLOCKs will use this since they have 
 	// a Linked-List of their own.
-	AST(AST_SYMBOL type, AST *value);
+	AST(AST_SYMBOL type, ASTNode *value);
 
 	// Overload comparison operator to compare unique 
 	// symbols of AST_Node
