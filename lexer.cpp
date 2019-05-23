@@ -73,7 +73,10 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 		// Tag the end-of-block Esc character to identify where a block ends.
 		if(newNode == token::SKINNY_ARROW) inBlock = true;
-		if(utils::peekAhead(in,1) != '\t') newNode->endOfBlock = true;
+		if(inBlock && newNode == token::NEWLINE && utils::peekAhead(in,1) != '\t') {
+			newNode->endOfBlock = true;
+			inBlock = false;
+		}
 
 		// if(utils::qualifiesForActionMap(newNode)) lexer::setMap(newNode);
 
