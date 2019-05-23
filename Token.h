@@ -46,21 +46,6 @@ namespace utility {
 
 
 
-// #define TOKEN_LIST(T, S)								 		\
-// 	T(IF, utility::isIF(S))										\
-// 	T(EQ, utility::isEQ(S))										\
-// 	T(BAR, utility::isBAR(S))									\
-// 	T(EQEQ, utility::isEQEQ(S))									\
-// 	T(ELSE, utility::isELSE(S))									\
-// 	T(COMMA, utility::isCOMMA(S))								\
-// 	T(STRING, nullptr)								            \
-// 	T(OUTPUT, utility::isOUTPUT(S))								\
-// 	T(BACKTICK, utility::isBACKTICK(S))							\
-// 	T(IDENTIFIER, nullptr)						                \
-// 	T(SKINNY_ARROW, utility::isSKINNYARROW(S))					
-					
-
-
 
 // All Token Symbols
 #define T(symbol, name) symbol,
@@ -141,10 +126,14 @@ struct TokenNode {
 		}
 	};
 
-	// Overload Operator to compare symbols of objects.
+	// Overload Operators to compare symbols of objects.
 	bool operator==(token::Symbol type) const {
 		// Call overloaded operator of Token Object.
 		return (*(this->tokenPtr) == type);
+	}
+
+	bool operator!=(token::Symbol type) const {
+		return (this->tokenPtr->getType() != type);
 	}
 
 }; // TokenNode Struct
