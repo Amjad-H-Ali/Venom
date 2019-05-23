@@ -7,16 +7,21 @@
 
 int main(){
 
-	token::TokenNode *head = lexer::lexer((char *) "new.vnm");
+	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
 
-	// AST_Node *AST_Head = parser::wrapperParser(head);
-	// parser::wrapperParser();
+	// for(token::TokenNode *ptr = tHead; ptr; ptr = ptr->next) {
+	// 	std::cout << ptr->tokenPtr->getTypeName() << " ADDRESS: " << ptr;
 
-	// for(AST_Node *ptr = AST_Head; ptr; ptr = ptr->getNext()) {
-	// 	if(ptr->getRightOperand()->getType() == AST_FUNCTION)
-
-	// 		std::cout << ptr->getTypeName(ptr->getRightOperand()->getParams()->getType()) << std::endl;
+	// 	if(ptr->end)
+	// 		std::cout << "  END: TRUE" << std::endl;
+	// 	else
+	// 		std::cout << "  END: FALSE" << std::endl;
 	// }
+
+	ASTNode *astHead = parser::parse(tHead);
+
+	for(ASTNode *ptr = astHead; ptr; ptr = ptr->next)
+		std::cout << ptr->value->getTypeName(ptr->value->getType()) << std::endl;
 
 
 };

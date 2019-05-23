@@ -72,19 +72,19 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 		// Tag the end-of-block Esc character or the BAR
 		// to identify where a BLOCK or LIST ends.
-		if(*newNode == token::SKINNY_ARROW) inBlock = true;
 		if(inBlock && *newNode == token::NEWLINE && utils::peekAhead(in,1) != '\t') {
 			newNode->end = true;
 			inBlock = false;
 		}
 
-		if(*newNode == token::BAR && !inList) inList = true;
+		if(*newNode == token::SKINNY_ARROW) inBlock = true;
+		
+
 		if(*newNode == token::BAR && inList) {
 			newNode->end = true;
 			inList = false;
 		}
-
-
+		if(*newNode == token::BAR && !inList) inList = true;
 		
 	} // While
 
@@ -285,10 +285,12 @@ char utils::peekAhead(INFILE in, int places) {
 
 	// Jump ahead and peek
 	for(int i = 0; i < places; i ++)
-		in >> std::ws >> result;
+		in >> result;
 
 	// Return to start position
 	in.seekg(startPos);
+
+	std::cout << "PEEK RESULT:  " << result << std::endl;
 
 	return result;
 };

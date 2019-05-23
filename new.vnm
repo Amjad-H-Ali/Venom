@@ -1,1 +1,3 @@
 func is |name,address|->
+	name is "foo"
+

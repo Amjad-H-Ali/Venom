@@ -7,6 +7,10 @@ namespace utils = parser::utility;
 
 ASTNode *parser::parse(tNode tn, bool parseBlock) {
 
+	if(parseBlock) std::cout << tn << "  " << "TRUE" << std::endl;
+
+	else std::cout << tn<< "  " << "FALSE" << std::endl;
+
 	if(!tn || (parseBlock && tn->end && *tn == token::NEWLINE)) return nullptr;
 
 	// Skip BLOCK or LIST if end node is detected.
@@ -45,9 +49,9 @@ AST *parser::parseTNode(tNode tn) {
 	else if(*tn == token::IS)
 		return new AST(ASSIGN);
 	else if(*tn == token::SKINNY_ARROW)
-		return new AST(BLOCK, parser::parseBlock(tn));
-	else if(*tn == token::BAR)
-		return new AST(LIST, parser::parseList(tn));
+		return new AST(BLOCK, parser::parseBlock(tn->prev));
+	else if(*tn == token::BAR && !tn->end)
+		return new AST(LIST, parser::parseList(tn->prev));
 	else if(*tn == token::STRING)
 		// Call R-Value Constructor: Steal the name of STRING that will be Deleted soon.
 		return new AST(STR, std::move((*tn->tokenPtr)));
@@ -70,6 +74,8 @@ ASTNode *parser::parseList(tNode tn) {
 
 	// Iterate Left Given the LIFO order of Linked-Lists.
 	ASTNode *head = parseList(tn->prev);
+
+	if(isParam) std::cout <<tn->tokenPtr->getType()<< " Yes" << std::endl; 
 
 	if(*tn == token::IDENTIFIER || *tn == token::STRING) {
 
