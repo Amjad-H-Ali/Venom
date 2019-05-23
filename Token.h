@@ -131,7 +131,7 @@ struct TokenNode {
 	bool end;
 
 	TokenNode()
-		:tokenPtr(nullptr), next(nullptr), prev(nullptr), endOfBlock(false)
+		:tokenPtr(nullptr), next(nullptr), prev(nullptr), end(false)
 	{};
 
 	~TokenNode() {

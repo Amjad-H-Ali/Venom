@@ -22,6 +22,8 @@
 #undef N
 
 
+struct ASTNode;
+
 // Base class for an AST_Node.
 class AST {
 private:
@@ -65,19 +67,7 @@ public:
 
 	char *getName() const;
 
-	char *getValue() const;
-
-
-	// // For BinaryOp
-	// virtual AST_Node *getLeftOperand() const {return nullptr;};
-	// virtual AST_Node *getRightOperand() const {return nullptr;};
-
-	// // For List
-	// virtual AST_Node *getValue() const {return nullptr;};
-
-	// // For Function
-	// virtual AST_Node *getParams() const {return nullptr;};
-	// virtual AST_Node *getBlock() const {return nullptr;};
+	ASTNode *getValue() const;
 
 }; // AST
 
