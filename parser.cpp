@@ -29,15 +29,15 @@ namespace utils = parser::utility;
 
 // };
 
-ASTNode *parser::parse(tNode tn) {
+ASTNode *parser::parse(tNode tn, bool parseBlock=false) {
 
-	if(!tn) return nullptr;
+	if(!tn || (parseBlock && tn->endOfBlock)) return nullptr;
 
 	// Skip block if endOfBlock node is detected.
-	tNode *next = (tn->endOfBlock) ? utils::skipTo(token::SKINNY_ARROW) : tn->next;
+	tNode *next = (tn->endOfBlock) ? utils::skipTo(token::SKINNY_ARROW) : (parseBlock ? tn->prev : tn->next );
 
 	// Next node in Linked-List of Tokens.
-	ASTNode *head = parse(next);
+	ASTNode *head = parse(next, parseBlock);
 
 	AST *newAST = parser::parseTNode(tn);
 
@@ -63,7 +63,7 @@ ASTNode *parser::parse(tNode tn) {
 
 ASTNode *parser::parseTNode(tNode tn) {
 	if(*tn == token::IDENTIFIER)
-		// Steal the name of IDENTIFIER that will be Deleted soon.
+		// Call R-Value Constructor: Steal the name of IDENTIFIER that will be Deleted soon.
 		return AST(ID, move(*(tn->tokenPtr)));
 	else if(*tn == token::IS)
 		return AST(ASSIGN);
@@ -72,14 +72,16 @@ ASTNode *parser::parseTNode(tNode tn) {
 	else if(*tn == token::BAR)
 		return AST(LIST, parser::parseList(tn));
 	else if(*tn == token::STRING)
-		// Steal the name of STRING that will be Deleted soon.
+		// Call R-Value Constructor: Steal the name of STRING that will be Deleted soon.
 		return AST(STR, move((*tn->tokenPtr)));
 };
 
 
 
 
-
+ASTNode *parser::parseBlock(tNode tn) {
+	return parser::parse(tn, true);
+};
 
 
 // AST_Node *parser::wrapperParser(tNode current) {
