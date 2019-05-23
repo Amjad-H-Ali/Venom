@@ -12,7 +12,7 @@ AST::AST(AST_SYMBOL type)
 // expiring object of type Token.
 AST::AST(AST_SYMBOL type, token::Token &&tokenObj)
 	:type(type), name(tokenObj.getName()), value(nullptr)
-{};
+{tokenObj.setName()};
 
 
 // LIST and BLOCKs will use this since they have 
