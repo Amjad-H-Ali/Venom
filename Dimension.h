@@ -10,57 +10,26 @@ class Dimension {
 
 private:
 
-	struct Link  {
-
-		const token::TokenNode *tn;
-
-		Link *next, *prev;
-	};
+	struct Link;
 
 	// Dimension
 	int D = 0;
 
 	// Linked-List of Openings and 
 	// closings To Dimension.
-	Link *opening, *closing;
+	Link *opening,  *closing,
+		 *openingT, *closingT; // Tail pointers.
 
 	Dimension()
-		:opening(nullptr), closing(nullptr)
+		:opening(nullptr), closing(nullptr), openingT(nullptr), closingT(nullptr)
 	{};
 
 public:
+	// Insert Opening of a new Dimension into Link.
+	void insertOpen(const token::TokenNode *tn);
 
-	void insertOpen(const token::TokenNode *tn) {
-
-		Link *newOpen = new Link();
-
-		newOpen->tn = tn;
-
-		newOpen->next = opening;
-
-		// Set neighbor prev to point to newOpen node.
-		if(opening) newOpen->next->prev = newOpen;
-
-		opening = newOpen;
-
-		D++; // Increment Dimension
-	}
-
-	void insertClose(const token::TokenNode *tn) {
-
-		Link *newClose = new Link();
-
-		newClose->tn = tn;
-
-		newClose->next = opening;
-
-		// Set neighbor prev to point to newClose node.
-		if(closing) newClose->next->prev = newClose;
-
-		closing = newClose;
-
-		D--; // Decrement Dimension
-	}
+	// Insert Closing of a Dimension into Link.
+	void insertClose(const token::TokenNode *tn);
 
 	static Dimension *getInstance() {
 
