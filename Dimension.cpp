@@ -8,7 +8,20 @@ struct Dimension::Link {
 	const token::TokenNode *tn;
 
 	Link *next, *prev;
+	Link() {std::cout << "Link Was Created!" << std::endl;}
+	~Link() {
+		if(next) delete next;
+		std::cout << "Link Was Deleted!" << std::endl;
+	}
 };
+
+ Dimension::~Dimension() {
+	std::cout << "Dimension Was Deleted!" << std::endl;
+
+	// Delete Linked-List.
+	if(opening) delete opening;
+	if(closing) delete closing;
+}
 
 // Insert Opening of a new Dimension into Link.
 void Dimension::insertOpen(const token::TokenNode *tn) {
@@ -35,7 +48,7 @@ void Dimension::insertClose(const token::TokenNode *tn) {
 
 	newClose->tn = tn;
 
-	newClose->next = opening;
+	newClose->next = closing;
 
 	// Set neighbor prev to point to newClose node.
 	if(closing) newClose->next->prev = newClose;
