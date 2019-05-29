@@ -6,7 +6,10 @@
 
 int main() {
 
-	Dimension *d = Dimension::getInstance();
+
+		std::cout << "Yes" << std::endl;
+
+	Dimension *const d = Dimension::getInstance();
 
 	Dimension *c = Dimension::getInstance();
 

@@ -7,6 +7,8 @@
 namespace utils = lexer::utility;
 
 
+// Represents Current Dimension of LIST or BLOCK.
+Dimension *const D = Dimension::getInstance();
 
 
 // Head and Tail to Doubly-Linked-List of ActionMap Nodes.
@@ -94,6 +96,32 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 
 }; // Lexer
+
+// Determines if TokenNode Closes Dimension.
+bool lexer::isClosing(token::TokenNode *tn, INFILE in) {
+
+
+	if(*D == 0) return false;
+
+	if(D->singleLine)
+
+		for(int i = 0; *D > i; i ++) {
+
+			char c = utils::peekAhead(in, i+1);
+
+			if((i < 2 && c == ',') || c ==) return true;
+
+			if(c == '\n' )
+		}
+
+		peek(D) == NewLine or EOF or in between is Comma return true
+
+	// else if not singleLine
+	// 	peek(D) != Tab or in between is comma return true
+
+	// return false 
+
+}
 
 // // Inserts address of newNode in Link-List of ActionMaps 
 // void lexer::setMap(token::TokenNode *node) {
@@ -279,13 +307,23 @@ bool utils::isEscSeq(char c) {
 // of places to Peek Ahead.
 char utils::peekAhead(INFILE in, int places) {
 	char result;
+	char container; 
 
 	// To remember starting position
 	auto startPos = in.tellg();
 
-	// Jump ahead and peek
-	for(int i = 0; i < places; i ++)
-		in >> result;
+	// Skip ahead and peek.
+	for(int i = 0; i < places; i ++) {
+		in >> container;
+
+		// To Skip Spaces ' ' 0x20, but not other ws.
+		if(!in.eof() && container == ' ') {
+			i--;
+			continue;
+		}
+
+		result = container;
+	}
 
 	// Return to start position
 	in.seekg(startPos);

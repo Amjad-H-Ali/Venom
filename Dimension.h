@@ -26,6 +26,10 @@ private:
 	~Dimension();
 
 public:
+	
+	// LIST on single line or spread out?
+	bool singleLine = true;	
+
 	// Insert Opening of a new Dimension into Link.
 	void insertOpen(const token::TokenNode *tn);
 

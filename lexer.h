@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Token.h"
 
+
+
 // Alias for ifstream&
 typedef std::ifstream &INFILE;
 
