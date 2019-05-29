@@ -2,22 +2,48 @@
 
 #define DIMENSION_H
 
+#include "Token.h"
+
+#include <iostream>
 
 class Dimension {
 
 private:
 
-	struct Opening;
+	struct Link  {
 
-	struct Closing;
+		token::TokenNode *tn;
 
-	Dimension(){};
-
-public:
+		Link *next, *prev;
+	};
 
 	// Dimension
 	int D = 0;
 
+	// Linked-List of Openings and 
+	// closings To Dimension.
+	Link *opening, *closing;
+
+	Dimension()
+		:opening(nullptr), closing(nullptr)
+	{};
+
+public:
+
+	void insertOpen(const token::TokenNode &tn) {
+
+		Link *newOpen = new Link();
+
+		newOpen->tn = tn;
+
+		newOpen->next = opening;
+
+		if(opening) newOpen->next->prev = newOpen;
+
+		opening = newOpen;
+
+		d++;
+	}
 
 
 	static Dimension *getInstance() {
