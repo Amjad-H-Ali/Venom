@@ -1,43 +1,17 @@
-// #include <iostream>
-// #include <fstream>
-
-// struct Object { 
-
-// private:
-
-// 	Object() {};
-
-// public: 
-
-// 	static Object *getInstance() {
-
-// 		static Object instance;
-
-// 		return &instance;
-// 	} 
-
-// 	Object(const Object&)         = delete;
-
-// 	void operator=(const Object&) = delete;
-
-// };
+#include <iostream>
+#include "Dimension.h"
 
 
 
-// int main(){
+int main() {
 
 
-// 	Object *foo = Object::getInstance();
+	Dimension *d = Dimension::getInstance();
 
-// 	Object *boo = Object::getInstance();
-
-// 	std::cout << foo << std::endl;
-
-// 	std::cout << boo << std::endl;
+	std::cout << d << std::endl;
 
 
-
-// };
+};
 
 
 
