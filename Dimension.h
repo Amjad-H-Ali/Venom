@@ -13,7 +13,7 @@ private:
 	struct Link;
 
 	// Dimension
-	int D = 0;
+	unsigned int D = 0;
 
 	// Linked-List of Openings and 
 	// closings To Dimension.
@@ -39,6 +39,20 @@ public:
 
 		return &instance;
 	};
+
+	// Overload operators
+
+	bool operator==(int i)  const;
+
+	bool operator<=(int i)  const;
+
+	bool operator>=(int i)  const;
+
+	bool operator<(int i)   const;
+
+	bool operator>(int i)   const;
+
+	unsigned operator>>(unsigned &i)  const;
 
 	// Copy or Assignment constructor
 	// not allowed for our Singleton.

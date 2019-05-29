@@ -33,7 +33,47 @@ int main() {
 
 	d->insertOpen(tn5);
 
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
+	d->insertOpen(tn5);
+
 	d->insertClose(tn6);
+
+
+	unsigned i;
+
+	*d>>i;
+
+	if(*d == 8)
+		std::cout << "It's 8" << std::endl;
+	else if(*d < 8)
+		std::cout << "Less than 8" << std::endl;
+
+	else if(*d <= 10)
+		std::cout << "Less than eq to 10" << std::endl;
+
+	else if(*d > 12)
+		std::cout << "Greater than 11" << std::endl;
+
+	else if(*d >= 11)
+		std::cout << "Greater than eq to 11" << std::endl;
+
+
+	std::cout << i << std::endl;
 
 };
 

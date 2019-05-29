@@ -9,12 +9,15 @@ struct Dimension::Link {
 
 	Link *next, *prev;
 	Link() {std::cout << "Link Was Created!" << std::endl;}
+
+	// Destructor: Deletes Chain.
 	~Link() {
 		if(next) delete next;
 		std::cout << "Link Was Deleted!" << std::endl;
 	}
 };
 
+// Deletes Linked-List properties.
  Dimension::~Dimension() {
 	std::cout << "Dimension Was Deleted!" << std::endl;
 
@@ -56,9 +59,38 @@ void Dimension::insertClose(const token::TokenNode *tn) {
 
 	closing = newClose;
 
+	// if(D <= 0) throw error
 	D--; // Decrement Dimension
 };
 
+
+// Overload operators
+
+bool Dimension::operator==(int i)  const {
+	return (D == i);
+};
+
+bool Dimension::operator<=(int i)  const {
+	return (D <= i);
+};
+
+bool Dimension::operator>=(int i)  const {
+	return (D >= i);
+};
+
+bool Dimension::operator<(int i)   const {
+	return (D < i);
+};
+
+bool Dimension::operator>(int i)   const {
+	return (D > i);
+};
+
+unsigned Dimension::operator>>(unsigned &i)  const {
+	i = D;
+
+	return i;
+};
 
 
 
