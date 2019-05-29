@@ -7,11 +7,12 @@ namespace utils = parser::utility;
 
 ASTNode *parser::parse(tNode tn, bool parseBlock) {
 
-	if(parseBlock) std::cout << tn << "  " << "TRUE" << std::endl;
-
-	else std::cout << tn<< "  " << "FALSE" << std::endl;
-
 	if(!tn || (parseBlock && tn->end && *tn == token::NEWLINE)) return nullptr;
+
+
+	if(parseBlock) std::cout << tn->tokenPtr->getTypeName() << "  " << "TRUE" << std::endl;
+
+	else std::cout << tn->tokenPtr->getTypeName()<< "  " << "FALSE" << std::endl;
 
 	// Skip BLOCK or LIST if end node is detected.
 	tNode next = (tn->end) ? utils::skipTo(tn) : (parseBlock ? tn->prev : tn->next);
@@ -75,7 +76,7 @@ ASTNode *parser::parseList(tNode tn) {
 	// Iterate Left Given the LIFO order of Linked-Lists.
 	ASTNode *head = parseList(tn->prev);
 
-	if(isParam) std::cout <<tn->tokenPtr->getType()<< " Yes" << std::endl; 
+	if(isParam) std::cout << tn->tokenPtr->getType() << " Yes" << std::endl; 
 
 	if(*tn == token::IDENTIFIER || *tn == token::STRING) {
 

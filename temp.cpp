@@ -1,21 +1,41 @@
 // #include <iostream>
 // #include <fstream>
 
-// int summation(int x, int y) {
-// 	if(x == y) return x;
+// struct Object { 
 
-// 	int next = (x == 10) ? 15 : x+1;
+// private:
 
-// 	int sum = x + summation(next,y);
+// 	Object() {};
+
+// public: 
+
+// 	static Object *getInstance() {
+
+// 		static Object instance;
+
+// 		return &instance;
+// 	} 
+
+// 	Object(const Object&)         = delete;
+
+// 	void operator=(const Object&) = delete;
+
+// };
 
 
-// 	return sum;
-
-// }
 
 // int main(){
 
-// 	std::cout << summation(1,20) << std::endl;
+
+// 	Object *foo = Object::getInstance();
+
+// 	Object *boo = Object::getInstance();
+
+// 	std::cout << foo << std::endl;
+
+// 	std::cout << boo << std::endl;
+
+
 
 // };
 

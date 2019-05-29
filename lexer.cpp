@@ -290,8 +290,6 @@ char utils::peekAhead(INFILE in, int places) {
 	// Return to start position
 	in.seekg(startPos);
 
-	std::cout << "PEEK RESULT:  " << result << std::endl;
-
 	return result;
 };
 
