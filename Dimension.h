@@ -12,7 +12,7 @@ private:
 
 	struct Link  {
 
-		token::TokenNode *tn;
+		const token::TokenNode *tn;
 
 		Link *next, *prev;
 	};
@@ -30,7 +30,7 @@ private:
 
 public:
 
-	void insertOpen(const token::TokenNode &tn) {
+	void insertOpen(const token::TokenNode *tn) {
 
 		Link *newOpen = new Link();
 
@@ -38,13 +38,29 @@ public:
 
 		newOpen->next = opening;
 
+		// Set neighbor prev to point to newOpen node.
 		if(opening) newOpen->next->prev = newOpen;
 
 		opening = newOpen;
 
-		d++;
+		D++; // Increment Dimension
 	}
 
+	void insertClose(const token::TokenNode *tn) {
+
+		Link *newClose = new Link();
+
+		newClose->tn = tn;
+
+		newClose->next = opening;
+
+		// Set neighbor prev to point to newClose node.
+		if(closing) newClose->next->prev = newClose;
+
+		closing = newClose;
+
+		D--; // Decrement Dimension
+	}
 
 	static Dimension *getInstance() {
 
