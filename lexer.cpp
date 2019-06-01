@@ -8,7 +8,7 @@ namespace utils = lexer::utility;
 
 
 // Represents Current Dimension of LIST or BLOCK.
-Dimension *const D = Dimension::getInstance();
+Dimension *const D = nullptr;
 
 
 // Head and Tail to Doubly-Linked-List of ActionMap Nodes.
@@ -23,8 +23,6 @@ Dimension *const D = Dimension::getInstance();
 token::TokenNode *lexer::lexer(char *fileName) {
 
 	std::ifstream in(fileName);
-	bool inBlock;
-	bool inList;
 	char c;
 
 	// Head to Doubly-Linked-List of Token Nodes.
@@ -63,18 +61,32 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		else continue; // Probably throw an error here, but continue for spaces.
 
 
-		// Insert new TokenNode in Doubly-Linked-List...
-		// after setting its value to point to new Token Object.
+
 		token::TokenNode *newNode = new token::TokenNode;
 
+
+		/*
+			Insert new TokenNode in Doubly-Linked-List
+			after setting its value to point to new Token Object.
+		*/ 
+
+		// Start ...
+
 		newNode->tokenPtr = newTokenPtr;
+
 		newNode->next = headNode;
-		if(headNode) newNode->next->prev = newNode; // Access prev property of neighbor node and point it to this newNode.
+
+		// Access prev property of neighbor node and point it to this newNode.
+		if(headNode) newNode->next->prev = newNode; 
 		headNode = newNode;
 
-		
+		// Finish.
 
-		
+		/*
+			If Token Node belongs to open/exit of an array or block,
+			record it in respective Dimension Object.
+		*/
+		if(utils::isDimensional(in, newNode)) lexer::insertDimension(newNode);	
 		
 	} // While
 
@@ -84,6 +96,17 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 
 }; // Lexer
+
+void lexer::insertDimension(token::TokenNode *tn) {
+	if(*tn == token::LBRACKET)
+		arrayD->insertOpen(tn)
+	else if (*tn == token::SKINNY_ARROW)
+		blockD->insertOpen(tn)
+	else if (*tn == token::RBRACKET)
+		arrayD->insertClose(tn)
+	else if (*tn == token::NEWLINE)
+		blockD->insertClose(tn)
+}
 
 // 
 
@@ -199,12 +222,16 @@ char *utils::makeC_String(INFILE in, std::streampos range) {
 // Bool Function passed in as argument. Restores file pointer
 // to original position when finished.
 std::streampos utils::rangeToChomp(char &c, INFILE in, bool(*greenLight)(const char)) {
+
 	decltype(in.tellg()) startPos = in.tellg(), offset = 0, endPos, range;
+
 	while(greenLight(c) && !in.eof()) {
+
 		offset+= (decltype(in.tellg()))1;
 		in>>c;
 
 	}
+
 	endPos = startPos + offset;
 	range = endPos - startPos;
 
@@ -270,9 +297,28 @@ bool utils::isEscSeq(char c) {
 	return (c == '\t' || c == '\n'); // To Add, Soon.
 };
 
-// To Peek multiple characters Ahead
-// Params: ifstream object and Amount 
-// of places to Peek Ahead.
+/*
+	Checks if Token Node is part of an array or block,
+	which is Dimensional.
+*/
+bool utils::isDimensional(INFILE in, token::TokenNode *tn) {
+
+	return (
+		*tn == token::LBRACKET || *tn == token::RBRACKET ||
+		*tn == token::SKINNY_ARROW || 
+		(
+			// If new line is an exit to a block
+			*tn == token::NEWLINE && blockD > 0 && 
+			peekAhead(in, blockD) != '\t'
+		)
+	);
+};
+
+/*
+	To Peek multiple characters Ahead
+	Params: ifstream object and Amount 
+	of places to Peek Ahead.
+*/
 char utils::peekAhead(INFILE in, int places) {
 	char result;
 	char container; 
@@ -289,10 +335,7 @@ char utils::peekAhead(INFILE in, int places) {
 		if(in.eof()) break;
 
 		// To Skip Spaces ' ' 0x20, but not other ws.
-		if(container == ' ') {
-			i--;
-			continue;
-		}
+		if(container == ' ') {i--; continue;}
 
 		result = container;
 	}

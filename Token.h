@@ -40,8 +40,8 @@ namespace utility {
 	T(STRING, nullptr)								\
 	T(OUTPUT, "output")								\
 	T(NEWLINE, "\n")								\
-	T(RBRACKET, "[")								\
-	T(LBRACKET, "]")								\
+	T(LBRACKET, "[")								\
+	T(RBRACKET, "]")								\
 	T(BACKTICK, "`")								\
 	T(IDENTIFIER, nullptr)						    \
 	T(SKINNY_ARROW, "->")							
@@ -69,9 +69,7 @@ public:
 
 		if(hint == &lexer::utility::isQuote) {setType(STRING); setName(stream); setTypeName((char *)"STRING");}
 
-// #define T(symbol, name) else if(name) {setType(symbol); setName(stream);}
-// 		TOKEN_LIST(T, stream)
-// #undef T
+
 
 #define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream); setTypeName((char *)#symbol);}
 		TOKEN_LIST(T)

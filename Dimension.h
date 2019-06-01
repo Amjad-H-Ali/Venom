@@ -42,10 +42,10 @@ private:
 
 public:
 
-	// Insert Opening of a new Dimension into Link.
+	// Insert Opening to a new Dimension into a Linked-List.
 	void insertOpen(const token::TokenNode *tn);
 
-	// Insert Closing of a Dimension into Link.
+	// Insert Closing to a new Dimension into a Linked-List.
 	void insertClose(const token::TokenNode *tn);
 
 	// Ensures One Instance.

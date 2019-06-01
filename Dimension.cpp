@@ -49,10 +49,11 @@ struct Dimension::NodeOfNodes {
 		:
 			opening(nullptr), closing(nullptr), openingT(nullptr),
 			closingT(nullptr), next(nullptr), prev(nullptr)
-	{};
+	{std::cout << "NodeOfNodes Was Created!" << std::endl;};
 
 
 	~NodeOfNodes() {
+		std::cout << "NodeOfNodes Was Deleted!" << std::endl;
 		// Delete Linked-List of Nodes.
 		if(opening) delete opening;
 		if(closing) delete closing;
@@ -76,7 +77,7 @@ Dimension::~Dimension() {
 	head = nullptr, tail = nullptr;
 };
 
-// Insert Opening of a new Dimension into Node.
+// Insert Opening to a new Dimension into a Linked-List.
 void Dimension::insertOpen(const token::TokenNode *tn) {
 
 	if(D == 0) { // New Block or Array
@@ -90,7 +91,7 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 		// Set neighbor prev (if exist) to point to newNodeOfNodes node.
 		if(head) newNodeOfNodes->next->prev = newNodeOfNodes;
-		else newNodeOfNodes->tail = newNodeOfNodes; // It's the first (will be last) one, so set Tail.
+		else tail = newNodeOfNodes; // It's the first (will be last) one, so set Tail.
 
 		head = newNodeOfNodes; // Set Head.
 
@@ -120,9 +121,10 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 };
 
-// Insert Closing of a Dimension into Node.
+// Insert Closing to a new Dimension into a Linked-List.
 void Dimension::insertClose(const token::TokenNode *tn) {
 
+	// TODO. Throw error if head DNE.
 
 	Node *newClose = new Node();
 
