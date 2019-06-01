@@ -27,8 +27,8 @@ private:
 	*/
 	struct NodeOfNodes; 
 
-	NodeOfNodes head; // Head Pointer.
-	NodeOfNodes tail; // Tail Pointer
+	NodeOfNodes *head; // Head Pointer.
+	NodeOfNodes *tail; // Tail Pointer
 
 	// Dimension
 	unsigned int D = 0;

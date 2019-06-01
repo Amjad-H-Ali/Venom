@@ -14,7 +14,7 @@ struct Dimension::Node {
 
 	Node *next, *prev;
 	Node() 
-		:next(nullptr), prev(nullptr)
+		:tn(nullptr), next(nullptr), prev(nullptr)
 	{std::cout << "Node Was Created!" << std::endl;}
 
 	/* 
@@ -74,43 +74,78 @@ Dimension::~Dimension() {
 	// Delete Linked-List of NodeOfNodes.
 	if(head) delete head;
 	head = nullptr, tail = nullptr;
-}
+};
 
 // Insert Opening of a new Dimension into Node.
 void Dimension::insertOpen(const token::TokenNode *tn) {
 
+	if(D == 0) { // New Block or Array
+
+		NodeOfNodes *newNodeOfNodes = new NodeOfNodes(); 
+
+		// Insert newNodeOfNodes into Linked-List.
+		// Start...
+
+		newNodeOfNodes->next = head; 
+
+		// Set neighbor prev (if exist) to point to newNodeOfNodes node.
+		if(head) newNodeOfNodes->next->prev = newNodeOfNodes;
+		else newNodeOfNodes->tail = newNodeOfNodes; // It's the first (will be last) one, so set Tail.
+
+		head = newNodeOfNodes; // Set Head.
+
+		// Finish
+	}
+
+
 	Node *newOpen = new Node();
+
+	
+	// Insert newOpen into Linked-List.
+	// Start...
 
 	newOpen->tn = tn;
 
-	newOpen->next = opening;
+	newOpen->next = head->opening;
 
-	// Set neighbor prev to point to newOpen node.
-	if(opening) newOpen->next->prev = newOpen;
-	else openingT = newOpen; // Set Tail pointer to Last Node.
+	// Set neighbor prev (if exist) to point to newOpen node.
+	if(head->opening) newOpen->next->prev = newOpen;
+	else head->openingT = newOpen; // It's the first (will be last) one, so set Tail.
 
-	opening = newOpen;
+	head->opening = newOpen; // Set Head
+
+	// Finish.
 
 	D++; // Increment Dimension
+
 };
 
 // Insert Closing of a Dimension into Node.
 void Dimension::insertClose(const token::TokenNode *tn) {
 
+
 	Node *newClose = new Node();
+
+	
+	// Insert newClose into Linked-List.
+	// Start...
 
 	newClose->tn = tn;
 
-	newClose->next = closing;
+	newClose->next = head->closing;
 
-	// Set neighbor prev to point to newClose node.
-	if(closing) newClose->next->prev = newClose;
-	else closingT = newClose; // Set Tail pointer to Last Node.
+	// Set neighbor prev (if exist) to point to newClose node.
+	if(head->closing) newClose->next->prev = newClose;
+	else head->closingT = newClose; // It's the first (will be last) one, so set Tail.
 
-	closing = newClose;
+	head->closing = newClose; // Set Head
 
 	// if(D <= 0) throw error
+
+	// Finish.
+
 	D--; // Decrement Dimension
+
 };
 
 
