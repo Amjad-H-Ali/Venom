@@ -1,15 +1,1 @@
-func is |name,address| ->
-	l is |"name"|
-
-
-	ENEWLINE  EBAR STR BAR IS ID ARROW EBAR ID COMMA ID BAR IS ID
-
-
-ENEWLINE ARROW EBAR BAR IS ID
-
-ID IS BAR NAME ADDRESS EBAR ARROW...
-	
-		EBAR  
-
-	
-
+|   |  |  |

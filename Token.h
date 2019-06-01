@@ -32,17 +32,19 @@ namespace utility {
 	T(IF, "if")										\
 	T(EQ, "=")										\
 	T(BAR, "|")										\
+	T(TAB, "\t")									\
 	T(EQEQ, "==")									\
 	T(ELSE, "else")									\
 	T(ELIF, "elif")									\
 	T(COMMA, ",")									\
 	T(STRING, nullptr)								\
 	T(OUTPUT, "output")								\
+	T(NEWLINE, "\n")								\
+	T(RBRACKET, "[")								\
+	T(LBRACKET, "]")								\
 	T(BACKTICK, "`")								\
 	T(IDENTIFIER, nullptr)						    \
-	T(SKINNY_ARROW, "->")							\
-	T(TAB, "\t")									\
-	T(NEWLINE, "\n")
+	T(SKINNY_ARROW, "->")							
 
 
 

@@ -98,23 +98,49 @@ token::TokenNode *lexer::lexer(char *fileName) {
 }; // Lexer
 
 // Determines if TokenNode Closes Dimension.
-bool lexer::isClosing(token::TokenNode *tn, INFILE in) {
+bool lexer::isClosing(INFILE in) {
+
+	if(D->singleLine) {
+		int jumps;
+
+		*D >> jumps;
 
 
-	if(*D == 0) return false;
+		char result;
+		char container; 
 
-	if(D->singleLine)
+		// To remember starting position
+		auto startPos = in.tellg();
 
-		for(int i = 0; *D > i; i ++) {
+		in >> std::noskipws;
 
-			char c = utils::peekAhead(in, i+1);
+		// Skip ahead and peek.
+		for(int i = 0; in >> container && i < jumps-1; i ++) {
 
-			if((i < 2 && c == ',') || c ==) return true;
+			// EOF 
+			if(in.eof()) break;
 
-			if(c == '\n' )
+			// To Skip Spaces ' ' 0x20, but not other ws.
+			if(container == ' ') {i--; continue;}
+
+			// If comma in between, it's closing.
+			if(container == ',') return true;
+
+			result = container;
 		}
 
-		peek(D) == NewLine or EOF or in between is Comma return true
+			
+		if(result == '\n' || in.eof()) return true;
+
+		// Return to start position
+		in.seekg(startPos);
+	}
+
+
+	return false;
+
+
+	
 
 	// else if not singleLine
 	// 	peek(D) != Tab or in between is comma return true
@@ -312,12 +338,16 @@ char utils::peekAhead(INFILE in, int places) {
 	// To remember starting position
 	auto startPos = in.tellg();
 
+	in >> std::noskipws;
+
 	// Skip ahead and peek.
 	for(int i = 0; i < places; i ++) {
 		in >> container;
 
+		if(in.eof()) break;
+
 		// To Skip Spaces ' ' 0x20, but not other ws.
-		if(!in.eof() && container == ' ') {
+		if(container == ' ') {
 			i--;
 			continue;
 		}
