@@ -72,21 +72,9 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		if(headNode) newNode->next->prev = newNode; // Access prev property of neighbor node and point it to this newNode.
 		headNode = newNode;
 
-		// Tag the end-of-block Esc character or the BAR
-		// to identify where a BLOCK or LIST ends.
-		if(inBlock && *newNode == token::NEWLINE && utils::peekAhead(in,1) != '\t') {
-			newNode->end = true;
-			inBlock = false;
-		}
-
-		if(*newNode == token::SKINNY_ARROW) inBlock = true;
 		
 
-		if(*newNode == token::BAR && inList) {
-			newNode->end = true;
-			inList = false;
-		}
-		if(*newNode == token::BAR && !inList) inList = true;
+		
 		
 	} // While
 
@@ -97,57 +85,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 }; // Lexer
 
-// Determines if TokenNode Closes Dimension.
-bool lexer::isClosing(INFILE in) {
-
-	if(D->singleLine) {
-		int jumps;
-
-		*D >> jumps;
-
-
-		char result;
-		char container; 
-
-		// To remember starting position
-		auto startPos = in.tellg();
-
-		in >> std::noskipws;
-
-		// Skip ahead and peek.
-		for(int i = 0; in >> container && i < jumps-1; i ++) {
-
-			// EOF 
-			if(in.eof()) break;
-
-			// To Skip Spaces ' ' 0x20, but not other ws.
-			if(container == ' ') {i--; continue;}
-
-			// If comma in between, it's closing.
-			if(container == ',') return true;
-
-			result = container;
-		}
-
-			
-		if(result == '\n' || in.eof()) return true;
-
-		// Return to start position
-		in.seekg(startPos);
-	}
-
-
-	return false;
-
-
-	
-
-	// else if not singleLine
-	// 	peek(D) != Tab or in between is comma return true
-
-	// return false 
-
-}
+// 
 
 // // Inserts address of newNode in Link-List of ActionMaps 
 // void lexer::setMap(token::TokenNode *node) {
@@ -320,7 +258,11 @@ bool utils::isNotClosingDoubleQT(char c) {
  
 // Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
 bool utils::isSinglyNamedToken(char c) {
-	return (c == '`' || c == '|' || c == '(' || c == ')' || c == ',');
+	return (
+			c == '`' || c == '|' || c == '[' ||
+			c == '(' || c == ')' || c == ',' ||
+			c == ']'
+	);
 };
 
 // Checks if character is one of the relevant Escape Sequences.

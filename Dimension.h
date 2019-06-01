@@ -10,25 +10,37 @@ class Dimension {
 
 private:
 
-	struct Link;
+	/*
+		Each instance of this class will contain a Token Node
+		that either is an opening to a new dimension or closing
+		of an existing one. Each instance will be chained together 
+		in a Linked-List.
+	*/
+	struct Node;
+
+	/*
+	 	Each instance of this class will contain a Linked-List
+		of Tokens that are either Opening or Closing a dimension 
+		to a block or array. Each one of these instances will in 
+		of itself be chained in a linked list with the purpose of
+		representing separate arrays or blocks.
+	*/
+	struct NodeOfNodes; 
+
+	NodeOfNodes head; // Head Pointer.
+	NodeOfNodes tail; // Tail Pointer
 
 	// Dimension
 	unsigned int D = 0;
 
-	// Linked-List of Openings and 
-	// closings To Dimension.
-	Link *opening,  *closing,  // Head Pointers.
-		 *openingT, *closingT; // Tail pointers.
+	
 
 	Dimension()
-		:opening(nullptr), closing(nullptr), openingT(nullptr), closingT(nullptr)
+		:head(nullptr), tail(nullptr)
 	{std::cout << "Dimension Was Created!" << std::endl;};
 	~Dimension();
 
 public:
-	
-	// LIST on single line or spread out?
-	bool singleLine = true;	
 
 	// Insert Opening of a new Dimension into Link.
 	void insertOpen(const token::TokenNode *tn);
