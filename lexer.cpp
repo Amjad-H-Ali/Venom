@@ -8,13 +8,8 @@ namespace utils = lexer::utility;
 
 
 // Represents Current Dimension of LIST or BLOCK.
-Dimension *const D = nullptr;
+ArrayDimension *const D = nullptr;
 
-
-// Head and Tail to Doubly-Linked-List of ActionMap Nodes.
-// See lexer::setMap
-// actMap::ActionMap *actMap::head = nullptr;
-// actMap::ActionMap *actMap::tail = nullptr; 
 
 
 // LEXER FUNCTIONS
@@ -108,36 +103,8 @@ void lexer::insertDimension(token::TokenNode *tn) {
 		blockD->insertClose(tn)
 }
 
-// 
 
-// // Inserts address of newNode in Link-List of ActionMaps 
-// void lexer::setMap(token::TokenNode *node) {
-
-
-// 	actMap::ActionMap *newNode = new actMap::ActionMap;
-
-// 	// Map to node.
-// 	newNode->mapValue = node;
-
-// 	// Insert newNode in Linked-List
-// 	newNode->next = actMap::head;
-
-// 	// If head points to nullptr, then let tail point to newNode ...
-// 	// because newNode will be pushed to the end (LIFO or FILO).
-// 	if(!actMap::head) actMap::tail = newNode;
-// 	// Access prev property of neighbor node and point it to this newNode.
-// 	else newNode->next->prev = newNode;
-
-// 	actMap::head = newNode;
-
-// }
-
-// // UTILITY FUNCTIONS
-
-// // Checks if Token is valid ActionMap node.
-// bool utils::qualifiesForActionMap(const token::TokenNode *node) {
-// 	return(*node == token::IS); // Much more coming soon.
-// }
+// UTILITY FUNCTIONS
 
 // Gets whole Potential String from beginning to end.
 char *utils::chompString(char &c, INFILE in) {

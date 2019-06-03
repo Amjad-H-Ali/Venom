@@ -1,6 +1,6 @@
-#ifndef DIMENSION_H
+#ifndef ARRAYDIMENSION_H
 
-#define DIMENSION_H
+#define ARRAYDIMENSION_H
 
 #include "Token.h"
 
