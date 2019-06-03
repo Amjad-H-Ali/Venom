@@ -161,6 +161,11 @@ void Dimension::insertClose(const token::TokenNode *tn) {
 };
 
 
+// Accessor
+unsigned getD() const {
+	return this->D;
+};
+
 
 
 // Overload operators

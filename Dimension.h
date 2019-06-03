@@ -49,6 +49,9 @@ public:
 	// Insert Closing to a new ArrayDimension into a Linked-List.
 	void insertClose(const token::TokenNode *tn);
 
+	// Accessor
+	unsigned getD() const;
+
 
 	// Overload operators
 

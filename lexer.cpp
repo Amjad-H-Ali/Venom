@@ -280,7 +280,7 @@ bool utils::isDimensional(INFILE in, token::TokenNode *tn) {
 		(
 			// If new line is an exit to a block
 			*tn == token::NEWLINE && blockD > 0 && 
-			peekAhead(in, blockD) != '\t'
+			utils::rangeOnlyHas(in, *blockD, )
 		)
 	);
 };
