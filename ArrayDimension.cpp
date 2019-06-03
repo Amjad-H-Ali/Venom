@@ -1,3 +1,4 @@
+#include "Dimension.h"
 #include "ArrayDimension.h"
 #include "Token.h"
 
@@ -8,6 +9,9 @@
 	of an existing one. Each instance will be chained together 
 	in a Linked-List.
 */
+
+
+/* TEMP
 struct ArrayDimension::Node {
 
 	const token::TokenNode *tn;
@@ -17,17 +21,23 @@ struct ArrayDimension::Node {
 		:tn(nullptr), next(nullptr), prev(nullptr)
 	{std::cout << "Node Was Created!" << std::endl;}
 
+*/
 	/* 
 		Destructor: Deletes Chain.
 		Do not delete tn, as tn is pointer to TokenNode
 		that is in use by other components.
 	*/
+
+	/*TEMP
 	~Node() {
 		if(next) delete next;
 		std::cout << "Node Was Deleted!" << std::endl;
 		next = nullptr, prev = nullptr, tn = nullptr;
 	}
 };
+
+
+*/
 
 
 /*
@@ -37,6 +47,8 @@ struct ArrayDimension::Node {
 	of itself be chained in a linked list with the purpose of
 	representing separate arrays or blocks.
 */
+
+/*TEMP
 struct ArrayDimension::NodeOfNodes {
 	// Linked-List of Openings and 
 	// Closings To ArrayDimension.
@@ -67,6 +79,7 @@ struct ArrayDimension::NodeOfNodes {
 	}
 };
 
+*/
 
 // Deletes Linked-List properties.
 ArrayDimension::~ArrayDimension() {
@@ -153,6 +166,8 @@ void ArrayDimension::insertClose(const token::TokenNode *tn) {
 
 // Overload operators
 
+/*TEMP
+
 bool ArrayDimension::operator==(int i)  const {
 	return (D == i);
 };
@@ -179,6 +194,7 @@ unsigned ArrayDimension::operator>>(unsigned &i)  const {
 	return i;
 };
 
+*/
 
 
 

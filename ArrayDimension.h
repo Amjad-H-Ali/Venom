@@ -2,13 +2,19 @@
 
 #define ARRAYDIMENSION_H
 
+#include "Dimension.h"
 #include "Token.h"
+
 
 #include <iostream>
 
-class ArrayDimension {
+
+
+class ArrayDimension : public Dimension {
 
 private:
+
+	
 
 	/*
 		Each instance of this class will contain a Token Node
@@ -16,7 +22,10 @@ private:
 		of an existing one. Each instance will be chained together 
 		in a Linked-List.
 	*/
+
+	/* TEMP
 	struct Node;
+	*/
 
 	/*
 	 	Each instance of this class will contain a Linked-List
@@ -25,18 +34,28 @@ private:
 		of itself be chained in a linked list with the purpose of
 		representing separate arrays or blocks.
 	*/
+
+	/* TEMP
 	struct NodeOfNodes; 
 
 	NodeOfNodes *head; // Head Pointer.
 	NodeOfNodes *tail; // Tail Pointer
 
+	*/
 	// Dimension
+
+	/*TEMP
 	unsigned int D = 0;
+
+	*/
+
+
 
 	
 
 	ArrayDimension()
-		:head(nullptr), tail(nullptr)
+		:Dimension()
+		// :head(nullptr), tail(nullptr)
 	{std::cout << "ArrayDimension Was Created!" << std::endl;};
 	~ArrayDimension();
 
@@ -58,6 +77,8 @@ public:
 
 	// Overload operators
 
+	/* TEMP
+
 	bool operator==(int i)  const;
 
 	bool operator<=(int i)  const;
@@ -70,9 +91,11 @@ public:
 
 	unsigned operator>>(unsigned &i)  const;
 
+	*/
+
 	// Copy or Assignment constructor
 	// not allowed for our Singleton.
-	ArrayDimension(const ArrayDimension&) 		= delete; 
+	ArrayDimension(const ArrayDimension&) 	= delete; 
 	void operator=(const ArrayDimension&)	= delete;
 
 }; // ArrayDimension

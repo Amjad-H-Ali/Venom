@@ -1,13 +1,13 @@
-// #include <iostream>
-// #include <fstream>
-// #include "ArrayDimension.h"
-// #include "Token.h"
+#include <iostream>
+#include <fstream>
+#include "ArrayDimension.h"
+#include "Token.h"
 
-// ArrayDimension *const D = ArrayDimension::getInstance();
+ArrayDimension *const D = ArrayDimension::getInstance();
 
 
 
-// int main() {
+int main() {
 
 
 	
@@ -15,42 +15,42 @@
 
 // 	// std::cout << "Yes" << std::endl;
 
-// 	ArrayDimension *const d = ArrayDimension::getInstance();
+	ArrayDimension *const d = ArrayDimension::getInstance();
 
 	
 
-// 	token::TokenNode *tn2 = new token::TokenNode;
+	token::TokenNode *tn2 = new token::TokenNode;
 
-// 	token::TokenNode *tn3 = new token::TokenNode;
+	token::TokenNode *tn3 = new token::TokenNode;
 
-// 	token::TokenNode *tn4 = new token::TokenNode;
+	token::TokenNode *tn4 = new token::TokenNode;
 
-// 	token::TokenNode *tn5 = new token::TokenNode;
+	token::TokenNode *tn5 = new token::TokenNode;
 
-// 	token::TokenNode *tn6 = new token::TokenNode;
+	token::TokenNode *tn6 = new token::TokenNode;
 
 	
 
-// 	D->insertOpen(tn2);
-// 	d->insertClose(tn6);
+	D->insertOpen(tn2);
+	d->insertClose(tn6);
 
 
-// 	d->insertOpen(tn3);
-// 	d->insertClose(tn6);
+	d->insertOpen(tn3);
+	d->insertClose(tn6);
 
-// 	d->insertOpen(tn2);
-// 	d->insertClose(tn6);
-
-
-// 	D->insertOpen(tn3);
-// 	d->insertClose(tn6);
-
-// 	// d->insertOpen(tn2);
-// 	// d->insertClose(tn6);
+	d->insertOpen(tn2);
+	d->insertClose(tn6);
 
 
-// 	// d->insertOpen(tn3);
-// 	// d->insertClose(tn6);
+	D->insertOpen(tn3);
+	d->insertClose(tn6);
+
+	// d->insertOpen(tn2);
+	// d->insertClose(tn6);
+
+
+	// d->insertOpen(tn3);
+	// d->insertClose(tn6);
 
 
 // 	// unsigned i;
@@ -74,7 +74,7 @@
 
 // 	// std::cout << i << std::endl;
 
-// };
+};
 
 
 
