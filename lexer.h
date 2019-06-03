@@ -11,7 +11,7 @@ typedef std::ifstream &INFILE;
 namespace token {
 	class Token;
 	struct TokenNode;
-} // End of forward delaration of Token class.
+} // End.
 
 namespace lexer {
 
@@ -20,8 +20,6 @@ namespace utility	{
 
 	// UTILITY FUNCTIONS
 		
-	// Checks if Token is valid ActionMap node.
-	bool qualifiesForActionMap(const token::TokenNode *node);
 	// Gets entire potential string.
 	char *chompString(char &c, INFILE in);
 	char *chompOperator(char &c, INFILE in);
@@ -64,13 +62,12 @@ namespace utility	{
 
 
 
-}; // utility Namespace
+}; // utility
 	
 	// LEXER FUNCTIONS
 
 	// Tokenizes input file and adds to Linked List of Tokens.
 	token::TokenNode *lexer(char *fileName);
-	// Inserts address of newNode in Link-List of ActionMaps 
-	void setMap(token::TokenNode *node);
 	
-}; // lexer Namespace
+	
+}; // lexer 

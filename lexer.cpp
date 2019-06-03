@@ -7,8 +7,11 @@
 namespace utils = lexer::utility;
 
 
-// Represents Current Dimension of LIST or BLOCK.
-ArrayDimension *const D = nullptr;
+// Represents Dimensions of an array.
+ArrayDimension *const arrayD = nullptr;
+
+// Represents Dimension of a block.
+BlockDimension *const blockD = nullptr;
 
 
 
@@ -29,12 +32,13 @@ token::TokenNode *lexer::lexer(char *fileName) {
 	token::Token *newTokenPtr = nullptr;
 
 
-
-	// Read input file char by char
-	// Do not skip white space otherwise
-	// cannot differentiate between adjacent 
-	// AlphaNumeral characters belonging to 
-	// separate Tokens.
+	/*
+		Read input file char by char
+		Do not skip white space otherwise
+		cannot differentiate between adjacent 
+		AlphaNumeral characters belonging to 
+		separate Tokens.
+	*/
 	in >> std::noskipws;
 	while(in >> c) { 
 
@@ -279,6 +283,19 @@ bool utils::isDimensional(INFILE in, token::TokenNode *tn) {
 			peekAhead(in, blockD) != '\t'
 		)
 	);
+};
+
+// Checks if range ahead contains only given character.
+bool utils::rangeOnlyHas(INFILE in, int places, char c) {
+	char container;
+	// Remember start position
+	auto startPos = in.tellg();
+
+	for(int i = 0;in >> container && i < places; i ++) {
+		
+		if(container != c) return false;
+	}
+	return true;
 };
 
 /*
