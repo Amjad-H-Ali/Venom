@@ -3,7 +3,6 @@
 #define ARRAYDIMENSION_H
 
 #include "Dimension.h"
-#include "Token.h"
 
 
 #include <iostream>
@@ -14,58 +13,13 @@ class ArrayDimension : public Dimension {
 
 private:
 
-	
-
-	/*
-		Each instance of this class will contain a Token Node
-		that either is an opening to a new dimension or closing
-		of an existing one. Each instance will be chained together 
-		in a Linked-List.
-	*/
-
-	/* TEMP
-	struct Node;
-	*/
-
-	/*
-	 	Each instance of this class will contain a Linked-List
-		of Tokens that are either Opening or Closing a dimension 
-		to a block or array. Each one of these instances will in 
-		of itself be chained in a linked list with the purpose of
-		representing separate arrays or blocks.
-	*/
-
-	/* TEMP
-	struct NodeOfNodes; 
-
-	NodeOfNodes *head; // Head Pointer.
-	NodeOfNodes *tail; // Tail Pointer
-
-	*/
-	// Dimension
-
-	/*TEMP
-	unsigned int D = 0;
-
-	*/
-
-
-
-	
-
 	ArrayDimension()
 		:Dimension()
-		// :head(nullptr), tail(nullptr)
-	{std::cout << "ArrayDimension Was Created!" << std::endl;};
-	~ArrayDimension();
+	{std::cout << "ArrayDimension Was Created!" << " Address: " << this <<  std::endl;};
+
 
 public:
 
-	// Insert Opening to a new ArrayDimension into a Linked-List.
-	void insertOpen(const token::TokenNode *tn);
-
-	// Insert Closing to a new ArrayDimension into a Linked-List.
-	void insertClose(const token::TokenNode *tn);
 
 	// Ensures One Instance.
 	static ArrayDimension *getInstance() {
@@ -75,26 +29,9 @@ public:
 		return &instance;
 	};
 
-	// Overload operators
-
-	/* TEMP
-
-	bool operator==(int i)  const;
-
-	bool operator<=(int i)  const;
-
-	bool operator>=(int i)  const;
-
-	bool operator<(int i)   const;
-
-	bool operator>(int i)   const;
-
-	unsigned operator>>(unsigned &i)  const;
-
-	*/
 
 	// Copy or Assignment constructor
-	// not allowed for our Singleton.
+	// not allowed in our Singleton.
 	ArrayDimension(const ArrayDimension&) 	= delete; 
 	void operator=(const ArrayDimension&)	= delete;
 

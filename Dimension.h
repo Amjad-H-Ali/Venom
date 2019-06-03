@@ -16,26 +16,7 @@ protected:
 		of an existing one. Each instance will be chained together 
 		in a Linked-List.
 	*/
-	struct Node {
-
-	const token::TokenNode *tn;
-
-	Node *next, *prev;
-	Node() 
-		:tn(nullptr), next(nullptr), prev(nullptr)
-	{std::cout << "Node Was Created!" << std::endl;}
-
-	/* 
-		Destructor: Deletes Chain.
-		Do not delete tn, as tn is pointer to TokenNode
-		that is in use by other components.
-	*/
-	~Node() {
-		if(next) delete next;
-		std::cout << "Node Was Deleted!" << std::endl;
-		next = nullptr, prev = nullptr, tn = nullptr;
-	}
-};
+	struct Node;
 
 	/*
 	 	Each instance of this class will contain a Linked-List
@@ -44,35 +25,7 @@ protected:
 		of itself be chained in a linked list with the purpose of
 		representing separate arrays or blocks.
 	*/
-	struct NodeOfNodes {
-	// Linked-List of Openings and 
-	// Closings To Dimension.
-	Node *opening,  *closing,  // Head Pointers.
-		 *openingT, *closingT; // Tail pointers.
-
-	NodeOfNodes *next, *prev;
-
-	NodeOfNodes()
-		:
-			opening(nullptr), closing(nullptr), openingT(nullptr),
-			closingT(nullptr), next(nullptr), prev(nullptr)
-	{std::cout << "NodeOfNodes Was Created!" << std::endl;};
-
-
-	~NodeOfNodes() {
-		std::cout << "NodeOfNodes Was Deleted!" << std::endl;
-		// Delete Linked-List of Nodes.
-		if(opening) delete opening;
-		if(closing) delete closing;
-
-		// Delete chain of objects of NodeOfNodes Type.
-		if(next) delete next;
-
-		opening = nullptr, closing = nullptr,
-		openingT = nullptr, closingT = nullptr,
-		next = nullptr, prev = nullptr;
-	}
-};
+	struct NodeOfNodes;
 
 	NodeOfNodes *head; // Head Pointer.
 	NodeOfNodes *tail; // Tail Pointer
@@ -81,14 +34,21 @@ protected:
 	unsigned int D = 0;
 
 
-
-
 	// Only inherited classes can call constructor
 	Dimension()
 		:head(nullptr), tail(nullptr)
-	{};
+	{std::cout<<"Dimension was Created!" << " Address: " << this << std::endl;};
+
+	~Dimension();
 
 public:
+
+	// Insert Opening to a new ArrayDimension into a Linked-List.
+	void insertOpen(const token::TokenNode *tn);
+
+	// Insert Closing to a new ArrayDimension into a Linked-List.
+	void insertClose(const token::TokenNode *tn);
+
 
 	// Overload operators
 
