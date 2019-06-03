@@ -1,21 +1,21 @@
 // #include <iostream>
 // #include <fstream>
-// #include "Dimension.h"
+// #include "ArrayDimension.h"
 // #include "Token.h"
 
-// Dimension *const D = Dimension::getInstance();
+// ArrayDimension *const D = ArrayDimension::getInstance();
 
 
 
 // int main() {
 
 
-
+	
 
 
 // 	// std::cout << "Yes" << std::endl;
 
-// 	Dimension *const d = Dimension::getInstance();
+// 	ArrayDimension *const d = ArrayDimension::getInstance();
 
 	
 
@@ -45,12 +45,12 @@
 // 	D->insertOpen(tn3);
 // 	d->insertClose(tn6);
 
-// 	d->insertOpen(tn2);
-// 	d->insertClose(tn6);
+// 	// d->insertOpen(tn2);
+// 	// d->insertClose(tn6);
 
 
-// 	d->insertOpen(tn3);
-// 	d->insertClose(tn6);
+// 	// d->insertOpen(tn3);
+// 	// d->insertClose(tn6);
 
 
 // 	// unsigned i;

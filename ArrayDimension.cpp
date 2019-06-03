@@ -1,4 +1,4 @@
-#include "Dimension.h"
+#include "ArrayDimension.h"
 #include "Token.h"
 
 
@@ -8,7 +8,7 @@
 	of an existing one. Each instance will be chained together 
 	in a Linked-List.
 */
-struct Dimension::Node {
+struct ArrayDimension::Node {
 
 	const token::TokenNode *tn;
 
@@ -37,9 +37,9 @@ struct Dimension::Node {
 	of itself be chained in a linked list with the purpose of
 	representing separate arrays or blocks.
 */
-struct Dimension::NodeOfNodes {
+struct ArrayDimension::NodeOfNodes {
 	// Linked-List of Openings and 
-	// Closings To Dimension.
+	// Closings To ArrayDimension.
 	Node *opening,  *closing,  // Head Pointers.
 		 *openingT, *closingT; // Tail pointers.
 
@@ -69,16 +69,16 @@ struct Dimension::NodeOfNodes {
 
 
 // Deletes Linked-List properties.
-Dimension::~Dimension() {
-	std::cout << "Dimension Was Deleted!" << std::endl;
+ArrayDimension::~ArrayDimension() {
+	std::cout << "ArrayDimension Was Deleted!" << std::endl;
 
 	// Delete Linked-List of NodeOfNodes.
 	if(head) delete head;
 	head = nullptr, tail = nullptr;
 };
 
-// Insert Opening to a new Dimension into a Linked-List.
-void Dimension::insertOpen(const token::TokenNode *tn) {
+// Insert Opening to a new ArrayDimension into a Linked-List.
+void ArrayDimension::insertOpen(const token::TokenNode *tn) {
 
 	if(D == 0) { // New Block or Array
 
@@ -121,8 +121,8 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 };
 
-// Insert Closing to a new Dimension into a Linked-List.
-void Dimension::insertClose(const token::TokenNode *tn) {
+// Insert Closing to a new ArrayDimension into a Linked-List.
+void ArrayDimension::insertClose(const token::TokenNode *tn) {
 
 	// TODO. Throw error if head DNE.
 
@@ -153,27 +153,27 @@ void Dimension::insertClose(const token::TokenNode *tn) {
 
 // Overload operators
 
-bool Dimension::operator==(int i)  const {
+bool ArrayDimension::operator==(int i)  const {
 	return (D == i);
 };
 
-bool Dimension::operator<=(int i)  const {
+bool ArrayDimension::operator<=(int i)  const {
 	return (D <= i);
 };
 
-bool Dimension::operator>=(int i)  const {
+bool ArrayDimension::operator>=(int i)  const {
 	return (D >= i);
 };
 
-bool Dimension::operator<(int i)   const {
+bool ArrayDimension::operator<(int i)   const {
 	return (D < i);
 };
 
-bool Dimension::operator>(int i)   const {
+bool ArrayDimension::operator>(int i)   const {
 	return (D > i);
 };
 
-unsigned Dimension::operator>>(unsigned &i)  const {
+unsigned ArrayDimension::operator>>(unsigned &i)  const {
 	i = D;
 
 	return i;

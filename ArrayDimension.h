@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-class Dimension {
+class ArrayDimension {
 
 private:
 
@@ -35,23 +35,23 @@ private:
 
 	
 
-	Dimension()
+	ArrayDimension()
 		:head(nullptr), tail(nullptr)
-	{std::cout << "Dimension Was Created!" << std::endl;};
-	~Dimension();
+	{std::cout << "ArrayDimension Was Created!" << std::endl;};
+	~ArrayDimension();
 
 public:
 
-	// Insert Opening to a new Dimension into a Linked-List.
+	// Insert Opening to a new ArrayDimension into a Linked-List.
 	void insertOpen(const token::TokenNode *tn);
 
-	// Insert Closing to a new Dimension into a Linked-List.
+	// Insert Closing to a new ArrayDimension into a Linked-List.
 	void insertClose(const token::TokenNode *tn);
 
 	// Ensures One Instance.
-	static Dimension *getInstance() {
+	static ArrayDimension *getInstance() {
 
-		static Dimension instance;
+		static ArrayDimension instance;
 
 		return &instance;
 	};
@@ -72,10 +72,10 @@ public:
 
 	// Copy or Assignment constructor
 	// not allowed for our Singleton.
-	Dimension(const Dimension&) 		= delete; 
-	void operator=(const Dimension&)	= delete;
+	ArrayDimension(const ArrayDimension&) 		= delete; 
+	void operator=(const ArrayDimension&)	= delete;
 
-}; // Dimension
+}; // ArrayDimension
 
 
 #endif
