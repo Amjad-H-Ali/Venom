@@ -292,19 +292,23 @@ bool utils::isDimensional(INFILE in, token::TokenNode *tn) {
 	return (
 		*tn == token::LBRACKET || *tn == token::RBRACKET ||
 		*tn == token::SKINNY_ARROW || 
-		(*blockD > 0 && isClosingBlock(tn))
+		(*blockD > 0 && isClosingBlock(in, tn))
 	);
 };
 
 // Checks if Token Node is last in block.
-bool utils::isClosingBlock(token::TokenNode *tn) {
+bool utils::isClosingBlock(INFILE in, token::TokenNode *tn) {
 	return (
 		(	// If NEWLINE is an exit to a block.
 			*tn == token::NEWLINE &&
-			!utils::rangeOnlyHas(in, blockD->getD())
+			!utils::rangeOnlyHas(in, blockD->getD(), '\t')
 		) 
-
-		|| in.peek()== EOF
+		/*
+			Token Node Closes Block if it's last in file.
+			Use of peekAhead instead of istream::peek because 
+			peek does not skip spaces, peekAhead does.
+		*/
+		|| utils::peekAhead(in, 1) == EOF
 	);
 };
 
@@ -328,9 +332,12 @@ bool utils::rangeOnlyHas(INFILE in, int places, char c) {
 };
 
 /*
-	To Peek multiple characters Ahead
-	Params: ifstream object and Amount 
+	To Peek multiple characters Ahead.
+
+	Params: ifstream object and Number 
 	of places to Peek Ahead.
+
+	Skips spaces.
 */
 char utils::peekAhead(INFILE in, int places) {
 	char result;
@@ -345,7 +352,7 @@ char utils::peekAhead(INFILE in, int places) {
 	for(int i = 0; i < places; i ++) {
 		in >> container;
 
-		if(in.eof()) break;
+		if(in.eof()) return EOF;
 
 		// To Skip Spaces ' ' 0x20, but not other ws.
 		if(container == ' ') {i--; continue;}

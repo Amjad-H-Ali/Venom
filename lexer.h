@@ -60,6 +60,8 @@ namespace utility	{
 		which is Dimensional.
 	*/
 	bool isDimensional(INFILE in, token::TokenNode *tn);
+	// Checks if Token Node is last in block.
+	bool isClosingBlock(INFILE in, token::TokenNode *tn);
 	// Checks if range ahead contains only given character.
 	bool rangeOnlyHas(INFILE in, int places, char c);
 	// To Peek multiple characters Ahead

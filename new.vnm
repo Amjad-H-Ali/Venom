@@ -1,3 +1,8 @@
 func is |name| ->
 	"Hello"
 	"World"
+	func2 is |moo| ->
+		"cat"
+		[[]]
+
+foo

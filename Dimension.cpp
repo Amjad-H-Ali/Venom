@@ -78,6 +78,8 @@ Dimension::~Dimension() {
 	// Delete Linked-List of NodeOfNodes.
 	if(head) delete head;
 	head = nullptr, tail = nullptr;
+
+	std::cout<<"Dimension was Deleted" << " Address:: " << this << std::endl;
 };
 
 
