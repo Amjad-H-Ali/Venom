@@ -2,16 +2,18 @@
 #include <fstream>
 #include "lexer.h"
 #include "Token.h"
+#include "ArrayDimension.h"
+#include "BlockDimension.h"
 
 
 namespace utils = lexer::utility;
 
 
 // Represents Dimensions of an array.
-ArrayDimension *const arrayD = nullptr;
+ArrayDimension *const arrayD = ArrayDimension::getInstance();
 
 // Represents Dimension of a block.
-BlockDimension *const blockD = nullptr;
+BlockDimension *const blockD = BlockDimension::getInstance();
 
 
 
@@ -41,6 +43,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 	*/
 	in >> std::noskipws;
 	while(in >> c) { 
+
 
 		// Single Character Token
 		if(utils::isSinglyNamedToken(c)) 
@@ -96,16 +99,28 @@ token::TokenNode *lexer::lexer(char *fileName) {
 
 }; // Lexer
 
+// Inserts start/end to block or array in 
+// respective Object.
 void lexer::insertDimension(token::TokenNode *tn) {
-	if(*tn == token::LBRACKET)
-		arrayD->insertOpen(tn)
-	else if (*tn == token::SKINNY_ARROW)
-		blockD->insertOpen(tn)
-	else if (*tn == token::RBRACKET)
-		arrayD->insertClose(tn)
-	else if (*tn == token::NEWLINE)
-		blockD->insertClose(tn)
-}
+	if(*tn == token::LBRACKET) {
+		
+		arrayD->insertOpen(tn);
+		std::cout << "OPEN to Array" << std::endl;
+	}
+	else if (*tn == token::SKINNY_ARROW) {
+		std::cout << "OPEN to Func" << std::endl;
+		blockD->insertOpen(tn);
+	}
+	else if (*tn == token::RBRACKET) {
+		std::cout << "Close to Array" << std::endl;
+		arrayD->insertClose(tn);
+	}
+	else {
+		std::cout << "Close to Func" << std::endl;
+		blockD->insertClose(tn);
+	}
+	
+};
 
 
 // UTILITY FUNCTIONS
@@ -277,11 +292,19 @@ bool utils::isDimensional(INFILE in, token::TokenNode *tn) {
 	return (
 		*tn == token::LBRACKET || *tn == token::RBRACKET ||
 		*tn == token::SKINNY_ARROW || 
-		(
-			// If new line is an exit to a block
-			*tn == token::NEWLINE && blockD > 0 && 
-			utils::rangeOnlyHas(in, *blockD, )
-		)
+		(*blockD > 0 && isClosingBlock(tn))
+	);
+};
+
+// Checks if Token Node is last in block.
+bool utils::isClosingBlock(token::TokenNode *tn) {
+	return (
+		(	// If NEWLINE is an exit to a block.
+			*tn == token::NEWLINE &&
+			!utils::rangeOnlyHas(in, blockD->getD())
+		) 
+
+		|| in.peek()== EOF
 	);
 };
 
@@ -291,10 +314,16 @@ bool utils::rangeOnlyHas(INFILE in, int places, char c) {
 	// Remember start position
 	auto startPos = in.tellg();
 
-	for(int i = 0;in >> container && i < places; i ++) {
+	for(int i = 0;i < places; i ++) {
+
+		in >> container;
+
+		std::cout << "RANGE" << std::endl;
 		
 		if(container != c) return false;
 	}
+
+	in.seekg(startPos);
 	return true;
 };
 

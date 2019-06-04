@@ -1,1 +1,3 @@
-|   |  |  |
+func is |name| ->
+	"Hello"
+	"World"

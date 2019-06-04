@@ -18,10 +18,10 @@ int main(){
 	// 		std::cout << "  END: FALSE" << std::endl;
 	// }
 
-	ASTNode *astHead = parser::parse(tHead);
+	// ASTNode *astHead = parser::parse(tHead);
 
-	for(ASTNode *ptr = astHead; ptr; ptr = ptr->next)
-		std::cout << ptr->value->getTypeName(ptr->value->getType()) << std::endl;
+	// for(ASTNode *ptr = astHead; ptr; ptr = ptr->next)
+	// 	std::cout << ptr->value->getTypeName(ptr->value->getType()) << std::endl;
 
 
 };

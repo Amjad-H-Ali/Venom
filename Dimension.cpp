@@ -75,8 +75,6 @@ struct Dimension::NodeOfNodes {
 
 
 Dimension::~Dimension() {
-	std::cout << "Some Dimension Was Deleted!" << " Address: " << this << std::endl;
-
 	// Delete Linked-List of NodeOfNodes.
 	if(head) delete head;
 	head = nullptr, tail = nullptr;
@@ -162,7 +160,7 @@ void Dimension::insertClose(const token::TokenNode *tn) {
 
 
 // Accessor
-unsigned getD() const {
+unsigned Dimension::getD() const {
 	return this->D;
 };
 

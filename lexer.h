@@ -55,6 +55,13 @@ namespace utility	{
 	bool isNotClosingDoubleQT(char c);
 	// Checks if character is a relevant Escape Sequence.
 	bool isEscSeq(char c);
+	/*
+		Checks if Token Node is part of an array or block,
+		which is Dimensional.
+	*/
+	bool isDimensional(INFILE in, token::TokenNode *tn);
+	// Checks if range ahead contains only given character.
+	bool rangeOnlyHas(INFILE in, int places, char c);
 	// To Peek multiple characters Ahead
 	// Params: ifstream object and Amount 
 	// of places to Peek Ahead.
@@ -68,6 +75,10 @@ namespace utility	{
 
 	// Tokenizes input file and adds to Linked List of Tokens.
 	token::TokenNode *lexer(char *fileName);
+
+	// Inserts start/end to block or array in 
+	// respective Object.
+	void insertDimension(token::TokenNode *tn);
 	
 	
 }; // lexer 

@@ -37,7 +37,7 @@ protected:
 	// Only inherited classes can call constructor
 	Dimension()
 		:head(nullptr), tail(nullptr)
-	{std::cout<<"Dimension was Created!" << " Address: " << this << std::endl;};
+	{};
 
 	~Dimension();
 
