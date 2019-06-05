@@ -7,7 +7,9 @@
 
 int main(){
 
-	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
+	// token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
+
+	
 
 	// for(token::TokenNode *ptr = tHead; ptr; ptr = ptr->next) {
 	// 	std::cout << ptr->tokenPtr->getTypeName() << " ADDRESS: " << ptr;

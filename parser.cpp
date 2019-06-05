@@ -7,7 +7,7 @@ namespace utils = parser::utility;
 
 ASTNode *parser::parse(tNode tn, bool parseBlock) {
 
-	if(!tn || (parseBlock && tn->end && *tn == token::NEWLINE)) return nullptr;
+	if(!tn || (parseBlock && tn->closing && *tn == token::NEWLINE)) return nullptr;
 
 
 	if(parseBlock) std::cout << tn->tokenPtr->getTypeName() << "  " << "TRUE" << std::endl;
@@ -15,7 +15,7 @@ ASTNode *parser::parse(tNode tn, bool parseBlock) {
 	else std::cout << tn->tokenPtr->getTypeName()<< "  " << "FALSE" << std::endl;
 
 	// Skip BLOCK or LIST if end node is detected.
-	tNode next = (tn->end) ? utils::skipTo(tn) : (parseBlock ? tn->prev : tn->next);
+	tNode next = (tn->closing) ? utils::skipTo(tn) : (parseBlock ? tn->prev : tn->next);
 
 
 	// Next node in Linked-List of Tokens.
@@ -51,7 +51,7 @@ AST *parser::parseTNode(tNode tn) {
 		return new AST(ASSIGN);
 	else if(*tn == token::SKINNY_ARROW)
 		return new AST(BLOCK, parser::parseBlock(tn->prev));
-	else if(*tn == token::BAR && !tn->end)
+	else if(*tn == token::BAR && !tn->closing)
 		return new AST(LIST, parser::parseList(tn->prev));
 	else if(*tn == token::STRING)
 		// Call R-Value Constructor: Steal the name of STRING that will be Deleted soon.
@@ -65,7 +65,7 @@ ASTNode *parser::parseList(tNode tn) {
 	// Is this LIST a Parameter LIST of a Function?
 	static bool isParam;
 
-	if(*tn == token::BAR && tn->end) {
+	if(*tn == token::BAR && tn->closing) {
 
 		// Check if this LIST is a Param LIST.
 		if(*tn->prev == token::SKINNY_ARROW) isParam = true;

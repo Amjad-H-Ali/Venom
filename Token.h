@@ -113,10 +113,10 @@ struct TokenNode {
 	token::Token *tokenPtr;
 	token::TokenNode *next, *prev;
 	// Indicates that this node is an end to a BLOCK or LIST.
-	bool end;
+	bool closing;
 
 	TokenNode()
-		:tokenPtr(nullptr), next(nullptr), prev(nullptr), end(false)
+		:tokenPtr(nullptr), next(nullptr), prev(nullptr), closing(false)
 	{};
 
 	~TokenNode() {

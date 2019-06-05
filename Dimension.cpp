@@ -27,6 +27,7 @@ struct Dimension::Node {
 		std::cout << "Node Was Deleted!" << " Address: " << this <<  std::endl;
 		next = nullptr, prev = nullptr, tn = nullptr;
 	}
+
 };
 
 
@@ -44,13 +45,16 @@ struct Dimension::NodeOfNodes {
 	// Closings To Dimension.
 	Node *opening,  *closing,  // Head Pointers.
 	 	 *openingT, *closingT; // Tail pointers.
-
+	 	 
 	NodeOfNodes *next, *prev;
+
+	// Current opening Token Node.
+	Node *currentNode;
 
 	NodeOfNodes()
 		:
-			opening(nullptr), closing(nullptr), openingT(nullptr),
-			closingT(nullptr), next(nullptr), prev(nullptr)
+			opening(nullptr), closing(nullptr), openingT(nullptr), 
+			closingT(nullptr), next(nullptr), prev(nullptr), currentNode(nullptr)
 	{std::cout << "NodeOfNodes Was Created!" << " Address: " << this <<  std::endl;};
 
 
@@ -69,6 +73,20 @@ struct Dimension::NodeOfNodes {
 		openingT = nullptr, closingT = nullptr,
 		next = nullptr, prev = nullptr;
 	}
+
+	// Updates current Node pointer to represent next opening Token Node.
+	NodeOfNodes *shift() {
+		// Return next NodeOfNodes.
+		if(!currentNode->prev)
+			return prev;
+
+		currentNode = currentNode->prev;
+
+		// Return current NodeOfNodes with updated current Node.
+		return this;
+	}
+
+
 };
 
 
@@ -84,9 +102,23 @@ Dimension::~Dimension() {
 
 
 
+const token::TokenNode *Dimension::getCurrentOpen() {
+	// Store current state of NodeOfNodes.
+	NodeOfNodes *currNodeOfNodes = currentNodeOfNodes;
+
+	// Update to represent next opening Token Node.
+	currentNodeOfNodes = currentNodeOfNodes->shift();
+
+	std::cout << "CURRENT NODEOFNODE: " <<currentNodeOfNodes << std::endl;
+
+	return currNodeOfNodes->currentNode->tn;
+};
+
 
 // Insert Opening to a new Dimension into a Linked-List.
 void Dimension::insertOpen(const token::TokenNode *tn) {
+
+	std::cout << "TN OPEN ADDRESS: " << tn << std::endl;
 
 	if(D == 0) { // New Block or Array
 
@@ -99,7 +131,13 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 		// Set neighbor prev (if exist) to point to newNodeOfNodes node.
 		if(head) newNodeOfNodes->next->prev = newNodeOfNodes;
-		else tail = newNodeOfNodes; // It's the first (will be last) one, so set Tail.
+
+		else {
+			tail = newNodeOfNodes;    // It's the first (will be last) one, so set Tail.
+
+			currentNodeOfNodes = newNodeOfNodes; // This NodeOfNodes must be the first (will be last) node.
+
+		}
 
 		head = newNodeOfNodes; // Set Head.
 
@@ -119,7 +157,16 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 	// Set neighbor prev (if exist) to point to newOpen node.
 	if(head->opening) newOpen->next->prev = newOpen;
-	else head->openingT = newOpen; // It's the first (will be last) one, so set Tail.
+
+	else {
+		head->openingT = newOpen; // It's the first (will be last) one, so set Tail.
+
+		// Since first (will be last via LIFO) Node,
+		// assign currentOpen to point to it.
+		head->currentNode = newOpen; 
+	}
+	
+
 
 	head->opening = newOpen; // Set Head
 
@@ -132,7 +179,10 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 
 // Insert Closing to a new Dimension into a Linked-List.
-void Dimension::insertClose(const token::TokenNode *tn) {
+void Dimension::insertClose(token::TokenNode *tn) {
+
+	// This Token node closes a Dimension.
+	tn->closing = true;
 
 	// TODO. Throw error if head DNE.
 
