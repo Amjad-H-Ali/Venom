@@ -111,12 +111,18 @@ private:
 struct TokenNode {
 
 	token::Token *tokenPtr;
-	token::TokenNode *next, *prev;
+
+	// If this node is a "closing" or "opening" to a BLOCK or LIST,
+	// then it has a matching pair. Every other nodes' is set to nullptr.
+	token::TokenNode *next, *prev, *matchingPair;
+
 	// Indicates that this node is an end to a BLOCK or LIST.
 	bool closing;
 
 	TokenNode()
-		:tokenPtr(nullptr), next(nullptr), prev(nullptr), closing(false)
+		:
+			tokenPtr(nullptr), next(nullptr), prev(nullptr), 
+			matchingPair(nullptr), closing(false)
 	{};
 
 	~TokenNode() {

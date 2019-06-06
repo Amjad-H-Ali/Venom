@@ -9,7 +9,7 @@
 */
 struct Dimension::Node {
 
-	const token::TokenNode *tn;
+	token::TokenNode *tn;
 
 	Node *next, *prev;
 
@@ -44,17 +44,17 @@ struct Dimension::NodeOfNodes {
 	// Linked-List of Openings and 
 	// Closings To Dimension.
 	Node *opening,  *closing,  // Head Pointers.
-	 	 *openingT, *closingT; // Tail pointers.
-	 	 
+	 	 *openingT, *closingT, // Tail pointers.
+	 	 *matchingOpenNode; 
 	NodeOfNodes *next, *prev;
 
 	// Current opening Token Node.
-	Node *currentNode;
+	// Node *currentNode;
 
 	NodeOfNodes()
 		:
 			opening(nullptr), closing(nullptr), openingT(nullptr), 
-			closingT(nullptr), next(nullptr), prev(nullptr), currentNode(nullptr)
+			closingT(nullptr), next(nullptr), prev(nullptr), matchingOpenNode(nullptr)
 	{std::cout << "NodeOfNodes Was Created!" << " Address: " << this <<  std::endl;};
 
 
@@ -74,17 +74,26 @@ struct Dimension::NodeOfNodes {
 		next = nullptr, prev = nullptr;
 	}
 
-	// Updates current Node pointer to represent next opening Token Node.
-	NodeOfNodes *shift() {
-		// Return next NodeOfNodes.
-		if(!currentNode->prev)
-			return prev;
+	// Gets the corresponding open Node of a closing Node
+	Node *getMatchingOpenNode() {
+		Node *temp = matchingOpenNode;
 
-		currentNode = currentNode->prev;
+		matchingOpenNode = matchingOpenNode->next;
 
-		// Return current NodeOfNodes with updated current Node.
-		return this;
+		return temp;
 	}
+
+	// Updates current Node pointer to represent next opening Token Node.
+	// NodeOfNodes *shift() {
+	// 	// Return next NodeOfNodes.
+	// 	if(!currentNode->prev)
+	// 		return prev;
+
+	// 	currentNode = currentNode->prev;
+
+	// 	// Return current NodeOfNodes with updated current Node.
+	// 	return this;
+	// }
 
 
 };
@@ -102,21 +111,21 @@ Dimension::~Dimension() {
 
 
 
-const token::TokenNode *Dimension::getCurrentOpen() {
-	// Store current state of NodeOfNodes.
-	NodeOfNodes *currNodeOfNodes = currentNodeOfNodes;
+// const token::TokenNode *Dimension::getMatchingOpen() {
+// 	// Store current state of NodeOfNodes.
+// 	NodeOfNodes *currNodeOfNodes = currentNodeOfNodes;
 
-	// Update to represent next opening Token Node.
-	currentNodeOfNodes = currentNodeOfNodes->shift();
+// 	// Update to represent next opening Token Node.
+// 	currentNodeOfNodes = currentNodeOfNodes->shift();
 
-	std::cout << "CURRENT NODEOFNODE: " <<currentNodeOfNodes << std::endl;
+// 	std::cout << "CURRENT NODEOFNODE: " <<currentNodeOfNodes << std::endl;
 
-	return currNodeOfNodes->currentNode->tn;
-};
+// 	return currNodeOfNodes->currentNode->tn;
+// };
 
 
 // Insert Opening to a new Dimension into a Linked-List.
-void Dimension::insertOpen(const token::TokenNode *tn) {
+void Dimension::insertOpen(token::TokenNode *tn) {
 
 	std::cout << "TN OPEN ADDRESS: " << tn << std::endl;
 
@@ -135,7 +144,7 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 		else {
 			tail = newNodeOfNodes;    // It's the first (will be last) one, so set Tail.
 
-			currentNodeOfNodes = newNodeOfNodes; // This NodeOfNodes must be the first (will be last) node.
+			// currentNodeOfNodes = newNodeOfNodes; // This NodeOfNodes must be the first (will be last) node.
 
 		}
 
@@ -163,12 +172,14 @@ void Dimension::insertOpen(const token::TokenNode *tn) {
 
 		// Since first (will be last via LIFO) Node,
 		// assign currentOpen to point to it.
-		head->currentNode = newOpen; 
+		// head->currentNode = newOpen; 
 	}
 	
 
 
 	head->opening = newOpen; // Set Head
+
+	head->matchingOpenNode = newOpen; // Set to first node in Linked-List.
 
 	// Finish.
 
@@ -183,6 +194,15 @@ void Dimension::insertClose(token::TokenNode *tn) {
 
 	// This Token node closes a Dimension.
 	tn->closing = true;
+
+
+	Node *matchingOpenNode = head->getMatchingOpenNode();
+
+	// Assign closing node's corresponding open node.
+	tn->matchingPair = matchingOpenNode->tn;
+
+	// Assign opening node's corresponding close node.
+	matchingOpenNode->tn->matchingPair = tn;
 
 	// TODO. Throw error if head DNE.
 

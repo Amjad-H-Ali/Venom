@@ -13,14 +13,14 @@ namespace utility {
 // UTILITIES 
 
 // Skips to begining of LIST or BLOCK
-tNode skipTo(tNode tn);
+// tNode skipTo(tNode tn);
 
 }; // utility
 
 // PARSER functions
 
 // MAIN parser function
-ASTNode *parse(tNode tn, bool parseBlock=false);
+ASTNode *parse(tNode tn, tNode = nullptr);
 
 // Parses a specific token Node and returns an AST.
 AST *parseTNode(tNode tn);

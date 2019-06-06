@@ -32,7 +32,7 @@ protected:
 	NodeOfNodes *head; // Head Pointer.
 	NodeOfNodes *tail; // Tail Pointer
 
-	NodeOfNodes *currentNodeOfNodes;
+	// NodeOfNodes *currentNodeOfNodes;
 
 	// Dimension
 	unsigned int D = 0;
@@ -40,18 +40,18 @@ protected:
 
 	// Only inherited classes can call constructor
 	Dimension()
-		:head(nullptr), tail(nullptr), currentNodeOfNodes(nullptr)
+		:head(nullptr), tail(nullptr)
 	{};
 
 	~Dimension();
 
 public:
 
-	const token::TokenNode *getCurrentOpen();
+	// const token::TokenNode *getMatchingOpen();
 
 
 	// Insert Opening to a new ArrayDimension into a Linked-List.
-	void insertOpen(const token::TokenNode *tn);
+	void insertOpen(token::TokenNode *tn);
 
 	// Insert Closing to a new ArrayDimension into a Linked-List.
 	void insertClose(token::TokenNode *tn);

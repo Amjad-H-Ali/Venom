@@ -33,48 +33,48 @@
 
 	
 
-// 	D->insertOpen(tn);
-// 	d->insertClose(tn);
+// 	// D->insertOpen(tn);
+// 	// d->insertClose(tn);
 
 
-// 	d->insertOpen(tn);
-// 	d->insertClose(tn);
+// 	// d->insertOpen(tn);
+// 	// d->insertClose(tn);
 
-// 	d->insertOpen(tn);
-// 	d->insertClose(tn);
-
-
-// 	D->insertOpen(tn);
-// 	d->insertClose(tn);
+// 	// d->insertOpen(tn);
+// 	// d->insertClose(tn);
 
 
+// 	// D->insertOpen(tn);
+// 	// d->insertClose(tn);
 
 
 
-// 	b->insertOpen(tn);
-// 	B->insertClose(tn);
 
 
-// 	b->insertOpen(tn2);
-// 	B->insertClose(tn2);
-
-// 	B->insertOpen(tn3);
-// 	B->insertClose(tn3);
+// 	// b->insertOpen(tn);
+// 	// B->insertClose(tn);
 
 
-// 	B->insertOpen(tn4);
-// 	b->insertClose(tn4);
+// 	// b->insertOpen(tn2);
+// 	// B->insertClose(tn2);
+
+// 	// B->insertOpen(tn3);
+// 	// B->insertClose(tn3);
 
 
-// 	auto n = b->getCurrentOpen();
+// 	// B->insertOpen(tn4);
+// 	// b->insertClose(tn4);
 
-// 	auto z = b->getCurrentOpen();
 
-// 	auto w = b->getCurrentOpen();
+// 	// auto n = b->getCurrentOpen();
 
-// 	std::cout << n << std::endl;
-// 	std::cout << z << std::endl;
-// 	std::cout << w << std::endl;
+// 	// auto z = b->getCurrentOpen();
+
+// 	// auto w = b->getCurrentOpen();
+
+// 	// std::cout << n << std::endl;
+// 	// std::cout << z << std::endl;
+// 	// std::cout << w << std::endl;
 
 
 // 	// d->insertOpen(tn2);

@@ -5,21 +5,17 @@
 namespace utils = parser::utility;
 
 
-ASTNode *parser::parse(tNode tn, bool parseBlock) {
+ASTNode *parser::parse(tNode tn, tNode exit) {
 
-	if(!tn || (parseBlock && tn->closing && *tn == token::NEWLINE)) return nullptr;
+	if(tn == exit) return nullptr;
 
-
-	if(parseBlock) std::cout << tn->tokenPtr->getTypeName() << "  " << "TRUE" << std::endl;
-
-	else std::cout << tn->tokenPtr->getTypeName()<< "  " << "FALSE" << std::endl;
 
 	// Skip BLOCK or LIST if end node is detected.
-	tNode next = (tn->closing) ? utils::skipTo(tn) : (parseBlock ? tn->prev : tn->next);
+	tNode next = tn->closing ? tn->matchingPair : tn->next;
 
 
 	// Next node in Linked-List of Tokens.
-	ASTNode *head = parse(next, parseBlock);
+	ASTNode *head = parse(next, exit);
 
 	AST *newAST = parser::parseTNode(tn);
 
@@ -50,9 +46,9 @@ AST *parser::parseTNode(tNode tn) {
 	else if(*tn == token::IS)
 		return new AST(ASSIGN);
 	else if(*tn == token::SKINNY_ARROW)
-		return new AST(BLOCK, parser::parseBlock(tn->prev));
-	else if(*tn == token::BAR && !tn->closing)
-		return new AST(LIST, parser::parseList(tn->prev));
+		return new AST(BLOCK, parser::parseBlock(tn));
+	else if(*tn == token::RBRACKET)
+		return new AST(LIST, parser::parseList(tn));
 	else if(*tn == token::STRING)
 		// Call R-Value Constructor: Steal the name of STRING that will be Deleted soon.
 		return new AST(STR, std::move((*tn->tokenPtr)));
@@ -110,8 +106,8 @@ ASTNode *parser::parseList(tNode tn) {
 };
 
 
-ASTNode *parser::parseBlock(tNode tn) {
-	return parser::parse(tn, true);
+ASTNode *parser::parseBlock(tNode openingTN) {
+	return parser::parse(openingTN->matchingPair->next, openingTN);
 };
 
 
@@ -121,8 +117,8 @@ ASTNode *parser::parseBlock(tNode tn) {
 // UTILITIES 
 
 // Skips to begining of LIST or BLOCK
-tNode utils::skipTo(tNode tn) {
-	if(tn == token::RBRACKET)
-		return arrayD.getCurrentOpen();
-	return blockD.getCurrentOpen();
-};
+// tNode utils::skipToOpen(tNode tn) {
+// 	if(tn == token::RBRACKET)
+// 		return arrayD.getCurrentOpen();
+// 	return blockD.getCurrentOpen();
+// };
