@@ -7,7 +7,7 @@
 
 int main(){
 
-	// token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
+	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
 
 	
 

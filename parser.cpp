@@ -122,11 +122,7 @@ ASTNode *parser::parseBlock(tNode tn) {
 
 // Skips to begining of LIST or BLOCK
 tNode utils::skipTo(tNode tn) {
-	tNode begining;
-	if(*tn == token::BAR)
-		for(begining = tn->next; *begining != token::BAR; begining = begining->next);
-	else
-		for(begining = tn->next; *begining != token::SKINNY_ARROW; begining = begining->next);
-
-	return begining;
+	if(tn == token::RBRACKET)
+		return arrayD.getCurrentOpen();
+	return blockD.getCurrentOpen();
 };
