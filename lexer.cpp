@@ -42,11 +42,18 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		separate Tokens.
 	*/
 	in >> std::noskipws;
-	while(in >> c) { 
+	while(in >> c || *blockD > 0) { 
 
+		static int count = 0;
+		std::cout << "CHARMOO: " << count++ << ' ' << c << std::endl;
+
+		if(in.eof()) {
+			std::cout << "==============================================================================" << std::endl;
+			newTokenPtr = new token::Token((char *)"\n");
+		}
 
 		// Single Character Token
-		if(utils::isSinglyNamedToken(c)) 
+		else if(utils::isSinglyNamedToken(c)) 
 			newTokenPtr = new token::Token(utils::chompSingleChar(c, in));
 		// AlphaNumeric(eg. Identifier, Keyword, etc.)
 		else if(utils::isEligibleStartToAlphaNum(c)) 
@@ -60,6 +67,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		// TAB
 		else if(utils::isEscSeq(c))
 			newTokenPtr = new token::Token(utils::chompSingleChar(c, in));
+		
 		else continue; // Probably throw an error here, but continue for spaces.
 
 
@@ -92,6 +100,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 		
 	} // While
 
+	std::cout << blockD->getD()<< std::endl;
 
 
 	return headNode;
@@ -103,9 +112,8 @@ token::TokenNode *lexer::lexer(char *fileName) {
 // respective Object.
 void lexer::insertDimension(token::TokenNode *tn) {
 	if(*tn == token::LBRACKET) {
-		
-		arrayD->insertOpen(tn);
 		std::cout << "OPEN to Array" << std::endl;
+		arrayD->insertOpen(tn);
 	}
 	else if (*tn == token::SKINNY_ARROW) {
 		std::cout << "OPEN to Func" << std::endl;
@@ -179,8 +187,6 @@ char *utils::chompSingleChar(char &c, INFILE in) {
 	// Set file pointer before Character to chomp
 	// since read is not start inclusive.
 	in.seekg(in.tellg()-(decltype(in.tellg()))1, in.beg);
-
-	std::cout << "Chomp: " << c << std::endl;
 
 	return utils::makeC_String(in, 1);
 };

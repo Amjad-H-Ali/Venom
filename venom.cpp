@@ -20,10 +20,14 @@ int main(){
 	// 		std::cout << "  END: FALSE" << std::endl;
 	// }
 
-	// ASTNode *astHead = parser::parse(tHead);
+	std::cout << "MAIN" << std::endl;
 
-	// for(ASTNode *ptr = astHead; ptr; ptr = ptr->next)
-	// 	std::cout << ptr->value->getTypeName(ptr->value->getType()) << std::endl;
+	std::cout << tHead->matchingPair->matchingPair << " " << tHead->tokenPtr->getTypeName() << std::endl;
+
+	ASTNode *astHead = parser::parse(tHead);
+
+	for(ASTNode *ptr = astHead; ptr; ptr = ptr->next)
+		std::cout << ptr->value->getTypeName(ptr->value->getType()) << std::endl;
 
 
 };

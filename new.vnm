@@ -4,5 +4,3 @@ func is |name| ->
 	func2 is |moo| ->
 		"cat"
 		[[]]
-
-foo

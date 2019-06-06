@@ -20,13 +20,14 @@ namespace utility {
 // PARSER functions
 
 // MAIN parser function
-ASTNode *parse(tNode tn, tNode = nullptr);
+ASTNode *parse(tNode tn, tNode exit= nullptr);
 
 // Parses a specific token Node and returns an AST.
 AST *parseTNode(tNode tn);
 
 // Parses a LIST from a linked-list of token nodes.
-ASTNode *parseList(tNode tn);
+// ASTNode *parseList(tNode tn);
+ASTNode *parseList(tNode openingTN);
 
 // Parses a BLOCK from a linked-list of token nodes.
 ASTNode *parseBlock(tNode tn);

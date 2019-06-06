@@ -208,19 +208,30 @@ void Dimension::insertClose(token::TokenNode *tn) {
 
 	Node *newClose = new Node();
 
+	std::cout << "A" << std::endl;
 	
 	// Insert newClose into Linked-List.
 	// Start...
 
 	newClose->tn = tn;
 
+	std::cout << "B" << std::endl;
+
 	newClose->next = head->closing;
+
+	std::cout << "C" << std::endl;
 
 	// Set neighbor prev (if exist) to point to newClose node.
 	if(head->closing) newClose->next->prev = newClose;
 	else head->closingT = newClose; // It's the first (will be last) one, so set Tail.
 
+	std::cout << "D" << std::endl;
+
+
 	head->closing = newClose; // Set Head
+
+	std::cout << "E" << std::endl;
+
 
 	// if(D <= 0) throw error
 
