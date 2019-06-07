@@ -1,4 +1,7 @@
-#pragma once
+#ifndef PARSER_H
+
+#define PARSER_H
+
 #include "AST.h"
 #include "Token.h"
 
@@ -34,3 +37,4 @@ ASTNode *parseBlock(tNode tn);
 
 
 }; // parser
+#endif

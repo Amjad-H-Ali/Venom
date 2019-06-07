@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AST_H
+
+#define AST_H
 
 #include "Token.h"
 
@@ -83,5 +85,7 @@ struct ASTNode {
 		:value(nullptr), next(nullptr), prev(nullptr)
 	{};
 };
+
+#endif
 
 

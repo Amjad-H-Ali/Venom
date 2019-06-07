@@ -1,4 +1,7 @@
-#pragma once
+#ifndef LEXER_H
+
+#define LEXER_H
+
 #include <iostream>
 #include "Token.h"
 
@@ -84,3 +87,5 @@ namespace utility	{
 	
 	
 }; // lexer 
+
+#endif
