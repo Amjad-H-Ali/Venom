@@ -111,6 +111,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 // Inserts start/end to block or array in 
 // respective Object.
 void lexer::insertDimension(token::TokenNode *tn) {
+
 	if(*tn == token::LBRACKET) {
 		std::cout << "OPEN to Array" << std::endl;
 		arrayD->insertOpen(tn);
