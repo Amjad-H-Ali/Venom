@@ -16,7 +16,21 @@ protected:
 		of an existing one. Each instance will be chained together 
 		in a Linked-List.
 	*/
-	struct Node;
+
+	/*
+		Each instance of Open class type represents a Token Node
+		that opens up a new dimension, or in other words, the 
+		start of a new LIST or BLOCK (ie. LBRACKET, SKINNY_ARROW).
+	*/
+	struct Open;
+
+	/*
+		A stack of objects of type Open. This is where open Token 
+		Nodes, waiting to be paired with a closing Token Node, live.
+		Every time the "insertClose" method is invoked, an object is 
+		popped off the stack.
+	*/
+	Open *openStack;
 
 	/*
 	 	Each instance of this class will contain a Linked-List
@@ -25,12 +39,14 @@ protected:
 		of itself be chained in a linked list with the purpose of
 		representing separate arrays or blocks.
 	*/
-	struct NodeOfNodes;
+	// struct NodeOfNodes;
 
 
 
-	NodeOfNodes *head; // Head Pointer.
-	NodeOfNodes *tail; // Tail Pointer
+	// NodeOfNodes *head; // Head Pointer.
+	// NodeOfNodes *tail; // Tail Pointer
+
+
 
 	// NodeOfNodes *currentNodeOfNodes;
 
@@ -38,9 +54,10 @@ protected:
 	unsigned int D = 0;
 
 
+
 	// Only inherited classes can call constructor
 	Dimension()
-		:head(nullptr), tail(nullptr)
+		:opens(nullptr)
 	{};
 
 	~Dimension();
@@ -50,10 +67,25 @@ public:
 	// const token::TokenNode *getMatchingOpen();
 
 
-	// Insert Opening to a new ArrayDimension into a Linked-List.
+	/*
+		Instantiates an Open Type object that represents a
+		Token Node who opens a LIST or BLOCK. Attaches the
+		new instance to a Linked-List.
+
+		Params: Token Node that opens a LIST or BLOCK
+	*/
 	void insertOpen(token::TokenNode *tn);
 
-	// Insert Closing to a new ArrayDimension into a Linked-List.
+	/*
+		Assigns the "closing" member of the Token Node to true
+		and its "matchingPair" member to the corresponding open 
+		Token Node. That corresponding open Token Node's 
+		"matchingPair" member is set to this closing Token Node
+		that is passed in. Lastly. pops off that opening node 
+		from the stack of Open objects.
+
+		Params: Token Node that closed a LIST or BLOCK
+	*/
 	void insertClose(token::TokenNode *tn);
 
 	// Accessor

@@ -48,13 +48,7 @@ token::TokenNode *lexer::lexer(char *fileName) {
 	in >> std::noskipws;
 	while(in >> c || *blockD > 0) { 
 
-		static int count = 0;
-		std::cout << "CHARMOO: " << count++ << ' ' << c << std::endl;
-
-		if(in.eof()) {
-			std::cout << "==============================================================================" << std::endl;
-			newTokenPtr = new token::Token((char *)"\n");
-		}
+		if(in.eof()) newTokenPtr = new token::Token((char *)"\n");
 
 		// Single Character Token
 		else if(utils::isSinglyNamedToken(c)) 
@@ -339,9 +333,15 @@ bool utils::rangeOnlyHas(INFILE in, int places, char c) {
 	// Remember start position
 	auto startPos = in.tellg();
 
+	in >> std::noskipws;
+
 	for(int i = 0;i < places; i ++) {
 
 		in >> container;
+
+		if(in.eof()) return EOF;
+
+		if(container == '\n' || container == ' ') {i--; continue;}
 
 		std::cout << "RANGE" << std::endl;
 		

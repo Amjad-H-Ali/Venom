@@ -1,6 +1,15 @@
 func is |name| ->
-	"Hello"
-	"World"
-	func2 is |moo| ->
-		"cat"
-		[[]]
+
+	func2 is |age| ->
+	
+		func3 is |age| ->
+
+			func4 is |age| ->
+
+				func5 is |age| ->
+
+					func6 is |age| ->
+
+						func7 is |age| ->
+
+							[[ ["I am a string inside a 3D array inside 7 layers of functions"] ]]

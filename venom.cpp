@@ -9,7 +9,13 @@ int main(){
 
 	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
 
-	
+	for(token::TokenNode *ptr = tHead; ptr; ptr = ptr->next) {
+		std::cout << "TN:             "<< ptr->tokenPtr->getTypeName() << std::endl;
+
+		if(*ptr == token::RBRACKET || *ptr == token::LBRACKET)
+			std::cout << "BRACKET:             "<< ptr->matchingPair << std::endl;
+
+	}
 
 	// for(token::TokenNode *ptr = tHead; ptr; ptr = ptr->next) {
 	// 	std::cout << ptr->tokenPtr->getTypeName() << " ADDRESS: " << ptr;
@@ -26,8 +32,8 @@ int main(){
 
 	ASTNode *astHead = parser::parse(tHead);
 
-	for(ASTNode *ptr = astHead; ptr; ptr = ptr->next)
-		std::cout << ptr->value->getTypeName(ptr->value->getType()) << std::endl;
+	
+
 
 
 };

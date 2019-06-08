@@ -2,30 +2,32 @@
 
 
 /*
-	Each instance of this class will contain a Token Node
-	that either is an opening to a new dimension or closing
-	of an existing one. Each instance will be chained together 
-	in a Linked-List.
+	Each instance of Open class type represents a Token Node
+	that opens up a new dimension, or in other words, the 
+	start of a new LIST or BLOCK (ie. LBRACKET, SKINNY_ARROW).
 */
-struct Dimension::Node {
+struct Dimension::Open {
 
 	token::TokenNode *tn;
 
-	Node *next, *prev;
+	// Node *next, *prev;
+	Node *next;
 
 	Node() 
-		:tn(nullptr), next(nullptr), prev(nullptr)
+		:tn(nullptr), next(nullptr)
 	{std::cout << "Node Was Created!" << " Address: " << this << std::endl;}
 
 	/* 
-		Destructor: Deletes Chain.
-		Do not delete tn, as tn is pointer to TokenNode
-		that is in use by other components.
+		Destructor: Deletes Chain of Open instances.
+		Does not delete tn, as tn is a pointer to a
+		Token Node that is in use by other components.
 	*/
 	~Node() {
 		if(next) delete next;
 		std::cout << "Node Was Deleted!" << " Address: " << this <<  std::endl;
-		next = nullptr, prev = nullptr, tn = nullptr;
+		// next = nullptr, prev = nullptr, tn = nullptr;
+		next = nullptr, tn = nullptr;
+
 	}
 
 };
@@ -39,72 +41,76 @@ struct Dimension::Node {
 	of itself be chained in a linked list with the purpose of
 	representing separate arrays or blocks.
 */
-struct Dimension::NodeOfNodes {
+// struct Dimension::NodeOfNodes {
 
-	// Linked-List of Openings and 
-	// Closings To Dimension.
-	Node *opening,  *closing,  // Head Pointers.
-	 	 *openingT, *closingT, // Tail pointers.
-	 	 *matchingOpenNode; 
-	NodeOfNodes *next, *prev;
+// 	// Linked-List of Openings and 
+// 	// Closings To Dimension.
+// 	Node *opening,  *closing,  // Head Pointers.
+// 	 	 *openingT, *closingT, // Tail pointers.
+// 	 	 *matchingOpenNode; 
+// 	NodeOfNodes *next, *prev;
 
-	// Current opening Token Node.
-	// Node *currentNode;
+// 	// Current opening Token Node.
+// 	// Node *currentNode;
 
-	NodeOfNodes()
-		:
-			opening(nullptr), closing(nullptr), openingT(nullptr), 
-			closingT(nullptr), next(nullptr), prev(nullptr), matchingOpenNode(nullptr)
-	{std::cout << "NodeOfNodes Was Created!" << " Address: " << this <<  std::endl;};
-
-
-	~NodeOfNodes() {
-
-		std::cout << "NodeOfNodes Was Deleted!" << " Address: " << this <<  std::endl;
-
-		// Delete Linked-List of Nodes.
-		if(opening) delete opening;
-		if(closing) delete closing;
-
-		// Delete chain of objects of NodeOfNodes Type.
-		if(next) delete next;
-
-		opening = nullptr, closing = nullptr,
-		openingT = nullptr, closingT = nullptr,
-		next = nullptr, prev = nullptr;
-	}
-
-	// Gets the corresponding open Node of a closing Node
-	Node *getMatchingOpenNode() {
-		Node *temp = matchingOpenNode;
-
-		matchingOpenNode = matchingOpenNode->next;
-
-		return temp;
-	}
-
-	// Updates current Node pointer to represent next opening Token Node.
-	// NodeOfNodes *shift() {
-	// 	// Return next NodeOfNodes.
-	// 	if(!currentNode->prev)
-	// 		return prev;
-
-	// 	currentNode = currentNode->prev;
-
-	// 	// Return current NodeOfNodes with updated current Node.
-	// 	return this;
-	// }
+// 	NodeOfNodes()
+// 		:
+// 			opening(nullptr), closing(nullptr), openingT(nullptr), 
+// 			closingT(nullptr), next(nullptr), prev(nullptr), matchingOpenNode(nullptr)
+// 	{std::cout << "NodeOfNodes Was Created!" << " Address: " << this <<  std::endl;};
 
 
-};
+// 	~NodeOfNodes() {
+
+// 		std::cout << "NodeOfNodes Was Deleted!" << " Address: " << this <<  std::endl;
+
+// 		// Delete Linked-List of Nodes.
+// 		if(opening) delete opening;
+// 		if(closing) delete closing;
+
+// 		// Delete chain of objects of NodeOfNodes Type.
+// 		if(next) delete next;
+
+// 		opening = nullptr, closing = nullptr,
+// 		openingT = nullptr, closingT = nullptr,
+// 		next = nullptr, prev = nullptr;
+// 	}
+
+// 	// Gets the corresponding open Node of a closing Node
+// 	Node *getMatchingOpenNode() {
+// 		Node *temp = matchingOpenNode;
+
+// 		matchingOpenNode = matchingOpenNode->next;
+
+// 		return temp;
+// 	}
+
+// 	// Updates current Node pointer to represent next opening Token Node.
+// 	// NodeOfNodes *shift() {
+// 	// 	// Return next NodeOfNodes.
+// 	// 	if(!currentNode->prev)
+// 	// 		return prev;
+
+// 	// 	currentNode = currentNode->prev;
+
+// 	// 	// Return current NodeOfNodes with updated current Node.
+// 	// 	return this;
+// 	// }
+
+
+// };
 
 
 
 
 Dimension::~Dimension() {
 	// Delete Linked-List of NodeOfNodes.
-	if(head) delete head;
-	head = nullptr, tail = nullptr;
+	// if(head) delete head;
+
+	// Deletes remaining Open objects, if any.
+	if(openStack) delete openStack;
+
+	// head = nullptr, tail = nullptr;
 
 	std::cout<<"Dimension was Deleted" << " Address:: " << this << std::endl;
 };
@@ -124,11 +130,15 @@ Dimension::~Dimension() {
 // };
 
 
-// Insert Opening to a new Dimension into a Linked-List.
+/*
+	Instantiates an Open Type object that represents a
+	Token Node who opens a LIST or BLOCK. Attaches the
+	new instance to a Linked-List.
+
+	Params: Token Node that opens a LIST or BLOCK
+*/
 void Dimension::insertOpen(token::TokenNode *tn) {
-
-	std::cout << "TN OPEN ADDRESS: " << tn << std::endl;
-
+	
 	if(D == 0) { // New Block or Array
 
 		NodeOfNodes *newNodeOfNodes = new NodeOfNodes(); 
@@ -187,22 +197,40 @@ void Dimension::insertOpen(token::TokenNode *tn) {
 
 };
 
+/*
+	Assigns the "closing" member of the Token Node to true
+	and its "matchingPair" member to the corresponding open 
+	Token Node. That corresponding open Token Node's 
+	"matchingPair" member is set to this closing Token Node
+	that is passed in. Lastly. pops off that opening node 
+	from the stack of Open objects.
 
-
-// Insert Closing to a new Dimension into a Linked-List.
+	Params: Token Node that closed a LIST or BLOCK
+*/
 void Dimension::insertClose(token::TokenNode *tn) {
 
 	// This Token node closes a Dimension.
 	tn->closing = true;
 
 
-	Node *matchingOpenNode = head->getMatchingOpenNode();
+	// Node *matchingOpenNode = head->getMatchingOpenNode();
 
 	// Assign closing node's corresponding open node.
-	tn->matchingPair = matchingOpenNode->tn;
+	// tn->matchingPair = matchingOpenNode->tn;
+
+	// Assign nodes' corresponding open and closing node.
+	tn->matchingPair = head->opening->tn; // Setting closing token node's matching pair.
+
+	tn->matchingPair->matchingPair = tn; // Setting opening token node's matching pair.
+
+
+	// Delete opening node from Linked-List as it has been 
+	// closed off. (Dimension has been closed).
+
+	head->opening->
 
 	// Assign opening node's corresponding close node.
-	matchingOpenNode->tn->matchingPair = tn;
+	// matchingOpenNode->tn->matchingPair = tn;
 
 	// TODO. Throw error if head DNE.
 
