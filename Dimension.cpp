@@ -129,6 +129,23 @@ Dimension::~Dimension() {
 // 	return currNodeOfNodes->currentNode->tn;
 // };
 
+// Pushes to the stack.
+void Dimension::push(Open *newOpen) {
+	newOpen->next = openStack;
+
+	openStack = newOpen; // Set Head
+};
+
+// Pops off the stack.
+void Dimension::pop() {
+	Open *temp = openStack;
+
+	openStack = openStack->next;
+
+	temp->next = nullptr;
+
+	delete temp;
+};
 
 /*
 	Instantiates an Open Type object that represents a
@@ -138,58 +155,61 @@ Dimension::~Dimension() {
 	Params: Token Node that opens a LIST or BLOCK
 */
 void Dimension::insertOpen(token::TokenNode *tn) {
-	
-	if(D == 0) { // New Block or Array
 
-		NodeOfNodes *newNodeOfNodes = new NodeOfNodes(); 
+	// if(D == 0) { // New Block or Array
 
-		// Insert newNodeOfNodes into Linked-List.
-		// Start...
+	// 	NodeOfNodes *newNodeOfNodes = new NodeOfNodes(); 
 
-		newNodeOfNodes->next = head; 
+	// 	// Insert newNodeOfNodes into Linked-List.
+	// 	// Start...
 
-		// Set neighbor prev (if exist) to point to newNodeOfNodes node.
-		if(head) newNodeOfNodes->next->prev = newNodeOfNodes;
+	// 	newNodeOfNodes->next = head; 
 
-		else {
-			tail = newNodeOfNodes;    // It's the first (will be last) one, so set Tail.
+	// 	// Set neighbor prev (if exist) to point to newNodeOfNodes node.
+	// 	if(head) newNodeOfNodes->next->prev = newNodeOfNodes;
 
-			// currentNodeOfNodes = newNodeOfNodes; // This NodeOfNodes must be the first (will be last) node.
+	// 	else {
+	// 		tail = newNodeOfNodes;    // It's the first (will be last) one, so set Tail.
 
-		}
+	// 		// currentNodeOfNodes = newNodeOfNodes; // This NodeOfNodes must be the first (will be last) node.
 
-		head = newNodeOfNodes; // Set Head.
+	// 	}
 
-		// Finish
-	}
+	// 	head = newNodeOfNodes; // Set Head.
+
+	// 	// Finish
+	// }
 
 
-	Node *newOpen = new Node();
-
-	
-	// Insert newOpen into Linked-List.
-	// Start...
+	Open *newOpen = new Open();
 
 	newOpen->tn = tn;
 
-	newOpen->next = head->opening;
+	// Insert "newOpen" into Linked-List (stack).
+	push(newOpen);
+
+	// newOpen->next = head->opening;
+
+	
 
 	// Set neighbor prev (if exist) to point to newOpen node.
-	if(head->opening) newOpen->next->prev = newOpen;
+	// if(head->opening) newOpen->next->prev = newOpen;
 
-	else {
-		head->openingT = newOpen; // It's the first (will be last) one, so set Tail.
+	// else {
+		// head->openingT = newOpen; // It's the first (will be last) one, so set Tail.
 
 		// Since first (will be last via LIFO) Node,
 		// assign currentOpen to point to it.
 		// head->currentNode = newOpen; 
-	}
+	// }
 	
 
 
-	head->opening = newOpen; // Set Head
+	// head->opening = newOpen; // Set Head
 
-	head->matchingOpenNode = newOpen; // Set to first node in Linked-List.
+
+
+	// head->matchingOpenNode = newOpen; // Set to first node in Linked-List.
 
 	// Finish.
 
@@ -201,8 +221,8 @@ void Dimension::insertOpen(token::TokenNode *tn) {
 	Assigns the "closing" member of the Token Node to true
 	and its "matchingPair" member to the corresponding open 
 	Token Node. That corresponding open Token Node's 
-	"matchingPair" member is set to this closing Token Node
-	that is passed in. Lastly. pops off that opening node 
+	"matchingPair" member is set to the closing Token Node
+	that is passed in. Lastly, pops off that opening node 
 	from the stack of Open objects.
 
 	Params: Token Node that closed a LIST or BLOCK
@@ -212,6 +232,17 @@ void Dimension::insertClose(token::TokenNode *tn) {
 	// This Token node closes a Dimension.
 	tn->closing = true;
 
+	// Assign nodes' corresponding open and closing node.
+
+	tn->matchingPair = openStack->tn; // Setting closing Token Node's matching pair.
+
+	openStack->tn->matchingPair = tn; // Setting opening token node's matching pair.
+
+
+	// Pop Open object off stack as the open Token Node that it
+	// represents has been matched with a closing Token Node.
+	pop();
+
 
 	// Node *matchingOpenNode = head->getMatchingOpenNode();
 
@@ -219,46 +250,46 @@ void Dimension::insertClose(token::TokenNode *tn) {
 	// tn->matchingPair = matchingOpenNode->tn;
 
 	// Assign nodes' corresponding open and closing node.
-	tn->matchingPair = head->opening->tn; // Setting closing token node's matching pair.
+	// tn->matchingPair = head->opening->tn; // Setting closing token node's matching pair.
 
-	tn->matchingPair->matchingPair = tn; // Setting opening token node's matching pair.
+	// tn->matchingPair->matchingPair = tn; // Setting opening token node's matching pair.
 
 
 	// Delete opening node from Linked-List as it has been 
 	// closed off. (Dimension has been closed).
 
-	head->opening->
+	// head->opening->
 
 	// Assign opening node's corresponding close node.
 	// matchingOpenNode->tn->matchingPair = tn;
 
 	// TODO. Throw error if head DNE.
 
-	Node *newClose = new Node();
+	// Node *newClose = new Node();
 
-	std::cout << "A" << std::endl;
+	// std::cout << "A" << std::endl;
 	
-	// Insert newClose into Linked-List.
-	// Start...
+	// // Insert newClose into Linked-List.
+	// // Start...
 
-	newClose->tn = tn;
+	// newClose->tn = tn;
 
-	std::cout << "B" << std::endl;
+	// std::cout << "B" << std::endl;
 
-	newClose->next = head->closing;
+	// newClose->next = head->closing;
 
-	std::cout << "C" << std::endl;
+	// std::cout << "C" << std::endl;
 
-	// Set neighbor prev (if exist) to point to newClose node.
-	if(head->closing) newClose->next->prev = newClose;
-	else head->closingT = newClose; // It's the first (will be last) one, so set Tail.
+	// // Set neighbor prev (if exist) to point to newClose node.
+	// if(head->closing) newClose->next->prev = newClose;
+	// else head->closingT = newClose; // It's the first (will be last) one, so set Tail.
 
-	std::cout << "D" << std::endl;
+	// std::cout << "D" << std::endl;
 
 
-	head->closing = newClose; // Set Head
+	// head->closing = newClose; // Set Head
 
-	std::cout << "E" << std::endl;
+	// std::cout << "E" << std::endl;
 
 
 	// if(D <= 0) throw error

@@ -32,6 +32,12 @@ protected:
 	*/
 	Open *openStack;
 
+	// Pushes to the stack.
+	void push();
+
+	// Pops off the stack.
+	void pop();
+
 	/*
 	 	Each instance of this class will contain a Linked-List
 		of Tokens that are either Opening or Closing a dimension 
