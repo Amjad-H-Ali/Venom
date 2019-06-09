@@ -2,7 +2,11 @@
 
 #define PARSER_H
 
-#include "AST.h"
+#include "AST_BinOp.h"
+#include "AST_List.h"
+#include "AST_Block.h"
+#include "AST_STR.h"
+#include "AST_ID.h"
 #include "Token.h"
 
 // Alias for const token::TokenNode *
@@ -23,17 +27,17 @@ namespace utility {
 // PARSER functions
 
 // MAIN parser function
-ASTNode *parse(tNode tn, tNode exit= nullptr);
+AST *parse(tNode tn, tNode exit= nullptr);
 
 // Parses a specific token Node and returns an AST.
-AST *parseTNode(tNode tn);
+AST_Node *parseTNode(tNode tn);
 
 // Parses a LIST from a linked-list of token nodes.
 // ASTNode *parseList(tNode tn);
-ASTNode *parseList(tNode openingTN);
+AST *parseList(tNode openingTN);
 
 // Parses a BLOCK from a linked-list of token nodes.
-ASTNode *parseBlock(tNode tn);
+AST *parseBlock(tNode tn);
 
 
 }; // parser
