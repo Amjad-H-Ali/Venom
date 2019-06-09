@@ -3,6 +3,7 @@
 #define AST_ID_H
 
 #include "AST_Node.h"
+#include "Token.h"
 
 
 class AST_ID : public AST_Node {
@@ -15,8 +16,12 @@ private:
 
 
 public:
-
-	AST_ID(ast::AST_SYMBOL type, AST_Node *value);
+	/*	
+		R-Value constructor:
+		This constructor highjacks the name from an 
+		expiring object of type Token.
+	*/
+	AST_ID(ast::AST_SYMBOL type, AST_Node *value, token::Token &&tkObj);
 
 }; // AST_ID
 

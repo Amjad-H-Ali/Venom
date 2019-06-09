@@ -1,0 +1,28 @@
+#ifndef AST_STR_H
+
+#define AST_STR_H
+
+#include "AST_Node.h"
+#include "Token.h"
+
+
+class AST_STR : public AST_Node {
+
+private:
+
+	char *value;
+
+
+public:
+	/*	
+		R-Value constructor:
+		This constructor highjacks the name from an 
+		expiring object of type Token.
+	*/
+	AST_STR(ast::AST_SYMBOL type, token::Token &&tkObj);
+
+}; // AST_STR
+
+
+
+#endif
