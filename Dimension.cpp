@@ -11,20 +11,20 @@ struct Dimension::Open {
 	token::TokenNode *tn;
 
 	// Node *next, *prev;
-	Node *next;
+	Open *next;
 
-	Node() 
+	Open() 
 		:tn(nullptr), next(nullptr)
-	{std::cout << "Node Was Created!" << " Address: " << this << std::endl;}
+	{std::cout << "Open Was Created!" << " Address: " << this << std::endl;}
 
 	/* 
 		Destructor: Deletes Chain of Open instances.
 		Does not delete tn, as tn is a pointer to a
 		Token Node that is in use by other components.
 	*/
-	~Node() {
+	~Open() {
 		if(next) delete next;
-		std::cout << "Node Was Deleted!" << " Address: " << this <<  std::endl;
+		std::cout << "Open Was Deleted!" << " Address: " << this <<  std::endl;
 		// next = nullptr, prev = nullptr, tn = nullptr;
 		next = nullptr, tn = nullptr;
 

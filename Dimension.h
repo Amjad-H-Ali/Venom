@@ -33,7 +33,7 @@ protected:
 	Open *openStack;
 
 	// Pushes to the stack.
-	void push();
+	void push(Open *newOpen);
 
 	// Pops off the stack.
 	void pop();
@@ -63,7 +63,7 @@ protected:
 
 	// Only inherited classes can call constructor
 	Dimension()
-		:opens(nullptr)
+		:openStack(nullptr)
 	{};
 
 	~Dimension();
