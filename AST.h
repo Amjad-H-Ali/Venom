@@ -12,7 +12,7 @@ struct AST {
 	AST *next, *prev;
 
 	AST()
-		:value(nullptr), next(nullptr), prev(nullptr)
+		:node(nullptr), next(nullptr), prev(nullptr)
 	{};
 };
 

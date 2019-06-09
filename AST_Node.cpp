@@ -34,14 +34,12 @@ ast::AST_SYMBOL AST_Node::getType() const {
 
 
 char *AST_Node::getTypeName() const {
-	
-	switch(this->type) {
 
-#define N(symbol) case symbol: return (char *)#symbol;
-		ast::AST_LIST(N)
+#define N(symbol) if (ast::symbol == this->type)return (char *)#symbol;
+		AST_LIST(N)
 #undef N
 
-	}
+	else return nullptr;
 
 };
 

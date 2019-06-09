@@ -4,28 +4,28 @@
 #include "parser.h"
 #include "AST.h"
 
-void _log(ASTNode *node) {
+// void _log(AST *node) {
 
-	if(!node) return ;
+// 	if(!node) return ;
 
-	_log(node->next);
+// 	_log(node->next);
 
-	_log(node->value->getValue());
+// 	_log(node->node->getValue());
 
-	std::cout << node->value->getTypeName(node->value->getType()) << std::endl;
+// 	std::cout << node->value->getTypeName(node->value->getType()) << std::endl;
 
-	if(node->value->getName())
-		std::cout << node->value->getName() << std::endl;
+// 	if(node->value->getName())
+// 		std::cout << node->value->getName() << std::endl;
 
-};
+// };
 
 int main(){
 
 	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
 
-	ASTNode *astHead = parser::parse(tHead);
+	AST *astHead = parser::parse(tHead);
 
-	_log(astHead);
+	// _log(astHead);
 
 	
 

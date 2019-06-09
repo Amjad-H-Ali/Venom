@@ -21,7 +21,7 @@ public:
 		This constructor highjacks the name from an 
 		expiring object of type Token.
 	*/
-	AST_ID(ast::AST_SYMBOL type, AST_Node *value, token::Token &&tkObj);
+	AST_ID(ast::AST_SYMBOL type, token::Token &&tkObj);
 
 }; // AST_ID
 
