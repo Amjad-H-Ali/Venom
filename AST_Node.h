@@ -10,17 +10,23 @@
 
 	N: Unique Symbol of each Node in AST
 */
+
+namespace ast {
+
 #define AST_LIST(N) 			    \
 	N(ID)							\
 	N(ASSIGN)						\
 	N(STR)							\
 	N(LIST)							\
-	N(BLOCK)					
+	N(BLOCK)						\
+	N(FUNC)							
 
 // All AST Symbols
 #define N(symbol) symbol,
 	enum AST_SYMBOL {AST_LIST(N)};
 #undef N
+
+}; // ast
 
 
 // Base class of AST Nodes.
@@ -29,7 +35,7 @@ class AST_Node {
 private:
 
 	// Unique Symbol for AST_Node.
-	AST_SYMBOL type;
+	ast::AST_SYMBOL type;
 
 	// // May or may not have value.
 	// // (LISTS and BLOCKS have value)
@@ -41,7 +47,7 @@ private:
 
 public:
 
-	AST_Node(AST_SYMBOL type);
+	AST_Node(ast::AST_SYMBOL type);
 
 	// // STRINGS and IDs will probably use this...
 	// // Since they have unique names.
@@ -54,12 +60,12 @@ public:
 	// AST(AST_SYMBOL type, ASTNode *value);
 
 	// Overload comparison operator to compare unique symbols
-	bool operator==(AST_SYMBOL type) const;
+	bool operator==(ast::AST_SYMBOL type) const;
 
 	// ACCESSORS
 
 	// AST_Node unique symbol
-	AST_SYMBOL getType() const;
+	ast::AST_SYMBOL getType() const;
 
 	// AST_Node unique String
 	char *getTypeName() const;
@@ -69,5 +75,7 @@ public:
 	// ASTNode *getValue() const;
 
 }; // AST_Node
+
+
 
 #endif
