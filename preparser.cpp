@@ -1,11 +1,11 @@
 #include <iostream>
-#include "parser.h"
+#include "preparser.h"
 #include <utility>	// For move()
 
-namespace utils = parser::utility;
+namespace utils = preparser::utility;
 
 
-AST *parser::parse(tNode tn, tNode exit) {
+AST *preparser::preparse(tNode tn, tNode exit) {
 
 	if(tn == exit) return nullptr;
 
@@ -17,9 +17,9 @@ AST *parser::parse(tNode tn, tNode exit) {
 
 
 	// Next node in Linked-List of Tokens.
-	AST *head = parse(next, exit);
+	AST *head = preparse(next, exit);
 
-	AST_Node *newAST_Node = parser::parseTNode(tn);
+	AST_Node *newAST_Node = preparser::parseTNode(tn);
 
 	if(!newAST_Node) return head; // Probably throw error?
 
@@ -41,7 +41,7 @@ AST *parser::parse(tNode tn, tNode exit) {
 
 };
 
-AST_Node *parser::parseTNode(tNode tn) {
+AST_Node *preparser::parseTNode(tNode tn) {
 	if(*tn == token::IDENTIFIER)
 
 		// Call R-Value Constructor: Steal the name of IDENTIFIER that will be Deleted soon.
@@ -53,11 +53,11 @@ AST_Node *parser::parseTNode(tNode tn) {
 
 	else if(*tn == token::SKINNY_ARROW)
 
-		return new AST_Block(ast::BLOCK, parser::parseBlock(tn));
+		return new AST_Block(ast::BLOCK, preparser::parseBlock(tn));
 
 	else if(*tn == token::LBRACKET || (*tn == token::BAR && !tn->closing))
 
-		return new AST_List(ast::LIST, parser::parseList(tn));
+		return new AST_List(ast::LIST, preparser::parseList(tn));
 
 	else if(*tn == token::STRING)
 
@@ -67,17 +67,17 @@ AST_Node *parser::parseTNode(tNode tn) {
 	return nullptr;
 };
 
-AST *parser::parseList(tNode openingTN) {
+AST *preparser::parseList(tNode openingTN) {
 	std::cout << "PARSINGLIST:   " << openingTN << "matchingPair    " << openingTN->matchingPair<< std::endl;
 
-	return parser::parse(openingTN->matchingPair->next, openingTN);
+	return preparser::preparse(openingTN->matchingPair->next, openingTN);
 }
 
 
 
 
-AST *parser::parseBlock(tNode openingTN) {
-	return parser::parse(openingTN->matchingPair->next, openingTN);
+AST *preparser::parseBlock(tNode openingTN) {
+	return preparser::preparse(openingTN->matchingPair->next, openingTN);
 };
 
 

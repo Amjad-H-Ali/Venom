@@ -1,35 +1,28 @@
 #include <iostream>
 #include "Token.h"
 #include "lexer.h"
-#include "parser.h"
+#include "preparser.h"
 #include "AST.h"
 
-// void _log(AST *node) {
+void _log(AST *node) {
 
-// 	if(!node) return ;
+	if(!node) return ;
 
-// 	_log(node->next);
+	_log(node->next);
 
-// 	_log(node->node->getValue());
+	std::cout << node->node->getTypeName() << std::endl;
 
-// 	std::cout << node->value->getTypeName(node->value->getType()) << std::endl;
 
-// 	if(node->value->getName())
-// 		std::cout << node->value->getName() << std::endl;
 
-// };
+};
 
 int main(){
 
 	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
 
-	AST *astHead = parser::parse(tHead);
+	AST *astHead = preparser::preparse(tHead);
 
-	// _log(astHead);
-
-	
-
-
+	_log(astHead);
 
 };
 

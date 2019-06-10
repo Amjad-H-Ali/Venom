@@ -1,6 +1,6 @@
-#ifndef PARSER_H
+#ifndef PREPARSER_H
 
-#define PARSER_H
+#define PREPARSER_H
 
 #include "AST_BinOp.h"
 #include "AST_List.h"
@@ -13,7 +13,7 @@
 typedef const token::TokenNode *tNode;
 
 
-namespace parser {
+namespace preparser {
 
 namespace utility {
 
@@ -27,7 +27,7 @@ namespace utility {
 // PARSER functions
 
 // MAIN parser function
-AST *parse(tNode tn, tNode exit= nullptr);
+AST *preparse(tNode tn, tNode exit= nullptr);
 
 // Parses a specific token Node and returns an AST.
 AST_Node *parseTNode(tNode tn);
@@ -40,5 +40,5 @@ AST *parseList(tNode openingTN);
 AST *parseBlock(tNode tn);
 
 
-}; // parser
+}; // preparser
 #endif
