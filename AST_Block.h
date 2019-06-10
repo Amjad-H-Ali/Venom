@@ -17,6 +17,8 @@ public:
 
 	AST_Block(ast::AST_SYMBOL type, AST *value);
 
+	void setValue(AST *value);
+
 }; // AST_Block
 
 

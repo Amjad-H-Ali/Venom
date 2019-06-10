@@ -10,3 +10,9 @@ AST_STR::AST_STR(ast::AST_SYMBOL type, token::Token &&tkObj)
 {
 	tkObj.setName(); // Set "name" to nullptr in Token object.
 };
+
+
+void AST_STR::setValue(char *value) {
+
+	this->value = value;
+};

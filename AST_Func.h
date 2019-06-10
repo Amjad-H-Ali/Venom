@@ -20,6 +20,8 @@ public:
 
 	AST_Func(ast::AST_SYMBOL type, AST_List *params, AST_Block *body);
 
+	void setValue(AST_List *params, AST_Block *body);
+
 }; // AST_Func
 
 

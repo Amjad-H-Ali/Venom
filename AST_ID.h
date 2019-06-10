@@ -23,6 +23,8 @@ public:
 	*/
 	AST_ID(ast::AST_SYMBOL type, token::Token &&tkObj);
 
+	void setValue(AST_Node *value);
+
 }; // AST_ID
 
 

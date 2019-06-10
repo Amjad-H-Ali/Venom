@@ -10,3 +10,7 @@ AST_ID::AST_ID(ast::AST_SYMBOL type, token::Token &&tkObj)
 {
 	tkObj.setName(); // Set "name" to nullptr in Token object.
 };
+
+void AST_ID::setValue(AST_Node *value) {
+	this->value = value;
+};

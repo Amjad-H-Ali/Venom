@@ -17,6 +17,9 @@ public:
 
 	AST_List(ast::AST_SYMBOL type, AST *value);
 
+	void setValue(AST *value);
+
+
 }; // AST_List
 
 

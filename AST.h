@@ -2,8 +2,9 @@
 
 #define AST_H
 
-#include "AST_Node.h"
 
+// Forward Declaration
+class AST_Node;
 
 struct AST {
 

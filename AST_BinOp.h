@@ -16,6 +16,8 @@ public:
 
 	AST_BinOp(ast::AST_SYMBOL type);
 
+	void setValue(AST_Node *left, AST_Node *right);
+
 }; // AST_BinOp
 
 

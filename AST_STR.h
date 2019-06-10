@@ -12,7 +12,6 @@ private:
 
 	char *value;
 
-
 public:
 	/*	
 		R-Value constructor:
@@ -20,6 +19,8 @@ public:
 		expiring object of type Token.
 	*/
 	AST_STR(ast::AST_SYMBOL type, token::Token &&tkObj);
+
+	void setValue(char *value);
 
 }; // AST_STR
 

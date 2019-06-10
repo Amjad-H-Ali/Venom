@@ -3,3 +3,8 @@
 AST_List::AST_List(ast::AST_SYMBOL type, AST *value) 
 	:AST_Node(type), value(value)
 {};
+
+
+void AST_List::setValue(AST *value) {
+	this->value = value;
+};
