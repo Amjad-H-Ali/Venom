@@ -2,11 +2,6 @@
 
 #define AST_NODE_H
 
-#include "AST.h"
-
-class AST_List;
-
-class AST_Block;
 
 /*
 	AST_LIST takes in a Macro(N).
@@ -53,13 +48,6 @@ public:
 
 	// SETTERS
 	virtual void setValue(ast::AST_SYMBOL type);
-
-	// virtual void setValue(char *value)     					 = 0;
-	// virtual void setValue(AST *value)      					 = 0;
-	// virtual void setValue(AST_Node *value) 					 = 0;
-	// virtual void setValue(AST_List *params, AST_Block *body) = 0;
-	// virtual void setValue(AST_Node *left, AST_Node *right)   = 0;
-
 
 
 	// ACCESSORS

@@ -2,9 +2,8 @@
 
 #define AST_H
 
+#include "AST_Node.h"
 
-// Forward Declaration
-class AST_Node;
 
 struct AST {
 
@@ -15,6 +14,11 @@ struct AST {
 	AST()
 		:node(nullptr), next(nullptr), prev(nullptr)
 	{};
+
+	// Overload operator.
+	bool operator==(ast::AST_SYMBOL type) {
+		return *this->node == type;
+	};
 };
 
 #endif

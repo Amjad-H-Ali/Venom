@@ -5,6 +5,7 @@ AST_Block::AST_Block(ast::AST_SYMBOL type, AST *value)
 {};
 
 
+
 void AST_Block::setValue(AST *value) {
 	this->value = value;
 };

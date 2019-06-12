@@ -51,7 +51,7 @@ AST_Node *preparser::parseTNode(tNode tn) {
 
 		return new AST_BinOp(ast::ASSIGN);
 
-	else if(*tn == token::SKINNY_ARROW)
+	else if(*tn == token::SKINNY_ARROW) 
 
 		return new AST_Block(ast::BLOCK, preparser::parseBlock(tn));
 
