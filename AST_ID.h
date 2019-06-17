@@ -2,17 +2,17 @@
 
 #define AST_ID_H
 
-#include "AST_Node.h"
+
 #include "Token.h"
+#include "AST_Node.h"
 
 
-class AST_ID : public AST_Node {
+class AST_ID : AST_Node  {
 
 private:
 
-	char *name;
+	char *value;
 
-	AST_Node *value;
 
 
 public:
@@ -23,7 +23,8 @@ public:
 	*/
 	AST_ID(ast::AST_SYMBOL type, token::Token &&tkObj);
 
-	void setValue(AST_Node *value);
+	void setValue(char *value);
+
 
 }; // AST_ID
 

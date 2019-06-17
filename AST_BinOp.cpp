@@ -5,7 +5,7 @@ AST_BinOp::AST_BinOp(ast::AST_SYMBOL type)
 {};
 
 
-void AST_BinOp::setValue(AST_Node *left, AST_Node *right) {
+void AST_BinOp::setValue(astPtr_t left, astPtr_t right) {
 	this->left = left;
 	this->right = right;
 };

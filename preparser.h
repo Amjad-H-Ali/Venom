@@ -2,12 +2,14 @@
 
 #define PREPARSER_H
 
+#include "AST.h"
 #include "AST_BinOp.h"
 #include "AST_List.h"
 #include "AST_Block.h"
 #include "AST_STR.h"
 #include "AST_ID.h"
-#include "Token.h"
+
+
 
 // Alias for const token::TokenNode *
 typedef const token::TokenNode *tNode;
@@ -30,7 +32,7 @@ namespace utility {
 AST *preparse(tNode tn, tNode exit= nullptr);
 
 // Parses a specific token Node and returns an AST.
-AST_Node *parseTNode(tNode tn);
+astPtr_t parseTNode(tNode tn);
 
 // Parses a LIST from a linked-list of token nodes.
 // ASTNode *parseList(tNode tn);

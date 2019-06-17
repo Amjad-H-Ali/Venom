@@ -4,17 +4,17 @@
 #include "preparser.h"
 #include "AST.h"
 
-void _log(AST *node) {
+// void _log(AST *node) {
 
-	if(!node) return ;
+// 	if(!node) return ;
 
-	_log(node->next);
+// 	_log(node->next);
 
-	std::cout << node->node->getTypeName() << std::endl;
+// 	std::cout << node->node->getTypeName() << std::endl;
 
 
 
-};
+// };
 
 int main(){
 
@@ -22,7 +22,7 @@ int main(){
 
 	AST *astHead = preparser::preparse(tHead);
 
-	_log(astHead);
+	// _log(astHead);
 
 };
 

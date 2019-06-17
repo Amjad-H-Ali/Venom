@@ -2,32 +2,7 @@
 
 #define AST_NODE_H
 
-
-/*
-	AST_LIST takes in a Macro(N).
-	Each Macro has a signature(type),
-	where type is a unique symbol of 
-	an AST_Node.
-
-	N: Unique Symbol of each Node in AST
-*/
-
-namespace ast {
-
-#define AST_LIST(N) 			    \
-	N(ID)							\
-	N(ASSIGN)						\
-	N(STR)							\
-	N(LIST)							\
-	N(BLOCK)						\
-	N(FUNC)							
-
-// All AST Symbols
-#define N(symbol) symbol,
-	enum AST_SYMBOL {AST_LIST(N)};
-#undef N
-
-}; // ast
+#include "AST.h"
 
 
 // Base class of AST Nodes.
@@ -46,9 +21,9 @@ public:
 	// Overload comparison operator to compare unique symbols
 	bool operator==(ast::AST_SYMBOL type) const;
 
-	// SETTERS
-	virtual void setValue(ast::AST_SYMBOL type);
-
+	// // SETTERS
+	// virtual void setValue(ast::AST_SYMBOL type);
+	// virtual void setValue(AST_List *params, AST_Block *body); // For AST_Func
 
 	// ACCESSORS
 
@@ -57,6 +32,8 @@ public:
 
 	// AST_Node unique String
 	char *getTypeName() const;
+
+	// virtual void getValue() const {};
 
 	
 

@@ -6,11 +6,11 @@
 	expiring object of type Token.
 */
 AST_ID::AST_ID(ast::AST_SYMBOL type, token::Token &&tkObj) 
-	:AST_Node(type), name(tkObj.getName()), value(nullptr)
+	:AST_Node(type), value(tkObj.getName())
 {
 	tkObj.setName(); // Set "name" to nullptr in Token object.
 };
 
-void AST_ID::setValue(AST_Node *value) {
+void AST_ID::setValue(char *value) {
 	this->value = value;
 };

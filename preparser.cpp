@@ -1,6 +1,6 @@
 #include <iostream>
-#include "preparser.h"
 #include <utility>	// For move()
+#include "preparser.h"
 
 namespace utils = preparser::utility;
 
@@ -19,16 +19,16 @@ AST *preparser::preparse(tNode tn, tNode exit) {
 	// Next node in Linked-List of Tokens.
 	AST *head = preparse(next, exit);
 
-	AST_Node *newAST_Node = preparser::parseTNode(tn);
+	astPtr_t newAstPtr = preparser::parseTNode(tn);
 
-	if(!newAST_Node) return head; // Probably throw error?
+	if(!newAstPtr) return head; // Probably throw error?
 
 	
 
 	// Insert into Linked-List
 	AST *newAST = new AST;
 
-	newAST->node = newAST_Node;
+	newAST->node = newAstPtr;
 
 	newAST->next = head;
 
@@ -41,7 +41,7 @@ AST *preparser::preparse(tNode tn, tNode exit) {
 
 };
 
-AST_Node *preparser::parseTNode(tNode tn) {
+astPtr_t preparser::parseTNode(tNode tn) {
 	if(*tn == token::IDENTIFIER)
 
 		// Call R-Value Constructor: Steal the name of IDENTIFIER that will be Deleted soon.

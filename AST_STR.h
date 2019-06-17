@@ -2,11 +2,12 @@
 
 #define AST_STR_H
 
-#include "AST_Node.h"
 #include "Token.h"
+#include "AST_Node.h"
 
 
-class AST_STR : public AST_Node {
+
+class AST_STR : AST_Node {
 
 private:
 
@@ -21,6 +22,7 @@ public:
 	AST_STR(ast::AST_SYMBOL type, token::Token &&tkObj);
 
 	void setValue(char *value);
+
 
 }; // AST_STR
 

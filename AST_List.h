@@ -2,11 +2,11 @@
 
 #define AST_LIST_H
 
-#include "AST.h"
 #include "AST_Node.h"
 
 
-class AST_List : public AST_Node {
+
+class AST_List : AST_Node {
 
 private:
 

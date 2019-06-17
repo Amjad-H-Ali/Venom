@@ -2,21 +2,22 @@
 
 #define AST_BIN_OP_H
 
+
 #include "AST_Node.h"
 
-
-class AST_BinOp : public AST_Node {
+class AST_BinOp : AST_Node {
 
 private:
 
-	AST_Node *left, *right;
+	astPtr_t left, right;
 
 
 public:
 
 	AST_BinOp(ast::AST_SYMBOL type);
 
-	void setValue(AST_Node *left, AST_Node *right);
+	void setValue(astPtr_t left, astPtr_t right);
+
 
 }; // AST_BinOp
 

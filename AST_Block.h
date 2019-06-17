@@ -2,11 +2,12 @@
 
 #define AST_BLOCK_H
 
-#include "AST.h"
+
 #include "AST_Node.h"
 
 
-class AST_Block : public AST_Node {
+
+class AST_Block : AST_Node {
 
 private:
 
@@ -19,6 +20,7 @@ public:
 
 
 	void setValue(AST *value);
+
 
 }; // AST_Block
 

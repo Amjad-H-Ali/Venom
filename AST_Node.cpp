@@ -13,9 +13,9 @@ bool AST_Node::operator==(ast::AST_SYMBOL type) const {
 
 // Setters
 
-void AST_Node::setValue(ast::AST_SYMBOL type) {
-	this->type = type;
-};
+// void AST_Node::setValue(ast::AST_SYMBOL type) {
+// 	this->type = type;
+// };
 
 // Accessors
 
