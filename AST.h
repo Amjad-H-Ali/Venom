@@ -14,8 +14,15 @@ class AST_Func;
 class AST_Block; 
 class AST_BinOp;
 
+/*
+ 	To create Linked-List of objects of different types. Why not use their parent since they all share the same
+ 	one? The reason: Due to some objects having different member variables than their siblings, overloaded 
+ 	set_value/get_value methods were needed. I did not want to add all the various methods as virtual methods 
+ 	in the Base class. Using std::variant allows me to call   
+*/
 typedef std::variant< std::nullptr_t, AST_STR *, AST_List *, AST_ID *, AST_Func *, AST_Block *, AST_BinOp *> astPtr_t;
 
+// See AST.cpp
 extern bool operator!(astPtr_t astPtrType);
 
 /*
@@ -46,7 +53,6 @@ namespace ast {
 }; // ast
 
 
-// extern astPtr_t;
 
 struct AST {
 
