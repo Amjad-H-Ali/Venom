@@ -15,6 +15,7 @@ namespace parser {
 
 	template<typename ... Params>
 	astPtr_t parse (Params&& ... param);
+	AST_Block *parseBlock(AST_Block *block);
 
 }; // parser
 

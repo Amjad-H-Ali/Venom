@@ -41,7 +41,7 @@ astPtr_t parser::parse (Params&& ... params) {
 
 	return std::visit(AstOverloads{
 
-		[](AST_List *list, AST_Block *block)->astPtr_t { return new AST_Func(ast::FUNC, list, block);},
+		[](AST_List *list, AST_Block *block)->astPtr_t { return new AST_Func(ast::FUNC, list, parser::parseBlock(block) );},
 
 		[](auto, auto)->astPtr_t {return new AST_Block(ast::FUNC, nullptr);},
 
@@ -50,5 +50,13 @@ astPtr_t parser::parse (Params&& ... params) {
 	}, std::forward<Params>(params)...);
 
 };
+
+AST_Block *parser::parseBlock(AST_Block *block) {
+
+	parser::_main(block->getValue());
+
+	return block;
+
+}
 
 
