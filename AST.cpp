@@ -1,4 +1,11 @@
 #include "AST.h"
+#include "AST_Node.h"
+#include "AST_STR.h"
+#include "AST_List.h"
+#include "AST_ID.h"
+#include "AST_Block.h"
+#include "AST_BinOp.h"
+#include "AST_Func.h"
 
 
 
@@ -17,7 +24,7 @@
 	In this case, we are inheriting an operator() method from each Lambda. That is what
 	is seen below in the first line right of the colon.
 */
-template<typename ... Params> struct NotOperatorOverloads : Params ... {using Params::operator() ...;};
+template<typename ... Params> struct Overloads : Params ... {using Params::operator() ...;};
 
 /*
 	This is a deduction guide for the compiler. We are telling the compiler, "When you see this
@@ -26,7 +33,7 @@ template<typename ... Params> struct NotOperatorOverloads : Params ... {using Pa
 	NotOperatorOverloads<foo, bar, zoo>). This will instantiate an object that inherits from foo,
 	bar, and zoo (which should be Lambdas). "
 */
-template<typename ... Params> NotOperatorOverloads(Params ...) -> NotOperatorOverloads<Params ... >;
+template<typename ... Params> Overloads(Params ...) -> Overloads<Params ... >;
 
 // Takes in the std::variant type as param.
 bool operator!(astPtr_t astPtrType) {
@@ -38,9 +45,12 @@ bool operator!(astPtr_t astPtrType) {
 		So when std::visit calls our functor with the std::variant (astPtrType)
 		passed as argument, we get the correct return value.
 	*/
-	return std::visit(NotOperatorOverloads {
+	return std::visit(Overloads {
+
 		[](auto) {return false;},
+
 		[](std::nullptr_t) {return true;}
+
 	}, astPtrType);
 };
 
@@ -54,3 +64,13 @@ bool operator!(astPtr_t astPtrType) {
 AST::AST()
 	:node(nullptr), next(nullptr), prev(nullptr)
 {};
+
+char* AST::getTypeName() {
+	return std::visit(Overloads {
+
+			[](auto n){return n->getTypeName();},
+
+			[](std::nullptr_t){return (char *)"nullptr";}
+
+		}, this->node);
+};

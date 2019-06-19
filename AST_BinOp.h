@@ -5,7 +5,7 @@
 
 #include "AST_Node.h"
 
-class AST_BinOp : AST_Node {
+class AST_BinOp : public AST_Node {
 
 private:
 

@@ -8,7 +8,7 @@
 
 
 
-class AST_Func : AST_Node {
+class AST_Func : public AST_Node {
 
 private:
 

@@ -6,7 +6,7 @@
 
 
 
-class AST_List : AST_Node {
+class AST_List : public AST_Node {
 
 private:
 

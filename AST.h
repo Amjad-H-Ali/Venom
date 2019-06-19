@@ -63,6 +63,8 @@ struct AST {
 	AST();
 		
 
+	char* getTypeName();
+
 	// Overload operator.
 	// bool operator==(ast::AST_SYMBOL type) {
 	// 	return this->node == type;

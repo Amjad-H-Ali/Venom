@@ -7,7 +7,7 @@
 #include "AST_Node.h"
 
 
-class AST_ID : AST_Node  {
+class AST_ID : public AST_Node  {
 
 private:
 

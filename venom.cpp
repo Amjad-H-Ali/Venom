@@ -6,17 +6,17 @@
 #include "parser.h"
 
 
-// void _log(AST *node) {
+void _log(AST *node) {
 
-// 	if(!node) return ;
+	if(!node) return ;
 
-// 	_log(node->next);
-
-// 	std::cout << node->node->getTypeName() << std::endl;
+	_log(node->next);
 
 
 
-// };
+	std::cout << node << node->getTypeName() << std::endl;
+
+};
 
 int main(){
 
@@ -26,7 +26,7 @@ int main(){
 
 	AST *parsedAstHead = parser::_main(astHead);
 
-	// _log(astHead);
+	_log(parsedAstHead);
 
 };
 

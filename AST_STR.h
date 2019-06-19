@@ -7,7 +7,7 @@
 
 
 
-class AST_STR : AST_Node {
+class AST_STR : public AST_Node {
 
 private:
 
