@@ -20,7 +20,7 @@ AST *parser::_main(AST *astHead) {
 
 	AST *head = _main(astHead->next);
 
-	astPtr_t astPtr = parser::parse(astHead->node, astHead->prev->node);
+	astPtr_t astPtr = parser::parse(astHead, astHead->node);
 
 	if(!astPtr) return head;
 
@@ -37,21 +37,31 @@ AST *parser::_main(AST *astHead) {
 };
 
 template<typename ... Params>
-astPtr_t parser::parse (Params&& ... params) {
+astPtr_t parser::parse (AST *parent, Params&& ... params) {
 
 	return std::visit(AstOverloads{
 
-		[](AST_List *list, AST_Block *block)->astPtr_t { return new AST_Func(ast::FUNC, list, parser::parseBlock(block) );},
+		[parent](AST_Block *block)->astPtr_t {return parseBlockContext(parent);},
 
-		[](auto, auto)->astPtr_t {return new AST_Block(ast::FUNC, nullptr);},
+		[parent](AST_List *list, AST_Block *block)->astPtr_t {std::cout << "----------------------------------------------------------------------------------------------- (AST_List *list, AST_Block *block)->astPtr_t " << std::endl; return new AST_Func(ast::FUNC, list, parser::parseBlock(block) );},
 
-		[](auto)->astPtr_t {return new AST_Block(ast::FUNC, nullptr);}
+		[parent](auto, auto)->astPtr_t {return new AST_Block(ast::FUNC, nullptr);},
+
+		[parent](auto)->astPtr_t {return new AST_Block(ast::FUNC, nullptr);}
 
 	}, std::forward<Params>(params)...);
 
 };
 
+astPtr_t  parser::parseBlockContext(AST *parentOfBlock) {
+
+  	AST *nextParent = parentOfBlock->prev;
+
+  	return nextParent ? parser::parse(nextParent, nextParent->node, parentOfBlock->node) : nullptr;
+};
+
 AST_Block *parser::parseBlock(AST_Block *block) {
+
 
 	parser::_main(block->getValue());
 

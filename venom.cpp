@@ -1,8 +1,10 @@
 #include <iostream>
 #include "Token.h"
 #include "lexer.h"
-#include "preparser.h"
 #include "AST.h"
+#include "preparser.h"
+#include "parser.h"
+
 
 // void _log(AST *node) {
 
@@ -21,6 +23,8 @@ int main(){
 	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
 
 	AST *astHead = preparser::preparse(tHead);
+
+	AST *parsedAstHead = parser::_main(astHead);
 
 	// _log(astHead);
 

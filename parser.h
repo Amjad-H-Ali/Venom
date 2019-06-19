@@ -14,7 +14,8 @@ namespace parser {
 	AST *_main(AST *astHead);
 
 	template<typename ... Params>
-	astPtr_t parse (Params&& ... param);
+	astPtr_t parse (AST *parent, Params&& ... params);
+	astPtr_t  parseBlockContext(AST *parentOfBlock);
 	AST_Block *parseBlock(AST_Block *block);
 
 }; // parser
