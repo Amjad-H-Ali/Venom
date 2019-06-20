@@ -43,7 +43,7 @@ astPtr_t parser::parse (AST *parent, Params&& ... params) {
 
 		[parent](AST_List *list)->astPtr_t {return parseListContext(parent);},
 
-		[parent](AST_List *list, AST_Block *block)->astPtr_t {std::cout << "----------------------------------------------------------------------------------------------- (AST_List *list, AST_Block *block)->astPtr_t " << std::endl; return new AST_Func(ast::FUNC, list, parser::parseBlock(block) );},
+		[parent](AST_List *list, AST_Block *block)->astPtr_t {return new AST_Func(ast::FUNC, list, parser::parseBlock(block));},
 
 		[parent](AST_List *list, auto)->astPtr_t {return list;},
 
@@ -61,16 +61,19 @@ astPtr_t  parser::parseListContext(AST *parentOfList) {
 
   	AST *nextParent = parentOfList->prev;
 
-  	return nextParent ? parser::parse(nextParent, parentOfList->node, nextParent->node) : nullptr;
+  	return nextParent ? parser::parse(nextParent, parentOfList->node, nextParent->node) 
+  	
+  		: parser::parse(nextParent, parentOfList->node, (astPtr_t) nullptr);
 };
 
 AST_Block *parser::parseBlock(AST_Block *block) {
 
 
-	parser::_main(block->getValue());
+	AST *newAST = parser::_main(block->getValue());
+
+	block->setValue(newAST);
 
 	return block;
-
 }
 
 

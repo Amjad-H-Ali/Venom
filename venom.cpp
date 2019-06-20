@@ -16,7 +16,6 @@ void _log(AST *node) {
 
 	_log(node->getValueOfNode());
 
-	std::cout << node->getTypeName() << std::endl << std::endl;
 
 	
 
