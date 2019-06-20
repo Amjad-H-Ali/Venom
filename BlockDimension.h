@@ -31,8 +31,7 @@ public:
 	};
 
 
-	// Copy or Assignment constructor
-	// not allowed in our Singleton.
+	// Copy or Assignment constructor not allowed in our Singleton.
 	BlockDimension(const BlockDimension&) 	= delete; 
 	void operator=(const BlockDimension&)	= delete;
 
