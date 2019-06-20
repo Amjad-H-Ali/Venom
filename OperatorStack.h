@@ -1,7 +1,8 @@
 /*
 	This class will behave as a stack of operators that are waiting to
-	be processed. Once parser is finished doing its job, we can process
-	the operators in this stack.
+	be processed. With this, we don't have to iterate through the AST 
+	again. Once parser is finished doing its job, we can process the 
+	operators in this stack.
 
 	Also note: this is a Singleton class. Only on instance is allowed of
 	this type because I don't see why we would need more than one.
@@ -25,7 +26,9 @@ public:
 	}
 
 private:
-	
+
+	AST_BinOp *stack;
+
 	// Ensures One Instance.
 	OperatorStack() {};
 
