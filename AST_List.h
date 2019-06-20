@@ -19,6 +19,8 @@ public:
 
 	void setValue(AST *value);
 
+	AST *getValue() const;
+
 
 }; // AST_List
 

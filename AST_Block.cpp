@@ -11,7 +11,7 @@ void AST_Block::setValue(AST *value) {
 };
 
 
-AST *AST_Block::getValue() {
+AST *AST_Block::getValue() const {
 
 	return this->value;
 };

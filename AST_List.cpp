@@ -8,3 +8,9 @@ AST_List::AST_List(ast::AST_SYMBOL type, AST *value)
 void AST_List::setValue(AST *value) {
 	this->value = value;
 };
+
+
+AST *AST_List::getValue() const {
+	
+	return this->value;
+};

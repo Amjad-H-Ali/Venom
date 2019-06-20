@@ -65,6 +65,8 @@ AST::AST()
 	:node(nullptr), next(nullptr), prev(nullptr)
 {};
 
+
+
 char* AST::getTypeName() {
 	return std::visit(Overloads {
 
@@ -73,4 +75,31 @@ char* AST::getTypeName() {
 			[](std::nullptr_t){return (char *)"nullptr";}
 
 		}, this->node);
+};
+
+
+AST *AST::getValueOfNode() {
+
+	return std::visit(Overloads {
+
+		[](AST_Block *block){return block->getValue();},
+
+		[](AST_List *list){return list->getValue();},
+
+		[](auto){return (AST *) nullptr;}
+
+	}, this->node);
+};
+
+// Overload operator
+bool AST::operator==(ast::AST_SYMBOL type) {
+
+	return std::visit(Overloads {
+
+		[type](auto astPtr) {return *astPtr == type;},
+
+		[](std::nullptr_t){return false;}
+
+	}, this->node);
+
 };

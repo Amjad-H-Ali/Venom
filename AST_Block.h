@@ -21,7 +21,7 @@ public:
 
 	void setValue(AST *value);
 
-	AST *getValue();
+	AST *getValue() const;
 
 
 }; // AST_Block

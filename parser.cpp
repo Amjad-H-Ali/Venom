@@ -14,15 +14,9 @@
 
 AST *parser::_main(AST *astHead) {
 
-	static int count = 0;
 
-	count ++;
-
-	std::cout << count << std::endl << std::endl;
 
 	if(!astHead) return nullptr;
-
-	
 
 	AST *head = _main(astHead->next);
 
@@ -38,7 +32,6 @@ AST *parser::_main(AST *astHead) {
 
 	head = newAST;
 
-	std::cout << "HEAD ADRESS   " << head << std::endl << std::endl;
 	return head;
 
 };
