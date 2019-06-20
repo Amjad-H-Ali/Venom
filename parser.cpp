@@ -62,13 +62,13 @@ astPtr_t  parser::parseListContext(AST *parentOfList) {
   	AST *nextParent = parentOfList->prev;
 
   	return nextParent ? parser::parse(nextParent, parentOfList->node, nextParent->node) 
-  	
-  		: parser::parse(nextParent, parentOfList->node, (astPtr_t) nullptr);
+		: parser::parse(nextParent, parentOfList->node, (astPtr_t) nullptr);
 };
 
 AST_Block *parser::parseBlock(AST_Block *block) {
 
-
+	// TODO: Clean up the memory leak here...
+	
 	AST *newAST = parser::_main(block->getValue());
 
 	block->setValue(newAST);
