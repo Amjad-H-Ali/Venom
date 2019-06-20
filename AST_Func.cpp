@@ -11,3 +11,7 @@ void AST_Func::setValue(AST_List *params, AST_Block *body) {
 	this->body = body;
 };
 
+AST_Block *AST_Func::getBody() const {
+
+	return this->body;
+};

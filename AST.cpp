@@ -86,6 +86,8 @@ AST *AST::getValueOfNode() {
 
 		[](AST_List *list){return list->getValue();},
 
+		[](AST_Func *func){return func->getBody()->getValue();},
+
 		[](auto){return (AST *) nullptr;}
 
 	}, this->node);

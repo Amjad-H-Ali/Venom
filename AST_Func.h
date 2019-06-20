@@ -23,6 +23,8 @@ public:
 
 	void setValue(AST_List *params, AST_Block *body);
 
+	AST_Block *getBody() const;
+
 
 
 }; // AST_Func

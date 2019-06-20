@@ -10,11 +10,15 @@ void _log(AST *node) {
 
 	if(!node) return ;
 
-	_log(node->next);
+	_log(node->next); 
 
+	std::cout << node->getTypeName() << std::endl << std::endl;
 
+	_log(node->getValueOfNode());
 
-	std::cout << node << node->getTypeName() << std::endl;
+	std::cout << node->getTypeName() << std::endl << std::endl;
+
+	
 
 };
 
