@@ -47,7 +47,7 @@ private:
 
 				op->setValue(lParent->node, rParent->node);
 
-
+				// Detatch Node from AST link.
 				parent->next = lParent->next;
 
 				parent->prev = rParent->prev;

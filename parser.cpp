@@ -9,8 +9,9 @@
 #include "AST_BinOp.h"
 #include "AST_Func.h"
 #include "parser.h"
+#include "OperatorStack.h"
 
-
+OperatorStack *opStack = new OperatorStack;
 
 AST *parser::_main(AST *astHead) {
 
@@ -46,6 +47,8 @@ astPtr_t parser::parse (AST *parent, Params&& ... params) {
 		[parent](AST_List *list, AST_Block *block)->astPtr_t {return new AST_Func(ast::FUNC, list, parser::parseBlock(block));},
 
 		[parent](AST_List *list, auto)->astPtr_t {return list;},
+
+		[parent](AST_BinOp *binOp)->astPtr_t {opStack->push(parent); return binOp;},
 
 		[parent](auto, auto)->astPtr_t {return nullptr;},
 
