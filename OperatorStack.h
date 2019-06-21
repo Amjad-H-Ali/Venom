@@ -52,6 +52,10 @@ private:
 
 				parent->prev = rParent->prev;
 
+				parent->next->prev = parent;
+
+				parent->prev->next = parent;
+
 				delete lParent;
 				delete rParent;
 
