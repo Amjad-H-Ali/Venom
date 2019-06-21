@@ -9,13 +9,15 @@
 
 #define OPERATOR_STACK_H
 
-#include "AST_BinOp.h"
+#include "AST.h"
 
-
+// TODO: consider putting this in its own header file for reuse.
+template<typename ... Ts> struct Overloads : Ts ... {using Ts::operator()...;};
+template<typename ... Ts> Overloads(Ts ...) -> Overloads<Ts ...>;
 
 struct Node {
 
-	AST_BinOp *op;
+	AST *op;
 
 
 	Node *next;
@@ -31,14 +33,41 @@ private:
 	Node *stackOfOps;
 
 
+	void process(AST *parent, astPtr_t astPtr) {
 
-	void process(Node *opNode) {
+		std::visit(Overloads {
+
+			[](auto op) { /* Do Nothing...*/ },
+
+			[parent](AST_BinOp *op) {
+
+				AST *lParent = parent->next,
+
+					*rParent = parent->prev;
+
+				op->setValue(lParent->node, rParent->node);
+
+
+				parent->next = lParent->next;
+
+				parent->prev = rParent->prev;
+
+				delete lParent;
+				delete rParent;
+
+			}
+
+		}, astPtr);
+	}
+
+	void processEach(Node *opNode) {
 
 		if(!opNode) return;
 
-		process(opNode->next);
+		processEach(opNode->next);
 
-		opNode->op->process();
+		AST *node = opNode->op;
+		process(node, node->node);
 	}
 
 public:
@@ -59,9 +88,11 @@ public:
 
 	}
 
-	void process() {
 
-		process(stackOfOps);
+
+	void processEach() {
+
+		processEach(stackOfOps);
 		
 	}
 
