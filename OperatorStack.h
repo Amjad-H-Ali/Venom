@@ -3,43 +3,52 @@
 	be processed. With this, we don't have to iterate through the AST 
 	again. Once parser is finished doing its job, we can process the 
 	operators in this stack.
-
-	Also note: this is a Singleton class. Only on instance is allowed of
-	this type because I don't see why we would need more than one.
-
 */
 
 #ifndef OPERATOR_STACK_H
 
 #define OPERATOR_STACK_H
 
-class OperatorStack {
-
-public:
+#include "AST.h"
 
 
-	static OperatorStack *getInstance() {
 
-		static OperatorStack instance;
+struct Node {
 
-		return &instance;
-	}
+	AST *AST_Operator;
 
-private:
 
-	AST_BinOp *stack;
-
-	// Ensures One Instance.
-	OperatorStack() {};
-
-	// Copy or Assignment constructor not allowed in our Singleton.
-	OperatorStack(const OperatorStack&)  = delete;
-	void operator=(const OperatorStack&) = delete;
-
+	Node *next;
 
 
 };
 
-extern OperatorStack *stackOfOps;
+
+class OperatorStack {
+
+private:
+
+	Node *stackOfOps;
+
+public:
+
+	OperatorStack()
+		:stackOfOps(nullptr)
+	{};
+
+	void push(AST *operatorNode) {
+
+		Node *newNode = new Node;
+
+		newNode->AST_Operator = operatorNode;
+
+		newNode->next = stackOfOps;
+
+	}
+
+
+}
+
+extern OperatorStack *opStack;
 
 #endif
