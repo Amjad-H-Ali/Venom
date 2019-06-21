@@ -9,13 +9,13 @@
 
 #define OPERATOR_STACK_H
 
-#include "AST.h"
+#include "AST_BinOp.h"
 
 
 
 struct Node {
 
-	AST *AST_Operator;
+	AST_BinOp *op;
 
 
 	Node *next;
@@ -30,24 +30,43 @@ private:
 
 	Node *stackOfOps;
 
+
+
+	void process(Node *opNode) {
+
+		if(!opNode) return;
+
+		process(opNode->next);
+
+		opNode->op->process();
+	}
+
 public:
 
 	OperatorStack()
 		:stackOfOps(nullptr)
 	{};
 
-	void push(AST *operatorNode) {
+	void push(AST *oper) {
 
 		Node *newNode = new Node;
 
-		newNode->AST_Operator = operatorNode;
+		newNode->op = oper;
 
 		newNode->next = stackOfOps;
 
+		stackOfOps = newNode;
+
+	}
+
+	void process() {
+
+		process(stackOfOps);
+		
 	}
 
 
-}
+};
 
 extern OperatorStack *opStack;
 

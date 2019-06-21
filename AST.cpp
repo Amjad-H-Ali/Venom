@@ -78,6 +78,7 @@ char* AST::getTypeName() {
 };
 
 
+
 AST *AST::getValueOfNode() {
 
 	return std::visit(Overloads {

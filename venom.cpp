@@ -4,6 +4,7 @@
 #include "AST.h"
 #include "preparser.h"
 #include "parser.h"
+#include "OperatorStack.h"
 
 
 void _log(AST *node) {
