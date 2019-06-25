@@ -13,9 +13,12 @@ void _log(AST *node) {
 
 	_log(node->next); 
 
+
 	std::cout << node->getTypeName() << std::endl << std::endl;
 
-	_log(node->getValueOfNode());
+	
+
+	if(*node == ast::ASSIGN) std::cout <<  "ADRESS " << node <<std::endl;
 
 
 	
@@ -29,6 +32,10 @@ int main(){
 	AST *astHead = preparser::preparse(tHead);
 
 	AST *parsedAstHead = parser::_main(astHead);
+
+	opStack->processEach();
+
+
 
 	_log(parsedAstHead);
 

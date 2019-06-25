@@ -10,6 +10,7 @@
 #define OPERATOR_STACK_H
 
 #include "AST.h"
+#include <iostream>
 
 // TODO: consider putting this in its own header file for reuse.
 template<typename ... Ts> struct Overloads : Ts ... {using Ts::operator()...;};
@@ -21,6 +22,10 @@ struct Node {
 
 
 	Node *next;
+
+	Node()
+		:op(nullptr)
+	{};
 
 
 };
@@ -37,13 +42,22 @@ private:
 
 		std::visit(Overloads {
 
-			[](auto op) { /* Do Nothing...*/ },
+			[](auto op) { /* Do Nothing...*/},
 
 			[parent](AST_BinOp *op) {
+
+				std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
+
+				std::cout << parent  << "  " << op << "  "<< std::endl;
+
+				std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
+
 
 				AST *lParent = parent->next,
 
 					*rParent = parent->prev;
+
+				std::cout << "lll " <<lParent  << "  " << rParent << "  "<< std::endl;
 
 				op->setValue(lParent->node, rParent->node);
 
@@ -52,12 +66,17 @@ private:
 
 				parent->prev = rParent->prev;
 
-				parent->next->prev = parent;
+				std::cout << "THIS IS L AND R   " << parent->next<< "   " << parent->prev << std::endl;
 
-				parent->prev->next = parent;
+				if (parent->next) parent->next->prev = parent;
+
+				if (parent->prev) parent->prev->next = parent;
+
+				std::cout <<"ENDDDDDDD"<< std::endl;
 
 				delete lParent;
 				delete rParent;
+
 
 			}
 
@@ -71,6 +90,7 @@ private:
 		processEach(opNode->next);
 
 		AST *node = opNode->op;
+		std::cout << "IN FUNC, L and R:   " << node->next << "   " << node->prev << std::endl;
 		process(node, node->node);
 	}
 

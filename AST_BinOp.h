@@ -18,6 +18,8 @@ public:
 
 	void setValue(astPtr_t left, astPtr_t right);
 
+	
+
 
 }; // AST_BinOp
 

@@ -1,17 +1,20 @@
 #include "AST_Func.h"
 
-AST_Func::AST_Func(ast::AST_SYMBOL type, AST_List *params, AST_Block *body) 
-	:AST_Node(type), params(params), body(body)
-{};
+AST_Func::AST_Func(ast::AST_SYMBOL type, AST_List &&params, AST *body) 
+	:AST_Node(type), params(params.getValue()), body(body)
+{
+	// Set value to nullptr after stealing.
+	params.setValue(nullptr); 
+};
 
 
 
-void AST_Func::setValue(AST_List *params, AST_Block *body) {
+void AST_Func::setValue(AST *params, AST *body) {
 	this->params = params;
 	this->body = body;
 };
 
-AST_Block *AST_Func::getBody() const {
+AST *AST_Func::getBody() const {
 
 	return this->body;
 };

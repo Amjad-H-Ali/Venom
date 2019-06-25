@@ -7,9 +7,15 @@
 #include "AST_ID.h"
 #include "AST_Block.h"
 #include "AST_BinOp.h"
-#include "AST_Func.h"
+#include "AST_Func.h"	
 #include "parser.h"
 #include "OperatorStack.h"
+
+AST{LIST{AST{}}}-AST{BLOCK{AST{}}}
+
+
+AST{FUNC{LIST{AST}, BLOCK{AST}}}
+
 
 OperatorStack *opStack = new OperatorStack;
 
@@ -31,7 +37,11 @@ AST *parser::_main(AST *astHead) {
 
 	newAST->next = head;
 
+	if(head) head->prev = newAST;
+
 	head = newAST;
+
+	if(*newAST == ast::ASSIGN) opStack->push(newAST);
 
 	return head;
 
@@ -44,11 +54,19 @@ astPtr_t parser::parse (AST *parent, Params&& ... params) {
 
 		[parent](AST_List *list)->astPtr_t {return parseListContext(parent);},
 
-		[parent](AST_List *list, AST_Block *block)->astPtr_t {return new AST_Func(ast::FUNC, list, parser::parseBlock(block));},
+		[parent](AST_List *list, AST_Block *block)->astPtr_t {
+
+			// Parsed block contents.
+			AST *funcBody = parser::_main(block->getValue());
+
+			// Steal list contents for function parameter list.
+			return new AST_Func(ast::FUNC, std::move(*list), block);
+
+		},
 
 		[parent](AST_List *list, auto)->astPtr_t {return list;},
 
-		[parent](AST_BinOp *binOp)->astPtr_t {opStack->push(parent); return binOp;},
+		[parent](AST_BinOp *binOp)->astPtr_t {return binOp;},
 
 		[parent](auto, auto)->astPtr_t {return nullptr;},
 
