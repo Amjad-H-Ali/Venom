@@ -11,10 +11,8 @@
 #include "parser.h"
 #include "OperatorStack.h"
 
-AST{LIST{AST{}}}-AST{BLOCK{AST{}}}
 
 
-AST{FUNC{LIST{AST}, BLOCK{AST}}}
 
 
 OperatorStack *opStack = new OperatorStack;
@@ -60,7 +58,7 @@ astPtr_t parser::parse (AST *parent, Params&& ... params) {
 			AST *funcBody = parser::_main(block->getValue());
 
 			// Steal list contents for function parameter list.
-			return new AST_Func(ast::FUNC, std::move(*list), block);
+			return new AST_Func(ast::FUNC, std::move(*list), funcBody);
 
 		},
 
@@ -86,15 +84,5 @@ astPtr_t  parser::parseListContext(AST *parentOfList) {
 		: parser::parse(nextParent, parentOfList->node, (astPtr_t) nullptr);
 };
 
-AST_Block *parser::parseBlock(AST_Block *block) {
-
-	// TODO: Clean up the memory leak here...
-	
-	AST *newAST = parser::_main(block->getValue());
-
-	block->setValue(newAST);
-
-	return block;
-}
 
 
