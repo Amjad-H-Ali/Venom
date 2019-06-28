@@ -15,6 +15,9 @@ private:
 			*current;
 
 public:
+
+	Queue();
+
 	/*
 		*
 		* Pushes a pointer to an object at the end of the Queue.
