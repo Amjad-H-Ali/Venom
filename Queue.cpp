@@ -48,4 +48,6 @@ void Queue::jump(unsigned places) {
 	* Returns Node in Queue that "current" is pointing to.
 	*
 */
-Node<T> *Queue::current();
+Node<T> *Queue::current() {
+	return current;
+};
