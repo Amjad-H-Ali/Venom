@@ -12,7 +12,7 @@ private:
 
 	Node<T> *head, 
 			*tail, 
-			*current;
+			*_current;
 
 public:
 
@@ -23,12 +23,12 @@ public:
 		* Pushes a pointer to an object at the end of the Queue.
 		*
 	*/
-	void push(T *objPtr);
+	void push(T objPtr);
 
 
 	/*
 		*
-		* Moves "current" pointer a number of places ahead.
+		* Moves "_current" pointer a number of places ahead.
 		* Params: Number of places to move in the Queue.
 		*
 	*/
@@ -36,7 +36,7 @@ public:
 
 	/*
 		*
-		* Returns Node in Queue that "current" is pointing to.
+		* Returns Node in Queue that "_current" is pointing to.
 		*
 	*/
 	Node<T> *current();
