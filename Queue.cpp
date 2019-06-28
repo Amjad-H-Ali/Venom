@@ -38,7 +38,10 @@ void Queue::push(T *objPtr) {
 	* Params: Number of places to move in the Queue.
 	*
 */
-void Queue::jump(unsigned places);
+void Queue::jump(unsigned places) {
+
+	for(unsigned i = 0; current && i < places; ++i, current = current->next);
+};
 
 /*
 	*
