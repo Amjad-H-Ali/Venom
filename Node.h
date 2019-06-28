@@ -1,3 +1,8 @@
+/*
+	*
+	* Generic Link to create Doubly Linked-Lists.
+	*
+*/
 #ifndef NODE_H
 
 #define NODE_H
@@ -13,6 +18,7 @@ struct Node {
 	Node<Ptr_t>()
 		:value(nullptr), next(nullptr), prev(nullptr)
 	{};
-};
+
+}; // Node
 
 #endif
