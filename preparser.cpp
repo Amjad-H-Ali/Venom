@@ -4,6 +4,39 @@
 
 namespace utils = preparser::utility;
 
+auto preparse(Queue<Token *> *unParsedTokens) {
+
+	return [unParsedTokens](auto flag) {
+
+		Queue<astPtr_t> *preparsedAst = new Queue<astPtr_t>;
+
+		while(tokenNode = flag()) {
+
+			preparsedAst->push(parseToken(tokenNode->value)); 
+		};
+
+		return preparsedAst;
+
+	};
+};
+
+preparse() {
+
+	Queue<astPtr_t> preparsedAst
+
+
+
+
+
+	
+};
+
+parseToken(Token *tokenPtr) {
+
+	if(*tokenPtr == token::ID)
+
+
+};
 
 AST *preparser::preparse(tNode tn, tNode exit) {
 
