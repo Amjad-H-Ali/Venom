@@ -1,16 +1,45 @@
 #include <iostream>
-#include <utility>	// For move()
+#include <utility>		// For move()
 #include "preparser.h"
 
 namespace utils = preparser::utility;
 
-auto preparse(Queue<Token *> *unParsedTokens) {
+class Preparser {
+
+private:
+	Queue<Token *> *unParsedTokens;
+
+public:
+
+	Preparser(Queue<Token *> *unParsedTokens)
+		:unParsedTokens(unParsedTokens)
+	{};
+
+	auto operator()() {
+
+		Queue<astPtr_t> *parsedAst = new Queue<astPtr_t>;
+
+
+		return [](auto callableFlag) {
+
+			while(callableFlag()) {
+
+				astPtr_t parsedAstPtr = parseToken(preparsedAst->current()->value);
+
+				preparsedAst->push(parsedAstPtr);
+			};
+		};
+	};
+
+};
+
+auto mainPreparse(Queue<Token *> *unParsedTokens) {
 
 	return [unParsedTokens](auto flag) {
 
 		Queue<astPtr_t> *preparsedAst = new Queue<astPtr_t>;
 
-		while(tokenNode = flag()) {
+		while(Node<Token *> *tokenNode = flag()) {
 
 			preparsedAst->push(parseToken(tokenNode->value)); 
 		};
@@ -19,6 +48,15 @@ auto preparse(Queue<Token *> *unParsedTokens) {
 
 	};
 };
+
+Queue<astPtr_t> *foo () {
+
+	auto preparse = preparseWrapper(tokenNode);
+
+	preparse(unParsedTokens->current());
+};
+
+
 
 preparse() {
 
@@ -31,9 +69,19 @@ preparse() {
 	
 };
 
-parseToken(Token *tokenPtr) {
+astPtr_t parseToken(Token *tokenPtr) {
 
 	if(*tokenPtr == token::ID)
+
+		// Steal Identifier name from token object.
+		return new AST_ID(ast::ID, std::move(*(tokenPtr)));
+
+	// Start to BLOCK.
+	if(*tokenPtr == token::ARROW)
+
+
+		return new AST_BLOCK(ast::BLOCK, )
+
 
 
 };
