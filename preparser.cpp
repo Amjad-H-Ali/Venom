@@ -9,57 +9,159 @@ class Preparser {
 private:
 	Queue<Token *> *unParsedTokens;
 
+	/*	
+		*
+		* Returns a callable that returns whether if at end of BLOCK or LIST range.
+		* Lambda wrapped in function for reuse by LIST and BLOCK.
+		*
+	*/
+	auto callFlagForListAndBlock(Token *tokenPtr) {
+
+		return [tokenPtr, unParsedTokens] {
+
+				return (
+
+					tokenPtr->matchingCloseToken != unParsedTokens->current()->value;
+				);
+			};
+	};
+
 public:
 
 	Preparser(Queue<Token *> *unParsedTokens)
 		:unParsedTokens(unParsedTokens)
 	{};
 
+	/*
+		*
+		* Overload () operator. Creates a Queue of astPtr_t(s). 
+		* Return: Lambda that takes in a conditional and parses Queue of tokenPtr(s)
+		* and pushes parsed items into Queue of astPtr_t(s).
+		*
+	*/
+
 	auto operator()() {
 
 		Queue<astPtr_t> *parsedAst = new Queue<astPtr_t>;
 
-
+		/*
+			*
+			* callableFlag: conditional to know when to stop iterating through
+			* unParsedTokens member variable.
+			*
+		*/
 		return [](auto callableFlag) {
 
 			while(callableFlag()) {
 
+				/*
+					*
+					* Parse token and receive astPtr_t.
+					*
+				*/
 				astPtr_t parsedAstPtr = parseToken(unParsedTokens->current()->value);
 
-				parsedAst->push(parsedAstPtr);
+				parsedAst->push(parsedAstPtr); 
 
-				unParsedTokens->jump(1);
+				/*
+					*
+					* Move "_current" pointer one step ahead.
+					*
+				*/
+				unParsedTokens->jump(1); 
 			};
 
 			return parsedAst;
 		};
 	};
 
+	/*
+		*
+		* Parse token object and return an astPtr_t.
+		*
+	*/
 	astPtr_t parseToken(Token *tokenPtr) {
 
 
 		if(*tokenPtr == token::ID)
 
-			// Steal Identifier name from token object.
-			return new AST_ID(ast::ID, std::move(*(tokenPtr)));
+			/*
+				*
+				* Steal Identifier name from token object.
+				*
+			*/
+			return new AST_ID(ast::ID, std::move(*tokenPtr));
 
-		// Start to BLOCK.
-		if(*tokenPtr == token::ARROW)
+		/*
+			*
+			* Start to BLOCK.
+			*
+		*/
+		if(*tokenPtr == token::ARROW) {
 
 			unParsedTokens->jump(1);
 
+			/*
+				*
+				* Call to this Functor.
+				* Returns a Lambda that parses the unParsedTokens data member .
+				*
+			*/
 			auto parseBlock = (*this)();
 
-			auto callFlag = [tokenPtr, unParsedTokens] {
+			/*
+				*
+				* Conditional for parsing the range of tokens that is the Block.
+				*
+			*/
+			auto callFlag = callFlagForListAndBlock(tokenPtr);
 
-				return (
-
-					tokenPtr->matchingCloseToken != unParsedTokens->current()->value;
-
-				)
-			};
-
+			/*
+				*
+				* Recursively parsing block. 
+				*
+			*/
 			return new AST_BLOCK(ast::BLOCK, parseBlock(callFlag));
+		};
+
+
+		else if(*tokenPtr == token::IS)
+
+			return new AST_BinOp(ast::ASSIGN);
+
+		else if(*tokenPtr == token::LBRACKET || (*tokenPtr == token::BAR && !tokenPtr->closing)) {
+
+			unParsedTokens->jump(1);
+
+			/*
+				*
+				* Call to this Functor.
+				* Returns a Lambda that parses the unParsedTokens data member .
+				*
+			*/
+			auto parseList = (*this)();
+
+			/*
+				*
+				* Conditional for parsing the range of tokens that is the List.
+				*
+			*/
+			auto callFlag = callFlagForListAndBlock(tokenPtr); 
+
+			return new AST_List(ast::LIST, parseList(callFlag));
+
+		};
+
+		else if(*tokenPtr == token::STRING)
+
+			/*
+				*
+				* Steal STR name from token object.
+				*
+			*/
+			return new AST_STR(ast::STR, std::move(*tokenPtr));
+
+		return nullptr;
 	};
 
 };
