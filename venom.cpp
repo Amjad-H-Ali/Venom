@@ -1,9 +1,10 @@
 #include <iostream>
 #include "Token.h"
-#include "lexer.h"
+#include "Queue.h"
+#include "Lexer.h"
+#include "Preparser.h"
+#include "Parser.h"
 #include "AST.h"
-#include "preparser.h"
-#include "parser.h"
 #include "OperatorStack.h"
 
 
@@ -27,7 +28,7 @@ void _log(AST *node) {
 
 int main(){
 
-	token::TokenNode *tHead = lexer::lexer((char *) "new.vnm");
+	Queue<Token *> *tokenQ = lexer::lexer("new.vnm");
 
 	AST *astHead = preparser::preparse(tHead);
 

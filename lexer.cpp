@@ -7,6 +7,31 @@
 #include "ParamDimension.h"
 
 
+class Lexer {
+
+private:
+
+	std::ifstream inFile;
+
+	char stream;
+
+
+public:
+
+	Lexer(const char *fileName)
+		:inFile(fileName)
+	{};
+
+	// Queue<Token *> *Tokenize() {
+
+	// 	inFile >> std::noskipws;
+
+	// 	while(inFile >> stream)
+	// };
+
+}; // Lexer
+
+
 namespace utils = lexer::utility;
 
 
@@ -24,7 +49,7 @@ ParamDimension *const paramD = ParamDimension::getInstance();
 // LEXER FUNCTIONS
 
 // Tokenizes input file and adds to Linked List.
-token::TokenNode *lexer::lexer(char *fileName) {
+token::TokenNode *lexer::lexer(const char *fileName) {
 
 	std::ifstream in(fileName);
 	char c;

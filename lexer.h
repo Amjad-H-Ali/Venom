@@ -79,7 +79,7 @@ namespace utility	{
 	// LEXER FUNCTIONS
 
 	// Tokenizes input file and adds to Linked List of Tokens.
-	token::TokenNode *lexer(char *fileName);
+	token::TokenNode *lexer(const char *fileName);
 
 	// Inserts start/end to block or array in 
 	// respective Object.
