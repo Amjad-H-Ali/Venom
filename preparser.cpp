@@ -24,11 +24,42 @@ public:
 
 			while(callableFlag()) {
 
-				astPtr_t parsedAstPtr = parseToken(preparsedAst->current()->value);
+				astPtr_t parsedAstPtr = parseToken(unParsedTokens->current()->value);
 
-				preparsedAst->push(parsedAstPtr);
+				parsedAst->push(parsedAstPtr);
+
+				unParsedTokens->jump(1);
 			};
+
+			return parsedAst;
 		};
+	};
+
+	astPtr_t parseToken(Token *tokenPtr) {
+
+
+		if(*tokenPtr == token::ID)
+
+			// Steal Identifier name from token object.
+			return new AST_ID(ast::ID, std::move(*(tokenPtr)));
+
+		// Start to BLOCK.
+		if(*tokenPtr == token::ARROW)
+
+			unParsedTokens->jump(1);
+
+			auto parseBlock = (*this)();
+
+			auto callFlag = [tokenPtr, unParsedTokens] {
+
+				return (
+
+					tokenPtr->matchingCloseToken != unParsedTokens->current()->value;
+
+				)
+			};
+
+			return new AST_BLOCK(ast::BLOCK, parseBlock(callFlag));
 	};
 
 };
@@ -71,16 +102,7 @@ preparse() {
 
 astPtr_t parseToken(Token *tokenPtr) {
 
-	if(*tokenPtr == token::ID)
-
-		// Steal Identifier name from token object.
-		return new AST_ID(ast::ID, std::move(*(tokenPtr)));
-
-	// Start to BLOCK.
-	if(*tokenPtr == token::ARROW)
-
-
-		return new AST_BLOCK(ast::BLOCK, )
+	
 
 
 
