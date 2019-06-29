@@ -5,6 +5,7 @@
 #include "ArrayDimension.h"
 #include "BlockDimension.h"
 #include "ParamDimension.h"
+#include "utility.h"
 
 
 class Lexer {
@@ -15,19 +16,62 @@ private:
 
 	char stream;
 
+	/*
+		* Pointer to new Token object
+		* that may be Instantiated soon.
+	*/
+	Token *newTokenPtr;
+
+
 
 public:
 
 	Lexer(const char *fileName)
-		:inFile(fileName)
+
+		:inFile(fileName), newTokenPtr(nullptr)
 	{};
 
-	// Queue<Token *> *Tokenize() {
+	Queue<Token *> *Tokenize() {
 
-	// 	inFile >> std::noskipws;
+		inFile >> std::noskipws;
 
-	// 	while(inFile >> stream)
-	// };
+		/*	
+			********************* EOF but block remains open
+			********************* because no more new lines.
+		*/
+		while(inFile >> stream || *blockD > 0) {
+
+			/*
+				*
+				* When EOF and block still open, manually create 
+				* new lines (Token::NEWLINE) to mark end. 
+				*
+			*/
+			if(inFile.eof()) newTokenPtr = new Token("\n");
+
+
+			/*
+				* 
+				* Single Character Token (ie. BAR, RBRACKET, COMMA, etc.)
+				*
+			*/
+			else if(isSinglyNamedToken()) 
+				newTokenPtr = new Token(chompSingleChar());
+
+			/*
+				*
+				* AlphaNumeric(eg. Identifier, Keyword, etc.)
+				*
+			*/
+			else if(isEligibleStartToAlphaNum()) 
+				newTokenPtr = new Token(chompAlphaNumeric(), &isEligibleStartToAlphaNum);
+
+
+
+
+
+		} // while
+	};
 
 }; // Lexer
 
@@ -58,9 +102,7 @@ token::TokenNode *lexer::lexer(const char *fileName) {
 	token::TokenNode *headNode = nullptr;
 
 
-	// Pointer to new Token object
-	// that may be Instantiated soon.
-	token::Token *newTokenPtr = nullptr;
+	
 
 
 	/*
@@ -73,14 +115,10 @@ token::TokenNode *lexer::lexer(const char *fileName) {
 	in >> std::noskipws;
 	while(in >> c || *blockD > 0) { 
 
-		if(in.eof()) newTokenPtr = new token::Token((char *)"\n");
+		
 
-		// Single Character Token
-		else if(utils::isSinglyNamedToken(c)) 
-			newTokenPtr = new token::Token(utils::chompSingleChar(c, in));
-		// AlphaNumeric(eg. Identifier, Keyword, etc.)
-		else if(utils::isEligibleStartToAlphaNum(c)) 
-			newTokenPtr = new token::Token(utils::chompAlphaNumeric(c, in), &utils::isEligibleStartToAlphaNum);
+		
+		
 		// Potential Operator 
 		else if(utils::isOperator(c)) 
 			newTokenPtr = new token::Token(utils::chompOperator(c, in));

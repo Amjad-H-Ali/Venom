@@ -40,14 +40,15 @@ namespace utility {
 	T(ELSE, "else")									\
 	T(ELIF, "elif")									\
 	T(COMMA, ",")									\
+	T(ARROW, "->")									\
 	T(STRING, nullptr)								\
 	T(OUTPUT, "output")								\
 	T(NEWLINE, "\n")								\
 	T(LBRACKET, "[")								\
 	T(RBRACKET, "]")								\
 	T(BACKTICK, "`")								\
-	T(IDENTIFIER, nullptr)						    \
-	T(SKINNY_ARROW, "->")							
+	T(IDENTIFIER, nullptr)						    
+								
 
 
 
