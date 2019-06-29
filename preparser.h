@@ -2,45 +2,50 @@
 
 #define PREPARSER_H
 
-#include "AST.h"
-#include "AST_BinOp.h"
-#include "AST_List.h"
-#include "AST_Block.h"
-#include "AST_STR.h"
-#include "AST_ID.h"
+#include "AST.h"    // For astPtr_t
+#include "Token.h"
+#include "Queue.h"
 
 
 
 // Alias for const token::TokenNode *
-typedef const token::TokenNode *tNode;
+// typedef const token::TokenNode *tNode;
 
 
-namespace preparser {
+class Preparser {
 
-namespace utility {
+private:
 
-// UTILITIES 
+	Queue<Token *> *unParsedTokens;
 
-// Skips to begining of LIST or BLOCK
-// tNode skipTo(tNode tn);
+	/*	
+		*
+		* Returns a callable that returns whether if at end of BLOCK or LIST range.
+		* Lambda wrapped in function for reuse by LIST and BLOCK.
+		*
+	*/
+	auto callFlagForListAndBlock(Token *tokenPtr);
 
-}; // utility
+public:
 
-// PARSER functions
+	Preparser(Queue<Token *> *unParsedTokens);
 
-// MAIN parser function
-AST *preparse(tNode tn, tNode exit= nullptr);
+	/*
+		*
+		* Overload () operator. Creates a Queue of astPtr_t(s). 
+		* Return: Lambda that takes in a conditional and parses Queue of tokenPtr(s)
+		* and pushes parsed items into Queue of astPtr_t(s).
+		*
+	*/
+	auto operator()();
 
-// Parses a specific token Node and returns an AST.
-astPtr_t parseTNode(tNode tn);
+	/*
+		*
+		* Parse token object and return an astPtr_t.
+		*
+	*/
+	astPtr_t parseToken(Token *tokenPtr);
 
-// Parses a LIST from a linked-list of token nodes.
-// ASTNode *parseList(tNode tn);
-AST *parseList(tNode openingTN);
+}; // Preparser
 
-// Parses a BLOCK from a linked-list of token nodes.
-AST *parseBlock(tNode tn);
-
-
-}; // preparser
 #endif
