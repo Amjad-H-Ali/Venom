@@ -21,6 +21,11 @@ private:
 
     Node *head;
 
+    size_t hash(const char letter) const {
+        
+        return letter - '!';
+    }
+
 public:
 
     Trie()
@@ -34,7 +39,7 @@ public:
 
         for(size_t c = 0; str[c]; ++c) {
 
-            size_t indx = str[c];
+            size_t indx = hash(str[c]);
 
             if(!current->paths[indx]) current->paths[indx] = new Node;
 
