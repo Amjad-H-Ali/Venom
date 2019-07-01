@@ -23,13 +23,14 @@ namespace utility {
 
 
 
+/*
+	* TOKEN_LIST takes in a Token Macro (T).
+	* Each Macro has the same signature M(type, name), 
+	* where type is a unique symbol for the Token and name
+	* is a string containing the Token.
 
-// TOKEN_LIST takes in a Token Macro (T).
-// Each Macro has the same signature M(type, name), 
-// where type is a unique symbol for the Token and name
-// is a string containing the Token.
-
-// T: Token Macro
+	* T: Token Macro
+*/
 #define TOKEN_LIST(T)							    \
 	T(IS, "is")									    \
 	T(IF, "if")										\
@@ -53,18 +54,25 @@ namespace utility {
 
 
 
-// All Token Symbols
-#define T(symbol, name) symbol,
-	// In this case, only the symbol is needed
-	// and the second parameter is unused to
-	// generate the List of Token Symbols.
-	enum Symbol{TOKEN_LIST(T) NUM_OF_TOKENS};
-#undef T
+
 
 
 class Token {
 
 public:
+
+
+	/*
+		* All Token Symbols
+	*/
+#define T(symbol, name) symbol,
+	/* 
+		* In this case, only the symbol is needed
+		* and the second parameter is unused to
+		* generate the List of Token Symbols.
+	*/
+	enum Symbol{TOKEN_LIST(T) NUM_OF_TOKENS};
+#undef T
 
 	
 
