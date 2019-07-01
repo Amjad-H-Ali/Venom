@@ -2,6 +2,8 @@
 
 #define TRIE_H
 
+template<typename T>
+
 class Trie {
 
 private:
@@ -10,8 +12,14 @@ private:
 
     struct Node {
 
-        Symbol val;
+        T type;
 
+        /*
+            *
+            * Used to determine if data member "type" exist when T is of Symbol type.
+            * Symbol is an enum and enums are default initialized to 0, which is always false.
+            *
+        */
         bool exists;
 
         Node *paths[NUM_OF_SINGLE_ASCII];
@@ -35,7 +43,7 @@ public:
     {}
 
 
-    void push(Symbol type, const char *str) {
+    void push(const char *str, T type) {
        
         Node *current = head;
 
@@ -50,7 +58,7 @@ public:
 
         current->exists = true;
 
-        current->val = type;
+        current->type = type;
 
 
     }
