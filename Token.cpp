@@ -4,6 +4,13 @@
 namespace utils = token::utility;
 namespace tk = token;
 
+/*
+	*
+	* Used to map input file text (C-Style strings)  
+	* to their corresponding Symbol in O(n) time complexity.
+	*
+*/
+Trie<Token::Symbol *> *Token::mapToSymbol = new Trie<Token::Symbol *>;
 
 // Destructor
 tk::Token::~Token() {

@@ -63,7 +63,9 @@ public:
 
 
 	/*
+		*
 		* All Token Symbols
+		*
 	*/
 #define T(symbol, name) symbol,
 	/* 
@@ -72,7 +74,17 @@ public:
 		* generate the List of Token Symbols.
 	*/
 	enum Symbol{TOKEN_LIST(T) NUM_OF_TOKENS};
+
 #undef T
+
+
+	/*
+		*
+		* Used to map strings (C-Style) to their corresponding
+		* Symbol in O(n) time complexity.
+		*
+	*/
+	static Trie<Symbol *> *mapToSymbol;
 
 	
 
