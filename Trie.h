@@ -53,8 +53,26 @@ public:
 
         current->type = type;
 
-
     }
+
+    Ptr_t map(const char *str) {
+
+        if(!str) return nullptr;
+        
+        Node *current = head;
+
+        for(size_t c = 0; str[c]; ++c) {
+
+            size_t indx = hash(str[c]);
+
+            if(!current->paths[indx]) return nullptr;
+
+            current = current->paths[indx]; 
+        }
+
+        return current->type;
+
+    };
 
     
 
