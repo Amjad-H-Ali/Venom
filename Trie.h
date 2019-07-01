@@ -10,19 +10,21 @@ private:
 
     struct Node {
 
-        bool val;
+        Symbol val;
+
+        bool exists;
 
         Node *paths[NUM_OF_SINGLE_ASCII];
 
         Node()
-            :val(false), paths{nullptr}
+            :exists(false), paths{nullptr}
         {}
     };
 
     Node *head;
 
     size_t hash(const char letter) const {
-        
+
         return letter - '!';
     }
 
@@ -33,7 +35,7 @@ public:
     {}
 
 
-    void push(const char *str) {
+    void push(Symbol type, const char *str) {
        
         Node *current = head;
 
@@ -45,6 +47,10 @@ public:
 
             current = current->paths[indx];
         }
+
+        current->exists = true;
+
+        current->val = type;
 
 
     }
