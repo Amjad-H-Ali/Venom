@@ -47,7 +47,7 @@ public:
 				* new lines (Token::NEWLINE) to mark end. 
 				*
 			*/
-			if(inFile.eof()) newTokenPtr = new Token("\n");
+			if(inFile.eof()) newTokenPtr = new Token(Token::NEWLINE);
 
 
 			/*
@@ -55,8 +55,10 @@ public:
 				* Single Character Token (ie. BAR, RBRACKET, COMMA, etc.)
 				*
 			*/
-			else if(isSinglyNamedToken()) 
+			else if(isSinglyNamedToken()) {
+				const char *
 				newTokenPtr = new Token(chompSingleChar());
+			}
 
 			/*
 				*
