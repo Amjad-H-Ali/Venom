@@ -30,7 +30,15 @@ int main(){
 
 	Queue<Token *> *tokenQ = lexer::lexer("new.vnm");
 
-	AST *astHead = preparser::preparse(tHead);
+	Preparser *preparser = new Preparser(tokenQ);
+	
+	/*
+	 	 *************************************** Passing Lambda to Lambda to know when
+	 	 *************************************** to stop iterating over tokenQ.
+	*/
+	Queue<astPtr_t> *preparsedAst = preparser()([tokenQ]{return tokenQ->current();});
+
+	AST *astHead = Preparse(tHead);
 
 	AST *parsedAstHead = parser::_main(astHead);
 

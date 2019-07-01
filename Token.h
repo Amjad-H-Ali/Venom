@@ -66,6 +66,8 @@ class Token {
 
 public:
 
+	
+
 	// Main Constructor
 	Token(char *stream, bool(*hint)(char)=nullptr) 
 	{	

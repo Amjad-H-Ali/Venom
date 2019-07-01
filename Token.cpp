@@ -49,15 +49,5 @@ char *tk::Token::getTypeName() const {
 
 
 
-// Utility function that compares two strings
-bool utils::isMatch(char *s1, char *s2) {
-	if(s1 && s2) {
-		int indx = 0;
-		while(s1[indx] == s2[indx]) {
-			if(s1[indx]== '\0' && s2[indx] == '\0') return true;
-			indx++;
-		}
-	}		
-	return false;
-};
+
 

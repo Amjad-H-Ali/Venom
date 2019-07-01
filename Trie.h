@@ -2,7 +2,7 @@
 
 #define TRIE_H
 
-template<typename T>
+template<typename Ptr_t>
 
 class Trie {
 
@@ -12,22 +12,16 @@ private:
 
     struct Node {
 
-        T type;
-
-        /*
-            *
-            * Used to determine if data member "type" exist when T is of Symbol type.
-            * Symbol is an enum and enums are default initialized to 0, which is always false.
-            *
-        */
-        bool exists;
+        Ptr_t type;
 
         Node *paths[NUM_OF_SINGLE_ASCII];
 
         Node()
-            :exists(false), paths{nullptr}
+            :Ptr_t(nullptr), paths{nullptr}
         {}
-    };
+
+    }; // Node
+
 
     Node *head;
 
@@ -43,7 +37,7 @@ public:
     {}
 
 
-    void push(const char *str, T type) {
+    void push(const char *str, Ptr_t type) {
        
         Node *current = head;
 
@@ -56,7 +50,6 @@ public:
             current = current->paths[indx];
         }
 
-        current->exists = true;
 
         current->type = type;
 

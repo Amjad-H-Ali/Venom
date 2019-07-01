@@ -6,7 +6,9 @@
 // 	Declared *paths[26];
 
 // 	// Initialize all pointers in array to NULL.
-// 	Declared():paths(){};
+// 	Declared()
+//		:paths()
+//	{};
 // };
 
 
