@@ -176,7 +176,7 @@ astPtr_t Preparser::parseToken(Token *tokenPtr) {
 
 	return nullptr;
 
-}; // Preparser
+}; // parserToken
 
 
 

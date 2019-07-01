@@ -12,6 +12,21 @@ namespace tk = token;
 */
 Trie<Token::Symbol *> *Token::mapToSymbol = new Trie<Token::Symbol *>;
 
+
+/*
+	*
+	* Load Trie with all Symbols.
+	*
+*/
+
+#define T(symbol, name) Token::mapToSymbol->push(name, new token::Symbol(token::symbol));
+	
+	TOKEN_LIST(T)
+
+#undef T
+
+
+
 // Destructor
 tk::Token::~Token() {
 	// Delete Dynamically Allocated Array
