@@ -9,14 +9,14 @@ private:
     static constexpr size_t NUM_OF_SINGLE_ASCII = '~' - '!';
 
     struct Node {
-        
+
         bool val;
 
         Node *paths[NUM_OF_SINGLE_ASCII];
 
         Node()
             :val(false), paths{nullptr}
-        {};
+        {}
     };
 
     Node *head;
@@ -25,7 +25,24 @@ public:
 
     Trie()
         :head(nullptr)
-    {};
+    {}
+
+
+    void push(const char *str) {
+       
+        Node *current = head;
+
+        for(size_t c = 0; str[c]; ++c) {
+
+            size_t indx = str[c];
+
+            if(!current->paths[indx]) current->paths[indx] = new Node;
+
+            current = current->paths[indx];
+        }
+
+
+    }
 
     
 
