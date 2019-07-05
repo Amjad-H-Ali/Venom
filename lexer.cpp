@@ -24,6 +24,9 @@ private:
 
 
 
+
+
+
 public:
 
 	Lexer(const char *fileName)
@@ -65,8 +68,32 @@ public:
 				* AlphaNumeric(eg. Identifier, Keyword, etc.)
 				*
 			*/
-			else if(isEligibleStartToAlphaNum()) 
-				newTokenPtr = new Token(chompAlphaNumeric(), &isEligibleStartToAlphaNum);
+			else if(isEligibleStartToAlphaNum()) {
+
+				char *someAlphaNum = chompAlphaNumeric();
+
+				/*
+					*
+					* Check if value is a keyword (it would be in the Trie if it is).
+					* If it's not a keyword, then it must be an Identifier. 
+					***********************
+					*********************** Returns nullptr or pointer to Token::Symbol.
+				*/
+				if(Token::Symbol *sym = Token::mapToSymbol->map(someAlphaNum))
+
+					newTokenPtr = new Token(*sym);
+
+
+				else
+					/*
+						*
+						* Identifier Token Constructor. 
+						* Store Identifier name.
+						*
+					*/
+					newTokenPtr = new Token(someAlphaNum, Symbol::IDENTIFIER);
+
+			}
 
 
 
@@ -322,7 +349,7 @@ bool utils::isNumeric(char c) {
 
 // Checks if current character is a letter.
 bool utils::isAtoZ(char c) {
-	return ((c >= 'a' && c <= 'z') || (c >='A' && c <= 'Z'));
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 };
 
 // Checks if character is Alphanumeric (A-Z, 0-9, or _)

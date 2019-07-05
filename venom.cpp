@@ -28,7 +28,7 @@ void _log(AST *node) {
 
 int main(){
 
-	Queue<Token *> *tokenQ = lexer::lexer("new.vnm");
+	Queue<Token *> *tokenQ = lexer::lexer("new.venom");
 
 	Preparser *preparser = new Preparser(tokenQ);
 	

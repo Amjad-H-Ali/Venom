@@ -55,6 +55,7 @@ public:
 
     }
 
+
     Ptr_t map(const char *str) {
 
         if(!str) return nullptr;
