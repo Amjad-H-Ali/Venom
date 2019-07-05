@@ -58,9 +58,11 @@ public:
 				* Single Character Token (ie. BAR, RBRACKET, COMMA, etc.)
 				*
 			*/
-			else if(isSinglyNamedToken()) {
-				const char *
-				newTokenPtr = new Token(chompSingleChar());
+			else if(isSingleCharSymbol()) {
+
+				Token::Symbol *sym = Token::mapToSymbol->map(chompSingleCharSymbol());
+
+				newTokenPtr = new Token(*sym);
 			}
 
 			/*
@@ -70,7 +72,7 @@ public:
 			*/
 			else if(isEligibleStartToAlphaNum()) {
 
-				char *someAlphaNum = chompAlphaNumeric();
+				const char *someAlphaNum = chompAlphaNumeric();
 
 				/*
 					*
@@ -87,7 +89,7 @@ public:
 				else
 					/*
 						*
-						* Identifier Token Constructor. 
+						* Token Constructor for Identifier. 
 						* Store Identifier name.
 						*
 					*/
