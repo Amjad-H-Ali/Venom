@@ -56,20 +56,21 @@ public:
     }
 
 
-    Ptr_t map(const char *str) {
+    Ptr_t map(const std::string &data,  decltype(data.size()) start, decltype(data.size()) end) {
 
-        if(!str) return nullptr;
-        
         Node *current = head;
 
-        for(size_t c = 0; str[c]; ++c) {
+        while(start < end) {
 
-            size_t indx = hash(str[c]);
+            size_t indx = hash(data[start]);
 
             if(!current->paths[indx]) return nullptr;
 
-            current = current->paths[indx]; 
-        }
+            ++start;
+
+            current = current->paths[indx];
+
+        } 
 
         return current->type;
 
