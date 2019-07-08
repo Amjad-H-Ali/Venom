@@ -55,8 +55,15 @@ public:
 
     }
 
+    /*
+        *
+        * Finds corresponding Ptr_t data of string in O(1) time complexity.
+        * Params: string containing data and the range (start and end) to read.
+        * Range is set to full string as defualt.
+    */
+    Ptr_t map(const std::string &data,  decltype(data.size()) start = 0, decltype(data.size()) end = 0) {
 
-    Ptr_t map(const std::string &data,  decltype(data.size()) start, decltype(data.size()) end) {
+        if(end == 0) end = data.size();
 
         Node *current = head;
 
@@ -80,11 +87,11 @@ public:
     /*
         *
         * Gets the index of the string of where the data stopped matching.
-        * Params: the string containing the text from the input file &
-        * the position of where to start reading from the string.
+        * Params: the string containing the data and the position of where to 
+        * start reading the string (set to begining of string as defualt).
         *
     */
-    std::string::size_type getBreakPoint(const std::string &data, decltype(data.size()) start) {
+    std::string::size_type getBreakPoint(const std::string &data, decltype(data.size()) start = 0) {
     
         Node *current = head;
 
