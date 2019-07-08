@@ -22,9 +22,36 @@ private:
 	*/
 	Token *newTokenPtr;
 
+	/* 
+		*
+		* Gets the index of the string of where it no longer can be 
+		* part of a potential identifier. 
+		* Params: string containing data to tokenize and the start position
+		* to read the string (defualt to beginning).
+		*
+    */
+	std::string::size_type getIdentifierBreakPoint(const std::string &data, decltype(data.size()) start = 0) {
+    	
+		decltype(data.size()) beginning = start;
 
+    	/*
+			*
+			* Identifier rules: 
+			* ** Can contain anything from "A-Z", and "_".
+			* ** Can contain numbers as long as it does not begin with one.
+			* -------------------------------------------------------------
+			* This loop increments as long as these conditions are met.
+			*
+		*/
+		for(decltype(data.size()) len = data.size(); (start < len) && 
+			((data[start] >= 'a' && data[start] <= 'z') || 
+			(data[start] >= 'A' && data[start] <= 'Z') ||
+			(data[start] == '_') || ((start > beginning) && 
+			(data[start] >= '0') && (data[start] <= '9'))); ++start);
+   
 
-
+    	return start;
+	}
 
 public:
 
