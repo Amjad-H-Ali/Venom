@@ -8,19 +8,15 @@
 
 
 
-// Alias for const token::TokenNode *
-// typedef const token::TokenNode *tNode;
-
-
 class Preparser {
 
 private:
 
-	Queue<Token *> *unParsedTokens;
+	Queue<Token> *unParsedTokens;
 
 	/*	
 		*
-		* Returns a callable that returns whether if at end of BLOCK or LIST range.
+		* Returns a callable that returns whether at end of a BLOCK or LIST range.
 		* Lambda wrapped in function for reuse by LIST and BLOCK.
 		*
 	*/
@@ -28,7 +24,7 @@ private:
 
 public:
 
-	Preparser(Queue<Token *> *unParsedTokens);
+	Preparser(Queue<Token> *unParsedTokens);
 
 	/*
 		*

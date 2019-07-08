@@ -8,14 +8,24 @@ Queue::Queue()
 
 /*
 	*
-	* Pushes a pointer to an object at the end of the Queue.
+	* Pushes an object at the end of the Queue.
+	* Params: variable number of arguments that
+	* will be passed into T object constructor. 
+	* Creates T object emplace.
 	*
 */
-void Queue::push(T objPtr) {
+template<typename ... Params>
+
+void Queue::enqueue(Params&& ... params) {
 
 	Node<T> *newNode = new Node<T>;
 
-	newNode->value = objPtr;
+	/*
+		*
+		* Forward L-Value or R-Value when passing to T constructor
+		*
+	*/
+	newNode->value = new T(std::forward<Params>(params)...);
 
 	/*
 		*

@@ -7,15 +7,15 @@
 
 #define NODE_H
 
-template<typename Ptr_t>
+template<typename T>
 
 struct Node {
 
-	Ptr_t value;
+	T *value;
 
-	Node<Ptr_t> *next, *prev;
+	Node<T> *next, *prev;
 
-	Node<Ptr_t>()
+	Node<T>()
 		:value(nullptr), next(nullptr), prev(nullptr)
 	{};
 

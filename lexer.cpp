@@ -14,13 +14,16 @@ private:
 
 	std::ifstream inFile;
 
-	char stream;
+	std::string stream;
 
 	/*
 		* Pointer to new Token object
 		* that may be Instantiated soon.
 	*/
 	Token *newTokenPtr;
+
+
+	Queue<Token> *tokensQ;
 
 	/* 
 		*
@@ -37,8 +40,8 @@ private:
     	/*
 			*
 			* Identifier rules: 
-			* ** Can contain anything from "A-Z", and "_".
-			* ** Can contain numbers as long as it does not begin with one.
+			* *** Can contain anything from "A-Z", and "_".
+			* *** Can contain numbers as long as it does not begin with one.
 			* -------------------------------------------------------------
 			* This loop increments as long as these conditions are met.
 			*
@@ -53,6 +56,41 @@ private:
     	return start;
 	}
 
+
+	void generateTokensInQ(const std::string &data, decltype(data.size()) start = 0, decltype(data.size()) end = 0) {
+
+	    if(start >= end) return;
+
+	    if(end == 0) end = data.size();
+
+
+	    if(Token::Symbol *sym = Token::mapToSymbol->map(data, start, end))
+	        tokensQ.push(new Token)
+	    
+	    else {
+	        
+	         decltype(data.size()) aToZbreak = getAtoZbreakPoint(data, start),
+	                             symBreak = Token::mapToSymbol->getBreakPoint(data, start);
+	    
+
+	        if( (symBreak > 0) && (symBreak >= aToZbreak) && (sym = Token::mapToSymbol->map(data, start, symBreak)) ) {
+	            std::cout <<  *sym << std::endl;
+	            start = symBreak;
+	        }
+	        else {
+
+	            std::cout << "ID" << std::endl;
+
+	            start = aToZbreak;
+	        }
+
+	        generate(data, start, end);
+	    }
+	       
+	 
+	    
+	}
+
 public:
 
 	Lexer(const char *fileName)
@@ -60,7 +98,9 @@ public:
 		:inFile(fileName), newTokenPtr(nullptr)
 	{};
 
-	Queue<Token *> *Tokenize() {
+	Queue<Token> *Tokenize() {
+
+		tokensQ = new Queue<Token>
 
 		inFile >> std::noskipws;
 

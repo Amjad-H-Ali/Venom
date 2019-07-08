@@ -20,10 +20,15 @@ public:
 
 	/*
 		*
-		* Pushes a pointer to an object at the end of the Queue.
+		* Pushes an object at the end of the Queue.
+		* Params: variable number of arguments that
+		* will be passed into T object constructor. 
+		* Creates T object emplace.
 		*
 	*/
-	void push(T objPtr);
+	template<typename ... Params>
+
+	void enqueue(Params&& ... params);
 
 
 	/*

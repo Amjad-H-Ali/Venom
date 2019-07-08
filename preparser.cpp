@@ -15,7 +15,7 @@
 // namespace utils = preparser::utility;
 
 
-Preparser::Preparser(Queue<Token *> *unParsedTokens)
+Preparser::Preparser(Queue<Token> *unParsedTokens)
 	:unParsedTokens(unParsedTokens)
 {};
 
