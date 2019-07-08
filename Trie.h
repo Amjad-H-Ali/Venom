@@ -75,6 +75,30 @@ public:
 
     };
 
+
+    /*
+        *
+        * Gets the index of the string of where the data stopped matching.
+        * Params: the string containing the text from the input file &
+        * the position of where to start reading from the string.
+        *
+    */
+    std::string::size_type getBreakPoint(const std::string &data, decltype(data.size()) start) {
+    
+        Node *current = head;
+
+        for(decltype(data.size()) len = data.size(); start < len; ++start)
+            
+            size_t indx = hash(data[start]);
+
+            if(!current->paths[indx]) break;
+
+            current = current->paths[indx];
+        }
+
+        return start;
+    }
+
     
 
 }; // Trie

@@ -26,7 +26,6 @@ private:
 
 
 
-
 public:
 
 	Lexer(const char *fileName)
@@ -94,8 +93,16 @@ public:
 						*
 					*/
 					newTokenPtr = new Token(someAlphaNum, Symbol::IDENTIFIER);
-
 			}
+
+			/*
+				* 
+				* Potential Operator 
+				*
+			*/
+			else if(isOperator(c)) 
+
+				newTokenPtr = new token::Token(utils::chompOperator(c, in));
 
 
 
@@ -150,9 +157,7 @@ token::TokenNode *lexer::lexer(const char *fileName) {
 
 		
 		
-		// Potential Operator 
-		else if(utils::isOperator(c)) 
-			newTokenPtr = new token::Token(utils::chompOperator(c, in));
+		
 		// String
 		else if(utils::isQuote(c)) 
 			newTokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
@@ -340,8 +345,10 @@ std::streampos utils::rangeToChomp(char &c, INFILE in, bool(*greenLight)(const c
 
 // Check if character is an eligible operator.
 bool utils::isOperator(char c) {
-	return (c == '=' || c == '+' || c == '-' || c == '*' || c == '/' 
-		|| c == '%' || c == '>' || c == '<');
+	return (
+		c == '=' || c == '+' || c == '-' || c == '*' ||
+	    c == '/' || c == '%' || c == '>' || c == '<'
+	);
 };
 
 // Checks if current charachter is a number

@@ -17,10 +17,18 @@ void Queue::push(T objPtr) {
 
 	newNode->value = objPtr;
 
-	// First Node in Queue. Assign all pointers to it.
+	/*
+		*
+		* First Node in Queue. Assign all pointers to it.
+		*
+	*/
 	if(!head) {head = newNode; tail = newNode; _current = newNode;}
 
-	// Append Node to end of Queue.
+	/*
+		*
+		* Append Node to end of Queue.
+		*
+	*/
 	else {
 
 		tail->next = newNode;
