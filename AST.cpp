@@ -51,7 +51,7 @@ bool operator!(const ast_t &astObj) {
 
 		[](std::nullptr_t) {return true;}
 
-	}, astPtrType);
+	}, astObj);
 };
 
 /*

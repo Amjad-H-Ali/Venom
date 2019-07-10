@@ -33,9 +33,9 @@ private:
 		* to read the string (defualt to beginning).
 		*
     */
-	std::string::size_type getIdentifierBreakPoint(const std::string &data, decltype(data.size()) start = 0) {
+	std::string::size_type getIdentifierBreakPoint(const std::string &data, std::string::size_type start = 0) {
     	
-		decltype(data.size()) beginning = start;
+		decltype(start) beginning = start;
 
     	/*
 			*
@@ -46,7 +46,7 @@ private:
 			* This loop increments as long as these conditions are met.
 			*
 		*/
-		for(decltype(data.size()) len = data.size(); (start < len) && 
+		for(decltype(start) len = data.size(); (start < len) && 
 			((data[start] >= 'a' && data[start] <= 'z') || 
 			(data[start] >= 'A' && data[start] <= 'Z') ||
 			(data[start] == '_') || ((start > beginning) && 
@@ -57,7 +57,7 @@ private:
 	}
 
 
-	void generateTokensInQ(const std::string &data, decltype(data.size()) start = 0, decltype(data.size()) end = 0) {
+	void generateTokensInQ(const std::string &data, std::string::size_type start = 0, std::string::size_type end = 0) {
 
 	    if(start >= end) return;
 
@@ -69,8 +69,8 @@ private:
 	    
 	    else {
 	        
-	         decltype(data.size()) aToZbreak = getAtoZbreakPoint(data, start),
-	                             symBreak = Token::mapToSymbol->getBreakPoint(data, start);
+	        decltype(start) aToZbreak = getAtoZbreakPoint(data, start),
+	                         symBreak = Token::mapToSymbol->getBreakPoint(data, start);
 	    
 
 	        if( (symBreak > 0) && (symBreak >= aToZbreak) && (sym = Token::mapToSymbol->map(data, start, symBreak)) ) {
