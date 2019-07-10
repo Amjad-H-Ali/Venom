@@ -36,7 +36,7 @@ template<typename ... Params> struct Overloads : Params ... {using Params::opera
 template<typename ... Params> Overloads(Params ...) -> Overloads<Params ... >;
 
 // Takes in the std::variant type as param.
-bool operator!(astPtr_t astPtrType) {
+bool operator!(const ast_t &astObj) {
 
 	/*
 		Our struct's constructor is being called with Lambdas passed as 

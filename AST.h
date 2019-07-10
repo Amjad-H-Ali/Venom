@@ -23,7 +23,7 @@ class AST_BinOp;
 typedef std::variant< std::nullptr_t, AST_Str , AST_List , AST_ID , AST_Func , AST_Block , AST_BinOp > ast_t;
 
 // See AST.cpp
-extern bool operator!(astPtr_t astPtrType);
+extern bool operator!(const ast_t &astObj);
 
 /*
 	AST_LIST takes in a Macro(N).
