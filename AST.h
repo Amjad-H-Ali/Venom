@@ -20,7 +20,7 @@ class AST_BinOp;
  	set_value/get_value methods were needed. I did not want to add all the various methods as virtual methods 
  	in the Base class. Using std::variant allows me to call   
 */
-typedef std::variant< std::nullptr_t, AST_STR *, AST_List *, AST_ID *, AST_Func *, AST_Block *, AST_BinOp *> astPtr_t;
+typedef std::variant< std::nullptr_t, AST_Str , AST_List , AST_ID , AST_Func , AST_Block , AST_BinOp > ast_t;
 
 // See AST.cpp
 extern bool operator!(astPtr_t astPtrType);

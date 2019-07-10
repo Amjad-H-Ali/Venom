@@ -1,3 +1,7 @@
+
+// Tokens construct to work with emplace, finish Lexer, change astptr_t to ast_t
+
+
 func is |name| ->
 
 	func2 is |age| ->
