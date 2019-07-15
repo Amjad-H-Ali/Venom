@@ -88,7 +88,25 @@ public:
 
 	
 
-	// Main Constructor
+	/*
+		----------------
+		  Constructors
+		----------------
+	*/
+
+	/*
+		*
+		* IDENTIFIER and STRING Constructor.
+		*
+	*/
+	Token(const std::string &stream, Symbol type) {
+
+		value = stream;
+		
+		type = type;
+	}
+
+
 	Token(char *stream, bool(*hint)(char)=nullptr) 
 	{	
 		
@@ -127,7 +145,8 @@ public:
 
 	// Data
 private:
-	char *name, *typeName;
+	std::string value, typeName;
+
 	Symbol type; 
 
 }; // Token

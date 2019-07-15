@@ -61,7 +61,7 @@ public:
         * Params: string containing data and the range (start and end) to read.
         * Range is set to full string as defualt.
     */
-    Ptr_t map(const std::string &data,  decltype(data.size()) start = 0, decltype(data.size()) end = 0) {
+    Ptr_t map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) {
 
         if(end == 0) end = data.size();
 
@@ -91,11 +91,11 @@ public:
         * start reading the string (set to begining of string as defualt).
         *
     */
-    std::string::size_type getBreakPoint(const std::string &data, decltype(data.size()) start = 0) {
+    std::string::size_type getBreakPoint(const std::string &data, std::string::size_type start = 0) {
     
         Node *current = head;
 
-        for(decltype(data.size()) len = data.size(); start < len; ++start)
+        for(decltype(start) len = data.size(); start < len; ++start)
             
             size_t indx = hash(data[start]);
 

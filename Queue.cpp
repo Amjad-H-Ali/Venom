@@ -22,7 +22,7 @@ void Queue::enqueue(Params&& ... params) {
 
 	/*
 		*
-		* Forward L-Value or R-Value when passing to T constructor
+		* Forward L-Value or R-Value when passing to T constructor.
 		*
 	*/
 	newNode->value = new T(std::forward<Params>(params)...);
@@ -36,7 +36,7 @@ void Queue::enqueue(Params&& ... params) {
 
 	/*
 		*
-		* Append Node to end of Queue.
+		* Append Node to Queue.
 		*
 	*/
 	else {

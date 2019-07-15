@@ -40,10 +40,10 @@ private:
     	/*
 			*
 			* Identifier rules: 
-			* *** Can contain anything from "A-Z", and "_".
-			* *** Can contain numbers as long as it does not begin with one.
+			*   * Can contain anything from "A-Z", and "_".
+			*   * Can contain numbers as long as it does not begin with one.
 			* -------------------------------------------------------------
-			* This loop increments as long as these conditions are met.
+			* This loop increments as long as above conditions are met.
 			*
 		*/
 		for(decltype(start) len = data.size(); (start < len) && 
@@ -57,37 +57,57 @@ private:
 	}
 
 
-	void generateTokensInQ(const std::string &data, std::string::size_type start = 0, std::string::size_type end = 0) {
+	void generateTokensInQ(std::string::size_type start = 0, std::string::size_type end = 0) {
+
+		if(end == 0) end = stream.size();
 
 	    if(start >= end) return;
 
-	    if(end == 0) end = data.size();
-
-
+	    /*
+			*
+			* Check if stream is the corresponding string value to any of the Token
+			* symbols held in the Trie (Token::mapToSymbol). This can be a keyword,
+			* paranthesis, comma, bracket, etc.
+			*
+	    */
 	    if(Token::Symbol *sym = Token::mapToSymbol->map(data, start, end))
-	        tokensQ.push(new Token)
+	        tokensQ.enqueue(*sym);
 	    
+	    /*
+			*
+			* If stream does not match any of the Token symbols, then it could be any of the following:
+			*    * It's holding more than one value, meaning it contains values that were not spaced out (ie. "if(" ).
+			*    * It's an identifier.
+			* 	 * Otherwise, It's an error.
+			*
+	    */
 	    else {
-	        
-	        decltype(start) aToZbreak = getAtoZbreakPoint(data, start),
+	    	/*
+	    		*
+	    		* Reccursively single out keywords, identifiers, operators, etc that are 
+	    		* mashed together in the stream and Tokenize.
+	    		*
+	        */
+	        decltype(start) aToZbreak = getIdentifierBreakPoint(data, start),
 	                         symBreak = Token::mapToSymbol->getBreakPoint(data, start);
 	    
 
 	        if( (symBreak > 0) && (symBreak >= aToZbreak) && (sym = Token::mapToSymbol->map(data, start, symBreak)) ) {
-	            std::cout <<  *sym << std::endl;
+
+	        	tokensQ.enqueue(*sym); 
+
 	            start = symBreak;
 	        }
+	        
 	        else {
 
-	            std::cout << "ID" << std::endl;
+	        	tokensQ.enqueue(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
 
 	            start = aToZbreak;
 	        }
 
-	        generate(data, start, end);
+	        generateTokensInQ(start, end);
 	    }
-	       
-	 
 	    
 	}
 
@@ -100,7 +120,7 @@ public:
 
 	Queue<Token> *Tokenize() {
 
-		tokensQ = new Queue<Token>
+		tokensQ = new Queue<Token>;
 
 		inFile >> std::noskipws;
 
