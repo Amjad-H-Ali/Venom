@@ -102,7 +102,18 @@ public:
 	Token(const std::string &stream, Symbol type) {
 
 		value = stream;
-		
+
+		type = type;
+	}
+
+	/*
+		*
+		* Constructor for Everything else like keywords, operators, etc,
+		*
+	*/
+	Token(Symbol type) 
+		:value(nullptr)
+	{
 		type = type;
 	}
 
