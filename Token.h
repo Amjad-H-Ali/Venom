@@ -3,6 +3,8 @@
 #define TOKEN_H
 
 #include "lexer.h"
+#include <vector>
+
 
 
 // Forward Declaration of lexer::utility functions.
@@ -86,6 +88,13 @@ public:
 	*/
 	static Trie<Symbol *> *mapToSymbol;
 
+	/*
+		*
+		* All Token symbols in string form for logging.
+		*
+	*/
+	static std::vector<std::string> typeName;
+
 	
 
 	/*
@@ -118,22 +127,7 @@ public:
 	}
 
 
-	Token(char *stream, bool(*hint)(char)=nullptr) 
-	{	
-		
 
-		if(hint == &lexer::utility::isQuote) {setType(STRING); setName(stream); setTypeName((char *)"STRING");}
-
-
-
-#define T(symbol, name) else if(utility::isMatch(stream, (char *)name)) {setType(symbol); setName(stream); setTypeName((char *)#symbol);}
-		TOKEN_LIST(T)
-#undef T
-		// If AlphaNum and not any keyword, must be Identifier.
-		else if(hint == &lexer::utility::isEligibleStartToAlphaNum) {setType(IDENTIFIER); setName(stream); setTypeName((char *)"IDENTIFIER");}
-		
-		// Else Throw Exception
-	};
 
 	// Destructor
 	~Token();
@@ -156,7 +150,13 @@ public:
 
 	// Data
 private:
-	std::string value, typeName;
+	/*
+		*
+		* This data member is set to nullptr unless type is a STRING or IDENTIFIER.
+		*
+	*/
+	std::string value;
+
 
 	Symbol type; 
 

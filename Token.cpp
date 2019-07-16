@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Token.h"
+#include <vector>
 
 namespace utils = token::utility;
 namespace tk = token;
@@ -24,6 +25,28 @@ Trie<Token::Symbol *> *Token::mapToSymbol = new Trie<Token::Symbol *>;
 
 #undef T
 
+
+
+
+/*
+	*
+	* All Token symbols in string form for logging.
+	*
+*/
+std::vector<std::string> Token::typeName;
+
+Token::typeName.reserve(Token::NUM_OF_TOKENS);
+
+/*
+	*
+	* Populate vector with all Token types in string form.
+	*
+*/
+#define T(symbol, name) Token::typeName.emplace_back(#symbol);
+
+	TOKEN_LIST(T)
+
+#undef T
 
 
 // Destructor
