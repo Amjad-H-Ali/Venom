@@ -33,7 +33,7 @@ private:
 		* to read the string (defualt to beginning).
 		*
     */
-	std::string::size_type getIdentifierBreakPoint(const std::string &data, std::string::size_type start = 0) {
+	std::string::size_type getIdentifierBreakPoint(std::string::size_type start = 0) {
     	
 		decltype(start) beginning = start;
 
@@ -88,7 +88,7 @@ private:
 	    		* mashed together in the stream and Tokenize.
 	    		*
 	        */
-	        decltype(start) aToZbreak = getIdentifierBreakPoint(data, start),
+	        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
 	                         symBreak = Token::mapToSymbol->getBreakPoint(data, start);
 	    
 
