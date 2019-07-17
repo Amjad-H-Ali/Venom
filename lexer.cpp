@@ -27,10 +27,9 @@ private:
 
 	/* 
 		*
-		* Gets the index of the string of where it no longer can be 
+		* Gets the index of the stream where it no longer can be 
 		* part of a potential identifier. 
-		* Params: string containing data to tokenize and the start position
-		* to read the string (defualt to beginning).
+		* Params: start position to read the stream (defualt to beginning).
 		*
     */
 	std::string::size_type getIdentifierBreakPoint(std::string::size_type start = 0) {
@@ -46,14 +45,35 @@ private:
 			* This loop increments as long as above conditions are met.
 			*
 		*/
-		for(decltype(start) len = data.size(); (start < len) && 
-			((data[start] >= 'a' && data[start] <= 'z') || 
-			(data[start] >= 'A' && data[start] <= 'Z') ||
-			(data[start] == '_') || ((start > beginning) && 
-			(data[start] >= '0') && (data[start] <= '9'))); ++start);
+		for(decltype(start) len = stream.size(); (start < len) && 
+			((stream[start] >= 'a' && stream[start] <= 'z') || 
+			(stream[start] >= 'A' && stream[start] <= 'Z') ||
+			(stream[start] == '_') || ((start > beginning) && 
+			(stream[start] >= '0') && (stream[start] <= '9'))); ++start);
    
 
     	return start;
+	}
+
+	/*
+		*
+		* Gets the ending index of the string in stream.
+		* Params: start position to read the stream (defualt to beginning).
+		*
+	*/
+	std::string::size_type getStrBreakPoint(std::string::size_type start = 0) {
+
+		/*
+			*
+			* Store so we know which type of ending quote to look for. Increment
+			* start to move on to firt character in string.
+			*
+		*/
+		char quote = stream[start++];
+
+		for(decltype(start) len = stream.size(); start < len && stream[start] != quote; ++start);
+
+		return start;
 	}
 
 
@@ -70,41 +90,83 @@ private:
 			* paranthesis, comma, bracket, etc.
 			*
 	    */
-	    if(Token::Symbol *sym = Token::mapToSymbol->map(data, start, end))
+	    if(Token::Symbol *sym = Token::mapToSymbol->map(stream, start, end))
 	        tokensQ.enqueue(*sym);
 	    
 	    /*
 			*
 			* If stream does not match any of the Token symbols, then it could be any of the following:
-			*    * It's holding more than one value, meaning it contains values that were not spaced out (ie. "if(" ).
+			*    * It's holding more than one symbol, meaning it contains symbols that were not spaced out (ie. "if(" ).
 			*    * It's an identifier.
-			* 	 * Otherwise, It's an error.
-			*
+			* 	 * It's a string.
+			* 	 * Otherwise, it's an error.
+			* Reccusively Tokenize potential string, identifier, keyword, etc.
 	    */
 	    else {
+
 	    	/*
-	    		*
-	    		* Reccursively single out keywords, identifiers, operators, etc that are 
-	    		* mashed together in the stream and Tokenize.
-	    		*
+	        	*
+				* Check for possible string.
+				*
 	        */
-	        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
-	                         symBreak = Token::mapToSymbol->getBreakPoint(data, start);
-	    
+	        if(stream[start] == '"' || stream[start] == '\'') {
 
-	        if( (symBreak > 0) && (symBreak >= aToZbreak) && (sym = Token::mapToSymbol->map(data, start, symBreak)) ) {
+	        	decltype(start) strBreak = getStrBreakPoint(start);
 
-	        	tokensQ.enqueue(*sym); 
 
-	            start = symBreak;
+	        	tokensQ.enqueue(stream.substr(start, strBreak), Token::STRING);
+
+	        	/*
+	        		*
+	        		* Increment to skip ending quote.
+	        		*
+	        	*/ 
+	        	start = (++strBreak);
+
 	        }
-	        
+
 	        else {
 
-	        	tokensQ.enqueue(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
+	        	/*	
+	        		*
+	        		* If aToZbreak is greater than symBreak and symBreak was greater than 0,
+	        		* than we have an identifier whom part of it happens to have the same name 
+	        		* as a symbol (ie. Symbol: is, Identifier: isFoo)
+	        		*
+		    	*/
+		        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
+		                        symBreak  = Token::mapToSymbol->getBreakPoint(stream, start);
+		    
+		        /*
+		        	*
+					* Check for possible match to keywords or other Symbols in Trie.
+					*
+		        */
+		        if( (symBreak > 0) && (symBreak >= aToZbreak) && (sym = Token::mapToSymbol->map(stream, start, symBreak)) ) {
 
-	            start = aToZbreak;
-	        }
+		        	tokensQ.enqueue(*sym); 
+
+		            start = symBreak;
+		        }
+
+		        /*
+		        	*
+					* Check for possible identifier.
+					*
+		        */
+		        else if(aToZbreak > 0) {
+
+		        	tokensQ.enqueue(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
+
+		            start = aToZbreak;
+		        }
+
+		        /*
+		        	*
+		        	* else: error
+		        	*
+		        */
+	       	}
 
 	        generateTokensInQ(start, end);
 	    }
