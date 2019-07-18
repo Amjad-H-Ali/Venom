@@ -113,8 +113,12 @@ private:
 			* paranthesis, comma, bracket, etc.
 			*
 	    */
-	    if(Token::Symbol *sym = Token::mapToSymbol->map(stream, start, end))
+	    if(Token::Symbol *sym = Token::mapToSymbol->map(stream, start, end)) {
+
 	        tokensQ.enqueue(*sym);
+
+
+	    }
 	    
 	    /*
 			*
@@ -165,9 +169,15 @@ private:
 					* Check for possible match to keywords or other Symbols in Trie.
 					*
 		        */
-		        if( (symBreak > 0) && (symBreak >= aToZbreak) && (sym = Token::mapToSymbol->map(stream, start, symBreak)) ) {
+		        if( (symBreak > 0) && (symBreak >= aToZbreak) ) {
 
-		        	tokensQ.enqueue(*sym); 
+		        	/*
+		        		*
+		        		* Tokenize symbol using the main if statement above 
+		        		* and control retrurns here.
+		        		*
+		        	*/
+		        	generateTokensInQ(start, symBreak);
 
 		            start = symBreak;
 		        }
