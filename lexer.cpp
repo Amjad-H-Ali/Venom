@@ -17,13 +17,32 @@ private:
 	std::string stream;
 
 	/*
-		* Pointer to new Token object
-		* that may be Instantiated soon.
+		*
+		* Tokens are stored here and will be given to Preparser.
+		*
 	*/
-	Token *newTokenPtr;
-
-
 	Queue<Token> *tokensQ;
+
+	/*	
+		*
+		* Represents Dimensions of an array.
+		*
+	*/
+	ArrayDimension *const arrayD = ArrayDimension::getInstance();
+
+	/*	
+		*
+		* Represents Dimension of a block.
+		*
+	*/
+	BlockDimension *const blockD = BlockDimension::getInstance();
+
+	/*
+		*
+		* Represents Dimension of a parameter list.
+		*
+	*/
+	ParamDimension *const paramD = ParamDimension::getInstance();
 
 	/* 
 		*
@@ -76,7 +95,11 @@ private:
 		return start;
 	}
 
-
+	/*
+		*
+		* Tokenizes data from stream and places it in tokensQ.
+		*
+	*/
 	void generateTokensInQ(std::string::size_type start = 0, std::string::size_type end = 0) {
 
 		if(end == 0) end = stream.size();
@@ -187,75 +210,25 @@ public:
 		inFile >> std::noskipws;
 
 		/*	
-			********************* EOF but block remains open
-			********************* because no more new lines.
+			*
+			* blockD condition is neccessary because we may
+			* have EOF but a block is still open. This occurs
+			* when a block is the last thing in the file and no 
+			* Token::NEWLINE succeeds it, which is the only way 
+			* we know where a block ends.
+			*
 		*/
 		while(inFile >> stream || *blockD > 0) {
 
 			/*
 				*
-				* When EOF and block still open, manually create 
+				* When EOF and block is still open, manually create 
 				* new lines (Token::NEWLINE) to mark end. 
 				*
 			*/
-			if(inFile.eof()) newTokenPtr = new Token(Token::NEWLINE);
+			if(inFile.eof()) tokensQ.enqueue(Token::NEWLINE);
 
-
-			/*
-				* 
-				* Single Character Token (ie. BAR, RBRACKET, COMMA, etc.)
-				*
-			*/
-			else if(isSingleCharSymbol()) {
-
-				Token::Symbol *sym = Token::mapToSymbol->map(chompSingleCharSymbol());
-
-				newTokenPtr = new Token(*sym);
-			}
-
-			/*
-				*
-				* AlphaNumeric(eg. Identifier, Keyword, etc.)
-				*
-			*/
-			else if(isEligibleStartToAlphaNum()) {
-
-				const char *someAlphaNum = chompAlphaNumeric();
-
-				/*
-					*
-					* Check if value is a keyword (it would be in the Trie if it is).
-					* If it's not a keyword, then it must be an Identifier. 
-					***********************
-					*********************** Returns nullptr or pointer to Token::Symbol.
-				*/
-				if(Token::Symbol *sym = Token::mapToSymbol->map(someAlphaNum))
-
-					newTokenPtr = new Token(*sym);
-
-
-				else
-					/*
-						*
-						* Token Constructor for Identifier. 
-						* Store Identifier name.
-						*
-					*/
-					newTokenPtr = new Token(someAlphaNum, Symbol::IDENTIFIER);
-			}
-
-			/*
-				* 
-				* Potential Operator 
-				*
-			*/
-			else if(isOperator(c)) 
-
-				newTokenPtr = new token::Token(utils::chompOperator(c, in));
-
-
-
-
+			else generateTokensInQ();
 
 		} // while
 	};
@@ -266,14 +239,7 @@ public:
 namespace utils = lexer::utility;
 
 
-// Represents Dimensions of an array.
-ArrayDimension *const arrayD = ArrayDimension::getInstance();
 
-// Represents Dimension of a block.
-BlockDimension *const blockD = BlockDimension::getInstance();
-
-// Represents Dimension of a parameter list.
-ParamDimension *const paramD = ParamDimension::getInstance();
 
 
 
