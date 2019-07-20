@@ -11,7 +11,7 @@ namespace tk = token;
 	* to their corresponding Symbol in O(n) time complexity.
 	*
 */
-Trie<Token::Symbol *> *Token::mapToSymbol = new Trie<Token::Symbol *>;
+Trie<Token::Symbol> *Token::mapToSymbol = new Trie<Token::Symbol>;
 
 
 /*
