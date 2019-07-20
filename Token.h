@@ -49,6 +49,8 @@ namespace utility {
 	T(NEWLINE, "\n")								\
 	T(LBRACKET, "[")								\
 	T(RBRACKET, "]")								\
+	T(LHANDLE, ":|")								\
+	T(RHANDLE, "|:")								\
 	T(BACKTICK, "`")								\
 	T(IDENTIFIER, nullptr)						    
 								
