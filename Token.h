@@ -132,6 +132,7 @@ public:
 
 
 private:
+
 	/*
 		*
 		* This data member is set to nullptr unless type is a STRING or IDENTIFIER.
@@ -139,16 +140,29 @@ private:
 	*/
 	std::string value;
 
+	/*
+		*
+		* Indicates that this Token is an end to a block, array, or parameter list.
+		*
+	*/
+	bool closing;
+
+	/*
+		*
+		* The matching opening/closing Token if this Token opens/closes an
+		* array, block, or parameter list. Otherwise, set to nullptr.
+		*
+	*/
+	Token *matchingPair;
+
 
 	Symbol type; 
 
 }; // Token
 
 
-// Indicates that this node is an end to a BLOCK or LIST.
-	bool closing;
 
-	Token *matching;
+	
 
 
 #endif
