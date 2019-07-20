@@ -71,3 +71,14 @@ void Queue::jump(unsigned places) {
 Node<T> *Queue::current() {
 	return _current;
 };
+
+
+/*
+	*
+	* Returns object of type T that the last Node in Queue holds.
+	*	
+*/
+T *Queue::end() {
+
+	return tail->value
+};

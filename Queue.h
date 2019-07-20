@@ -46,6 +46,13 @@ public:
 	*/
 	Node<T> *current();
 
+	/*
+		*
+		* Returns object of type T that the last Node in Queue holds.
+		*	
+	*/
+	T *end();
+
 
 }; // Queue
 
