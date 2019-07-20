@@ -28,21 +28,21 @@ private:
 		* Represents Dimensions of an array.
 		*
 	*/
-	ArrayDimension *const arrayD = ArrayDimension::getInstance();
+	ArrayDimension *const arrayD;
 
 	/*	
 		*
 		* Represents Dimension of a block.
 		*
 	*/
-	BlockDimension *const blockD = BlockDimension::getInstance();
+	BlockDimension *const blockD;
 
 	/*
 		*
 		* Represents Dimension of a parameter list.
 		*
 	*/
-	ParamDimension *const paramD = ParamDimension::getInstance();
+	ParamDimension *const paramD;
 
 	/* 
 		*
@@ -241,14 +241,26 @@ private:
 	*/
 	void insertDimension(const Token *tokenPtr) {
 
-		if(*tokenPtr == Token::LBRACKET) 
-			arrayD->insertOpen(tokenPtr);
+		if(*tokenPtr == Token::LBRACKET) {
 
-		else if(*tokenPtr == Token::LHANDLE) 
+			if(!arrayD) arrayD = ArrayDimension::getInstance();
+
+			arrayD->insertOpen(tokenPtr);
+		}
+
+		else if(*tokenPtr == Token::LHANDLE) {
+
+			if(!blockD) blockD = BlockDimension::getInstance();
+
 			blockD->insertOpen(tokenPtr);
+		}
 		
-		else if(*paramD == 0  && *tokenPtr == Token::BAR) 
+		else if(*paramD == 0  && *tokenPtr == Token::BAR) {
+
+			if(!paramD) paramD = ParamDimension::getInstance();
+
 			paramD->insertOpen(tokenPtr);
+		}
 		
 		else if(*tokenPtr == Token::RBRACKET) 
 			arrayD->insertClose(tokenPtr);
@@ -266,265 +278,20 @@ public:
 
 	Lexer(const char *fileName)
 
-		:inFile(fileName), newTokenPtr(nullptr)
+		:
+			inFile(fileName), stream(nullptr), tokensQ(nullptr), 
+			arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
 	{};
 
 	Queue<Token> *Tokenize() {
 
-		tokensQ = new Queue<Token>;
 
-		inFile >> std::noskipws;
+		if(!tokensQ) tokensQ = new Queue<Token>;
 
-		/*	
-			*
-			* blockD condition is neccessary because we may
-			* have EOF but a block is still open. This occurs
-			* when a block is the last thing in the file and no 
-			* Token::NEWLINE succeeds it, which is the only way 
-			* we know where a block ends.
-			*
-		*/
-		while(inFile >> stream || *blockD > 0) {
 
-			/*
-				*
-				* When EOF and block is still open, manually create 
-				* new lines (Token::NEWLINE) to mark end of unclosed 
-				* blocks. 
-				*
-			*/
-			if(inFile.eof()) tokensQ.enqueue(Token::NEWLINE);
+		while(inFile >> stream) generateTokensInQ();
 
-			else generateTokensInQ();
-
-		} // while
 	};
 
 }; // Lexer
-
-
-
-
-
-
-
-
-
-// LEXER FUNCTIONS
-
-// Tokenizes input file and adds to Linked List.
-token::TokenNode *lexer::lexer(const char *fileName) {
-
-	std::ifstream in(fileName);
-	char c;
-
-	// Head to Doubly-Linked-List of Token Nodes.
-	token::TokenNode *headNode = nullptr;
-
-
-	
-
-
-	/*
-		Read input file char by char
-		Do not skip white space otherwise
-		cannot differentiate between adjacent 
-		AlphaNumeral characters belonging to 
-		separate Tokens.
-	*/
-	in >> std::noskipws;
-	while(in >> c || *blockD > 0) { 
-
-		
-
-		
-		
-		
-		// String
-		else if(utils::isQuote(c)) 
-			newTokenPtr = new token::Token(utils::chompString(c, in), &utils::isQuote);
-		// TAB
-		else if(utils::isEscSeq(c))
-			newTokenPtr = new token::Token(utils::chompSingleChar(c, in));
-		
-		else continue; // Probably throw an error here, but continue for spaces.
-
-
-
-		token::TokenNode *newNode = new token::TokenNode;
-
-
-		/*
-			Insert new TokenNode in Doubly-Linked-List
-			after setting its value to point to new Token Object.
-		*/ 
-
-		// Start ...
-
-		newNode->tokenPtr = newTokenPtr;
-
-		newNode->next = headNode;
-
-		// Access prev property of neighbor node and point it to this newNode.
-		if(headNode) newNode->next->prev = newNode; 
-		headNode = newNode;
-
-		// Finish.
-
-		/*
-			If Token Node belongs to open/exit of an array or block,
-			record it in respective Dimension Object.
-		*/
-		if(utils::isDimensional(in, newNode)) lexer::insertDimension(newNode);	
-		
-	} // While
-
-	std::cout << blockD->getD()<< std::endl;
-
-
-	return headNode;
-
-
-}; // Lexer
-
-
-
-// UTILITY FUNCTIONS
-
-// Gets whole Potential String from beginning to end.
-char *utils::chompString(char &c, INFILE in) {
-
-	 
-	// Either a Single Quote or Double Quote.
-	char quote = c;
-
-
-	// Function that will be passed into rangeToChomp.
-	bool(*func)(const char) = (quote == '"' ? &isNotClosingDoubleQT : &isNotClosingSingleQT);
-
-	// Skip Quote so rangeToChomp can continue
-	in >> c;
-
-	// Range to Chomp 								
-	auto range = utils::rangeToChomp(c, in, func);
-
-
-	char *potentialString = utils::makeC_String(in, range);
-
-	// Skip closing quote.
-	in >> c;
-
-	return potentialString;
-};
-
-  
-
-
-
-
-
-
-
-// Checks if Token Node is last in block.
-bool utils::isClosingBlock(INFILE in, token::TokenNode *tn) {
-	return (
-		(	// If NEWLINE is an exit to a block.
-			*tn == token::NEWLINE &&
-			!utils::rangeOnlyHas(in, blockD->getD(), '\t')
-		) 
-		/*
-			Token Node Closes Block if it's last in file.
-			Use of peekAhead instead of istream::peek because 
-			peek does not skip spaces, peekAhead does.
-		*/
-		|| utils::peekAhead(in, 1) == EOF
-	);
-};
-
-// Checks if range ahead contains only given character.
-bool utils::rangeOnlyHas(INFILE in, int places, char c) {
-	char container;
-	// Remember start position
-	auto startPos = in.tellg();
-
-	in >> std::noskipws;
-
-	for(int i = 0;i < places; i ++) {
-
-		in >> container;
-
-		if(in.eof()) return EOF;
-
-		if(container == '\n' || container == ' ') {i--; continue;}
-
-		std::cout << "RANGE" << std::endl;
-		
-		if(container != c) return false;
-	}
-
-	in.seekg(startPos);
-	return true;
-};
-
-
-
-foo is |name, address| 
-
-:| 
-
-	bar is |age| 
-
-	:| 
-
-
-	|:
-
-|:
-
-	name is 5
-
-
-
-
-
-/*
-	To Peek multiple characters Ahead.
-
-	Params: ifstream object and Number 
-	of places to Peek Ahead.
-
-	Skips spaces.
-*/
-char utils::peekAhead(INFILE in, int places) {
-	char result;
-	char container; 
-
-	// To remember starting position
-	auto startPos = in.tellg();
-
-	in >> std::noskipws;
-
-	// Skip ahead and peek.
-	for(int i = 0; i < places; i ++) {
-		in >> container;
-
-		if(in.eof()) return EOF;
-
-		// To Skip Spaces ' ' 0x20, but not other ws.
-		if(container == ' ') {i--; continue;}
-
-		result = container;
-	}
-
-	// Return to start position
-	in.seekg(startPos);
-
-	return result;
-};
-
-
-
-
-
-
 
