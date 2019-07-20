@@ -2,7 +2,7 @@
 
 #define TRIE_H
 
-template<typename Ptr_t>
+template<typename T>
 
 class Trie {
 
@@ -12,12 +12,12 @@ private:
 
     struct Node {
 
-        Ptr_t type;
+        T *type;
 
         Node *paths[NUM_OF_SINGLE_ASCII];
 
         Node()
-            :Ptr_t(nullptr), paths{nullptr}
+            :T(nullptr), paths{nullptr}
         {}
 
     }; // Node
@@ -37,7 +37,7 @@ public:
     {}
 
 
-    void push(const char *str, Ptr_t type) {
+    void push(const char *str, T *type) {
        
         Node *current = head;
 
@@ -61,7 +61,7 @@ public:
         * Params: string containing data and the range (start and end) to read.
         * Range is set to full string as defualt.
     */
-    Ptr_t map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) {
+    T *map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) {
 
         if(end == 0) end = data.size();
 

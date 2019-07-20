@@ -2,26 +2,6 @@
 
 #define TOKEN_H
 
-#include "lexer.h"
-#include <vector>
-
-
-
-// Forward Declaration of lexer::utility functions.
-namespace lexer { namespace utility {
-	bool isQuote(char c);
-	bool isEligibleStartToAlphaNum(char c);
-
-}}; // End of forward Declaration of lexer::utility functions.
-
-namespace token {
-
-namespace utility {
-
-	// Checks if two strings match.
-	bool isMatch(char *s1, char *s2);
-
-}; // utility NameSpace
 
 
 
@@ -88,7 +68,7 @@ public:
 		* Symbol in O(n) time complexity.
 		*
 	*/
-	static Trie<Symbol *> *mapToSymbol;
+	static Trie<Symbol> *mapToSymbol;
 
 	/*
 		*
@@ -150,7 +130,7 @@ public:
 
 	char *getTypeName() const;
 
-	// Data
+
 private:
 	/*
 		*
@@ -165,45 +145,11 @@ private:
 }; // Token
 
 
-// Token Node In Linked-List
-struct TokenNode {
-
-	token::Token *tokenPtr;
-
-	// If this node is a "closing" or "opening" to a BLOCK or LIST,
-	// then it has a matching pair. Every other nodes' is set to nullptr.
-	token::TokenNode *next, *prev, *matchingPair;
-
-	// Indicates that this node is an end to a BLOCK or LIST.
+// Indicates that this node is an end to a BLOCK or LIST.
 	bool closing;
 
-	TokenNode()
-		:
-			tokenPtr(nullptr), next(nullptr), prev(nullptr), 
-			matchingPair(nullptr), closing(false)
-	{};
+	Token *matching;
 
-	~TokenNode() {
-		if(this->tokenPtr != nullptr) {
-			delete this->tokenPtr;
-			this->tokenPtr = nullptr;
-		}
-	};
-
-	// Overload Operators to compare symbols of objects.
-	bool operator==(token::Symbol type) const {
-		// Call overloaded operator of Token Object.
-		return (*(this->tokenPtr) == type);
-	}
-
-	bool operator!=(token::Symbol type) const {
-		return (this->tokenPtr->getType() != type);
-	}
-
-}; // TokenNode Struct
-
-
-}; // token NameSpace
 
 #endif
 
