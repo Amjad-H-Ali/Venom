@@ -222,7 +222,7 @@ private:
 		* block, or parameter list.
 		*
 	*/
-	bool utils::isDimensional(Token::Symbol sym) {
+	bool isDimensional(Token::Symbol sym) {
 
 		return (
 
@@ -232,6 +232,35 @@ private:
 		
 		);
 	} 
+
+	/*
+		*
+		* Inserts opening/closing Token to block, array or
+		* parameter list.
+		*
+	*/
+	void insertDimension(const Token *tokenPtr) {
+
+		if(*tokenPtr == Token::LBRACKET) 
+			arrayD->insertOpen(tokenPtr);
+
+		else if(*tokenPtr == Token::LHANDLE) 
+			blockD->insertOpen(tokenPtr);
+		
+		else if(*paramD == 0  && *tokenPtr == Token::BAR) 
+			paramD->insertOpen(tokenPtr);
+		
+		else if(*tokenPtr == Token::RBRACKET) 
+			arrayD->insertClose(tokenPtr);
+
+		else if(*tokenPtr == Token::RHANDLE)
+			blockD->insertClose(tokenPtr);
+
+		else if(*tokenPtr == Token::BAR) 
+			paramD->insertClose(tokenPtr);
+		
+	};
+
 
 public:
 
@@ -358,38 +387,6 @@ token::TokenNode *lexer::lexer(const char *fileName) {
 
 }; // Lexer
 
-// Inserts start/end to block or array in 
-// respective Object.
-void lexer::insertDimension(token::TokenNode *tn) {
-
-	if(*tn == token::LBRACKET) {
-		std::cout << "OPEN to Array" << std::endl;
-		arrayD->insertOpen(tn);
-	}
-
-	else if (*tn == token::SKINNY_ARROW) {
-		std::cout << "OPEN to Func" << std::endl;
-		blockD->insertOpen(tn);
-	}
-	else if(*paramD == 0  && *tn == token::BAR) {
-		std::cout << "OPEN to PARAM" << std::endl;
-		paramD->insertOpen(tn);
-	}
-	else if(*paramD > 0 && *tn == token::BAR) {
-		std::cout << "Close to PARAM" << std::endl;
-		paramD->insertClose(tn);
-	}
-
-	else if (*tn == token::RBRACKET) {
-		std::cout << "Close to Array" << std::endl;
-		arrayD->insertClose(tn);
-	}
-	else {
-		std::cout << "Close to Func" << std::endl;
-		blockD->insertClose(tn);
-	}
-	
-};
 
 
 // UTILITY FUNCTIONS
