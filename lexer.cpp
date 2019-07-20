@@ -18,7 +18,7 @@ private:
 
 	/*
 		*
-		* Tokens are stored here and will be given to Preparser.
+		* Tokens are stored here and will be fed to the Preparser.
 		*
 	*/
 	Queue<Token> *tokensQ;
@@ -115,8 +115,17 @@ private:
 	    */
 	    if(Token::Symbol *sym = Token::mapToSymbol->map(stream, start, end)) {
 
-	        tokensQ.enqueue(*sym);
+	    	tokensQ.enqueue(*sym);
 
+	    	/*
+				*
+				* Check if symbol is opening/closing a dimension of a block, array,
+				* or parameter list. If so, mark the Token that was just created.
+				*
+	    	*/
+	    	if(isDimensional(*sym)) insertDimension(tokensQ.end());
+	    
+	        
 
 	    }
 	    
@@ -204,7 +213,25 @@ private:
 	        generateTokensInQ(start, end);
 	    }
 	    
-	}
+	} // generateTokensInQ
+
+
+	/*	
+		* 
+		* Checks if symbol is of an opening/closing to array,
+		* block, or parameter list.
+		*
+	*/
+	bool utils::isDimensional(Token::Symbol sym) {
+
+		return (
+
+			*sym == Token::LBRACKET || *sym == Token::RBRACKET ||
+			*sym == Token::LHANDLE  || *sym == Token::RHANDLE  ||
+			*sym == token::BAR 
+		
+		);
+	} 
 
 public:
 
@@ -233,7 +260,8 @@ public:
 			/*
 				*
 				* When EOF and block is still open, manually create 
-				* new lines (Token::NEWLINE) to mark end. 
+				* new lines (Token::NEWLINE) to mark end of unclosed 
+				* blocks. 
 				*
 			*/
 			if(inFile.eof()) tokensQ.enqueue(Token::NEWLINE);
@@ -246,7 +274,7 @@ public:
 }; // Lexer
 
 
-namespace utils = lexer::utility;
+
 
 
 
@@ -392,150 +420,13 @@ char *utils::chompString(char &c, INFILE in) {
 	return potentialString;
 };
 
-
-// Gets Potential Operator
-char *utils::chompOperator(char &c, INFILE in) {
-
-	// Range to Chomp
-	auto range = utils::rangeToChomp(c, in, &isOperator);
-
-	return utils::makeC_String(in, range);
-}
+  
 
 
-// Gets whole AlphaNumeric from beginning to end.
-char *utils::chompAlphaNumeric(char &c, INFILE in) {
-
-	// Range to Chomp
-	auto range = utils::rangeToChomp(c, in, &isAlphaNumeric);
-
-	return utils::makeC_String(in, range);
-};
-
-// Chomp Single Token
-char *utils::chompSingleChar(char &c, INFILE in) {
-	// Range to Chomp
-	// No need for rangeToChomp if Single Character Token
-
-	// Set file pointer before Character to chomp
-	// since read is not start inclusive.
-	in.seekg(in.tellg()-(decltype(in.tellg()))1, in.beg);
-
-	return utils::makeC_String(in, 1);
-};
 
 
-// Creates a C-String. Parameters are an ifstream object
-// from which it will read in characters from current state
-// of this file object, and the range of characters to read.
-char *utils::makeC_String(INFILE in, std::streampos range) {
-
-	// Make a C String.
-	char *name = new char[range+(decltype(in.tellg()))1];
-
-	// Read in to name.
-	in.read(name, range);
-
-	name[range] = '\0';
 
 
-	return name;
-};  
-
-
-// Determines the length of stream to chomp based on the 
-// Bool Function passed in as argument. Restores file pointer
-// to original position when finished.
-std::streampos utils::rangeToChomp(char &c, INFILE in, bool(*greenLight)(const char)) {
-
-	decltype(in.tellg()) startPos = in.tellg(), offset = 0, endPos, range;
-
-	while(greenLight(c) && !in.eof()) {
-
-		offset+= (decltype(in.tellg()))1;
-		in>>c;
-
-	}
-
-	endPos = startPos + offset;
-	range = endPos - startPos;
-
-	// Reset file pointer to original position.
-	in.clear();
-	in.seekg(startPos-(decltype(in.tellg()))1, in.beg);
-
-	return range;
-};
-
-
-// Check if character is an eligible operator.
-bool utils::isOperator(char c) {
-	return (
-		c == '=' || c == '+' || c == '-' || c == '*' ||
-	    c == '/' || c == '%' || c == '>' || c == '<'
-	);
-};
-
-// Checks if current charachter is a number
-bool utils::isNumeric(char c) {
-	return (c >= '0' && c <= '9');
-}
-
-// Checks if current character is a letter.
-bool utils::isAtoZ(char c) {
-	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
-};
-
-// Checks if character is Alphanumeric (A-Z, 0-9, or _)
-bool utils::isAlphaNumeric(char c) {
-	return (utils::isAtoZ(c) || utils::isNumeric(c) || c == '_');
-};
-
-// Checks if character is an eligible beggining for AlphaNumeric.
-bool utils::isEligibleStartToAlphaNum(char c) {
-	return (utils::isAtoZ(c) || c == '_');
-};
-
-// Checks if character is a Quote
-bool utils::isQuote(char c) {
-	return (c == '"' || c == '\'');
-};
-
-// Returns true if not a single Quote.
-bool utils::isNotClosingSingleQT(char c) {
-	return (c != '\'');
-};
-// Returns true if not a double Quote.
-bool utils::isNotClosingDoubleQT(char c) {
-	return (c != '"');
-};
- 
-// Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
-bool utils::isSinglyNamedToken(char c) {
-	return (
-			c == '`' || c == '|' || c == '[' ||
-			c == '(' || c == ')' || c == ',' ||
-			c == ']'
-	);
-};
-
-// Checks if character is one of the relevant Escape Sequences.
-bool utils::isEscSeq(char c) {
-	return (c == '\t' || c == '\n'); // To Add, Soon.
-};
-
-/*
-	Checks if Token Node is part of an array or block,
-	which is Dimensional.
-*/
-bool utils::isDimensional(INFILE in, token::TokenNode *tn) {
-
-	return (
-		*tn == token::LBRACKET || *tn == token::RBRACKET ||
-		*tn == token::SKINNY_ARROW || *tn == token::BAR  ||
-		(*blockD > 0 && isClosingBlock(in, tn))
-	);
-};
 
 // Checks if Token Node is last in block.
 bool utils::isClosingBlock(INFILE in, token::TokenNode *tn) {
@@ -577,6 +468,27 @@ bool utils::rangeOnlyHas(INFILE in, int places, char c) {
 	in.seekg(startPos);
 	return true;
 };
+
+
+
+foo is |name, address| 
+
+:| 
+
+	bar is |age| 
+
+	:| 
+
+
+	|:
+
+|:
+
+	name is 5
+
+
+
+
 
 /*
 	To Peek multiple characters Ahead.
