@@ -49,41 +49,34 @@ Token::typeName.reserve(Token::NUM_OF_TOKENS);
 #undef T
 
 
-// Destructor
-tk::Token::~Token() {
-	// Delete Dynamically Allocated Array
-	if(this->name != nullptr) delete [] this->name;
-};
 
-// Overload == operator to compare symbol types.
-bool tk::Token::operator==(Symbol type) const {
+/*
+	*
+	* Overload operator to compare by symbol type.
+	*
+*/
+bool Token::operator==(Symbol type) const {
 	return (this->type == type);
 };
 
-// Setter Methods
-// Set name to character stream 
-void tk::Token::setName(char *name) {
-	this->name = name; 
-};
 
-// Set type to appropriate symbol
-void tk::Token::setType(Symbol type) {
-	this->type = type;
-};
-
-// Sets typeName to Symbol Type in String Form.
-void tk::Token::setTypeName(char *typeName) {
-	this->typeName = typeName;
-};
 	
-// Getter Methods
-char *tk::Token::getName() const {
-	return this->name; 
+/*
+	*
+	* Symbol type of Token.
+	*
+*/
+Symbol Token::getType() const {
+	return this->type;
 };
 
-
-tk::Symbol tk::Token::getType() const {
-	return this->type;
+/*
+	*
+	* Does this Token close off an array, block, or parameter list?
+	*
+*/
+bool isClosing() const {
+	return closing;
 };
 	
 

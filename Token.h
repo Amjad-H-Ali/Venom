@@ -111,14 +111,19 @@ public:
 	}
 
 
-	// Destructor
-	~Token();
-
-	// Overload == operator to compare symbol types.
+	/*
+		*
+		* Overload operator to compare by symbol type.
+		*
+	*/
 	bool operator==(Symbol type) const;
 
 	
-
+	/*
+		*
+		* Symbol type of Token.
+		*
+	*/
 	Symbol getType() const;
 
 	/*
@@ -127,6 +132,14 @@ public:
 		*
 	*/
 	static const std::string &getTypeName();
+
+
+	/*
+		*
+		* Does this Token close off an array, block, or parameter list?
+		*
+	*/
+	bool isClosing() const;
 
 
 private:
