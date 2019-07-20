@@ -128,7 +128,7 @@ public:
 
 	Symbol getType() const;
 
-	char *getTypeName() const;
+	static const std::string &getTypeName();
 
 
 private:

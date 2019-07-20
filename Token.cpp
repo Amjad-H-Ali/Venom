@@ -87,8 +87,9 @@ tk::Symbol tk::Token::getType() const {
 };
 	
 
-char *tk::Token::getTypeName() const {
-	return this->typeName;
+static const std::string &Token::getTypeName() {
+
+	return typeName[type];
 };
 
 
