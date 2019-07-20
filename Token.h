@@ -90,7 +90,9 @@ public:
 		* IDENTIFIER and STRING Constructor.
 		*
 	*/
-	Token(const std::string &stream, Symbol type) {
+	Token(const std::string &stream, Symbol type) 
+		:closing(false), matchingPair(nullptr)
+	{
 
 		value = stream;
 
@@ -103,12 +105,10 @@ public:
 		*
 	*/
 	Token(Symbol type) 
-		:value(nullptr)
+		:value(nullptr), closing(false), matchingPair(nullptr)
 	{
 		type = type;
 	}
-
-
 
 
 	// Destructor
@@ -117,17 +117,15 @@ public:
 	// Overload == operator to compare symbol types.
 	bool operator==(Symbol type) const;
 
-	// Methods
-	void setName(char *name=nullptr);
-
-	void setType(Symbol type);
-
-	void setTypeName(char *typeName);
 	
-	char *getName() const;
 
 	Symbol getType() const;
 
+	/*
+		*
+		* Gets the Token's symbol type in string form.
+		*
+	*/
 	static const std::string &getTypeName();
 
 

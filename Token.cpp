@@ -87,6 +87,11 @@ tk::Symbol tk::Token::getType() const {
 };
 	
 
+/*
+	*
+	* Gets the Token's symbol type in string form.
+	*
+*/
 static const std::string &Token::getTypeName() {
 
 	return typeName[type];
