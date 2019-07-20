@@ -141,6 +141,8 @@ public:
 	*/
 	bool isClosing() const;
 
+	void setClosing(bool isClosing);
+
 
 private:
 

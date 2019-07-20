@@ -79,6 +79,9 @@ bool isClosing() const {
 	return closing;
 };
 	
+void setClosing(bool isClosing) {
+	closing = isClosing;
+};
 
 /*
 	*
