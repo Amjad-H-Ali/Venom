@@ -49,6 +49,70 @@ Token::typeName.reserve(Token::NUM_OF_TOKENS);
 #undef T
 
 
+/*
+	------------------
+	  Getter methods
+	------------------
+
+*/
+
+/*
+	*
+	* Symbol type of Token.
+	*
+*/
+Symbol Token::getType() const {
+	return this->type;
+};
+
+/*
+	*
+	* Gets the Token's symbol type in string form.
+	*
+*/
+static const std::string &Token::getTypeName() {
+
+	return typeName[type];
+};
+
+/*
+	*
+	* Does this Token close off an array, block, or parameter list?
+	*
+*/
+bool isClosing() const {
+	return closing;
+};
+
+Token *getMatchingPair() const {
+	return matchingPair;
+}; 
+
+
+/*
+	------------------
+	  Setter methods
+	------------------
+
+*/
+
+void setClosing(bool isClosing) {
+	closing = isClosing;
+};
+
+
+
+void setMatchingPair(Token *matchingPair) {
+	matchingPair = matchingPair;
+};
+
+/*
+	------------------------
+	  Overloaded Operators
+	------------------------
+
+*/
+
 
 /*
 	*
@@ -61,42 +125,14 @@ bool Token::operator==(Symbol type) const {
 
 
 	
-/*
-	*
-	* Symbol type of Token.
-	*
-*/
-Symbol Token::getType() const {
-	return this->type;
-};
 
-/*
-	*
-	* Does this Token close off an array, block, or parameter list?
-	*
-*/
-bool isClosing() const {
-	return closing;
-};
+
+
 	
-void setClosing(bool isClosing) {
-	closing = isClosing;
-};
-
-Token *getMatchingPair() {
-	return matchingPair;
-}; 
 
 
-/*
-	*
-	* Gets the Token's symbol type in string form.
-	*
-*/
-static const std::string &Token::getTypeName() {
 
-	return typeName[type];
-};
+
 
 
 

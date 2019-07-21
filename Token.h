@@ -112,13 +112,12 @@ public:
 
 
 	/*
-		*
-		* Overload operator to compare by symbol type.
-		*
-	*/
-	bool operator==(Symbol type) const;
+		------------------
+		  Getter methods
+		------------------
 
-	
+	*/
+
 	/*
 		*
 		* Symbol type of Token.
@@ -133,7 +132,6 @@ public:
 	*/
 	static const std::string &getTypeName();
 
-
 	/*
 		*
 		* Does this Token close off an array, block, or parameter list?
@@ -141,10 +139,35 @@ public:
 	*/
 	bool isClosing() const;
 
+	Token *getMatchingPair() const;
+
+
+	/*
+		------------------
+		  Setter methods
+		------------------
+
+	*/
+
 	void setClosing(bool isClosing);
 
 
-	Token *getMatchingPair(); 
+	void setMatchingPair(Token *matchingPair);
+
+
+	/*
+		------------------------
+		  Overloaded Operators
+		------------------------
+
+	*/
+
+	/*
+		*
+		* Overload operator to compare by symbol type.
+		*
+	*/
+	bool operator==(Symbol type) const;
 
 
 private:
@@ -175,10 +198,6 @@ private:
 	Symbol type; 
 
 }; // Token
-
-
-
-	
 
 
 #endif
