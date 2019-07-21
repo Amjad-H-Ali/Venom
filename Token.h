@@ -144,6 +144,9 @@ public:
 	void setClosing(bool isClosing);
 
 
+	Token *getMatchingPair(); 
+
+
 private:
 
 	/*

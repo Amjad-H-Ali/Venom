@@ -83,6 +83,11 @@ void setClosing(bool isClosing) {
 	closing = isClosing;
 };
 
+Token *getMatchingPair() {
+	return matchingPair;
+}; 
+
+
 /*
 	*
 	* Gets the Token's symbol type in string form.
