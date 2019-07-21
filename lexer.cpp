@@ -263,12 +263,15 @@ private:
 		}
 		
 		else if(*tokenPtr == Token::RBRACKET) 
+
 			arrayD->insertClose(tokenPtr);
 
 		else if(*tokenPtr == Token::RHANDLE)
+
 			blockD->insertClose(tokenPtr);
 
 		else if(*tokenPtr == Token::BAR) 
+			
 			paramD->insertClose(tokenPtr);
 		
 	};

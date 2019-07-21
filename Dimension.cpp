@@ -8,14 +8,14 @@
 */
 struct Dimension::Open {
 
-	token::TokenNode *tn;
+	Token *tokenPtr;
 
 	// Node *next, *prev;
 	Open *next;
 
 	Open() 
 		:tn(nullptr), next(nullptr)
-	{std::cout << "Open Was Created!" << " Address: " << this << std::endl;}
+	{}
 
 	/* 
 		Destructor: Deletes Chain of Open instances.
@@ -24,7 +24,6 @@ struct Dimension::Open {
 	*/
 	~Open() {
 		if(next) delete next;
-		std::cout << "Open Was Deleted!" << " Address: " << this <<  std::endl;
 		// next = nullptr, prev = nullptr, tn = nullptr;
 		next = nullptr, tn = nullptr;
 
@@ -218,85 +217,44 @@ void Dimension::insertOpen(token::TokenNode *tn) {
 };
 
 /*
-	Assigns the "closing" member of the Token Node to true
-	and its "matchingPair" member to the corresponding open 
-	Token Node. That corresponding open Token Node's 
-	"matchingPair" member is set to the closing Token Node
-	that is passed in. Lastly, pops off that opening node 
-	from the stack of Open objects.
-
-	Params: Token Node that closed a LIST or BLOCK
+	*
+	* Matches the closing Token object with its corresponding opening Token
+	* and vice versa.
+	*
 */
-void Dimension::insertClose(token::TokenNode *tn) {
+void Dimension::insertClose(Token *tokenPtr) {
 
-	// This Token node closes a Dimension.
-	tn->closing = true;
+	/*
+		*
+		* This Token node closes a Dimension.
+		*
+	*/
+	tokenPtr->setClosing(true);
 
-	// Assign nodes' corresponding open and closing node.
+	/*
+		*
+		* Assign Token's corresponding Open/Closing Token.
+		*
+	*/
+	tokenPtr->setMatchingPair(openStack->tokenPtr); // Setting closing Token's matching pair.
 
-	tn->matchingPair = openStack->tn; // Setting closing Token Node's matching pair.
+	openStack->tokenPtr->setMatchingPair(tokenPtr); // Setting opening Token's matching pair.
 
-	openStack->tn->matchingPair = tn; // Setting opening token node's matching pair.
-
-
-	// Pop Open object off stack as the open Token Node that it
-	// represents has been matched with a closing Token Node.
+	/*
+		*
+		* Pop the Open object off stack since Token object that it
+		* represents has been matched with a closing Token object.
+		*
+	*/
 	pop();
 
 
-	// Node *matchingOpenNode = head->getMatchingOpenNode();
-
-	// Assign closing node's corresponding open node.
-	// tn->matchingPair = matchingOpenNode->tn;
-
-	// Assign nodes' corresponding open and closing node.
-	// tn->matchingPair = head->opening->tn; // Setting closing token node's matching pair.
-
-	// tn->matchingPair->matchingPair = tn; // Setting opening token node's matching pair.
-
-
-	// Delete opening node from Linked-List as it has been 
-	// closed off. (Dimension has been closed).
-
-	// head->opening->
-
-	// Assign opening node's corresponding close node.
-	// matchingOpenNode->tn->matchingPair = tn;
-
-	// TODO. Throw error if head DNE.
-
-	// Node *newClose = new Node();
-
-	// std::cout << "A" << std::endl;
-	
-	// // Insert newClose into Linked-List.
-	// // Start...
-
-	// newClose->tn = tn;
-
-	// std::cout << "B" << std::endl;
-
-	// newClose->next = head->closing;
-
-	// std::cout << "C" << std::endl;
-
-	// // Set neighbor prev (if exist) to point to newClose node.
-	// if(head->closing) newClose->next->prev = newClose;
-	// else head->closingT = newClose; // It's the first (will be last) one, so set Tail.
-
-	// std::cout << "D" << std::endl;
-
-
-	// head->closing = newClose; // Set Head
-
-	// std::cout << "E" << std::endl;
-
-
-	// if(D <= 0) throw error
-
-	// Finish.
-
-	D--; // Decrement Dimension
+	/*
+		*
+		* Decrement Dimension.
+		*
+	*/
+	D--;  
 
 };
 
