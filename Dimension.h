@@ -17,12 +17,7 @@ protected:
 		in a Linked-List.
 	*/
 
-	/*
-		Each instance of Open class type represents a Token Node
-		that opens up a new dimension, or in other words, the 
-		start of a new LIST or BLOCK (ie. LBRACKET, SKINNY_ARROW).
-	*/
-	struct Open;
+	
 
 	/*
 		A stack of objects of type Open. This is where open Token 
@@ -30,10 +25,10 @@ protected:
 		Every time the "insertClose" method is invoked, an object is 
 		popped off the stack.
 	*/
-	Open *openStack;
+	Node<Token> *openStack;
 
 	// Pushes to the stack.
-	void push(Open *newOpen);
+	void push(Node<Token> *newOpen);
 
 	// Pops off the stack.
 	void pop();
