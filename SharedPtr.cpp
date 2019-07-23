@@ -51,6 +51,11 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 
 SharedPtr::~SharedPtr() {
 
+	/*
+	 +++++ sharedBy decremented. Resource deleted if instance +++++
+	 +++++ is last one sharing resource.                      +++++ 
+	*/
+
 	cleanUp();
 };
 
@@ -89,6 +94,11 @@ SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
 
 SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
 
+	/*
+	 +++++ sharedBy decremented. Resource deleted if instance +++++
+	 +++++ is last one sharing resource.                      +++++ 
+	*/
+
 	cleanUp()
 
     /*
@@ -114,21 +124,28 @@ SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
 
 SmartPtr& SharedPtr::operator =(SmartPtr&& ptrObj) {
 
-        cleanUp();
+	/*
+	 +++++ sharedBy decremented. Resource deleted if instance +++++
+	 +++++ is last one sharing resource.                      +++++ 
+	*/
 
-        // shared also -- b'cause this instance
-        // no longer points to resource.
+    cleanUp();
 
-        // Steal resource of Xpiring obj.
-        ptr = ptrObj.ptr;
+    
 
-        sharedBy = ptrObj.sharedBy;
+    /*
+     +++++ Steal resource of Xpiring obj. +++++
+     */
 
-        ptrObj.ptr = nullptr;
+    ptr = ptrObj.ptr;
 
-        ptrObj.sharedBy = nullptr;
+    sharedBy = ptrObj.sharedBy;
 
-        return *this;
+    ptrObj.ptr = nullptr;
+
+    ptrObj.sharedBy = nullptr;
+
+    return *this;
 };
 
 
@@ -156,17 +173,16 @@ T *SharedPtr::operator ->() const {
 
 
 /*
- ++++++ Deletes resource and sharedBy counter if this instance is only ++++++
- ++++++ one sharing that resource. 									   ++++++
+ ++++++ Deletes resource and sharedBy counter if this ++++++
+ ++++++ instance is only one sharing that resource.   ++++++
  */
 
 void cleanUp() { 
 
 	/*
-	 ++++++++ If ptr is some resource, then we have a shared counter. ++++++++ 
-	 ++++++++ After decrementing sharedBy and it's 0, then this was   ++++++++
-	 ++++++++ the last instance pointing to that resource. So del.    ++++++++
-	 */
+	 +++++ sharedBy decremented. Resource deleted if instance +++++
+	 +++++ is last one sharing resource.                      +++++ 
+	*/
 
 	if(ptr && --(*sharedBy) == 0) {delete ptr; delete sharedBy;}
 }
