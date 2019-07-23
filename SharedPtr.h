@@ -51,7 +51,8 @@ private:
 	T *ptr;
 
 	/*	
-     +++++++++++ Number of ptr(s) resource is shared by. +++++++++++
+     +++++++++++ Keeps track of how many pointers  +++++++++++
+     +++++++++++ are sharing resource.             +++++++++++
 	 */
 
 	unsigned *sharedBy;

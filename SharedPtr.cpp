@@ -1,8 +1,13 @@
 
 SharedPtr::SharedPtr(T *tPtr = nullptr) 
 	:sharedBy(nullptr)
-{
-	if(tPtr) ++sharedBy;
+{	
+	/*
+ 	 ++++++++ If tPtr passed in is an actual resource and ++++++++
+     ++++++++ not nullptr, initialize counter to 1. 	  ++++++++
+ 	 */
+
+	if(tPtr) sharedBy = new unsigned(1);
 
 	ptr = tPtr;
 };
