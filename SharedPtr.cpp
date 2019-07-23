@@ -15,8 +15,14 @@ explicit SharedPtr::SharedPtr(T *tPtr = nullptr)
 	ptr = tPtr;
 };
 
-/*	
- +++++++ Copy Constructor +++++++
+
+/*
+ ++++++++ Rule of 5 ++++++++
+ */
+
+
+/* 1	
+ +++++++ Copy C'tor +++++++
  */
 
 SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
@@ -34,11 +40,12 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 	/*
 	 ++++++ If ptr exist, then gaurenteed sharedBy exist and is 1 or greater. ++++++
 	 */
-	
+
 	if(ptr) ++(*sharedBy);
 };
 
-/*
+
+/* 2
  ++++++ Destructor ++++++
  */
 
@@ -56,6 +63,56 @@ SharedPtr::~SharedPtr() {
      +++++ An instance was destructed. So sharedBy was -- either way. +++++
      */
 };
+
+
+
+/* 3
+ ++++++ Move C'tor ++++++
+ */
+
+SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
+
+    /*
+     ++++++ Steal resource and counter and set expiring instance data ++++++
+     ++++++ to nullptr. Temp obj is safe to DEL with no memory leaks. ++++++
+     ++++++ It will not DEL resource shared by others.				  ++++++
+     */
+
+    ptr = ptrObj.ptr;
+
+    ptrObj.ptr = nullptr;
+
+    shared = ptrObj.shared;
+
+    ptrObj.shared = nullptr;
+
+    /*
+     +++++ Does not increment shared since Temp is DEL and this instance +++++
+     +++++ created. sharedBy counter stolen from expiring obj.			 +++++
+     */
+};
+
+/* 4
+ ++++++ Copy Assignment ++++++
+ */
+
+SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
+
+};
+
+/* 5
+ ++++++ Move Assignment ++++++
+ */
+
+SmartPtr& SharedPtr::operator =(SmartPtr&& ptrObj) {
+
+};
+
+
+/* 
+ ++++++ Overloads ++++++
+ */
+
 
 /*
  ++++++++++ Overload Dereference Operator. ++++++++++
