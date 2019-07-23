@@ -19,7 +19,7 @@ void Stack::push(T *objPtr) {
 
 	/*
 		*
-		* If there's is an object in stack, point its
+		* If there's an object in stack, point its
 		* prev pointer to newNode.
 		*
 	*/
@@ -28,4 +28,8 @@ void Stack::push(T *objPtr) {
 	head = newNode;
 };
 
-void Stack::pop();
+
+void Stack::pop() {
+
+
+};
