@@ -1,6 +1,10 @@
 
-SharedPtr::SharedPtr(T *tPtr = nullptr) {
+SharedPtr::SharedPtr(T *tPtr = nullptr) 
+	:sharedBy(0)
+{
+	if(tPtr) ++sharedBy;
 
+	ptr = tPtr;
 };
 
 /*	
@@ -13,7 +17,7 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 	 +++++++ Copy resource and increment counter because another +++++++
 	 +++++++ object now points to same resource. 				 +++++++					
 	 */
-	
+
 	ptr = sharedPtrObj.ptr;
 
 	sharedBy = sharedPtrObj.sharedBy;
@@ -26,6 +30,7 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
  */
 
 SharedPtr::~SharedPtr() {
+
 	/*
 	 +++++++++++ Decrement count of shared resources +++++++++++
 	 */
