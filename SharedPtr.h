@@ -16,19 +16,49 @@ class SharedPtr {
 
 public:
 
-	SharedPtr(T *tPtr = nullptr);
+	/* 	
+	 +++++++ Main C'tor +++++++
+	 */
 
-	/*	
-	 +++++++ Copy Constructor +++++++
+	explicit SharedPtr(T *tPtr = nullptr);
+
+	/*
+	 ++++++++ Rule of 5 ++++++++
+	 */
+
+
+	/* 1	
+	 +++++++ Copy C'tor +++++++
 	 */
 
 	SharedPtr(const SharedPtr& sharedPtrObj);
 
-	/*
+	/* 2
 	 ++++++ Destructor ++++++
 	 */
 
 	~SharedPtr();
+
+	/* 3
+	 ++++++ Move C'tor ++++++
+	 */
+
+    SmartPtr(SmartPtr&& ptrObj);
+
+    /* 4
+	 ++++++ Copy Assignment ++++++
+	 */
+
+    SmartPtr& operator =(const SmartPtr& ptrObj);
+
+    /* 5
+	 ++++++ Move Assignment ++++++
+	 */
+    SmartPtr& operator =(SmartPtr&& ptrObj);
+
+	/* 
+	 ++++++ Overloads ++++++
+	 */
 
 	/*
 	 ++++++++++ Overload Dereference Operator. ++++++++++

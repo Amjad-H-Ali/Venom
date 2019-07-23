@@ -1,7 +1,10 @@
+/* 	
+ +++++++ Main C'tor +++++++
+ */
 
-SharedPtr::SharedPtr(T *tPtr = nullptr) 
+explicit SharedPtr::SharedPtr(T *tPtr = nullptr) 
 	:sharedBy(nullptr)
-{	
+{
 	/*
  	 ++++++++ If tPtr passed in is an actual resource and ++++++++
      ++++++++ not nullptr, initialize counter to 1. 	  ++++++++
@@ -27,7 +30,12 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 
 	sharedBy = sharedPtrObj.sharedBy;
 
-	++sharedBy;
+
+	/*
+	 ++++++ If ptr exist, then gaurenteed sharedBy exist and is 1 or greater. ++++++
+	 */
+	
+	if(ptr) ++(*sharedBy);
 };
 
 /*
@@ -37,16 +45,16 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 SharedPtr::~SharedPtr() {
 
 	/*
-	 +++++++++++ Decrement count of shared resources +++++++++++
+	 ++++++++ If ptr is some resource, then we have a shared counter. ++++++++ 
+	 ++++++++ After decrementing sharedBy and it's 0, then this was   ++++++++
+	 ++++++++ the last instance pointing to that resource. So del.    ++++++++
 	 */
 
-	--sharedBy;
+    if(ptr && --(*sharedBy) == 0) { delete ptr; delete sharedBy;}
 
-	/*
-	 +++++++++++++++ Only delete if no other pointer is set to this resource +++++++++++++++
-	 */
-
-	if(sharedBy == 0) delete ptr;
+    /*
+     +++++ An instance was destructed. So sharedBy was -- either way. +++++
+     */
 };
 
 /*
