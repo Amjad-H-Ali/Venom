@@ -87,6 +87,14 @@ private:
 
 	unsigned *sharedBy;
 
+
+	
+	/*
+	 ++++++ Deletes resource and sharedBy counter if this instance is only ++++++
+	 ++++++ one sharing that resource. 									   ++++++
+	 */
+    void cleanUp();
+
 }; // SharedPtr
 
 #endif

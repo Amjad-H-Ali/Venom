@@ -51,17 +51,7 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 
 SharedPtr::~SharedPtr() {
 
-	/*
-	 ++++++++ If ptr is some resource, then we have a shared counter. ++++++++ 
-	 ++++++++ After decrementing sharedBy and it's 0, then this was   ++++++++
-	 ++++++++ the last instance pointing to that resource. So del.    ++++++++
-	 */
-
-    if(ptr && --(*sharedBy) == 0) { delete ptr; delete sharedBy;}
-
-    /*
-     +++++ An instance was destructed. So sharedBy was -- either way. +++++
-     */
+	cleanUp();
 };
 
 
@@ -82,15 +72,16 @@ SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
 
     ptrObj.ptr = nullptr;
 
-    shared = ptrObj.shared;
+    sharedBy = ptrObj.sharedBy;
 
-    ptrObj.shared = nullptr;
+    ptrObj.sharedBy = nullptr;
 
     /*
-     +++++ Does not increment shared since Temp is DEL and this instance +++++
-     +++++ created. sharedBy counter stolen from expiring obj.			 +++++
+     +++++ Does not increment sharedBy since Temp is DEL and this instance +++++
+     +++++ created. sharedBy counter stolen from expiring obj.			   +++++
      */
 };
+
 
 /* 4
  ++++++ Copy Assignment ++++++
@@ -98,6 +89,23 @@ SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
 
 SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
 
+	cleanUp()
+
+    /*
+     +++++ Copy resources. +++++
+     */
+
+    ptr = ptrObj.ptr;
+
+    sharedBy = ptrObj.sharedBy;
+
+    /*
+     +++++ Increment as this instance also points to resource. +++++
+     */
+
+    if(ptr) ++(*sharedBy);
+
+    return *this;
 };
 
 /* 5
@@ -106,6 +114,21 @@ SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
 
 SmartPtr& SharedPtr::operator =(SmartPtr&& ptrObj) {
 
+        cleanUp();
+
+        // shared also -- b'cause this instance
+        // no longer points to resource.
+
+        // Steal resource of Xpiring obj.
+        ptr = ptrObj.ptr;
+
+        sharedBy = ptrObj.sharedBy;
+
+        ptrObj.ptr = nullptr;
+
+        ptrObj.sharedBy = nullptr;
+
+        return *this;
 };
 
 
@@ -130,3 +153,20 @@ T *SharedPtr::operator ->() const {
 	
 	return ptr;
 };
+
+
+/*
+ ++++++ Deletes resource and sharedBy counter if this instance is only ++++++
+ ++++++ one sharing that resource. 									   ++++++
+ */
+
+void cleanUp() { 
+
+	/*
+	 ++++++++ If ptr is some resource, then we have a shared counter. ++++++++ 
+	 ++++++++ After decrementing sharedBy and it's 0, then this was   ++++++++
+	 ++++++++ the last instance pointing to that resource. So del.    ++++++++
+	 */
+
+	if(ptr && --(*sharedBy) == 0) {delete ptr; delete sharedBy;}
+}
