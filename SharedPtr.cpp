@@ -7,8 +7,18 @@ SharedPtr::SharedPtr(T *tPtr = nullptr) {
  +++++++ Copy Constructor +++++++
  */
 
-SharedPtr::SharedPtr(SharedPtr& sharedPtrObj) {
+SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
+
+	/*	
+	 +++++++ Copy resource and increment counter because another +++++++
+	 +++++++ object now points to same resource. 				 +++++++					
+	 */
 	
+	ptr = sharedPtrObj.ptr;
+
+	sharedBy = sharedPtrObj.sharedBy;
+
+	++sharedBy;
 };
 
 /*

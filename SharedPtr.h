@@ -22,7 +22,7 @@ public:
 	 +++++++ Copy Constructor +++++++
 	 */
 
-	SharedPtr(SharedPtr& sharedPtrObj);
+	SharedPtr(const SharedPtr& sharedPtrObj);
 
 	/*
 	 ++++++ Destructor ++++++
