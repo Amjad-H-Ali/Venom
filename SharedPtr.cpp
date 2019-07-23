@@ -1,6 +1,6 @@
 
 SharedPtr::SharedPtr(T *tPtr = nullptr) 
-	:sharedBy(0)
+	:sharedBy(nullptr)
 {
 	if(tPtr) ++sharedBy;
 
@@ -48,7 +48,7 @@ SharedPtr::~SharedPtr() {
  ++++++++++ Overload Dereference Operator. ++++++++++
  */
 
-T &SharedPtr::operator *() {
+T &SharedPtr::operator *() const {
 	return *ptr;
 };
 
@@ -56,7 +56,7 @@ T &SharedPtr::operator *() {
  ++++++++ Overload Arrow Operator. ++++++++
  */
 
-T *SharedPtr::operator ->() {
+T *SharedPtr::operator ->() const {
 	
 	return ptr;
 };

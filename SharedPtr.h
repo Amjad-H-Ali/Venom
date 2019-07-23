@@ -34,15 +34,16 @@ public:
 	 ++++++++++ Overload Dereference Operator. ++++++++++
 	 */
 
-	T &operator *();
+	T &operator *() const;
 
 	/*
 	 ++++++++ Overload Arrow Operator. ++++++++
 	 */
 
-	T *operator ->();
+	T *operator ->() const;
 
 
+	
 
 
 private:
@@ -53,7 +54,7 @@ private:
      +++++++++++ Number of ptr(s) resource is shared by. +++++++++++
 	 */
 
-	unsigned sharedBy;
+	unsigned *sharedBy;
 
 }; // SharedPtr
 
