@@ -63,19 +63,19 @@ void Queue::jump(unsigned places) {
 
 
 /*
- ++++++ Returns current object in Queue +++++++
+ ++++++ Returns Ptr to current object in Queue +++++++
  */
 
-T *Queue::current() {
+SharedPtr<T> &Queue::current() {
 	return _current->value;
 };
 
 
 /*
- ++++++ Returns last object in Queue +++++++
+ ++++++ Returns Ptr to last object in Queue +++++++
  */
 
-T *Queue::end() {
+SharedPtr<T> &Queue::end() {
 
-	return tail->value
+	return tail->value;
 };

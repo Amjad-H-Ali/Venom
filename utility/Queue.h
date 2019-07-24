@@ -42,16 +42,16 @@ public:
 	void jump(unsigned places);
 
 	/*
-	 ++++++ Returns current object in Queue +++++++
+	 ++++++ Returns Ptr to current object in Queue +++++++
 	 */
 
-	T *current();
+	SharedPtr<T> &current();
 
 	/*
-	 ++++++ Returns last object in Queue +++++++
+	 ++++++ Returns Ptr to last object in Queue +++++++
 	 */
 
-	T *end();
+	SharedPtr<T> &end();
 
 
 }; // Queue
