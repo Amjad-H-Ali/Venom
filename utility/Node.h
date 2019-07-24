@@ -1,8 +1,7 @@
 /*
-	*
-	* Generic Link to create Doubly Linked-Lists.
-	*
-*/
+ ++++++ Generic Link to create Doubly Linked-Lists. ++++++
+ */
+
 #ifndef NODE_H
 
 #define NODE_H
