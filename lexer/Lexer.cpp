@@ -248,12 +248,14 @@ private:
 			arrayD->insertOpen(tokenPtr);
 		}
 
+
 		else if(*tokenPtr == Token::LHANDLE) {
 
 			if(!blockD) blockD = BlockDimension::getInstance();
 
 			blockD->insertOpen(tokenPtr);
 		}
+
 		
 		else if(*paramD == 0  && *tokenPtr == Token::BAR) {
 
@@ -262,13 +264,16 @@ private:
 			paramD->insertOpen(tokenPtr);
 		}
 		
+
 		else if(*tokenPtr == Token::RBRACKET) 
 
 			arrayD->insertClose(tokenPtr);
 
+
 		else if(*tokenPtr == Token::RHANDLE)
 
 			blockD->insertClose(tokenPtr);
+
 
 		else if(*tokenPtr == Token::BAR) 
 			
@@ -279,6 +284,10 @@ private:
 
 public:
 
+	/*
+	 ++++++++++ Main C'tor ++++++++++++++
+	*/
+	
 	Lexer(const char *fileName)
 
 		:

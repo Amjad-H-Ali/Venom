@@ -10,13 +10,33 @@ template<typename T>
 
 struct Node {
 
-	T *value;
+	/*
+	 +++++++ Ptr to actual value. Not just any ptr though (See SharedPtr.h). ++++++++++++
+	 +++++++ In the case of  
+	 */
+
+	SharedPtr<T> value;
 
 	Node<T> *next, *prev;
 
-	Node<T>()
-		:value(nullptr), next(nullptr), prev(nullptr)
-	{};
+	/*
+	 +++++++ Main C'tor. Takes in ptr to init data member named "value" . ++++++++
+	 */
+
+	Node<T>(const T *ObjPtr = nullptr)
+
+		:value(ObjPtr), next(nullptr), prev(nullptr)
+	{}
+
+	/*
+	 +++++++ C'tor that copies SharedPtr. Always calls SharedPtr Copy C'tor ++++++++
+	 */
+
+	Node<T>(const SharedPtr<T>& ptrObj)
+
+		:value(ptrObj), next(nullptr), prev(nullptr)
+	{}
+
 
 }; // Node
 
