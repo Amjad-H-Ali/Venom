@@ -22,13 +22,13 @@ template<typename ... Params>
 
 void Queue::enqueue(Params&& ... params) {
 
-	Node<T> *newNode = new Node<T>;
-
 	/*
-	 +++++++++ Forward L-Value or R-Value when passing to T constructor. +++++++++++
+	 ++++++ Create object of type T. Parameters' l-value/r-value is preserved while passing to T's C'tor  +++++++
+	 ++++++ Pass address of T object to Node, which will store it as a SharedPtr.                         +++++++
 	*/
-	newNode->value = new T(std::forward<Params>(params)...);
+	Node<T> *newNode = new Node<T>(new T(std::forward<Params>(params)...));
 
+	
 	/*
 	 +++++++ First Node in Queue. Assign all pointers to it. +++++++++
 	 */
