@@ -15,11 +15,15 @@ public:
 	Stack();
 
 	/*
-	 ++++++ Insert object into stack. +++++++
+	 ++++++ Insert ptr to object into stack. +++++++
+	 */
+
+	void Stack::push(const SharedPtr<Token> &objPtr);
+
+	/*
+	 +++++++ Pop object off stack +++++++++++
 	 */
 	
-	void push(T *objPtr);
-
 	void pop();
 
 }; // Stack
