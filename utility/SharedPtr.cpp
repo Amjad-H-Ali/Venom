@@ -2,7 +2,7 @@
  +++++++ Main C'tor +++++++
  */
 
-explicit SharedPtr::SharedPtr(T *tPtr = nullptr) 
+explicit SharedPtr::SharedPtr(const T *tPtr = nullptr) 
 	:sharedBy(nullptr)
 {
 	/*
@@ -158,7 +158,7 @@ SmartPtr& SharedPtr::operator =(SmartPtr&& ptrObj) {
  ++++++++++ Overload Dereference Operator. ++++++++++
  */
 
-T &SharedPtr::operator *() const {
+const T &SharedPtr::operator *() const {
 	return *ptr;
 };
 
@@ -166,7 +166,7 @@ T &SharedPtr::operator *() const {
  ++++++++ Overload Arrow Operator. ++++++++
  */
 
-T *SharedPtr::operator ->() const {
+const T *SharedPtr::operator ->() const {
 	
 	return ptr;
 };

@@ -15,10 +15,9 @@ public:
 	Stack();
 
 	/*
-		*
-		* Insert object of type T into stack.
-		*
-	*/
+	 ++++++ Insert object into stack. +++++++
+	 */
+	
 	void push(T *objPtr);
 
 	void pop();

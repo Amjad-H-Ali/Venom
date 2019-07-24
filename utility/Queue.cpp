@@ -12,10 +12,10 @@ Queue::Queue()
 
 
 /*
- ++++++++++++++++ Inserts an object at end of the Queue.     ++++++++++++++++
- ++++++++++++++++ Params: variable number of arguments that  ++++++++++++++++
- ++++++++++++++++ will be forwarded to T object constructor. ++++++++++++++++
- ++++++++++++++++ Creates T objects emplace.				 ++++++++++++++++
+ ++++++++++++ Inserts an object at end of the Queue.     ++++++++++++
+ ++++++++++++ Params: variable number of arguments that  ++++++++++++
+ ++++++++++++ will be forwarded to T object constructor. ++++++++++++
+ ++++++++++++ Creates T objects emplace.				 ++++++++++++
  */	
 
 template<typename ... Params>

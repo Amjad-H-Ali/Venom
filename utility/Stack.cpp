@@ -5,10 +5,9 @@ Stack::Stack()
 {};
 
 /*
-	*
-	* Insert object of type T into stack.
-	*
-*/
+ ++++++ Insert object into stack. +++++++
+ */
+
 void Stack::push(T *objPtr) {
 
 	Node<T> *newNode = new Node<T>;

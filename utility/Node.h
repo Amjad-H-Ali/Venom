@@ -1,5 +1,5 @@
 /*
- ++++++ Generic Link to create Doubly Linked-Lists. ++++++
+ ++++++ Generic Node to create Doubly Linked-Lists. ++++++
  */
 
 #ifndef NODE_H

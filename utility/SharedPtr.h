@@ -20,7 +20,7 @@ public:
 	 +++++++ Main C'tor +++++++
 	 */
 
-	explicit SharedPtr(T *tPtr = nullptr);
+	explicit SharedPtr(const T *tPtr = nullptr);
 
 	/*
 	 ++++++++ Rule of 5 ++++++++
@@ -64,13 +64,13 @@ public:
 	 ++++++++++ Overload Dereference Operator. ++++++++++
 	 */
 
-	T &operator *() const;
+	const T &operator *() const;
 
 	/*
 	 ++++++++ Overload Arrow Operator. ++++++++
 	 */
 
-	T *operator ->() const;
+	const T *operator ->() const;
 
 
 	
@@ -78,7 +78,7 @@ public:
 
 private:
 
-	T *ptr;
+	const T *ptr;
 
 	/*	
      +++++++++++ Keeps track of how many pointers  +++++++++++
