@@ -5,23 +5,20 @@ Stack::Stack()
 {};
 
 /*
- ++++++ Insert object into stack. +++++++
+ ++++++ Insert ptr to object into stack. +++++++
  */
 
-void Stack::push(T *objPtr) {
+void Stack::push(const SharedPtr<Token> &objPtr) {
 
-	Node<T> *newNode = new Node<T>;
+	Node<T> *newNode = new Node<T>(objPtr);
 
-	newNode->value = objPtr;
 
 	newNode->next = head;
 
 	/*
-		*
-		* If there's an object in stack, point its
-		* prev pointer to newNode.
-		*
-	*/
+	 ++++++ If exists, point object already in stack's  prev ptr to newNode +++++++
+	 */
+
 	if(head) head->prev = newNode;
 
 	head = newNode;
@@ -30,5 +27,6 @@ void Stack::push(T *objPtr) {
 
 void Stack::pop() {
 
+	
 
 };
