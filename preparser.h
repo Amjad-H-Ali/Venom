@@ -12,7 +12,7 @@ class Preparser {
 
 private:
 
-	Queue<Token> *unParsedTokens;
+	Queue<Token> *tokensQ;
 
 	/*	
 		*
@@ -24,7 +24,7 @@ private:
 
 public:
 
-	Preparser(Queue<Token> *unParsedTokens);
+	Preparser(Queue<Token> *tokensQ);
 
 	/*
 		*

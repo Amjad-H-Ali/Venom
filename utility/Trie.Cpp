@@ -103,6 +103,7 @@ T *Trie::map(const std::string &data,  std::string::size_type start = 0, std::st
  ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
  ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++
  */
+
 std::string::size_type Trie::getBreakPoint(const std::string &data, std::string::size_type start = 0) {
 
     Node *current = head;

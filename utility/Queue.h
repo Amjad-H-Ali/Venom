@@ -16,41 +16,41 @@ private:
 
 public:
 
+	/*
+	 ++++++ Main C'tor ++++++
+	 */
+
 	Queue();
 
 	/*
-		*
-		* Pushes an object at the end of the Queue.
-		* Params: variable number of arguments that
-		* will be passed into T object constructor. 
-		* Creates T object emplace.
-		*
-	*/
+	 ++++++++++++++++ Inserts an object at end of the Queue.     ++++++++++++++++
+	 ++++++++++++++++ Params: variable number of arguments that  ++++++++++++++++
+	 ++++++++++++++++ will be forwarded to T object constructor. ++++++++++++++++
+	 ++++++++++++++++ Creates T objects emplace.				 ++++++++++++++++
+	 */
+
 	template<typename ... Params>
 
 	void enqueue(Params&& ... params);
 
 
 	/*
-		*
-		* Moves "_current" pointer a number of places ahead.
-		* Params: Number of places to move in the Queue.
-		*
-	*/
+	 ++++++++ Moves "_current" pointer a number of places ahead. ++++++++++
+	 ++++++++ Params: Number of places to move in the Queue.     ++++++++++
+	 */
+
 	void jump(unsigned places);
 
 	/*
-		*
-		* Returns Node in Queue that "_current" is pointing to.
-		*
-	*/
-	Node<T> *current();
+	 ++++++ Returns current object in Queue +++++++
+	 */
+
+	T *current();
 
 	/*
-		*
-		* Returns object of type T that the last Node in Queue holds.
-		*	
-	*/
+	 ++++++ Returns last object in Queue +++++++
+	 */
+
 	T *end();
 
 

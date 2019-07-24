@@ -15,8 +15,8 @@
 // namespace utils = preparser::utility;
 
 
-Preparser::Preparser(Queue<Token> *unParsedTokens)
-	:unParsedTokens(unParsedTokens)
+Preparser::Preparser(Queue<Token> *tokensQ)
+	:tokensQ(tokensQ)
 {};
 
 
@@ -29,11 +29,11 @@ Preparser::Preparser(Queue<Token> *unParsedTokens)
 */
 auto Preparser::callFlagForListAndBlock(Token *tokenPtr) {
 
-	return [tokenPtr, unParsedTokens] {
+	return [tokenPtr, tokensQ] {
 
 		return (
 
-			tokenPtr->matchingCloseToken != unParsedTokens->current()->value;
+			tokenPtr->matchingCloseToken != tokensQ->current();
 		);
 	};
 };
@@ -53,7 +53,7 @@ auto Preparser::operator()() {
 	/*
 		*
 		* callableFlag: conditional to know when to stop iterating through
-		* unParsedTokens member variable.
+		* tokensQ member variable.
 		*
 	*/
 	return [](auto callableFlag) {
@@ -65,7 +65,7 @@ auto Preparser::operator()() {
 				* Parse token and receive astPtr_t.
 				*
 			*/
-			astPtr_t parsedAstPtr = parseToken(unParsedTokens->current()->value);
+			astPtr_t parsedAstPtr = parseToken(tokensQ->current());
 
 			parsedAst->push(parsedAstPtr); 
 
@@ -74,7 +74,7 @@ auto Preparser::operator()() {
 				* Move "_current" pointer one step ahead.
 				*
 			*/
-			unParsedTokens->jump(1); 
+			tokensQ->jump(1); 
 		};
 
 		return parsedAst;
@@ -106,12 +106,12 @@ astPtr_t Preparser::parseToken(Token *tokenPtr) {
 	*/
 	if(*tokenPtr == token::ARROW) {
 
-		unParsedTokens->jump(1);
+		tokensQ->jump(1);
 
 		/*
 			*
 			* Call to this Functor.
-			* Returns a Lambda that parses the unParsedTokens data member .
+			* Returns a Lambda that parses the tokensQ data member .
 			*
 		*/
 		auto parseBlock = (*this)();
@@ -144,12 +144,12 @@ astPtr_t Preparser::parseToken(Token *tokenPtr) {
 	*/
 	else if(*tokenPtr == token::LBRACKET || (*tokenPtr == token::BAR && !tokenPtr->closing)) {
 
-		unParsedTokens->jump(1);
+		tokensQ->jump(1);
 
 		/*
 			*
 			* Call to this Functor.
-			* Returns a Lambda that parses the unParsedTokens data member .
+			* Returns a Lambda that parses the tokensQ data member .
 			*
 		*/
 		auto parseList = (*this)();
