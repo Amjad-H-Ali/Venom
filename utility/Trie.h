@@ -8,36 +8,52 @@ class Trie {
 
 private:
 
+    /*
+     +++++++ All potential single char ASCII(s) that may be used as keys +++++++++++++
+     */
+
     static constexpr size_t NUM_OF_SINGLE_ASCII = '~' - '!';
+
+    /*
+     ++++++ Node for creating paths to the symbols ++++++++
+     */
 
     struct Node;
 
     Node *head;
 
-    size_t hash(const char letter) const;
+    /*
+     ++++ Returns unique key ++++
+     */
+
+    size_t hash(char letter) const;
 
 public:
 
+    /*
+     +++ Main C'tor +++
+    */ 
+
     Trie();
 
-
-    void push(const char *str, T *type);
+    /*
+     ++++++++ Adds symbol to Trie      ++++++++
+     ++++++++ Uses str literal as map  ++++++++
+     */
+    void push(const char *str, T *symbol);
 
     /*
-        *
-        * Finds corresponding Ptr_t data of string in O(1) time complexity.
-        * Params: string containing data and the range (start and end) to read.
-        * Range is set to full string as defualt.
-    */
+     +++++++++ Finds corresponding symbol of string in O(1) time complexity.         ++++++++++
+     +++++++++ Params: string containing data and the range (start and end) to read. ++++++++++
+     +++++++++ Range is set to full string as defualt.                               ++++++++++
+     */
     T *map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0);
 
     /*
-        *
-        * Gets the index of the string of where the data stopped matching.
-        * Params: the string containing the data and the position of where to 
-        * start reading the string (set to begining of string as defualt).
-        *
-    */
+     ++++++++++++ Gets the index of the string of where it stopped mapping.           +++++++++++++++++++
+     ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
+     ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++
+     */
     std::string::size_type getBreakPoint(const std::string &data, std::string::size_type start = 0);
 
     
