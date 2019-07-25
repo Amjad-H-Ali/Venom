@@ -135,7 +135,7 @@ public:
 	*/
 	bool isClosing() const;
 
-	Token *getMatchingPair() const;
+	SharedPtr<Token> &getMatchingPair() const;
 
 
 	/*
@@ -148,7 +148,7 @@ public:
 	void setClosing(bool isClosing);
 
 
-	void setMatchingPair(Token *matchingPair);
+	void setMatchingPair(SharedPtr<Token> &matchingPair);
 
 
 	/*
@@ -188,7 +188,7 @@ private:
 		* array, block, or parameter list. Otherwise, set to nullptr.
 		*
 	*/
-	Token *matchingPair;
+	SharedPtr<Token> matchingPair;
 
 
 	Symbol type; 

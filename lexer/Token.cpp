@@ -81,7 +81,7 @@ bool isClosing() const {
 	return closing;
 };
 
-Token *getMatchingPair() const {
+SharedPtr<Token> &getMatchingPair() const {
 	return matchingPair;
 }; 
 
@@ -99,7 +99,7 @@ void setClosing(bool isClosing) {
 
 
 
-void setMatchingPair(Token *matchingPair) {
+void setMatchingPair(SharedPtr<Token> &matchingPair) {
 	matchingPair = matchingPair;
 };
 
