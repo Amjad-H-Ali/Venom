@@ -113,17 +113,18 @@ private:
 			* paranthesis, comma, bracket, etc.
 			*
 	    */
-	    if(Token::Symbol *sym = Token::mapToSymbol->map(stream, start, end)) {
+	    if(Token::Symbol *symPtr = Token::mapToSymbol->map(stream, start, end)) {
 
-	    	tokensQ.enqueue(*sym);
+	    	tokensQ.enqueue(*symPtr);
 
 	    	/*
 				*
 				* Check if symbol is opening/closing a dimension of a block, array,
 				* or parameter list. If so, mark the Token that was just created.
+				* tokensQ.end() returns SharedPtr to Token.
 				*
 	    	*/
-	    	if(isDimensional(*sym)) insertDimension(tokensQ.end());
+	    	if(isDimensional(*symPtr)) insertDimension(tokensQ.end());
 	    
 	        
 
@@ -226,20 +227,20 @@ private:
 
 		return (
 
-			*sym == Token::LBRACKET || *sym == Token::RBRACKET ||
-			*sym == Token::LHANDLE  || *sym == Token::RHANDLE  ||
-			*sym == token::BAR 
+			sym == Token::LBRACKET || sym == Token::RBRACKET ||
+			sym == Token::LHANDLE  || sym == Token::RHANDLE  ||
+			sym == token::BAR 
 		
 		);
 	} 
 
 	/*
 		*
-		* Inserts opening/closing Token to block, array or
+		* Inserts opening/closing Token of block, array or
 		* parameter list.
 		*
 	*/
-	void insertDimension(const Token *tokenPtr) {
+	void insertDimension(SharedPtr<Token> &tokenPtr) {
 
 		if(*tokenPtr == Token::LBRACKET) {
 
