@@ -23,7 +23,7 @@ struct Node {
 	 +++++++ Main C'tor. Takes in ptr to init data member named "value" . ++++++++
 	 */
 
-	Node<T>(const T *ObjPtr = nullptr)
+	Node<T>(T *ObjPtr = nullptr)
 
 		:value(ObjPtr), next(nullptr), prev(nullptr)
 	{}

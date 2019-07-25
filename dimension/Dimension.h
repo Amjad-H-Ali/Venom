@@ -72,12 +72,9 @@ public:
 
 
 	/*
-		Instantiates an Open Type object that represents a
-		Token Node who opens a LIST or BLOCK. Attaches the
-		new instance to a Linked-List.
-
-		Params: Token Node that opens a LIST or BLOCK
-	*/
+	 +++++++ Inserts Token Ptr, that represents an open to a dimension, onto openStack +++++++++++
+	 */
+	
 	void insertOpen(const SmartPtr<Token> &tokenPtr);
 
 	/*
