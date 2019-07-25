@@ -58,3 +58,13 @@ void Stack::pop() {
 
 	delete temp;
 };
+
+
+/*
+ +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
+ */
+
+SmartPtr<T> &getTop() const {
+	
+	return head->value;
+};
