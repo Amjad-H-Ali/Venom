@@ -74,20 +74,14 @@ public:
 	/*
 	 +++++++ Inserts Token Ptr, that represents an open to a dimension, onto openStack +++++++++++
 	 */
-	
+
 	void insertOpen(const SmartPtr<Token> &tokenPtr);
 
 	/*
-		Assigns the "closing" member of the Token Node to true
-		and its "matchingPair" member to the corresponding open 
-		Token Node. That corresponding open Token Node's 
-		"matchingPair" member is set to this closing Token Node
-		that is passed in. Lastly. pops off that opening node 
-		from the stack of Open objects.
+	 ++++++++ Sets Opening/Closing Tokens' matching Opening/Closing, and pops off Open from openStack ++++++++++
+	 */
 
-		Params: Token Node that closed a LIST or BLOCK
-	*/
-	void insertClose(token::TokenNode *tn);
+	void Dimension::insertClose(SmartPtr<Token> &tokenPtr);
 
 	// Accessor
 	unsigned getD() const;

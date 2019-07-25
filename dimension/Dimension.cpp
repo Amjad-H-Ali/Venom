@@ -37,12 +37,10 @@ void Dimension::insertOpen(const SmartPtr<Token> &tokenPtr) {
 };
 
 /*
-	*
-	* Matches the closing Token object with its corresponding opening Token
-	* and vice versa.
-	*
-*/
-void Dimension::insertClose(Token *tokenPtr) {
+ ++++++++ Sets Opening/Closing Tokens' matching Opening/Closing, and pops off Open from openStack ++++++++++
+ */
+
+void Dimension::insertClose(SmartPtr<Token> &tokenPtr) {
 
 	/*
 		*
@@ -56,9 +54,12 @@ void Dimension::insertClose(Token *tokenPtr) {
 		* Assign Token's corresponding Open/Closing Token.
 		*
 	*/
-	tokenPtr->setMatchingPair(openStack->tokenPtr); // Setting closing Token's matching pair.
 
-	openStack->tokenPtr->setMatchingPair(tokenPtr); // Setting opening Token's matching pair.
+	SmartPtr<Token> &topToken = openStack->getTop();
+
+	tokenPtr->setMatchingPair(topToken); // Setting closing Token's matching pair.
+
+	topToken->setMatchingPair(tokenPtr); // Setting opening Token's matching pair.
 
 	/*
 		*
@@ -66,7 +67,7 @@ void Dimension::insertClose(Token *tokenPtr) {
 		* represents has been matched with a closing Token object.
 		*
 	*/
-	pop();
+	openStack.pop();
 
 
 	
