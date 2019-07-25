@@ -14,8 +14,9 @@ class ArrayDimension : public Dimension {
 private:
 
 	ArrayDimension()
+	
 		:Dimension()
-	{std::cout << "ArrayDimension Was Created!" << " Address: " << this <<  std::endl;};
+	{};
 
 
 public:

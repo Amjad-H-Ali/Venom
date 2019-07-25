@@ -15,8 +15,10 @@ class BlockDimension : public Dimension {
 private:
 
 	BlockDimension()
+
 		:Dimension()
-	{std::cout << "BlockDimension Was Created!" << " Address: " << this <<  std::endl;};
+
+	{};
 
 
 public:

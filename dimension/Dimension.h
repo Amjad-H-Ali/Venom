@@ -25,7 +25,12 @@ protected:
 		Every time the "insertClose" method is invoked, an object is 
 		popped off the stack.
 	*/
-	Node<Token> *openStack;
+
+	/*
+     +++++ Stack of ptrs to Token Objects that represent Openings to arrays, param lists, and blocks +++++++
+	 */
+
+	Stack<Token> openStack;
 
 	// Pushes to the stack.
 	void push(Node<Token> *newOpen);
@@ -57,9 +62,7 @@ protected:
 
 
 	// Only inherited classes can call constructor
-	Dimension()
-		:openStack(nullptr)
-	{};
+	Dimension() {};
 
 	~Dimension();
 
@@ -75,7 +78,7 @@ public:
 
 		Params: Token Node that opens a LIST or BLOCK
 	*/
-	void insertOpen(token::TokenNode *tn);
+	void insertOpen(const SmartPtr<Token> &tokenPtr);
 
 	/*
 		Assigns the "closing" member of the Token Node to true

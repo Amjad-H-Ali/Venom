@@ -12,18 +12,22 @@ private:
 
 public:
 
+	/*
+	 +++++++ Main C'tor +++++++++++
+	 */
+
 	Stack();
 
 	/*
 	 ++++++ Insert ptr to object into stack. +++++++
 	 */
 
-	void Stack::push(const SharedPtr<Token> &objPtr);
+	void Stack::push(const SharedPtr<T> &objPtr);
 
 	/*
 	 +++++++ Pop object off stack +++++++++++
 	 */
-	
+
 	void pop();
 
 }; // Stack

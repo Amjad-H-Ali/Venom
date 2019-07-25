@@ -14,8 +14,10 @@ class ParamDimension : public Dimension {
 private:
 
 	ParamDimension()
+
 		:Dimension()
-	{std::cout << "ParamDimension Was Created!" << " Address: " << this <<  std::endl;};
+
+	{};
 
 
 public:

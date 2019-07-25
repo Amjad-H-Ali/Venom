@@ -1,4 +1,7 @@
 
+/*
+ +++++++ Main C'tor +++++++++++
+ */
 
 Stack::Stack()
 	:head(nullptr)
@@ -8,7 +11,7 @@ Stack::Stack()
  ++++++ Insert ptr to object into stack. +++++++
  */
 
-void Stack::push(const SharedPtr<Token> &objPtr) {
+void Stack::push(const SharedPtr<T> &objPtr) {
 
 	Node<T> *newNode = new Node<T>(objPtr);
 
@@ -52,6 +55,6 @@ void Stack::pop() {
 	/*
 	 +++++++ SharedPtr in this Node deletes if it's the only ptr sharing resource +++++++++++
 	 */
-	
+
 	delete temp;
 };

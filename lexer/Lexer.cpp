@@ -222,7 +222,7 @@ private:
 		* block, or parameter list.
 		*
 	*/
-	bool isDimensional(Token::Symbol sym) {
+	inline bool isDimensional(Token::Symbol sym) {
 
 		return (
 
@@ -287,7 +287,7 @@ public:
 	/*
 	 ++++++++++ Main C'tor ++++++++++++++
 	*/
-	
+
 	Lexer(const char *fileName)
 
 		:
@@ -303,6 +303,7 @@ public:
 
 		while(inFile >> stream) generateTokensInQ();
 
+		return tokensQ;
 	};
 
 }; // Lexer

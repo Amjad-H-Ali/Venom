@@ -18,23 +18,6 @@ Dimension::~Dimension() {
 
 
 
-// Pushes to the stack.
-void Dimension::push(Node<Token> *newOpen) {
-	newOpen->next = openStack;
-
-	openStack = newOpen; // Set Head
-};
-
-// Pops off the stack.
-void Dimension::pop() {
-	Open *temp = openStack;
-
-	openStack = openStack->next;
-
-	temp->next = nullptr;
-
-	delete temp;
-};
 
 /*
 	Instantiates an Open Type object that represents a
@@ -43,21 +26,14 @@ void Dimension::pop() {
 
 	Params: Token Node that opens a LIST or BLOCK
 */
-void Dimension::insertOpen(Token *tokenPtr) {
-
-
-	Open *newOpen = new Open();
-
-	newOpen->tokenPtr = tokenPtr;
+void Dimension::insertOpen(const SmartPtr<Token> &tokenPtr) {
 
 	/*
-		*
-		* Insert "newOpen" into Linked-List (stack).
-		*
-	*/
-	push(newOpen);
+	 ++++++ Insert ptr to Token into stack. SharedPtr Cp C'tor called. ++++++++++
+	 */
 
-	
+	openStack.push(tokenPtr);
+
 
 	++D; // Increment Dimension
 
