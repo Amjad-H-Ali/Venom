@@ -2,90 +2,98 @@
 
 #define LEXER_H
 
-#include <iostream>
-#include "Token.h"
 
 
+class Lexer {
 
-// Alias for ifstream&
-typedef std::ifstream &INFILE;
+private:
 
-// Forward Declaration of token::Token and token::TokenNode classes.
-namespace token {
-	class Token;
-	struct TokenNode;
-} // End.
+	std::ifstream inFile;
 
-namespace lexer {
+	std::string stream;
 
-namespace utility	{
-
-
-	// UTILITY FUNCTIONS
-		
-	// Gets entire potential string.
-	char *chompString(char &c, INFILE in);
-	char *chompOperator(char &c, INFILE in);
-	// Gets whole AlphaNumeric from beginning to end.
-	char *chompAlphaNumeric(char &c, INFILE in);
-	// Chomp Single Token
-	char *chompSingleChar(char &c, INFILE in);
-	// Creates a C-String. Parameters are an ifstream object
-	// from which it will read in characters from current state
-	// of this file object, and the range of characters to read.
-	char *makeC_String(INFILE in, std::streampos range);
-	// Determines the length of stream to chomp based on the 
-	// Bool Function passed in as argument. Restores file pointer
-	// to original position when finished.
-	std::streampos rangeToChomp(char &c, INFILE in, bool(*greenLight)(const char));
-	// Checks if char is one of the operators.
-	bool isOperator(char c);
-	// Checks if current charachter is a number
-	bool isNumeric(char c);
-	// Checks if current character is a letter.
-	bool isAtoZ(char c);
-	// Checks if character is Alphanumeric (A-Z, 0-9, or _)
-	bool isAlphaNumeric(char c);
-	// Checks if character is an eligible beggining for AlphaNumeric.
-	bool isEligibleStartToAlphaNum(char c);
-	// Checks if one of the singly named Tokens (eg. `, |, (, ), etc.)
-	bool isSinglyNamedToken(char c);
-	// Checks if c is Quotes
-	bool isQuote(char c);
-	// Returns true if character is not a single quote.
-	bool isNotClosingSingleQT(char c);
-	// Returns true if character is not a double quote.
-	bool isNotClosingDoubleQT(char c);
-	// Checks if character is a relevant Escape Sequence.
-	bool isEscSeq(char c);
 	/*
-		Checks if Token Node is part of an array or block,
-		which is Dimensional.
+		*
+		* Tokens are stored here and will be fed to the Preparser.
+		*
 	*/
-	bool isDimensional(INFILE in, token::TokenNode *tn);
-	// Checks if Token Node is last in block.
-	bool isClosingBlock(INFILE in, token::TokenNode *tn);
-	// Checks if range ahead contains only given character.
-	bool rangeOnlyHas(INFILE in, int places, char c);
-	// To Peek multiple characters Ahead
-	// Params: ifstream object and Amount 
-	// of places to Peek Ahead.
-	char peekAhead(INFILE in, int places);
+	Queue<Token> *tokensQ;
+
+	/*	
+		*
+		* Represents Dimensions of an array.
+		*
+	*/
+	ArrayDimension *const arrayD;
+
+	/*	
+		*
+		* Represents Dimension of a block.
+		*
+	*/
+	BlockDimension *const blockD;
+
+	/*
+		*
+		* Represents Dimension of a parameter list.
+		*
+	*/
+	ParamDimension *const paramD;
+
+	/* 
+		*
+		* Gets the index of the stream where it no longer can be 
+		* part of a potential identifier. 
+		* Params: start position to read the stream (defualt to beginning).
+		*
+    */
+	std::string::size_type getIdentifierBreakPoint(std::string::size_type start = 0);
+
+	/*
+		*
+		* Gets the ending index of the string in stream.
+		* Params: start position to read the stream (defualt to beginning).
+		*
+	*/
+	std::string::size_type getStrBreakPoint(std::string::size_type start = 0);
+
+	/*
+		*
+		* Tokenizes data from stream and places it in tokensQ.
+		*
+	*/
+	void generateTokensInQ(std::string::size_type start = 0, std::string::size_type end = 0);
 
 
+	/*	
+		* 
+		* Checks if symbol is of an opening/closing to array,
+		* block, or parameter list.
+		*
+	*/
+	inline bool isDimensional(Token::Symbol sym); 
 
-}; // utility
-	
-	// LEXER FUNCTIONS
+	/*
+		*
+		* Inserts opening/closing Token of block, array or
+		* parameter list.
+		*
+	*/
+	void insertDimension(SharedPtr<Token> &tokenPtr);
 
-	// Tokenizes input file and adds to Linked List of Tokens.
-	token::TokenNode *lexer(const char *fileName);
 
-	// Inserts start/end to block or array in 
-	// respective Object.
-	void insertDimension(token::TokenNode *tn);
-	
-	
-}; // lexer 
+public:
+
+	/*
+	 ++++++++++ Main C'tor ++++++++++++++
+	*/
+
+	Lexer(const char *fileName);
+
+	Queue<Token> *Tokenize();
+
+}; // Lexer
+
+
 
 #endif

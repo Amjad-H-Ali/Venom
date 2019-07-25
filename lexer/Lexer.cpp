@@ -1,311 +1,262 @@
-#include <iostream>
-#include <fstream>
-#include "lexer.h"
-#include "Token.h"
-#include "ArrayDimension.h"
-#include "BlockDimension.h"
-#include "ParamDimension.h"
-#include "utility.h"
-
-
-class Lexer {
-
-private:
-
-	std::ifstream inFile;
-
-	std::string stream;
+/* 
+	*
+	* Gets the index of the stream where it no longer can be 
+	* part of a potential identifier. 
+	* Params: start position to read the stream (defualt to beginning).
+	*
+*/
+std::string::size_type Lexer::getIdentifierBreakPoint(std::string::size_type start = 0) {
+	
+	decltype(start) beginning = start;
 
 	/*
 		*
-		* Tokens are stored here and will be fed to the Preparser.
+		* Identifier rules: 
+		*   * Can contain anything from "A-Z", and "_".
+		*   * Can contain numbers as long as it does not begin with one.
+		* -------------------------------------------------------------
+		* This loop increments as long as above conditions are met.
 		*
 	*/
-	Queue<Token> *tokensQ;
+	for(decltype(start) len = stream.size(); (start < len) && 
+		((stream[start] >= 'a' && stream[start] <= 'z') || 
+		(stream[start] >= 'A' && stream[start] <= 'Z') ||
+		(stream[start] == '_') || ((start > beginning) && 
+		(stream[start] >= '0') && (stream[start] <= '9'))); ++start);
 
-	/*	
-		*
-		* Represents Dimensions of an array.
-		*
-	*/
-	ArrayDimension *const arrayD;
 
-	/*	
-		*
-		* Represents Dimension of a block.
-		*
-	*/
-	BlockDimension *const blockD;
+	return start;
+}
+
+/*
+	*
+	* Gets the ending index of the string in stream.
+	* Params: start position to read the stream (defualt to beginning).
+	*
+*/
+std::string::size_type Lexer::getStrBreakPoint(std::string::size_type start = 0) {
 
 	/*
 		*
-		* Represents Dimension of a parameter list.
+		* Store so we know which type of ending quote to look for. Increment
+		* start to move on to firt character in string.
 		*
 	*/
-	ParamDimension *const paramD;
+	char quote = stream[start++];
 
-	/* 
+	for(decltype(start) len = stream.size(); start < len && stream[start] != quote; ++start);
+
+	return start;
+}
+
+/*
+	*
+	* Tokenizes data from stream and places it in tokensQ.
+	*
+*/
+void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::size_type end = 0) {
+
+	if(end == 0) end = stream.size();
+
+    if(start >= end) return;
+
+    /*
 		*
-		* Gets the index of the stream where it no longer can be 
-		* part of a potential identifier. 
-		* Params: start position to read the stream (defualt to beginning).
+		* Check if stream is the corresponding string value to any of the Token
+		* symbols held in the Trie (Token::mapToSymbol). This can be a keyword,
+		* paranthesis, comma, bracket, etc.
 		*
     */
-	std::string::size_type getIdentifierBreakPoint(std::string::size_type start = 0) {
-    	
-		decltype(start) beginning = start;
+    if(Token::Symbol *symPtr = Token::mapToSymbol->map(stream, start, end)) {
+
+    	tokensQ.enqueue(*symPtr);
 
     	/*
 			*
-			* Identifier rules: 
-			*   * Can contain anything from "A-Z", and "_".
-			*   * Can contain numbers as long as it does not begin with one.
-			* -------------------------------------------------------------
-			* This loop increments as long as above conditions are met.
+			* Check if symbol is opening/closing a dimension of a block, array,
+			* or parameter list. If so, mark the Token that was just created.
+			* tokensQ.end() returns SharedPtr to Token.
 			*
-		*/
-		for(decltype(start) len = stream.size(); (start < len) && 
-			((stream[start] >= 'a' && stream[start] <= 'z') || 
-			(stream[start] >= 'A' && stream[start] <= 'Z') ||
-			(stream[start] == '_') || ((start > beginning) && 
-			(stream[start] >= '0') && (stream[start] <= '9'))); ++start);
-   
+    	*/
+    	if(isDimensional(*symPtr)) insertDimension(tokensQ.end());
+    
+        
 
-    	return start;
-	}
-
-	/*
+    }
+    
+    /*
 		*
-		* Gets the ending index of the string in stream.
-		* Params: start position to read the stream (defualt to beginning).
-		*
-	*/
-	std::string::size_type getStrBreakPoint(std::string::size_type start = 0) {
+		* If stream does not match any of the Token symbols, then it could be any of the following:
+		*    * It's holding more than one symbol, meaning it contains symbols that were not spaced out (ie. "if(" ).
+		*    * It's an identifier.
+		* 	 * It's a string.
+		* 	 * Otherwise, it's an error.
+		* Reccusively Tokenize potential string, identifier, keyword, etc.
+    */
+    else {
 
-		/*
+    	/*
+        	*
+			* Check for possible string.
 			*
-			* Store so we know which type of ending quote to look for. Increment
-			* start to move on to firt character in string.
-			*
-		*/
-		char quote = stream[start++];
+        */
+        if(stream[start] == '"' || stream[start] == '\'') {
 
-		for(decltype(start) len = stream.size(); start < len && stream[start] != quote; ++start);
+        	decltype(start) strBreak = getStrBreakPoint(start);
 
-		return start;
-	}
 
-	/*
-		*
-		* Tokenizes data from stream and places it in tokensQ.
-		*
-	*/
-	void generateTokensInQ(std::string::size_type start = 0, std::string::size_type end = 0) {
+        	tokensQ.enqueue(stream.substr(start, strBreak), Token::STRING);
 
-		if(end == 0) end = stream.size();
+        	/*
+        		*
+        		* Increment to skip ending quote.
+        		*
+        	*/ 
+        	start = (++strBreak);
 
-	    if(start >= end) return;
+        }
 
-	    /*
-			*
-			* Check if stream is the corresponding string value to any of the Token
-			* symbols held in the Trie (Token::mapToSymbol). This can be a keyword,
-			* paranthesis, comma, bracket, etc.
-			*
-	    */
-	    if(Token::Symbol *symPtr = Token::mapToSymbol->map(stream, start, end)) {
+        else {
 
-	    	tokensQ.enqueue(*symPtr);
-
-	    	/*
-				*
-				* Check if symbol is opening/closing a dimension of a block, array,
-				* or parameter list. If so, mark the Token that was just created.
-				* tokensQ.end() returns SharedPtr to Token.
-				*
+        	/*	
+        		*
+        		* If aToZbreak is greater than symBreak and symBreak was greater than 0,
+        		* than we have an identifier whom part of it happens to have the same name 
+        		* as a symbol (ie. Symbol: is, Identifier: isFoo)
+        		*
 	    	*/
-	    	if(isDimensional(*symPtr)) insertDimension(tokensQ.end());
+	        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
+	                        symBreak  = Token::mapToSymbol->getBreakPoint(stream, start);
 	    
-	        
-
-	    }
-	    
-	    /*
-			*
-			* If stream does not match any of the Token symbols, then it could be any of the following:
-			*    * It's holding more than one symbol, meaning it contains symbols that were not spaced out (ie. "if(" ).
-			*    * It's an identifier.
-			* 	 * It's a string.
-			* 	 * Otherwise, it's an error.
-			* Reccusively Tokenize potential string, identifier, keyword, etc.
-	    */
-	    else {
-
-	    	/*
+	        /*
 	        	*
-				* Check for possible string.
+				* Check for possible match to keywords or other Symbols in Trie.
 				*
 	        */
-	        if(stream[start] == '"' || stream[start] == '\'') {
-
-	        	decltype(start) strBreak = getStrBreakPoint(start);
-
-
-	        	tokensQ.enqueue(stream.substr(start, strBreak), Token::STRING);
+	        if( (symBreak > 0) && (symBreak >= aToZbreak) ) {
 
 	        	/*
 	        		*
-	        		* Increment to skip ending quote.
+	        		* Tokenize symbol using the main if statement above 
+	        		* and control retrurns here.
 	        		*
-	        	*/ 
-	        	start = (++strBreak);
+	        	*/
+	        	generateTokensInQ(start, symBreak);
 
+	            start = symBreak;
 	        }
 
-	        else {
+	        /*
+	        	*
+				* Check for possible identifier.
+				*
+	        */
+	        else if(aToZbreak > 0) {
 
-	        	/*	
-	        		*
-	        		* If aToZbreak is greater than symBreak and symBreak was greater than 0,
-	        		* than we have an identifier whom part of it happens to have the same name 
-	        		* as a symbol (ie. Symbol: is, Identifier: isFoo)
-	        		*
-		    	*/
-		        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
-		                        symBreak  = Token::mapToSymbol->getBreakPoint(stream, start);
-		    
-		        /*
-		        	*
-					* Check for possible match to keywords or other Symbols in Trie.
-					*
-		        */
-		        if( (symBreak > 0) && (symBreak >= aToZbreak) ) {
+	        	tokensQ.enqueue(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
 
-		        	/*
-		        		*
-		        		* Tokenize symbol using the main if statement above 
-		        		* and control retrurns here.
-		        		*
-		        	*/
-		        	generateTokensInQ(start, symBreak);
+	            start = aToZbreak;
+	        }
 
-		            start = symBreak;
-		        }
+	        /*
+	        	*
+	        	* else: error
+	        	*
+	        */
+       	}
 
-		        /*
-		        	*
-					* Check for possible identifier.
-					*
-		        */
-		        else if(aToZbreak > 0) {
-
-		        	tokensQ.enqueue(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
-
-		            start = aToZbreak;
-		        }
-
-		        /*
-		        	*
-		        	* else: error
-		        	*
-		        */
-	       	}
-
-	        generateTokensInQ(start, end);
-	    }
-	    
-	} // generateTokensInQ
+        generateTokensInQ(start, end);
+    }
+    
+} // generateTokensInQ
 
 
-	/*	
-		* 
-		* Checks if symbol is of an opening/closing to array,
-		* block, or parameter list.
-		*
-	*/
-	inline bool isDimensional(Token::Symbol sym) {
+/*	
+	* 
+	* Checks if symbol is of an opening/closing to array,
+	* block, or parameter list.
+	*
+*/
+inline bool Lexer::isDimensional(Token::Symbol sym) {
 
-		return (
+	return (
 
-			sym == Token::LBRACKET || sym == Token::RBRACKET ||
-			sym == Token::LHANDLE  || sym == Token::RHANDLE  ||
-			sym == token::BAR 
+		sym == Token::LBRACKET || sym == Token::RBRACKET ||
+		sym == Token::LHANDLE  || sym == Token::RHANDLE  ||
+		sym == token::BAR 
+	
+	);
+} 
+
+/*
+	*
+	* Inserts opening/closing Token of block, array or
+	* parameter list.
+	*
+*/
+void Lexer::insertDimension(SharedPtr<Token> &tokenPtr) {
+
+	if(*tokenPtr == Token::LBRACKET) {
+
+		if(!arrayD) arrayD = ArrayDimension::getInstance();
+
+		arrayD->insertOpen(tokenPtr);
+	}
+
+
+	else if(*tokenPtr == Token::LHANDLE) {
+
+		if(!blockD) blockD = BlockDimension::getInstance();
+
+		blockD->insertOpen(tokenPtr);
+	}
+
+	
+	else if(*paramD == 0  && *tokenPtr == Token::BAR) {
+
+		if(!paramD) paramD = ParamDimension::getInstance();
+
+		paramD->insertOpen(tokenPtr);
+	}
+	
+
+	else if(*tokenPtr == Token::RBRACKET) 
+
+		arrayD->insertClose(tokenPtr);
+
+
+	else if(*tokenPtr == Token::RHANDLE)
+
+		blockD->insertClose(tokenPtr);
+
+
+	else if(*tokenPtr == Token::BAR) 
 		
-		);
-	} 
-
-	/*
-		*
-		* Inserts opening/closing Token of block, array or
-		* parameter list.
-		*
-	*/
-	void insertDimension(SharedPtr<Token> &tokenPtr) {
-
-		if(*tokenPtr == Token::LBRACKET) {
-
-			if(!arrayD) arrayD = ArrayDimension::getInstance();
-
-			arrayD->insertOpen(tokenPtr);
-		}
+		paramD->insertClose(tokenPtr);
+	
+};
 
 
-		else if(*tokenPtr == Token::LHANDLE) {
-
-			if(!blockD) blockD = BlockDimension::getInstance();
-
-			blockD->insertOpen(tokenPtr);
-		}
-
-		
-		else if(*paramD == 0  && *tokenPtr == Token::BAR) {
-
-			if(!paramD) paramD = ParamDimension::getInstance();
-
-			paramD->insertOpen(tokenPtr);
-		}
-		
-
-		else if(*tokenPtr == Token::RBRACKET) 
-
-			arrayD->insertClose(tokenPtr);
 
 
-		else if(*tokenPtr == Token::RHANDLE)
+/*
+ ++++++++++ Main C'tor ++++++++++++++
+*/
 
-			blockD->insertClose(tokenPtr);
+Lexer::Lexer(const char *fileName)
 
+	:
+		inFile(fileName), stream(nullptr), tokensQ(nullptr), 
+		arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
+{};
 
-		else if(*tokenPtr == Token::BAR) 
-			
-			paramD->insertClose(tokenPtr);
-		
-	};
-
-
-public:
-
-	/*
-	 ++++++++++ Main C'tor ++++++++++++++
-	*/
-
-	Lexer(const char *fileName)
-
-		:
-			inFile(fileName), stream(nullptr), tokensQ(nullptr), 
-			arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
-	{};
-
-	Queue<Token> *Tokenize() {
+Queue<Token> *Lexer::Tokenize() {
 
 
-		if(!tokensQ) tokensQ = new Queue<Token>;
+	if(!tokensQ) tokensQ = new Queue<Token>;
 
 
-		while(inFile >> stream) generateTokensInQ();
+	while(inFile >> stream) generateTokensInQ();
 
-		return tokensQ;
-	};
-
-}; // Lexer
-
+	return tokensQ;
+};
