@@ -119,19 +119,3 @@ void setMatchingPair(Token *matchingPair) {
 bool Token::operator==(Symbol type) const {
 	return (this->type == type);
 };
-
-
-	
-
-
-
-	
-
-
-
-
-
-
-
-
-
