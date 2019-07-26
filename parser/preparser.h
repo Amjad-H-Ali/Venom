@@ -2,17 +2,12 @@
 
 #define PREPARSER_H
 
-#include "AST.h"    // For astPtr_t
-#include "Token.h"
-#include "Queue.h"
-
-
 
 class Preparser {
 
 private:
 
-	Queue<Token> *tokensQ;
+	const Queue<Token> *tokensQ;
 
 	/*	
 		*
@@ -28,19 +23,19 @@ public:
 
 	/*
 		*
-		* Overload () operator. Creates a Queue of astPtr_t(s). 
-		* Return: Lambda that takes in a conditional and parses Queue of tokenPtr(s)
-		* and pushes parsed items into Queue of astPtr_t(s).
+		* Overload () operator. Creates a Queue of ast_t(s). 
+		* Return: Lambda that takes in a conditional and parses tokensQ
+		* and pushes parsed items into Queue of ast_t(s).
 		*
 	*/
 	auto operator()();
 
 	/*
 		*
-		* Parse token object and return an astPtr_t.
+		* Parse token object and return an ast_t.
 		*
 	*/
-	astPtr_t parseToken(Token *tokenPtr);
+	ast_t parseToken(const SharedPtr<Token> &tokenPtr);
 
 }; // Preparser
 

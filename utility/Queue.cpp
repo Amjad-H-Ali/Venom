@@ -66,7 +66,7 @@ void Queue::jump(unsigned places) {
  ++++++ Returns Ptr to current object in Queue +++++++
  */
 
-SharedPtr<T> &Queue::current() {
+SharedPtr<T> &Queue::current() const {
 	return _current->value;
 };
 
@@ -75,7 +75,7 @@ SharedPtr<T> &Queue::current() {
  ++++++ Returns Ptr to last object in Queue +++++++
  */
 
-SharedPtr<T> &Queue::end() {
+SharedPtr<T> &Queue::end() const {
 
 	return tail->value;
 };

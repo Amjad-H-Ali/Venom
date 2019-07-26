@@ -45,13 +45,13 @@ public:
 	 ++++++ Returns Ptr to current object in Queue +++++++
 	 */
 
-	SharedPtr<T> &current();
+	SharedPtr<T> &current() const;
 
 	/*
 	 ++++++ Returns Ptr to last object in Queue +++++++
 	 */
 
-	SharedPtr<T> &end();
+	SharedPtr<T> &end() const;
 
 
 }; // Queue

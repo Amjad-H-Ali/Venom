@@ -46,18 +46,10 @@ private:
 
 			[parent](AST_BinOp *op) {
 
-				std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
-
-				std::cout << parent  << "  " << op << "  "<< std::endl;
-
-				std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
-
 
 				AST *lParent = parent->next,
 
 					*rParent = parent->prev;
-
-				std::cout << "lll " <<lParent  << "  " << rParent << "  "<< std::endl;
 
 				op->setValue(lParent->node, rParent->node);
 
@@ -66,13 +58,11 @@ private:
 
 				parent->prev = rParent->prev;
 
-				std::cout << "THIS IS L AND R   " << parent->next<< "   " << parent->prev << std::endl;
 
 				if (parent->next) parent->next->prev = parent;
 
 				if (parent->prev) parent->prev->next = parent;
 
-				std::cout <<"ENDDDDDDD"<< std::endl;
 
 				delete lParent;
 				delete rParent;
@@ -90,7 +80,6 @@ private:
 		processEach(opNode->next);
 
 		AST *node = opNode->op;
-		std::cout << "IN FUNC, L and R:   " << node->next << "   " << node->prev << std::endl;
 		process(node, node->node);
 	}
 

@@ -1,22 +1,13 @@
-#include "Preparser.h"
-#include "Queue.h"
-#include "Token.h"
-#include "AST.h"		// For astPtr_t
-#include "AST_BinOp.h"
-#include "AST_List.h"
-#include "AST_Block.h"
-#include "AST_STR.h"
-#include "AST_ID.h"
-#include <utility>		// For move()
 
 
 
 
-// namespace utils = preparser::utility;
 
 
-Preparser::Preparser(Queue<Token> *tokensQ)
-	:tokensQ(tokensQ)
+
+
+Preparser::Preparser(const Queue<Token> *tokensQ_Param)
+	:tokensQ(tokensQ_Param)
 {};
 
 
@@ -41,14 +32,14 @@ auto Preparser::callFlagForListAndBlock(Token *tokenPtr) {
 
 /*
 	*
-	* Overload () operator. Creates a Queue of astPtr_t(s). 
+	* Overload () operator. Creates a Queue of ast_t(s). 
 	* Return: Lambda that takes in a conditional and parses Queue of tokenPtr(s)
-	* and pushes parsed items into Queue of astPtr_t(s).
+	* and pushes parsed items into Queue of ast_t(s).
 	*
 */
 auto Preparser::operator()() {
 
-	Queue<astPtr_t> *parsedAst = new Queue<astPtr_t>;
+	Queue<ast_t> *preparsedAstQ = new Queue<ast_t>;
 
 	/*
 		*
@@ -62,10 +53,10 @@ auto Preparser::operator()() {
 
 			/*
 				*
-				* Parse token and receive astPtr_t.
+				* Parse token and receive ast_t.
 				*
 			*/
-			astPtr_t parsedAstPtr = parseToken(tokensQ->current());
+			ast_t parsedAstPtr = parseToken(tokensQ->current());
 
 			parsedAst->push(parsedAstPtr); 
 
@@ -84,10 +75,10 @@ auto Preparser::operator()() {
 
 /*
 	*
-	* Parse token object and return an astPtr_t.
+	* Parse token object and return an ast_t.
 	*
 */
-astPtr_t Preparser::parseToken(Token *tokenPtr) {
+ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
 
 
 	if(*tokenPtr == token::ID)

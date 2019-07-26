@@ -246,15 +246,11 @@ void Lexer::insertDimension(SharedPtr<Token> &tokenPtr) {
 Lexer::Lexer(const char *fileName)
 
 	:
-		inFile(fileName), stream(nullptr), tokensQ(nullptr), 
+		inFile(fileName), stream(nullptr), tokensQ(new Queue<Token>), 
 		arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
 {};
 
-Queue<Token> *Lexer::Tokenize() {
-
-
-	if(!tokensQ) tokensQ = new Queue<Token>;
-
+Queue<Token> *Lexer::operator ()(){
 
 	while(inFile >> stream) generateTokensInQ();
 

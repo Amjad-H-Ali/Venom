@@ -90,7 +90,7 @@ public:
 
 	Lexer(const char *fileName);
 
-	Queue<Token> *Tokenize();
+	Queue<Token> *operator ()();
 
 }; // Lexer
 
