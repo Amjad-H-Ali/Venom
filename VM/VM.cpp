@@ -157,11 +157,39 @@ void VM::operator()() {
 
 			callStack.pop();								// Pop value off top of stack.
 
-			callStack.push(*rgstr.eax);						// Push value in eax onto stack.
+			callStack.push(*rgstr.eax);						// Push summed value in eax onto stack.
 
 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
 
 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+		  }
+
+		  /*
+		   +++++ Function Call +++++
+		   */
+
+		  else if(*rgstr.eip == CALL) {
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+			rgstr.edx = rgstr.eip;							// Temporarly store function name.
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+			callStack.push(*rgstr.eip);						// Push number of arguments.
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+			callStack.push(rgstr.ebp);						// Push old base pointer.
+
+			callStack.push(rgstr.eip);						// Push return address.
+
+			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+
+			rgstr.ebp = rgstr.esp;							// Store return address in ebp.
+
+			rgstr.eip = declTree.map(*rgstr.edx);			// Map to function instructions.
 
 		  }
 
