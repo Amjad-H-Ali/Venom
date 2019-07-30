@@ -73,11 +73,11 @@ void VM::operator()() {
 
 		if(*rgstr.eip == DECL) {
 
-			rgstr.eip = (rgstr.eip)->next;       	// Increment eip to next instruction.
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
 
-			declTree.push(*rgstr.eip);     			// Declare name of variable.
+			declTree.push(*rgstr.eip);     					// Declare name of variable.
 
-			rgstr.eip = (rgstr.eip)->next;	   		// Increment eip to next instruction.
+			rgstr.eip = (rgstr.eip)->next;	   				// Increment eip to next instruction.
 		}											
 
 		/*
@@ -86,23 +86,34 @@ void VM::operator()() {
 
 		else if(*rgstr.eip == LOAD) {
 
-			rgstr.eip = (rgstr.eip)->next;       	// Increment eip to next instruction.
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction.
 
-			callStack.push(*eip);					// Push value onto stack.
+			callStack.push(*eip);							// Push value onto stack.
 
-			rgstr.esp = callStack.getTop();			// Set stack ptr to top.
+			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
 
-			rgstr.eip = (rgstr.eip)->next;       	// Increment eip to next instruction.
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction.
 
 		}	
 
 		/*
 		 +++++ Store value on top of stack into variable.
 		 */			
-
+			// TODO: setValue() method for Trie.
 		 else if(*rgstr.eip == STORE) {
 
-		 	
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+			rgstr.edx = rgstr.eip;							// Temporarly store string.
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+			declTree.setValue(*rgstr.edx, *rgstr.esp);		// Map variable name and store value from top of stack.
+
+			callStack.pop();								// Pop value off top of stack.
+
+			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+
 		 }							
 
 	}
