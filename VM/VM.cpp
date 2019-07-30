@@ -29,6 +29,12 @@ struct VM::Register {
 
 	Node<> *eax;
 
+	/*
+	 +++++ Data Register +++++
+	 */
+
+	Node<> *edx;
+
 
 
 	/*
@@ -97,7 +103,7 @@ void VM::operator()() {
 		}	
 
 		/*
-		 +++++ Store value on top of stack into variable.
+		 +++++ Store value on top of stack into variable. ++++++
 		 */			
 			// TODO: setValue() method for Trie.
 		 else if(*rgstr.eip == STORE) {
@@ -114,7 +120,13 @@ void VM::operator()() {
 
 			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
 
-		 }							
+		 }		
+
+		 /*
+		  +++++ Evaluate a variable +++++
+		  */		
+
+		  else if(*rgstr.eip)			
 
 	}
 
