@@ -40,6 +40,7 @@ public:
      ++++++++ Adds symbol to Trie      ++++++++
      ++++++++ Uses str literal as map  ++++++++
      */
+
     void push(const char *str, T *symbol);
 
     /*
@@ -47,6 +48,7 @@ public:
      +++++++++ Params: string containing data and the range (start and end) to read. ++++++++++
      +++++++++ Range is set to full string as defualt.                               ++++++++++
      */
+
     T *map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0);
 
     /*
@@ -54,6 +56,7 @@ public:
      ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
      ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++
      */
+    
     std::string::size_type getBreakPoint(const std::string &data, std::string::size_type start = 0);
 
     

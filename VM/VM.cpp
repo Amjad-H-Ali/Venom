@@ -36,16 +36,32 @@ struct VM::Register {
 	 */
 
 	Register()
-	
+
 		:esp(nullptr), ebp(nullptr), eip(nullptr), eax(nullptr)
 	{};
 
 }; // Register
 
 
+/* 
+ ++++++ Main C'tor ++++++++
+ */
+
+VM::VM(Queue<> *byteCodeQ)
+
+	:execQ(byteCodeQ), registers(new Register)
+{};
 
 
 /*
  ++++++ Executes the ByteCode in execQ +++++++++
 */
-void VM::operator()();
+
+void VM::operator()() {
+
+
+};
+
+
+
+

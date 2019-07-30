@@ -32,7 +32,7 @@ struct Node {
 	 +++++++ C'tor that takes in SharedPtr to copy. Always calls SharedPtr Copy C'tor ++++++++
 	 */
 
-	Node<T>(const SharedPtr<T>& ptrObj)
+	Node<T>(const SharedPtr<T>& ptrObj) // TODO: MAKE this Universal.
 
 		:value(ptrObj), next(nullptr), prev(nullptr)
 	{}

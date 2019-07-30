@@ -2,6 +2,7 @@
 /*
  ++++++ Node for creating paths to the symbols ++++++++
  */
+
 struct Trie::Node {
 
     T *type;
@@ -18,6 +19,7 @@ struct Trie::Node {
 /*
  ++++ Returns unique key ++++
  */
+
 size_t Trie::hash(char letter) const {
 
     return letter - '!';
@@ -27,7 +29,9 @@ size_t Trie::hash(char letter) const {
 /*
  +++ Main C'tor +++
 */
+
 Trie::Trie()
+
     :head(nullptr)
 {}
 
@@ -111,6 +115,7 @@ std::string::size_type Trie::getBreakPoint(const std::string &data, std::string:
     /*
      +++++++ Map as much as possible +++++++
      */
+    
     for(decltype(start) len = data.size(); start < len; ++start) {
         
         size_t indx = hash(data[start]);
@@ -123,5 +128,6 @@ std::string::size_type Trie::getBreakPoint(const std::string &data, std::string:
     /*
      +++++ Break point +++++++
      */
+
     return start;
 }

@@ -11,7 +11,7 @@ Stack::Stack()
  ++++++ Insert ptr to object into stack. +++++++
  */
 
-void Stack::push(const SharedPtr<T> &objPtr) {
+void Stack::push(const SharedPtr<T> &objPtr) { // TODO: Make this Universal ?
 
 	Node<T> *newNode = new Node<T>(objPtr);
 
