@@ -78,9 +78,9 @@ void Stack::popTop(Node<T> *stackPtr) {
  +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
  */
 
-SmartPtr<T> &getTop() const {
+SmartPtr<T> &Stack::getTop() const {
 
-	if(!head) return nullptr; // Ensure there's a head to begin with lest we seg. fault.
+	// TODO: Ensure there's a head to begin with lest we seg. fault.
 
 	return head->value;
 };
