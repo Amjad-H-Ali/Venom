@@ -94,7 +94,7 @@ void VM::operator()() {
 
 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction.
 
-			callStack.push(*eip);							// Push value onto stack.
+			callStack.push(*rgstr.eip);						// Push value onto stack.
 
 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
 
@@ -138,6 +138,32 @@ void VM::operator()() {
 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
 
 		  }			
+
+		  /*
+		   +++++ Add to values +++++
+		   */
+
+		  else if(*rgstr.eip == ADD) {
+
+		  	rgstr.eax = *rgstr.esp;							// Temporarly store value from stack into eax.
+
+			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+
+			callStack.pop();								// Pop value off top of stack.
+
+			rgstr.eax += (*rgstr.esp);						// Add value from stack to value in eax.
+
+			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+
+			callStack.pop();								// Pop value off top of stack.
+
+			callStack.push(*rgstr.eax);						// Push value in eax onto stack.
+
+			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+		  }
 
 	}
 
