@@ -33,6 +33,8 @@ void Stack::push(const SharedPtr<T> &objPtr) {
 
 void Stack::pop() {
 
+	if(!head) return; // Ensure there's a head to begin with lest we seg. fault.
+
 	/* 
 	 ++++++ Temporarly hold Node that will detach +++++++++
 	*/
@@ -43,6 +45,8 @@ void Stack::pop() {
 	 ++++++ New head +++++++++++
 	 */
 	head = head->next;
+
+	if(!head) return; // Ensure new head not equal to nullptr;
 
 	head->prev = nullptr;
 
@@ -59,12 +63,24 @@ void Stack::pop() {
 	delete temp;
 };
 
+/*
+ +++++++ Pop all objects above given Node in stack +++++++++++
+ */
+void Stack::popTop(Node<T> *stackPtr) {
+
+	while(head != stackPtr)
+
+    	pop();
+};
+
 
 /*
  +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
  */
 
 SmartPtr<T> &getTop() const {
-	
+
+	if(!head) return nullptr; // Ensure there's a head to begin with lest we seg. fault.
+
 	return head->value;
 };
