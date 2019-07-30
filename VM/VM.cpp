@@ -59,35 +59,51 @@ VM::VM(Queue<> *byteCodeQ)
 
 void VM::operator()() {
 
-	Register registers;
+	Register rgstr;
 
 	/*
 	 +++++ Set eip register to first instruction in execQ. Loop till no more instructions. ++++++++
 	 */
 
-	for(registers.eip = execQ->begin(); registers.eip; ) {
+	for(rgstr.eip = execQ->begin(); rgstr.eip; ) {
 
 		/*
 		 +++++ Declare variable (push to declTree) +++++++
 		 */
 
-		if(*eip == DECL) {
+		if(*rgstr.eip == DECL) {
 
-			eip = eip->next;       	// Increment eip to next instruction.
+			rgstr.eip = (rgstr.eip)->next;       	// Increment eip to next instruction.
 
-			declTree.push(eip)     	// Declare name of variable.
+			declTree.push(*rgstr.eip);     			// Declare name of variable.
 
-			eip = eip->next;	   	// Increment eip to next instruction.
-		}
+			rgstr.eip = (rgstr.eip)->next;	   		// Increment eip to next instruction.
+		}											
 
 		/*
 	     +++++ Push value onto stack ++++++
 		 */
 
-		else if(*eip == LOAD) {
+		else if(*rgstr.eip == LOAD) {
 
-			
-		}
+			rgstr.eip = (rgstr.eip)->next;       	// Increment eip to next instruction.
+
+			callStack.push(*eip);					// Push value onto stack.
+
+			rgstr.esp = callStack.getTop();			// Set stack ptr to top.
+
+			rgstr.eip = (rgstr.eip)->next;       	// Increment eip to next instruction.
+
+		}	
+
+		/*
+		 +++++ Store value on top of stack into variable.
+		 */			
+
+		 else if(*rgstr.eip == STORE) {
+
+		 	
+		 }							
 
 	}
 
