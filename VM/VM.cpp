@@ -43,7 +43,7 @@ struct VM::Register {
 
 	Register()
 
-		:esp(nullptr), ebp(nullptr), eip(nullptr), eax(nullptr)
+		:esp(nullptr), ebp(nullptr), eip(nullptr), eax(nullptr), edx(nullptr)
 	{};
 
 }; // Register
@@ -110,15 +110,14 @@ void VM::operator()() {
 
 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
 
-			rgstr.edx = rgstr.eip;							// Temporarly store string.
+			declTree.setValue(*rgstr.eip, *rgstr.esp);		// Map variable name and store value from top of stack.
 
-			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
-
-			declTree.setValue(*rgstr.edx, *rgstr.esp);		// Map variable name and store value from top of stack.
+			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
 
 			callStack.pop();								// Pop value off top of stack.
 
-			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
 
 		 }		
 
@@ -126,7 +125,19 @@ void VM::operator()() {
 		  +++++ Evaluate a variable +++++
 		  */		
 
-		  else if(*rgstr.eip)			
+		  else if(*rgstr.eip == EVAL) {
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+		  	rgstr.edx = declTree.map(*rgstr.eip)			// Map to value in string. Temporarly store value.
+
+		  	callStack.push(*rgstr.edx);						// Push value onto stack.
+
+			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+
+			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+
+		  }			
 
 	}
 
