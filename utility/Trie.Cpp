@@ -40,7 +40,7 @@ Trie::Trie()
  ++++++++ Uses str literal as map  ++++++++
  */
 
-void Trie::push(const char *str, T *symbol) {
+void Trie::push(const std::string &str, T *symbol) {
    
     Node *current = head;
 
@@ -48,9 +48,9 @@ void Trie::push(const char *str, T *symbol) {
      ++++ Hash each letter to map symbol ++++
      */
 
-    for(size_t c = 0; str[c]; ++c) {
+    for(char letter : str) {
 
-        size_t indx = hash(str[c]);
+        size_t indx = hash(letter);
 
         if(!current->paths[indx]) current->paths[indx] = new Node;
 
@@ -115,7 +115,7 @@ std::string::size_type Trie::getBreakPoint(const std::string &data, std::string:
     /*
      +++++++ Map as much as possible +++++++
      */
-    
+
     for(decltype(start) len = data.size(); start < len; ++start) {
         
         size_t indx = hash(data[start]);

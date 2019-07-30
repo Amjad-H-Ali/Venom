@@ -41,7 +41,7 @@ public:
      ++++++++ Uses str literal as map  ++++++++
      */
 
-    void push(const char *str, T *symbol);
+    void push(const std::string &str, T *symbol);
 
     /*
      +++++++++ Finds corresponding symbol of string in O(1) time complexity.         ++++++++++
@@ -56,7 +56,7 @@ public:
      ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
      ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++
      */
-    
+
     std::string::size_type getBreakPoint(const std::string &data, std::string::size_type start = 0);
 
     

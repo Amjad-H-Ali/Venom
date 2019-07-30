@@ -16,7 +16,7 @@ private:
 	 ++++++ ByteCode to execute. ++++++++
 	 */
 
-	Queue<> execQ;
+	Queue<> *execQ;
 
 	/*
 	 ++++++++ Used to map variable names to their values in O(1) time complexity ++++++++++++
@@ -30,9 +30,6 @@ private:
 	 */
 
 	struct Register;
-
-	Register *registers;
-
 
 public:
 
