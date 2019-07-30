@@ -193,6 +193,35 @@ void VM::operator()() {
 
 		  }
 
+		  /*
+		   +++++ Returning +++++
+		   */
+
+		  else if(*rgstr.eip == RET) {
+
+		  	rgstr.edx = *rgstr.esp; 						// Temporarly Store return value in edx.
+
+		  	rgstr.esp = rgstr.ebp;							// Set stack pointer to return address stored in stack.
+
+		  	callStack.popTop(rgstr.esp); 					// Pop everything left on stack above stack pointer.
+
+		  	rgstr.eip = *rgstr.esp; 						// After returning to old address, Set next instruction.
+
+			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+
+		  	callStack.pop(); 								// Pop off return address from stack.
+
+		  	rgstr.ebp = *rgstr.esp;							// Restore base pointer.
+
+		  	rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+
+		  	callStack.pop(); 								// Pop off base pointer from stack.
+
+		  	// Number of Args are next.
+		  	// Should pop multiple times.
+
+		  }
+
 	}
 
 
