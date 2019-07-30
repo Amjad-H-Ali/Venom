@@ -53,14 +53,7 @@ Token::typeName.reserve(Token::NUM_OF_TOKENS);
 
 */
 
-/*
-	*
-	* Symbol type of Token.
-	*
-*/
-Symbol Token::getType() const {
-	return this->type;
-};
+
 
 /*
 	*
@@ -116,6 +109,6 @@ void setMatchingPair(SharedPtr<Token> &matchingPair) {
 	* Overload operator to compare by symbol type.
 	*
 */
-bool Token::operator==(Symbol type) const {
-	return (this->type == type);
+bool Token::operator==(Symbol typeToCompare) const {
+	return (type == typeToCompare);
 };

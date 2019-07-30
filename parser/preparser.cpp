@@ -81,7 +81,7 @@ auto Preparser::operator()() {
 ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
 
 
-	if(*tokenPtr == token::ID)
+	if(*tokenPtr == Token::ID)
 
 		/*
 			*
@@ -95,7 +95,7 @@ ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
 		* Start to BLOCK.
 		*
 	*/
-	if(*tokenPtr == token::ARROW) {
+	if(*tokenPtr == Token::LHANDLE) {
 
 		tokensQ->jump(1);
 
@@ -123,7 +123,7 @@ ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
 	};
 
 
-	else if(*tokenPtr == token::IS)
+	else if(*tokenPtr == Token::IS)
 
 		return new AST_BinOp(ast::ASSIGN);
 
@@ -133,7 +133,7 @@ ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
 		* For array LIST and function parameter LIST.
 		*
 	*/
-	else if(*tokenPtr == token::LBRACKET || (*tokenPtr == token::BAR && !tokenPtr->closing)) {
+	else if(*tokenPtr == Token::LBRACKET || (*tokenPtr == Token::BAR && !tokenPtr->closing)) {
 
 		tokensQ->jump(1);
 
@@ -156,7 +156,7 @@ ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
 
 	};
 
-	else if(*tokenPtr == token::STRING)
+	else if(*tokenPtr == Token::STRING)
 
 		/*
 			*

@@ -31,6 +31,11 @@ public:
 	void pop();
 
 	/*
+	 +++++++ Pop all objects above given Node in stack +++++++++++
+	 */
+	void popTop(Node<T> *stackPtr);
+
+	/*
 	 +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
 	 */
 	SmartPtr<T> &getTop() const;

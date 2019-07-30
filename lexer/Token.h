@@ -114,12 +114,7 @@ public:
 
 	*/
 
-	/*
-		*
-		* Symbol type of Token.
-		*
-	*/
-	Symbol getType() const;
+
 
 	/*
 		*
@@ -163,7 +158,7 @@ public:
 		* Overload operator to compare by symbol type.
 		*
 	*/
-	bool operator==(Symbol type) const;
+	bool operator==(Symbol typeToCompare) const;
 
 
 private:
