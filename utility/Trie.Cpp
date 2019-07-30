@@ -36,8 +36,8 @@ Trie::Trie()
 {}
 
 /*
- ++++++++ Adds symbol to Trie      ++++++++
- ++++++++ Uses str literal as map  ++++++++
+ +++++ Adds symbol to Trie. Uses string as map to destination. Second param, the data +++++++
+ +++++ that will be stored at destination, is nullptr by default.                     +++++++
  */
 
 void Trie::push(const std::string &str, T *symbol) {
@@ -61,7 +61,7 @@ void Trie::push(const std::string &str, T *symbol) {
      ++++ Add symbol to mapped place in Trie. ++++
      */
 
-    current->symbol = symbol;
+    current->type = symbol;
 
 }
 
@@ -97,7 +97,7 @@ T *Trie::map(const std::string &data,  std::string::size_type start = 0, std::st
 
     } 
 
-    return current->symbol;
+    return current->type;
 
 };
 

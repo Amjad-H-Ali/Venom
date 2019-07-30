@@ -37,11 +37,11 @@ public:
     Trie();
 
     /*
-     ++++++++ Adds symbol to Trie      ++++++++
-     ++++++++ Uses str literal as map  ++++++++
+     +++++ Adds symbol to Trie. Uses string as map to destination. Second param, the data +++++++
+     +++++ that will be stored at destination, is nullptr by default.                     +++++++
      */
-
-    void push(const std::string &str, T *symbol);
+    
+    void push(const std::string &str, T *symbol = nullptr);
 
     /*
      +++++++++ Finds corresponding symbol of string in O(1) time complexity.         ++++++++++
