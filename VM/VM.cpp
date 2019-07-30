@@ -49,7 +49,7 @@ struct VM::Register {
 
 VM::VM(Queue<> *byteCodeQ)
 
-	:execQ(byteCodeQ), registers(new Register)
+	:execQ(byteCodeQ)
 {};
 
 
@@ -58,6 +58,39 @@ VM::VM(Queue<> *byteCodeQ)
 */
 
 void VM::operator()() {
+
+	Register registers;
+
+	/*
+	 +++++ Set eip register to first instruction in execQ. Loop till no more instructions. ++++++++
+	 */
+
+	for(registers.eip = execQ->begin(); registers.eip; ) {
+
+		/*
+		 +++++ Declare variable (push to declTree) +++++++
+		 */
+
+		if(*eip == DECL) {
+
+			eip = eip->next;       	// Increment eip to next instruction.
+
+			declTree.push(eip)     	// Declare name of variable.
+
+			eip = eip->next;	   	// Increment eip to next instruction.
+		}
+
+		/*
+	     +++++ Push value onto stack ++++++
+		 */
+
+		else if(*eip == LOAD) {
+
+			
+		}
+
+	}
+
 
 
 };
