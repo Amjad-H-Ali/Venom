@@ -66,6 +66,7 @@ void Stack::pop() {
 /*
  +++++++ Pop all objects above given Node in stack +++++++++++
  */
+
 void Stack::popTop(Node<T> *stackPtr) {
 
 	while(head != stackPtr)

@@ -217,8 +217,17 @@ void VM::operator()() {
 
 		  	callStack.pop(); 								// Pop off base pointer from stack.
 
-		  	// Number of Args are next.
-		  	// Should pop multiple times.
+		  	rgstr.eax = *rgstr.esp;							// Store number of arguments.
+
+		  	rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+
+		  	callStack.pop(); 								// Pop off number of arguments from stack.
+
+		  	callStack.popLoop(*rgstr.esp);					// Pop arguments off stack.
+
+			callStack.push(*rgstr.edx);						// Push return value onto stack.
+
+			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
 
 		  }
 
