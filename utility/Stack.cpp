@@ -73,6 +73,16 @@ void Stack::popTop(Node<T> *stackPtr) {
     	pop();
 };
 
+/*
+ +++++ Pop Multiple objects on stack +++++
+ */
+
+void Stack::popLoop(unsigned amount) {
+
+	for(unsigned i = 0; i < amount; ++i)
+
+		pop();
+}
 
 /*
  +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++

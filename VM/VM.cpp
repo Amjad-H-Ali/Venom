@@ -203,7 +203,7 @@ void VM::operator()() {
 
 		  	rgstr.esp = rgstr.ebp;							// Set stack pointer to return address stored in stack.
 
-		  	callStack.popTop(rgstr.esp); 					// Pop everything left on stack above stack pointer.
+		  	callStack.popTop(rgstr.esp); 					// Pop everything above stack pointer left on stack.
 
 		  	rgstr.eip = *rgstr.esp; 						// After returning to old address, Set next instruction.
 
