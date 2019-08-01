@@ -57,6 +57,12 @@ public:
     T *map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0);
 
     /*
+     +++++ Uses indx to map to destination and returns the data found there +++++
+     */ 
+
+    T *Trie::map(size_t indx);
+
+    /*
      ++++++++++++ Gets the index of the string where mapping broke off.               +++++++++++++++++++
      ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
      ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++

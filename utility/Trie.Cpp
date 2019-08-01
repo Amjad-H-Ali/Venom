@@ -5,7 +5,7 @@
 
 struct Trie::Node {
 
-    T *type;
+    T *tPtr;
 
     Node *paths[NUM_OF_SINGLE_ASCII];
 
@@ -66,7 +66,7 @@ void Trie::push(const std::string &str, T *data) {
      ++++ Add data to mapped place in Trie. ++++
      */
 
-    current->type = data;
+    current->tPtr = data;
 
 }
 
@@ -113,11 +113,11 @@ void Trie::push(size_t indx, T *data) {
      +++++ Store data at destination +++++
      */
 
-    current->tptr = data;
+    current->tPtr = data;
 };
 
 /*
- +++++++++ Finds corresponding symbol of string in O(1) time complexity.         ++++++++++
+ +++++++++ Finds corresponding data of string in O(1) time complexity.           ++++++++++
  +++++++++ Params: string containing data and the range (start and end) to read. ++++++++++
  +++++++++ Range is set to full string as defualt.                               ++++++++++
  */
@@ -133,7 +133,7 @@ T *Trie::map(const std::string &data,  std::string::size_type start = 0, std::st
     Node *current = head;
 
     /*
-     ++++++++ Use string data as key to map to corresponding symbol +++++++++
+     ++++++++ Use string data as key to map to corresponding data +++++++++
      */
 
     while(start < end) {
@@ -142,15 +142,54 @@ T *Trie::map(const std::string &data,  std::string::size_type start = 0, std::st
 
         if(!current->paths[indx]) return nullptr;
 
-        ++start;
-
         current = current->paths[indx];
+
+        ++start;
 
     } 
 
-    return current->type;
+    return current->tPtr;
 
 };
+
+/*
+ +++++ Uses indx to map to destination and returns the data found there +++++
+ */ 
+
+T *Trie::map(size_t indx) {
+
+    size_t modFactor = 10,
+           denom     = 1,
+           partOfIndx;
+
+    Node *current = head;
+
+    /*
+     +++++ Use each digit in indx to map to destination where result is located. ++++++
+     */
+
+
+    do {
+        
+        partOfIndx = indx % modFactor;
+
+        size_t digit = partOfIndx/denom;
+
+        if(!current->paths[digit]) return nullptr;
+
+        current = current->paths[digit];
+
+        modFactor *= 10;
+
+        denom *= 10;
+    }
+
+    while(partOfIndx != indx);
+    
+    
+    return current->tptr;
+
+}
 
 
 /*
