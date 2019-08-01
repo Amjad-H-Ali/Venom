@@ -170,7 +170,7 @@ T *Trie::map(size_t indx) {
 
 
     do {
-        
+
         partOfIndx = indx % modFactor;
 
         size_t digit = partOfIndx/denom;
@@ -187,7 +187,7 @@ T *Trie::map(size_t indx) {
     while(partOfIndx != indx);
     
     
-    return current->tptr;
+    return current->tPtr;
 
 }
 

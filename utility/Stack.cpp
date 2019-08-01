@@ -78,11 +78,20 @@ void Stack::popTop(Node<T> *stackPtr) {
  +++++ Pop Multiple objects on stack +++++
  */
 
-void Stack::popLoop(unsigned amount) {
+void Stack::popLoop(size_t amount) {
 
-	for(unsigned i = 0; i < amount; ++i)
+	for(size_t i = 0; i < amount; ++i)
 
 		pop();
+}
+
+/*
+ +++++ Overloaded subscript operator to access data in linked-list based on index +++++
+ */
+
+Node<T> &Stack::operator [](size_t indx) {
+
+	return *(indxMap.map(indx));
 }
 
 /*

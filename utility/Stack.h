@@ -33,14 +33,20 @@ public:
 	/*
 	 +++++++ Pop all objects above given Node in stack +++++++++++
 	 */
-	
+
 	void popTop(Node<T> *stackPtr);
 
 	/*
 	 +++++ Pop Multiple objects on stack +++++
 	 */
 
-	void Stack::popLoop(unsigned amount);
+	void Stack::popLoop(size_t amount);
+
+	/*
+	 +++++ Overloaded subscript operator to access data in linked-list based on index +++++
+	 */
+
+	Node<T> &Stack::operator [](size_t indx);
 
 	/*
 	 +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
