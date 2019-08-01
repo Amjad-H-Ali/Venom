@@ -211,7 +211,7 @@ void VM::operator()() {
 
 		  	callStack.pop(); 								// Pop off return address from stack.
 
-		  	rgstr.ebp = *rgstr.esp;							// Restore base pointer.
+		  	rgstr.ebp = rgstr.esp;							// Restore base pointer.
 
 		  	rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
 
@@ -223,7 +223,7 @@ void VM::operator()() {
 
 		  	callStack.pop(); 								// Pop off number of arguments from stack.
 
-		  	callStack.popLoop(*rgstr.esp);					// Pop arguments off stack.
+		  	callStack.popLoop(*rgstr.eax);					// Pop arguments off stack.
 
 			callStack.push(*rgstr.edx);						// Push return value onto stack.
 

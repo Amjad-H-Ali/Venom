@@ -36,16 +36,21 @@ Trie::Trie()
 {}
 
 /*
- +++++ Adds symbol to Trie. Uses string as map to destination. Second param, the data +++++++
- +++++ that will be stored at destination, is nullptr by default.                     +++++++
+ +++++ Stores data at a destination that was mapped using str. +++++
  */
 
-void Trie::push(const std::string &str, T *symbol) {
-   
+void Trie::push(const std::string &str, T *data) {
+
+    /*
+     +++++ If linked-list is empty +++++
+     */
+
+    if(!head) head = new Node;
+
     Node *current = head;
 
     /* 
-     ++++ Hash each letter to map symbol ++++
+     ++++ Hash each letter to map data ++++
      */
 
     for(char letter : str) {
@@ -58,12 +63,58 @@ void Trie::push(const std::string &str, T *symbol) {
     }
 
     /*
-     ++++ Add symbol to mapped place in Trie. ++++
+     ++++ Add data to mapped place in Trie. ++++
      */
 
-    current->type = symbol;
+    current->type = data;
 
 }
+
+/*
+ +++++ Stores data at a destination that was mapped using index. +++++
+ */
+
+void Trie::push(size_t indx, T *data) {
+
+    /*
+     +++++ If linked-list is empty +++++
+     */
+
+    if(!head) head = new Node;
+
+    size_t modFactor = 10,
+           denom     = 1,
+           partOfIndx;
+
+    Node *current = head;
+
+    /*
+     +++++ Use each digit in indx to map to destination where result will be stored. ++++++
+     */
+
+    do {
+
+        partOfIndx = indx % modFactor;
+
+        size_t digit = partOfIndx/denom;
+
+        if(!current->paths[digit]) current->paths[digit] = new Node;
+
+        current = current->paths[digit];
+        
+        modFactor *= 10;
+
+        denom  *= 10;
+    }
+
+    while( partOfIndx != indx);
+    
+    /*
+     +++++ Store data at destination +++++
+     */
+
+    current->tptr = data;
+};
 
 /*
  +++++++++ Finds corresponding symbol of string in O(1) time complexity.         ++++++++++
@@ -103,7 +154,7 @@ T *Trie::map(const std::string &data,  std::string::size_type start = 0, std::st
 
 
 /*
- ++++++++++++ Gets the index of the string of where it stopped mapping.           +++++++++++++++++++
+ ++++++++++++ Gets the index of the string where mapping broke off.               +++++++++++++++++++
  ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
  ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++
  */

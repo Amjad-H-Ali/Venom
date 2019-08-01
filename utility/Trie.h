@@ -37,11 +37,16 @@ public:
     Trie();
 
     /*
-     +++++ Adds symbol to Trie. Uses string as map to destination. Second param, the data +++++++
-     +++++ that will be stored at destination, is nullptr by default.                     +++++++
+     +++++ Stores data at a destination that was mapped using str. +++++
      */
-    
-    void push(const std::string &str, T *symbol = nullptr);
+
+    void push(const std::string &str, T *data = nullptr);
+
+    /*
+     +++++ Stores data at a destination that was mapped using index. +++++
+     */
+
+    void push(size_t indx, T *data = nullptr);
 
     /*
      +++++++++ Finds corresponding symbol of string in O(1) time complexity.         ++++++++++
@@ -52,7 +57,7 @@ public:
     T *map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0);
 
     /*
-     ++++++++++++ Gets the index of the string of where it stopped mapping.           +++++++++++++++++++
+     ++++++++++++ Gets the index of the string where mapping broke off.               +++++++++++++++++++
      ++++++++++++ Params: the string containing the key and the position of where to  +++++++++++++++++++
      ++++++++++++ start reading the string (set to begining of string as defualt).    +++++++++++++++++++
      */
