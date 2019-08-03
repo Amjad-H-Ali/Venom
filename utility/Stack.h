@@ -2,67 +2,64 @@
 
 #define STACK_H
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * A Stack, implemented using a linked-list, that can  *
+ * access elements in O(log n) time complexity.        *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 template<typename T>
 
-class Stack {
+class SmartStack {
 
 private:
 
-	Node<T> *head;
+	SharedPtr< Node<T> > head;
 
 	size_t size = 0;
 
 	/*
 	 +++++ Uses a given index to map to Node that is located at that index.  ++++++
 	 +++++ Allows for accessing a specific node in O(log n) time complexity, ++++++
-	 +++++ rather than the O(n) time linked-list are known to have.		     ++++++				 
+	 +++++    rather than the O(n) time linked-list are known to have.		 ++++++				 
 	 */ 	
 
 	Trie< Node<T> > indexMap;  
 
 public:
 
-	/*
-	 +++++++ Main C'tor +++++++++++
-	 */
+    /*
+     +++++++ Main C'tor +++++++++++
+     */
 
-	Stack();
+    SmartStack();
 
-	/*
-	 ++++++ Insert ptr to object into stack. +++++++
-	 */
+    /*
+     +++++ Push T objects emplace. Takes in parameters that construct T object. +++++
+     */
+    template<typename ... Params>
 
-	void push(const SharedPtr<T> &objPtr);
+    void push(Params&& ... params);
 
-	/*
-	 +++++++ Pop object off stack +++++++++++
-	 */
+    /*
+     +++++++ Pop object off stack +++++++++++
+     */
 
-	void pop();
+    void pop();
 
-	/*
-	 +++++++ Pop all objects above given Node in stack +++++++++++
-	 */
+  
+    /*
+    +++++ Overloaded subscript operator to access data in linked-list based on index +++++
+    */
 
-	void popTop(Node<T> *stackPtr);
+    T &operator [](size_t indx) const;
 
-	/*
-	 +++++ Pop Multiple objects on stack +++++
-	 */
+    /*
+    +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
+    */
 
-	void popLoop(size_t amount);
+    T &top() const;
 
-	/*
-	 +++++ Overloaded subscript operator to access data in linked-list based on index +++++
-	 */
+}; // SmartStack
 
-	Node<T> &operator [](size_t indx) const;
-
-	/*
-	 +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
-	 */
-	SmartPtr<T> &getTop() const;
-
-}; // Stack
 
 #endif

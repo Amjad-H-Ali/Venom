@@ -1,106 +1,98 @@
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * A Stack, implemented using a linked-list, that can  *
+ * access elements in O(log n) time complexity.        *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
 /*
  +++++++ Main C'tor +++++++++++
  */
 
-Stack::Stack()
-	:head(nullptr)
+SmartStack::SmartStack()
+    :head(nullptr)
 {};
 
 /*
- ++++++ Insert ptr to object into stack. +++++++
+ +++++ Push T objects emplace. Takes in parameters that construct T object. +++++
  */
 
-void Stack::push(const SharedPtr<T> &objPtr) { // TODO: Make this Universal ?
+template<typename ... Params>
 
-	Node<T> *newNode = new Node<T>(objPtr);
+void SmartStack::push(Params&& ... params) { 
+
+    /*
+     +++++ Constructing a Pointer to a Node, which contains a pointer to Object of type T +++++
+     */
+
+    SharedPtr< Node<T> > newNode(new Node<T>(new T(std::forward<Params>(params)...)));
 
 
-	newNode->next = head;
+    newNode->next = head;
 
-	/*
-	 ++++++ If exists, point object already in stack's  prev ptr to newNode +++++++
-	 */
+    head = newNode;
 
-	if(head) head->prev = newNode;
-
-	head = newNode;
+    /*
+     +++++ Register the index of the newNode for later access in O(log n). +++++
+     */
+    indexMap.push(size++, newNode);
 };
 
 /*
  +++++++ Pop object off stack +++++++++++
  */
 
-void Stack::pop() {
+void SmartStack::pop() {
 
-	if(!head) return; // Ensure there's a head to begin with lest we seg. fault.
+    if(!head) return; // Ensure there's a head to begin with lest we seg. fault.
 
-	/* 
-	 ++++++ Temporarly hold Node that will detach +++++++++
-	*/
+    /* 
+     ++++++ Temporarly hold Node that will detach +++++++++
+     */
 
-	Node<T> *temp = head;
+    SharedPtr< Node<T> > temp = head;
 
-	/*
-	 ++++++ New head +++++++++++
-	 */
-	head = head->next;
+    /*
+     ++++++ New head +++++++++++
+     */
+    head = head->next;
 
-	if(!head) return; // Ensure new head not equal to nullptr;
+    /*
+     ++++++ At this point, no way of referring to original head without temp ++++++++++
+     */
 
-	head->prev = nullptr;
+    temp->next = nullptr;
 
-	/*
-	 ++++++ At this point, no way of referring to original head without temp ++++++++++
-	 */
+    /*
+     +++++ Set data to nullptr in Trie +++++
+     */
 
-	temp->next = nullptr;
+     indexMap.eraseData(--size);
 
-	/*
-	 +++++++ SharedPtr in this Node deletes if it's the only ptr sharing resource +++++++++++
-	 */
+    /*
+     +++++++ SharedPtr in this Node deletes if it's the only ptr sharing resource +++++++++++
+     */
 
-	delete temp;
 };
 
-/*
- +++++++ Pop all objects above given Node in stack +++++++++++
- */
 
-void Stack::popTop(Node<T> *stackPtr) {
-
-	while(head != stackPtr)
-
-    	pop();
-};
 
 /*
- +++++ Pop Multiple objects on stack +++++
- */
++++++ Overloaded subscript operator to access data in linked-list based on index +++++
+*/
 
-void Stack::popLoop(size_t amount) {
+T &SmartStack::operator [](size_t indx) const {
 
-	for(size_t i = 0; i < amount; ++i)
-
-		pop();
+    return *(indexMap.map(indx)->value);
 }
 
 /*
- +++++ Overloaded subscript operator to access data in linked-list based on index +++++
- */
++++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
+*/
 
-Node<T> &Stack::operator [](size_t indx) const {
+T &SmartStack::top() const {
 
-	return *(indxMap.map(indx));
-}
+    // TODO: Ensure there's a head to begin with lest we seg. fault.
 
-/*
- +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++
- */
-
-SmartPtr<T> &Stack::getTop() const {
-
-	// TODO: Ensure there's a head to begin with lest we seg. fault.
-
-	return head->value;
+    return *head->value;
 };
