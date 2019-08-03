@@ -89,7 +89,7 @@ void Stack::popLoop(size_t amount) {
  +++++ Overloaded subscript operator to access data in linked-list based on index +++++
  */
 
-Node<T> &Stack::operator [](size_t indx) {
+Node<T> &Stack::operator [](size_t indx) const {
 
 	return *(indxMap.map(indx));
 }

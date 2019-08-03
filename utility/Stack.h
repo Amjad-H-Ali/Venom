@@ -10,6 +10,16 @@ private:
 
 	Node<T> *head;
 
+	size_t size = 0;
+
+	/*
+	 +++++ Uses a given index to map to Node that is located at that index.  ++++++
+	 +++++ Allows for accessing a specific node in O(log n) time complexity, ++++++
+	 +++++ rather than the O(n) time linked-list are known to have.		     ++++++				 
+	 */ 	
+
+	Trie< Node<T> > indexMap;  
+
 public:
 
 	/*
@@ -22,7 +32,7 @@ public:
 	 ++++++ Insert ptr to object into stack. +++++++
 	 */
 
-	void Stack::push(const SharedPtr<T> &objPtr);
+	void push(const SharedPtr<T> &objPtr);
 
 	/*
 	 +++++++ Pop object off stack +++++++++++
@@ -40,13 +50,13 @@ public:
 	 +++++ Pop Multiple objects on stack +++++
 	 */
 
-	void Stack::popLoop(size_t amount);
+	void popLoop(size_t amount);
 
 	/*
 	 +++++ Overloaded subscript operator to access data in linked-list based on index +++++
 	 */
 
-	Node<T> &Stack::operator [](size_t indx);
+	Node<T> &operator [](size_t indx) const;
 
 	/*
 	 +++++ Returns top of stack without popping it off. Return type is SharedPtr to object of type T +++++++

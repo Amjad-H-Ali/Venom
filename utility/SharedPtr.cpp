@@ -1,23 +1,35 @@
+#include "SharedPtr.h"
+
 /* 	
- +++++++ Main C'tor +++++++
+ +++++ Main C'tor +++++
  */
 
 explicit SharedPtr::SharedPtr(T *tPtr = nullptr) 
-	:sharedBy(nullptr)
+    :sharedBy(nullptr)
 {
-	/*
- 	 ++++++++ If tPtr passed in is an actual resource and ++++++++
-     ++++++++ not nullptr, initialize counter to 1. 	  ++++++++
- 	 */
+    
+    /*
+     +++++ Initialize counter to 1 if tPtr is not nullptr +++++
+     */
 
-	if(tPtr) sharedBy = new unsigned(1);
+    if(tPtr) sharedBy = new unsigned(1);
 
-	ptr = tPtr;
-};
+    ptr = tPtr;
+}
+
+/*
+ +++++ C'tor for Initialization to nullptr +++++
+ */
+
+SharedPtr::SharedPtr(const std::nullptr_t &nullObj) 
+    :ptr(nullptr), sharedBy(nullptr)
+{}
 
 
 /*
- ++++++++ Rule of 5 ++++++++
+ ++++++++++++++++
+    Rule of 5
+ ++++++++++++++++
  */
 
 
@@ -27,21 +39,22 @@ explicit SharedPtr::SharedPtr(T *tPtr = nullptr)
 
 SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 
-	/*	
-	 +++++++ Copy resource and increment counter because another +++++++
-	 +++++++ object now points to same resource. 				 +++++++					
-	 */
+    
+    /*	
+     +++++ Copy resource and increment counter since this instance +++++
+     +++++      shares same resource as object being copied.       +++++					
+     */
 
-	ptr = sharedPtrObj.ptr;
+    ptr = sharedPtrObj.ptr;
 
-	sharedBy = sharedPtrObj.sharedBy;
+    sharedBy = sharedPtrObj.sharedBy;
+    
+    /*
+     +++++ If ptr exist, sharedBy is guarenteed to exist as well. Increment it to +++++
+     +++++     acknowledge that another object now shares the same resource.      +++++
+     */
 
-
-	/*
-	 ++++++ If ptr exist, then gaurenteed sharedBy exist and is 1 or greater. ++++++
-	 */
-
-	if(ptr) ++(*sharedBy);
+    if(ptr) ++(*sharedBy); 
 };
 
 
@@ -51,12 +64,14 @@ SharedPtr::SharedPtr(const SharedPtr& sharedPtrObj) {
 
 SharedPtr::~SharedPtr() {
 
-	/*
-	 +++++ sharedBy decremented. Resource deleted if instance +++++
-	 +++++ is last one sharing resource.                      +++++ 
-	*/
+    
 
-	cleanUp();
+    /*
+     +++++ sharedBy is decremented. Resource is deleted   +++++
+     +++++    if instance is the last one sharing it.     +++++ 
+     */
+
+    cleanUp();
 };
 
 
@@ -65,12 +80,14 @@ SharedPtr::~SharedPtr() {
  ++++++ Move C'tor ++++++
  */
 
-SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
+SharedPtr::SharedPtr(SharedPtr&& ptrObj) {
+
+    
 
     /*
-     ++++++ Steal resource and counter and set expiring instance data ++++++
-     ++++++ to nullptr. Temp obj is safe to DEL with no memory leaks. ++++++
-     ++++++ It will not DEL resource shared by others.				  ++++++
+     ++++++ Steal resources and counter and set expiring instance's data ++++++
+     ++++++   to nullptr. Epiring obj is safe to DEL (no memory leaks).  ++++++
+     ++++++         It will not DEL resource shared by others.		    ++++++
      */
 
     ptr = ptrObj.ptr;
@@ -82,8 +99,8 @@ SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
     ptrObj.sharedBy = nullptr;
 
     /*
-     +++++ Does not increment sharedBy since Temp is DEL and this instance +++++
-     +++++ created. sharedBy counter stolen from expiring obj.			   +++++
+     +++++ Counter stolen from expiring object that will no longer  +++++
+     +++++  share resource. Thus, sharedBy is not incremented here  +++++
      */
 };
 
@@ -92,14 +109,14 @@ SharedPtr::SmartPtr(SmartPtr&& ptrObj) {
  ++++++ Copy Assignment ++++++
  */
 
-SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
+SharedPtr& SharedPtr::operator =(const SharedPtr& ptrObj) {
 
-	/*
-	 +++++ sharedBy decremented. Resource deleted if instance +++++
-	 +++++ is last one sharing resource.                      +++++ 
-	*/
+    /*
+     +++++ sharedBy is decremented. Resource is deleted   +++++
+     +++++    if instance is the last one sharing it.     +++++ 
+     */
 
-	cleanUp()
+    cleanUp();
 
     /*
      +++++ Copy resources. +++++
@@ -110,31 +127,35 @@ SmartPtr& SharedPtr::operator =(const SmartPtr& ptrObj) {
     sharedBy = ptrObj.sharedBy;
 
     /*
-     +++++ Increment as this instance also points to resource. +++++
+     +++++ Increment counter as this instance now +++++ 
+     +++++ shares resource of object being copied.+++++
      */
 
     if(ptr) ++(*sharedBy);
+
 
     return *this;
 };
 
 /* 5
- ++++++ Move Assignment ++++++
+ +++++ Move Assignment +++++
  */
 
-SmartPtr& SharedPtr::operator =(SmartPtr&& ptrObj) {
+SharedPtr& SharedPtr::operator =(SharedPtr&& ptrObj) {
 
-	/*
-	 +++++ sharedBy decremented. Resource deleted if instance +++++
-	 +++++ is last one sharing resource.                      +++++ 
-	*/
+    
+
+    /*
+     +++++ sharedBy is decremented. Resource is deleted   +++++
+     +++++    if instance is the last one sharing it.     +++++ 
+     */
 
     cleanUp();
 
     
 
     /*
-     +++++ Steal resource of Xpiring obj. +++++
+     +++++ Steal resource of expiring obj. +++++
      */
 
     ptr = ptrObj.ptr;
@@ -145,44 +166,97 @@ SmartPtr& SharedPtr::operator =(SmartPtr&& ptrObj) {
 
     ptrObj.sharedBy = nullptr;
 
+    /*
+     +++++ Counter stolen from expiring object that will no longer  +++++
+     +++++  share resource. Thus, sharedBy is not incremented here  +++++
+     */
+
+
     return *this;
 };
 
 
-/* 
- ++++++ Overloads ++++++
+/*
+ +++++ Assignment to nullptr +++++
+ */
+
+SharedPtr& SharedPtr::operator= (const std::nullptr_t &nullObj) {
+
+    /*
+     +++++ sharedBy is decremented. Resource is deleted   +++++
+     +++++    if instance is the last one sharing it.     +++++ 
+     */
+
+    cleanUp();
+
+    ptr = nullptr;
+
+    sharedBy = nullptr;
+
+    return *this;
+}
+
+
+/*
+ ++++++++++++++++
+    Overloads
+ ++++++++++++++++
  */
 
 
 /*
- ++++++++++ Overload Dereference Operator. ++++++++++
+ +++++ Overload Dereference Operator. +++++
  */
 
-T &SharedPtr::operator *() const {
-	return *ptr;
+inline T& SharedPtr::operator* () const {
+    return *ptr;
 };
 
 /*
- ++++++++ Overload Arrow Operator. ++++++++
+ +++++ Overload Arrow Operator. +++++
  */
 
-T *SharedPtr::operator ->() const {
-	
-	return ptr;
+inline T* SharedPtr::operator-> () const {
+    return ptr;
 };
+
+/*
+ +++++ Overload Comparison Operator. +++++
+ */
+
+inline bool SharedPtr::operator== (const std::nullptr_t &nullObj) const {
+    return (ptr == nullptr); 
+}
+
+/*
+ +++++ Overload Not Comparison Operator. +++++
+ */
+
+inline bool SharedPtr::operator!= (const std::nullptr_t &nullObj) const {
+    return !(ptr == nullptr); 
+}
+
+/*
+ +++++ Bool Convesion +++++
+ */
+
+inline operator bool() const {
+    return ptr != nullptr;
+}
+
 
 
 /*
- ++++++ Deletes resource and sharedBy counter if this ++++++
- ++++++ instance is only one sharing that resource.   ++++++
- */
+++++++ Deletes resource and sharedBy counter if this  ++++++
+++++++ instance is the only one sharing that resource.++++++
+*/
 
-void cleanUp() { 
+inline void SharedPtr::cleanUp() { 
 
-	/*
-	 +++++ sharedBy decremented. Resource deleted if instance +++++
-	 +++++ is last one sharing resource.                      +++++ 
-	*/
+    /*
+     +++++ sharedBy is decremented. Resource is deleted   +++++
+     +++++    if instance is the last one sharing it.     +++++ 
+     */
 
-	if(ptr && --(*sharedBy) == 0) {delete ptr; delete sharedBy;}
+    if(ptr && --(*sharedBy) == 0) {delete ptr; delete sharedBy;}
 }

@@ -60,7 +60,7 @@ public:
      +++++ Uses indx to map to destination and returns the data found there +++++
      */ 
 
-    T *Trie::map(size_t indx);
+    T *map(size_t indx);
 
     /*
      ++++++++++++ Gets the index of the string where mapping broke off.               +++++++++++++++++++

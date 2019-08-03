@@ -2,13 +2,13 @@
 
 #define SHARED_PTR_H
 
-/**********************************************
- *											  *
- * 	Smart pointer that keeps track of shared  *
- *	resources and only deletes it if share 	  *
- *	count is 0.								  *
- *											  *
- **********************************************/
+/* * * * * * * * * * * * * * * * * * * * * * * *
+ *											   *
+ * 	Smart pointer that keeps track of shared   *
+ *	resources and only deletes it if share 	   *
+ *	count is 0.								   *
+ *											   *
+ * * * * * * * * * * * * * * * * * * * * * * * */
 
 template<typename T>
 
@@ -16,83 +16,128 @@ class SharedPtr {
 
 public:
 
-	/* 	
-	 +++++++ Main C'tor +++++++
-	 */
+	
+    /* 	
+     +++++ Main C'tor +++++
+     */
 
-	explicit SharedPtr(T *tPtr = nullptr);
+    explicit SharedPtr(T *tPtr = nullptr);
 
-	/*
-	 ++++++++ Rule of 5 ++++++++
-	 */
+    /*
+     +++++ C'tor for Initialization to nullptr +++++
+     */
+
+    SharedPtr(const std::nullptr_t &nullObj);
 
 
-	/* 1	
-	 +++++++ Copy C'tor +++++++
-	 */
+    /*
+     ++++++++++++++++
+        Rule of 5
+     ++++++++++++++++
+     */
 
-	SharedPtr(const SharedPtr& sharedPtrObj);
 
-	/* 2
-	 ++++++ Destructor ++++++
-	 */
+    /* 1	
+     +++++++ Copy C'tor +++++++
+     */
 
-	~SharedPtr();
+    SharedPtr(const SharedPtr& sharedPtrObj);
 
-	/* 3
-	 ++++++ Move C'tor ++++++
-	 */
 
-    SmartPtr(SmartPtr&& ptrObj);
+    /* 2
+     ++++++ Destructor ++++++
+     */
+
+    ~SharedPtr();
+
+
+
+    /* 3
+     ++++++ Move C'tor ++++++
+     */
+
+    SharedPtr(SharedPtr&& ptrObj);
+
 
     /* 4
-	 ++++++ Copy Assignment ++++++
-	 */
+     ++++++ Copy Assignment ++++++
+     */
 
-    SmartPtr& operator =(const SmartPtr& ptrObj);
+    SharedPtr& operator =(const SharedPtr& ptrObj);
 
     /* 5
-	 ++++++ Move Assignment ++++++
-	 */
-    SmartPtr& operator =(SmartPtr&& ptrObj);
+     +++++ Move Assignment +++++
+     */
 
-	/* 
-	 ++++++ Overloads ++++++
-	 */
+    SharedPtr& operator =(SharedPtr&& ptrObj);
 
-	/*
-	 ++++++++++ Overload Dereference Operator. ++++++++++
-	 */
+    /*
+     +++++ Assignment to nullptr +++++
+     */
 
-	T &operator *() const;
-
-	/*
-	 ++++++++ Overload Arrow Operator. ++++++++
-	 */
-
-	T *operator ->() const;
+    SharedPtr& operator= (const std::nullptr_t &nullObj);
 
 
-	
+    /*
+     ++++++++++++++++
+        Overloads
+     ++++++++++++++++
+     */
+
+
+
+    /*
+     +++++ Overload Dereference Operator. +++++
+     */
+
+    T& operator* () const;
+
+    /*
+     +++++ Overload Arrow Operator. +++++
+     */
+
+    T* operator-> () const;
+
+    /*
+     +++++ Overload Comparison Operator. +++++
+     */
+
+    bool operator== (const std::nullptr_t &nullObj) const;
+
+    /*
+     +++++ Overload Not Comparison Operator. +++++
+     */
+
+    bool operator!= (const std::nullptr_t &nullObj) const;
+
+    /*
+     +++++ Bool Convesion +++++
+     */
+
+    operator bool() const;
 
 
 private:
 
+    /*
+     +++++ Underlying pointer +++++
+     */
+
 	T *ptr;
 
 	/*	
-     +++++++++++ Keeps track of how many pointers  +++++++++++
-     +++++++++++ are sharing resource.             +++++++++++
+     +++++ Keeps track of how many instances share resource +++++
 	 */
 
 	unsigned *sharedBy;
 
 
 	
-	/*
-	 ++++++ Deletes resource and sharedBy counter if this ++++++
-	 ++++++ instance is only one sharing that resource.   ++++++
-	 */
+   /*
+    ++++++ Deletes resource and sharedBy counter if this  ++++++
+    ++++++ instance is the only one sharing that resource.++++++
+    */
+
     void cleanUp();
 
 }; // SharedPtr
