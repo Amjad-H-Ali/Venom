@@ -104,6 +104,8 @@ public:
 
     bool operator== (const std::nullptr_t &nullObj) const;
 
+    bool operator== (const SharedPtr &ptrObj) const;
+
     /*
      +++++ Overload Not Comparison Operator. +++++
      */

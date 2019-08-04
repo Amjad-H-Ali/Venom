@@ -236,6 +236,10 @@ inline bool SharedPtr::operator== (const std::nullptr_t &nullObj) const {
     return (ptr == nullptr); 
 }
 
+inline bool operator== (const SharedPtr &ptrObj) const {
+    return (ptr == ptrObj.ptr);
+}
+
 /*
  +++++ Overload Not Comparison Operator. +++++
  */
