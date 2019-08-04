@@ -6,13 +6,11 @@
 
 
 /*
-	* TOKEN_LIST takes in a Token Macro (T).
-	* Each Macro has the same signature M(type, name), 
-	* where type is a unique symbol for the Token and name
-	* is a string containing the Token.
-
-	* T: Token Macro
-*/
+ +++++ TOKEN_LIST takes in a Token Macro (T). Each Macro has the same +++++
+ +++++ signature M(type, name), where type is a unique symbol for the +++++
+ +++++ Token and nameis a string containing the Token. T: Token macro +++++
+ */
+ 
 #define TOKEN_LIST(T)							    \
 	T(IS, "is")									    \
 	T(IF, "if")										\
@@ -60,11 +58,11 @@ public:
 
 	/*
 		*
-		* Used to map strings (C-Style) to their corresponding
-		* Symbol in O(n) time complexity.
+		* Used to map strings to their corresponding
+		* Symbol in O(1) time complexity.
 		*
 	*/
-	static Trie<Symbol> *mapToSymbol;
+	static SharedPtr< Trie<Symbol> > mapToSymbol;
 
 	/*
 		*
@@ -86,25 +84,14 @@ public:
 		* IDENTIFIER and STRING Constructor.
 		*
 	*/
-	Token(const std::string &stream, Symbol type) 
-		:closing(false), matchingPair(nullptr)
-	{
-
-		value = stream;
-
-		type = type;
-	}
+	Token(const std::string &stream, Symbol symType);
 
 	/*
 		*
 		* Constructor for Everything else like keywords, operators, etc,
 		*
 	*/
-	Token(Symbol type) 
-		:value(nullptr), closing(false), matchingPair(nullptr)
-	{
-		type = type;
-	}
+	Token(Symbol symType);
 
 
 	/*
@@ -113,7 +100,6 @@ public:
 		------------------
 
 	*/
-
 
 
 	/*

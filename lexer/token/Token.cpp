@@ -45,6 +45,31 @@ Token::typeName.reserve(Token::NUM_OF_TOKENS);
 
 #undef T
 
+/*
+	----------------
+	  Constructors
+	----------------
+*/
+
+/*
+	*
+	* IDENTIFIER and STRING Constructor.
+	*
+*/
+Token::Token(const std::string &stream, Symbol symType) 
+	:value(stream), type(symType), closing(false), matchingPair(nullptr)
+{}
+
+/*
+	*
+	* Constructor for Everything else like keywords, operators, etc,
+	*
+*/
+Token::Token(Symbol symType)
+
+	:value(nullptr), type(symType), closing(false), matchingPair(nullptr)
+{}
+
 
 /*
 	------------------
