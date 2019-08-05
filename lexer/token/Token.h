@@ -100,7 +100,7 @@ public:
 		* Gets the Token's symbol type in string form.
 		*
 	*/
-	static const std::string &getTypeName();
+	static const char *getTypeName();
 
 	/*
 		*
@@ -109,7 +109,7 @@ public:
 	*/
 	bool isClosing() const;
 
-	SharedPtr<Token> &getMatchingPair() const;
+	Token &getMatchingPair() const;
 
 
 	/*
@@ -122,7 +122,7 @@ public:
 	void setClosing(bool isClosing);
 
 
-	void setMatchingPair(const SharedPtr<Token> &matchingPair);
+	void setMatchingPair(Token *otherPair);
 
 
 	/*
@@ -162,7 +162,7 @@ private:
 		* array, block, or parameter list. Otherwise, set to nullptr.
 		*
 	*/
-	SharedPtr<Token> matchingPair;
+	Token *matchingPair;
 
 
 	Symbol type; 

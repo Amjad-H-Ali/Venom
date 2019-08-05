@@ -70,7 +70,7 @@ Token::Token(Symbol symType)
 	* Gets the Token's symbol type in string form.
 	*
 */
-static const std::string &Token::getTypeName() {
+static const char *Token::getTypeName() {
 
 	return typeName[type];
 };
@@ -84,8 +84,8 @@ bool isClosing() const {
 	return closing;
 };
 
-SharedPtr<Token> &getMatchingPair() const {
-	return matchingPair;
+Token &getMatchingPair() const {
+	return *matchingPair;
 }; 
 
 
@@ -102,8 +102,8 @@ void setClosing(bool isClosing) {
 
 
 
-void setMatchingPair(const SharedPtr<Token> &matchingPair) {
-	matchingPair = matchingPair;
+void setMatchingPair(Token *otherPair) {
+	matchingPair = otherPair;
 };
 
 /*
