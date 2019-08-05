@@ -192,7 +192,23 @@ void Trie::push(const std::string &str, const SharedPtr<T> &data) {
 }
 
 
+/* 
+ +++++ Stores data at the destination mapped with str, but params are forwarded to type T C'tor to create the data +++++
+ */
 
+template<typename ... Params>
+
+void Trie::push(const std::string &str, Params&& ... params) {
+
+    /*
+     +++++ Construct T object with params passed in and Create SharedPtr to T object. +++++
+     */
+
+    SharedPtr<T> tPtr(new T(std::forward<Params>(params)...));
+
+    push(str, tPtr);
+
+};
 
 
 /*

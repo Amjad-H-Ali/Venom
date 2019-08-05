@@ -73,6 +73,15 @@ public:
 
     void push(const std::string &str, const SharedPtr<T> &data);
 
+    /* 
+     +++++ Stores data at the destination mapped with str, but params are forwarded to type T C'tor to create the data +++++
+     */
+
+    template<typename ... Params>
+
+    void push(const std::string &str, Params&& ... params);
+
+
     /*
      +++++ Stores data at a destination that was mapped using index. +++++
      */
