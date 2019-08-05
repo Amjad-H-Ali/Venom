@@ -62,14 +62,13 @@ public:
 		* Symbol in O(1) time complexity.
 		*
 	*/
-	static SharedPtr< Trie<Symbol> > mapToSymbol;
+	static Trie<Symbol> mapToSymbol;
 
 	/*
-		*
-		* All Token symbols in string form for logging.
-		*
-	*/
-	static std::vector<std::string> typeName;
+	 +++++ Array of const char *, which is all Token symbols in string form +++++
+	 */
+	
+	static const char *typeName[NUM_OF_TOKENS];
 
 	
 

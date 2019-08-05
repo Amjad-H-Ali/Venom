@@ -5,10 +5,10 @@
 /*
 	*
 	* Used to map input file text (C-Style strings)  
-	* to their corresponding Symbol in O(n) time complexity.
+	* to their corresponding Symbol in O(1) time complexity.
 	*
 */
-Trie<Token::Symbol> *Token::mapToSymbol = new Trie<Token::Symbol>;
+Trie< Token::Symbol > Token::mapToSymbol;
 
 
 /*
@@ -25,25 +25,18 @@ Trie<Token::Symbol> *Token::mapToSymbol = new Trie<Token::Symbol>;
 
 
 
-/*
-	*
-	* All Token symbols in string form for logging.
-	*
-*/
-std::vector<std::string> Token::typeName;
-
-Token::typeName.reserve(Token::NUM_OF_TOKENS);
 
 /*
-	*
-	* Populate vector with all Token types in string form.
-	*
-*/
-#define T(symbol, name) Token::typeName.emplace_back(#symbol);
+ +++++ Array of const char *, which is all Token symbols in string form +++++
+ */
 
-	TOKEN_LIST(T)
+#define T(symbol, name) #symbol,
+
+   const char *Token::typeName[NUM_OF_TOKENS] = {LIST(T)};
 
 #undef T
+
+
 
 /*
 	----------------
