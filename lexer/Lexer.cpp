@@ -236,7 +236,11 @@ void Lexer::insertDimension(SharedPtr<Token> &tokenPtr) {
 	
 };
 
+/*
+ +++++ Finds corresponding Token symbol of a string from input stream in O(1) time-complexity. +++++
+ */
 
+Trie<Token::Symbol> Lexer::mapToSymbol;
 
 
 /*
@@ -248,7 +252,19 @@ Lexer::Lexer(const char *fileName)
 	:
 		inFile(fileName), stream(nullptr), tokensQ(new Queue<Token>), 
 		arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
-{};
+{
+
+/*
+ +++++ Load Trie with token symbols from TOKEN_LIST ++++++
+ */
+
+#define T(symbol, name) Token::mapToSymbol.push(name, Token::symbol);
+	
+	TOKEN_LIST(T)
+
+#undef T
+
+};
 
 Queue<Token> *Lexer::operator ()(){
 

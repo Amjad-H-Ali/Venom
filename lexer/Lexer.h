@@ -40,6 +40,12 @@ private:
 	*/
 	ParamDimension *const paramD;
 
+	/*
+	 +++++ Finds corresponding Token symbol of a string in O(1) time-complexity. +++++
+	 */
+
+	static Trie<Token::Symbol> mapToSymbol;
+
 	/* 
 		*
 		* Gets the index of the stream where it no longer can be 

@@ -57,17 +57,15 @@ public:
 
 
 	/*
-		*
-		* Used to map strings to their corresponding
-		* Symbol in O(1) time complexity.
-		*
-	*/
+	 +++++ Finds corresponding Token symbol of a string in O(1) time-complexity. +++++
+	 */
+
 	static Trie<Symbol> mapToSymbol;
 
 	/*
 	 +++++ Array of const char *, which is all Token symbols in string form +++++
 	 */
-	
+
 	static const char *typeName[NUM_OF_TOKENS];
 
 	
