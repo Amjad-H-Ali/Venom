@@ -63,13 +63,13 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
     /*
 		*
 		* Check if stream is the corresponding string value to any of the Token
-		* symbols held in the Trie (Token::mapToSymbol). This can be a keyword,
+		* symbols held in the Trie (mapToSymbol). This can be a keyword,
 		* paranthesis, comma, bracket, etc.
 		*
     */
-    if(Token::Symbol *symPtr = Token::mapToSymbol->map(stream, start, end)) {
+    if(Token::Symbol *symPtr = mapToSymbol.map(stream, start, end)) {
 
-    	tokensQ.enqueue(*symPtr);
+    	tokensQ.emplace_back(*symPtr);
 
     	/*
 			*
@@ -78,7 +78,7 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
 			* tokensQ.end() returns SharedPtr to Token.
 			*
     	*/
-    	if(isDimensional(*symPtr)) insertDimension(tokensQ.end());
+    	if(isDimensional(*symPtr)) insertDimension(SharedPtrtokensQ.end());
     
         
 
@@ -87,10 +87,10 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
     /*
 		*
 		* If stream does not match any of the Token symbols, then it could be any of the following:
-		*    * It's holding more than one symbol, meaning it contains symbols that were not spaced out (ie. "if(" ).
-		*    * It's an identifier.
-		* 	 * It's a string.
-		* 	 * Otherwise, it's an error.
+		*     +It's holding more than one symbol, meaning it contains symbols that were not spaced out (ie. "if(" ).
+		*     +It's an identifier.
+		* 	  +It's a string.
+		* 	  +Otherwise, it's an error.
 		* Reccusively Tokenize potential string, identifier, keyword, etc.
     */
     else {
@@ -105,7 +105,7 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
         	decltype(start) strBreak = getStrBreakPoint(start);
 
 
-        	tokensQ.enqueue(stream.substr(start, strBreak), Token::STRING);
+        	tokensQ.emplace_back(stream.substr(start, strBreak), Token::STRING);
 
         	/*
         		*
@@ -126,7 +126,7 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
         		*
 	    	*/
 	        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
-	                        symBreak  = Token::mapToSymbol->getBreakPoint(stream, start);
+	                        symBreak  = mapToSymbol.getBreakPoint(stream, start);
 	    
 	        /*
 	        	*
@@ -153,7 +153,7 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
 	        */
 	        else if(aToZbreak > 0) {
 
-	        	tokensQ.enqueue(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
+	        	tokensQ.emplace_back(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
 
 	            start = aToZbreak;
 	        }
@@ -194,45 +194,45 @@ inline bool Lexer::isDimensional(Token::Symbol sym) {
 	* parameter list.
 	*
 */
-void Lexer::insertDimension(SharedPtr<Token> &tokenPtr) {
+void Lexer::insertDimension(const Token &token) {
 
-	if(*tokenPtr == Token::LBRACKET) {
+	if(token == Token::LBRACKET) {
 
 		if(!arrayD) arrayD = ArrayDimension::getInstance();
 
-		arrayD->insertOpen(tokenPtr);
+		arrayD->insertOpen(token);
 	}
 
 
-	else if(*tokenPtr == Token::LHANDLE) {
+	else if(token == Token::LHANDLE) {
 
 		if(!blockD) blockD = BlockDimension::getInstance();
 
-		blockD->insertOpen(tokenPtr);
+		blockD->insertOpen(token);
 	}
 
 	
-	else if(*paramD == 0  && *tokenPtr == Token::BAR) {
+	else if(*paramD == 0  && token == Token::BAR) {
 
 		if(!paramD) paramD = ParamDimension::getInstance();
 
-		paramD->insertOpen(tokenPtr);
+		paramD->insertOpen(token);
 	}
 	
 
-	else if(*tokenPtr == Token::RBRACKET) 
+	else if(token == Token::RBRACKET) 
 
-		arrayD->insertClose(tokenPtr);
-
-
-	else if(*tokenPtr == Token::RHANDLE)
-
-		blockD->insertClose(tokenPtr);
+		arrayD->insertClose(token);
 
 
-	else if(*tokenPtr == Token::BAR) 
+	else if(token == Token::RHANDLE)
+
+		blockD->insertClose(token);
+
+
+	else if(token == Token::BAR) 
 		
-		paramD->insertClose(tokenPtr);
+		paramD->insertClose(token);
 	
 };
 
@@ -250,7 +250,7 @@ Trie<Token::Symbol> Lexer::mapToSymbol;
 Lexer::Lexer(const char *fileName)
 
 	:
-		inFile(fileName), stream(nullptr), tokensQ(new Queue<Token>), 
+		inFile(fileName), stream(nullptr), tokensQ(new std::vector<Token>), 
 		arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
 {
 
@@ -258,7 +258,7 @@ Lexer::Lexer(const char *fileName)
  +++++ Load Trie with token symbols from TOKEN_LIST ++++++
  */
 
-#define T(symbol, name) Token::mapToSymbol.push(name, Token::symbol);
+#define T(symbol, name) mapToSymbol.push(name, Token::symbol);
 	
 	TOKEN_LIST(T)
 
@@ -266,9 +266,9 @@ Lexer::Lexer(const char *fileName)
 
 };
 
-Queue<Token> *Lexer::operator ()(){
+std::vector<Token> &Lexer::operator ()(){
 
 	while(inFile >> stream) generateTokensInQ();
 
-	return tokensQ;
+	return *tokensQ;
 };

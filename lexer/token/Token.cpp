@@ -11,16 +11,8 @@
 Trie< Token::Symbol > Token::mapToSymbol;
 
 
-/*
-	*
-	* Load Trie with all Symbols.
-	*
-*/
-#define T(symbol, name) Token::mapToSymbol->push(name, new token::Symbol(token::symbol));
-	
-	TOKEN_LIST(T)
 
-#undef T
+
 
 
 
@@ -110,7 +102,7 @@ void setClosing(bool isClosing) {
 
 
 
-void setMatchingPair(SharedPtr<Token> &matchingPair) {
+void setMatchingPair(const SharedPtr<Token> &matchingPair) {
 	matchingPair = matchingPair;
 };
 

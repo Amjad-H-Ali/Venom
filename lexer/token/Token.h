@@ -56,11 +56,7 @@ public:
 #undef T
 
 
-	/*
-	 +++++ Finds corresponding Token symbol of a string in O(1) time-complexity. +++++
-	 */
-
-	static Trie<Symbol> mapToSymbol;
+	
 
 	/*
 	 +++++ Array of const char *, which is all Token symbols in string form +++++
@@ -126,7 +122,7 @@ public:
 	void setClosing(bool isClosing);
 
 
-	void setMatchingPair(SharedPtr<Token> &matchingPair);
+	void setMatchingPair(const SharedPtr<Token> &matchingPair);
 
 
 	/*

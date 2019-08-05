@@ -17,7 +17,7 @@ private:
 		* Tokens are stored here and will be fed to the Preparser.
 		*
 	*/
-	Queue<Token> *tokensQ;
+	std::vector<Token> *tokensQ;
 
 	/*	
 		*
@@ -41,7 +41,7 @@ private:
 	ParamDimension *const paramD;
 
 	/*
-	 +++++ Finds corresponding Token symbol of a string in O(1) time-complexity. +++++
+	 +++++ Finds corresponding Token symbol of a string from input stream in O(1) time-complexity. +++++
 	 */
 
 	static Trie<Token::Symbol> mapToSymbol;
@@ -85,7 +85,7 @@ private:
 		* parameter list.
 		*
 	*/
-	void insertDimension(SharedPtr<Token> &tokenPtr);
+	void insertDimension(const Token &token);
 
 
 public:
@@ -96,7 +96,7 @@ public:
 
 	Lexer(const char *fileName);
 
-	Queue<Token> *operator ()();
+	std::vector<Token> &operator ()();
 
 }; // Lexer
 
