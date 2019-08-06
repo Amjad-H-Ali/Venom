@@ -78,7 +78,7 @@ void Lexer::generateTokensInQ(std::string::size_type start = 0, std::string::siz
 			* tokensQ.end() returns SharedPtr to Token.
 			*
     	*/
-    	if(isDimensional(*symPtr)) insertDimension(SharedPtrtokensQ.end());
+    	if(isDimensional(*symPtr)) insertDimension(*tokensQ.end());
     
         
 

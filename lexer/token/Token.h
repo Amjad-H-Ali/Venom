@@ -30,7 +30,7 @@
 	T(LHANDLE, ":|")								\
 	T(RHANDLE, "|:")								\
 	T(BACKTICK, "`")								\
-	T(IDENTIFIER, nullptr)						    
+	T(ID, nullptr)						    
 								
 
 

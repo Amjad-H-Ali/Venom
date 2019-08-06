@@ -1,13 +1,10 @@
 
+/*
+ +++++ Main C'Tor +++++
+ */
 
-
-
-
-
-
-
-Preparser::Preparser(const Queue<Token> *tokensQ_Param)
-	:tokensQ(tokensQ_Param)
+Preparser::Preparser(const std::vector<Token> &tokensQ_Param)
+	:tokensQ(tokensQ_Param), curr(0)
 {};
 
 
@@ -39,7 +36,7 @@ auto Preparser::callFlagForListAndBlock(Token *tokenPtr) {
 */
 auto Preparser::operator()() {
 
-	Queue<ast_t> *preparsedAstQ = new Queue<ast_t>;
+	std::vector<ast_t> *preparsedAstQ = new std::vector<ast_t>;
 
 	/*
 		*
@@ -49,23 +46,26 @@ auto Preparser::operator()() {
 	*/
 	return [](auto callableFlag) {
 
+
+
 		while(callableFlag()) {
 
 			/*
 				*
-				* Parse token and receive ast_t.
+				* Parse token and push ast_t in container.
 				*
 			*/
-			ast_t parsedAstPtr = parseToken(tokensQ->current());
+			parseToken(preparsedAstQ);
 
 			parsedAst->push(parsedAstPtr); 
 
 			/*
 				*
-				* Move "_current" pointer one step ahead.
+				* Move "current" pointer one step ahead.
 				*
 			*/
-			tokensQ->jump(1); 
+
+			++curr;
 		};
 
 		return parsedAst;
@@ -78,7 +78,7 @@ auto Preparser::operator()() {
 	* Parse token object and return an ast_t.
 	*
 */
-ast_t Preparser::parseToken(const SharedPtr<Token> &tokenPtr) {
+void Preparser::parseToken(std::vector<ast_t> *astVec) {
 
 
 	if(*tokenPtr == Token::ID)

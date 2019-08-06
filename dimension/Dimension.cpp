@@ -46,9 +46,9 @@ void Dimension::insertClose(Token &closingToken) {
 	*/
 
 
-	closingToken->setMatchingPair(openStack[sp]); // Setting closing Token's matching pair.
+	closingToken->setMatchingPair(openStack[sp-1]); // Setting closing Token's matching pair.
 
-	openStack[sp]->setMatchingPair(closingToken); // Setting opening Token's matching pair.
+	openStack[sp-1]->setMatchingPair(closingToken); // Setting opening Token's matching pair.
 
 
 	--sp; // Decrement stack pointer.

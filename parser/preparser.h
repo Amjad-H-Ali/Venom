@@ -7,7 +7,13 @@ class Preparser {
 
 private:
 
-	const Queue<Token> *tokensQ;
+	const std::vector<Token> &tokensQ;
+
+	/*
+	 +++++ For iterating tokensQ +++++
+	 */
+
+	decltype(tokensQ.size()) curr;
 
 	/*	
 		*
@@ -19,7 +25,10 @@ private:
 
 public:
 
-	Preparser(Queue<Token> *tokensQ);
+	/*
+	 +++++ Main C'Tor +++++
+	 */
+	Preparser(const std::vector<Token> &tokensQ);
 
 	/*
 		*
@@ -35,7 +44,7 @@ public:
 		* Parse token object and return an ast_t.
 		*
 	*/
-	ast_t parseToken(const SharedPtr<Token> &tokenPtr);
+	void parseToken(std::vector<ast_t> *astVec);
 
 }; // Preparser
 
