@@ -17,7 +17,7 @@ private:
 		* Tokens are stored here and will be fed to the Preparser.
 		*
 	*/
-	std::vector<Token> *tokensQ;
+	std::vector<Token> *tokensVecPtr;
 
 	/*	
 		*
@@ -68,7 +68,7 @@ private:
 		* Tokenizes data from stream and places it in tokensQ.
 		*
 	*/
-	void generateTokensInQ(std::string::size_type start = 0, std::string::size_type end = 0);
+	void generateTokensInVec(std::string::size_type start = 0, std::string::size_type end = 0);
 
 
 	/*	

@@ -3,8 +3,8 @@
  +++++ Main C'Tor +++++
  */
 
-Preparser::Preparser(const std::vector<Token> &tokensQ_Param)
-	:tokensQ(tokensQ_Param), curr(0)
+Preparser::Preparser(const std::vector<Token> &tokensVec_Param)
+	:tokensVec(tokensVec_Param), curr(0)
 {};
 
 
@@ -15,13 +15,19 @@ Preparser::Preparser(const std::vector<Token> &tokensQ_Param)
 	* Lambda wrapped in function for reuse by LIST and BLOCK.
 	*
 */
-auto Preparser::callFlagForListAndBlock(Token *tokenPtr) {
+auto Preparser::callFlagForListAndBlock() {
 
-	return [tokenPtr, tokensQ] {
+	const Token *matchingPair = tokensVec[curr].matchingPair;
+
+	return [this, matchingPair] {
 
 		return (
 
-			tokenPtr->matchingCloseToken != tokensQ->current();
+			/*
+			 +++++ Check if at end of Block or List +++++
+			 */
+
+			tokensVec[curr] != *matchingPair;
 		);
 	};
 };
@@ -36,15 +42,15 @@ auto Preparser::callFlagForListAndBlock(Token *tokenPtr) {
 */
 auto Preparser::operator()() {
 
-	std::vector<ast_t> *preparsedAstQ = new std::vector<ast_t>;
+	std::vector<ast_t> *astVecPtr = new std::vector<ast_t>;
 
 	/*
 		*
 		* callableFlag: conditional to know when to stop iterating through
-		* tokensQ member variable.
+		* tokensVec member variable.
 		*
 	*/
-	return [](auto callableFlag) {
+	return [astVecPtr](auto callableFlag)->std::vector<ast_t>& {
 
 
 
@@ -55,20 +61,18 @@ auto Preparser::operator()() {
 				* Parse token and push ast_t in container.
 				*
 			*/
-			parseToken(preparsedAstQ);
-
-			parsedAst->push(parsedAstPtr); 
+			fillAstVecWithParsedToken(astVecPtr);
 
 			/*
 				*
-				* Move "current" pointer one step ahead.
+				* Move "current" pointer one step ahead in tokensVec.
 				*
 			*/
 
 			++curr;
 		};
 
-		return parsedAst;
+		return *astVecPtr;
 	};
 };
 
@@ -78,54 +82,56 @@ auto Preparser::operator()() {
 	* Parse token object and return an ast_t.
 	*
 */
-void Preparser::parseToken(std::vector<ast_t> *astVec) {
+void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 
-	if(*tokenPtr == Token::ID)
+	if(tokensVec[curr] == Token::ID)
 
 		/*
-			*
-			* Steal Identifier name from token object.
-			*
-		*/
-		return new AST_ID(ast::ID, std::move(*tokenPtr));
+		 +++++ Steal string value from Token and create ID. Then create AST<ID> emplace. +++++
+		 */
+
+		astVecPtr->emplace_back( ID( std::move(tokensVec[curr]) ) );
 
 	/*
-		*
-		* Start to BLOCK.
-		*
-	*/
-	if(*tokenPtr == Token::LHANDLE) {
-
-		tokensQ->jump(1);
-
-		/*
-			*
-			* Call to this Functor.
-			* Returns a Lambda that parses the tokensQ data member .
-			*
-		*/
-		auto parseBlock = (*this)();
+	 +++++ Start to Block +++++
+	 */
+	else if(tokensVec[curr] == Token::LHANDLE) {
 
 		/*
 			*
 			* Conditional for parsing the range of tokens that is the Block.
 			*
 		*/
-		auto callFlag = callFlagForListAndBlock(tokenPtr);
+		auto callFlag = callFlagForListAndBlock();
+
+		/*
+		 +++++ Shift pointer to enter Block +++++
+		 */
+		++curr;
+
+		/*
+			*
+			* Call to this Functor.
+			* Returns a Lambda that parses the tokensVec data member .
+			*
+		*/
+		auto parseBlock = (*this)();
+
+		
 
 		/*
 			*
 			* Recursively parsing block. 
 			*
 		*/
-		return new AST_BLOCK(ast::BLOCK, parseBlock(callFlag));
+		astVecPtr->emplace_back(Block(parseBlock(callFlag))); 
 	};
 
 
-	else if(*tokenPtr == Token::IS)
+	else if(tokensVec[curr] == Token::IS)
 
-		return new AST_BinOp(ast::ASSIGN);
+		astVecPtr->emplace_back(BinOp()); 
 
 
 	/*
@@ -133,17 +139,7 @@ void Preparser::parseToken(std::vector<ast_t> *astVec) {
 		* For array LIST and function parameter LIST.
 		*
 	*/
-	else if(*tokenPtr == Token::LBRACKET || (*tokenPtr == Token::BAR && !tokenPtr->closing)) {
-
-		tokensQ->jump(1);
-
-		/*
-			*
-			* Call to this Functor.
-			* Returns a Lambda that parses the tokensQ data member .
-			*
-		*/
-		auto parseList = (*this)();
+	else if(tokensVec[curr] == Token::LBRACKET || (tokensVec[curr] == Token::BAR && !tokensVec[curr].closing)) {
 
 		/*
 			*
@@ -152,20 +148,35 @@ void Preparser::parseToken(std::vector<ast_t> *astVec) {
 		*/
 		auto callFlag = callFlagForListAndBlock(tokenPtr); 
 
-		return new AST_List(ast::LIST, parseList(callFlag));
+		/*
+		 +++++ Shift pointer to enter List +++++
+		 */
+		++curr;
+
+		/*
+			*
+			* Call to this Functor.
+			* Returns a Lambda that parses the tokensVec data member .
+			*
+		*/
+		auto parseList = (*this)();
+
+		
+
+		astVecPtr->emplace_back( List(parseList(callFlag)) );
 
 	};
 
-	else if(*tokenPtr == Token::STRING)
+	else if(tokensVec[curr] == Token::STRING)
 
 		/*
 			*
 			* Steal STRING value from token object.
 			*
 		*/
-		return new AST_STR(ast::STR, std::move(*tokenPtr));
+		astVecPtr->emplace_back(Str(std::move(tokensVec[curr])));
 
-	return nullptr;
+	return;
 
 }; // parserToken
 

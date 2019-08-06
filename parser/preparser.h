@@ -7,13 +7,13 @@ class Preparser {
 
 private:
 
-	const std::vector<Token> &tokensQ;
+	const std::vector<Token> &tokensVec;
 
 	/*
-	 +++++ For iterating tokensQ +++++
+	 +++++ For iterating tokensVec +++++
 	 */
 
-	decltype(tokensQ.size()) curr;
+	decltype(tokensVec.size()) curr;
 
 	/*	
 		*
@@ -21,20 +21,20 @@ private:
 		* Lambda wrapped in function for reuse by LIST and BLOCK.
 		*
 	*/
-	auto callFlagForListAndBlock(Token *tokenPtr);
+	auto callFlagForListAndBlock();
 
 public:
 
 	/*
 	 +++++ Main C'Tor +++++
 	 */
-	Preparser(const std::vector<Token> &tokensQ);
+	Preparser(const std::vector<Token> &tokensVec_Param);
 
 	/*
 		*
-		* Overload () operator. Creates a Queue of ast_t(s). 
+		* Overload () operator. Creates a vector of ast_t(s). 
 		* Return: Lambda that takes in a conditional and parses tokensQ
-		* and pushes parsed items into Queue of ast_t(s).
+		* and pushes parsed items into vector of ast_t(s).
 		*
 	*/
 	auto operator()();
@@ -44,7 +44,7 @@ public:
 		* Parse token object and return an ast_t.
 		*
 	*/
-	void parseToken(std::vector<ast_t> *astVec);
+	void fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr);
 
 }; // Preparser
 
