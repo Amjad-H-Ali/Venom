@@ -21,14 +21,14 @@ private:
 		* Lambda wrapped in function for reuse by LIST and BLOCK.
 		*
 	*/
-	auto isAtEndOfListOrBlock();
+	auto Preparser::endOfListAndBlockCallable();
 
 	/*
-	 +++++ Recursively parses Block value that is used to construct a Block. +++++
-	 +++++ A Block may be a body to a function, if statement, object, etc.   +++++
+	 +++++ Recursively parses Block or List value that is used to construct a Block +++++
+	 +++++ or List. May be body to a function, param list, object, array, etc.      +++++
 	 */
 
-	std::vector<ast_t> &parseBlockValue();
+	std::vector<ast_t> &Preparser::parseRange();
 
 public:
 

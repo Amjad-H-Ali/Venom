@@ -24,31 +24,31 @@ auto Preparser::endOfListAndBlockCallable() {
 		return (
 
 			/*
-			 +++++ Check if at end of Block or List +++++
+			 +++++ Check if end of Block or List has been reached. +++++
 			 */
 
-			tokensVec[curr] != *matchingPair;
+			&tokensVec[curr] != matchingPair;
 		);
 	};
 };
 
 
 /*
- +++++ Recursively parses Block value that is used to construct a Block. +++++
- +++++ A Block may be a body to a function, if statement, object, etc.   +++++
+ +++++ Recursively parses Block or List value that is used to construct a Block +++++
+ +++++ or List. May be body to a function, param list, object, array, etc.      +++++
  */
 
-std::vector<ast_t> &Preparser::parseBlockValue() {
+std::vector<ast_t> &Preparser::parseRange() {
 
 	/*
 		*
 		* Conditional for parsing the range of tokens that is the Block.
 		*
 	*/
-	auto isEndOfBlock = endOfListAndBlockCallable();
+	auto isEndOfRange = endOfListAndBlockCallable();
 
 	/*
-	 +++++ Shift pointer to enter Block +++++
+	 +++++ Shift pointer to enter Block or List +++++
 	 */
 	++curr;
 
@@ -58,19 +58,21 @@ std::vector<ast_t> &Preparser::parseBlockValue() {
 		* Returns a Lambda that parses the tokensVec data member .
 		*
 	*/
-	auto getVecOfParsedBlockVal = (*this)();
+	auto getVecOfParsedRange = (*this)();
 
 
 
-	std::vector<ast_t> &blockVal = getVecOfParsedBlockVal(isEndOfBlock);
+	std::vector<ast_t> &parsedRange = getVecOfParsedRange(isEndOfRange);
 
 	/*
-	 +++++ Shift pointer to exit Block +++++
+	 +++++ Shift pointer to exit Block or List +++++
 	 */
 	++curr;
 
-	return blockVal;
+	return parsedRange;
 }
+
+
 
 /*
 	*
@@ -141,74 +143,26 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 +++++ Recursively parse Block value as vector. Vector creates AST<Block> emplace. AST creates Block emplace. +++++
 		 */
 
-		astVecPtr->emplace_back(std::in_place_type< AST<Block> >, parseBlockValue()); 
+		astVecPtr->emplace_back(std::in_place_type< AST<Block> >, parseRange()); 
 	};
 
-	/*
-	 +++++ Function Block +++++
-	 */
-	else if(tokensVec[curr] == Token::ARROW) {
-
-		/*
-		 ++++ Must be a param list preceding ARROW. Retrieve from ast vector. +++++
-		 */
-
-		ast_t &paramListAST = *(--astVecPtr.end());
-
-		/*
-		 +++++ Shift from ARROW to the next Token, which should be start to Block +++++
-		 */
-
-		++curr;
-
-		/*
-		 +++++ Get List from ast_t +++++
-		 */
-
-		AST<List> &paramList = std::get< AST<List> >(paramListAST);
-
-		/*
-		 +++++ Recursively parse Block value and Instantiate a Block. Then Instanstiat AST<Block> emplace +++++
-		 */
-		
-
-		astVecPtr->emplace_back(Block(parseBlockValue())); 
-		
-	}
 
 	/*
 	 +++++ Function Parameter List +++++
 	 */
 
-	else if(tokensVec[curr] == Token::BAR && !tokensVec[curr].closing) {
-
-		/*
-		 +++++ Used to stop loop. When called, checks if iterator is at end of List range in tokensVec +++++ 
-		 */
-
-		auto isEndOfList = endOfListAndBlockCallable();
-
-		/*
-		 +++++ Shift iterator to Enter the List +++++
-		 */
-
-		++curr;
-
-
-		auto getVecOfParsedListVal = (*this)();
-
+	else if(tokensVec[curr] == Token::BAR) {
 
 		/*
 		 +++++ TODO: Maybe listVal should not be ast_t and have its own since you cant have some types in a List +++++
 		 */
 
-		std::vector<ast_t> &listVal = getVecOfParsedListVal(isEndOfList);
-
 		/*
-		 +++++ Shift iterator to Skip Closing Token of List +++++
+		 +++++ Parse parameter list +++++
 		 */
 
-		++curr;
+		std::vector<ast_t> &listVal = parseRange();
+
 
 		/*
 		 +++++ TODO: Maybe check if next Token is ARROW. Otherwise syntax error +++++
@@ -228,8 +182,12 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		/*
 		 +++++ Parse Function Body +++++
 		 */
-		std::vector<ast_t> &blockVal = parseBlockValue();
+		std::vector<ast_t> &blockVal = parseRange();
 
+		/*
+		 +++++ Push AST<Func> in vector. Vector creates AST<Func> emplace. AST  +++++
+		 +++++ creates Func emplace. Func creates listVal and blockVal emplace.	+++++
+		 */
 
 		astVecPtr->emplace_back(std::in_place_type< AST<Func> >, listVal, blockVal);
 
@@ -238,7 +196,11 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 	else if(tokensVec[curr] == Token::IS)
 
-		astVecPtr->emplace_back(BinOp()); 
+		/*
+		 +++++ Assign values set later in Parser +++++
+		 */
+
+		astVecPtr->emplace_back(std::in_place_type< AST<Assign> >); 
 
 
 	/*
@@ -249,39 +211,19 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	else if(tokensVec[curr] == Token::LBRACKET) {
 
 		/*
-			*
-			* Conditional for parsing the range of tokens that is the List.
-			*
-		*/
-		auto callFlag = callFlagForListAndBlock(tokenPtr); 
-
-		/*
-		 +++++ Shift pointer to enter List +++++
+		 +++++ Recursively parse List value as vector. Vector creates AST<List> emplace. AST creates List emplace. +++++
 		 */
-		++curr;
 
-		/*
-			*
-			* Call to this Functor.
-			* Returns a Lambda that parses the tokensVec data member .
-			*
-		*/
-		auto parseList = (*this)();
-
-		
-
-		astVecPtr->emplace_back( List(parseList(callFlag)) );
+		astVecPtr->emplace_back(std::in_place_type< AST<List> >, parseRange()); 
 
 	};
 
 	else if(tokensVec[curr] == Token::STRING)
 
 		/*
-			*
-			* Steal STRING value from token object.
-			*
-		*/
-		astVecPtr->emplace_back(Str(std::move(tokensVec[curr])));
+		 +++++ Steal data from Token and C'truct AST<Str>. Vector creates AST<Str> emplace. AST creates Str emplace. +++++
+		 */
+		astVecPtr->emplace_back(std::in_place_type< AST<Str> >, std::move(tokensVec[curr]));
 
 	return;
 
