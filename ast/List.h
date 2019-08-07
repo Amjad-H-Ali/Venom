@@ -9,12 +9,14 @@ class List {
 
 private:
 
-	AST *value;
+	const std::vector<ast_t> &value;
 
 
 public:
 
-	List(AST *value);
+	List(const std::vector<ast_t> &listValue)
+		:value(listValue)
+	{}
 
 
 }; // List

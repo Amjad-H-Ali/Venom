@@ -60,7 +60,16 @@ std::vector<ast_t> &Preparser::parseBlockValue() {
 	*/
 	auto getVecOfParsedBlockVal = (*this)();
 
-	return getVecOfParsedBlockVal(isEndOfBlock);
+
+
+	std::vector<ast_t> &blockVal = getVecOfParsedBlockVal(isEndOfBlock);
+
+	/*
+	 +++++ Shift pointer to exit Block +++++
+	 */
+	++curr;
+
+	return blockVal;
 }
 
 /*
@@ -129,8 +138,9 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	else if(tokensVec[curr] == Token::LHANDLE) {
 
 		/*
-		 +++++ Recursively parse Block value and Instantiate a Block. Then Instanstiat AST<Block> emplace +++++
+		 +++++ Recursively parse Block value as vector. Vector creates AST<Block> emplace. AST creates Block emplace. +++++
 		 */
+
 		astVecPtr->emplace_back(std::in_place_type< AST<Block> >, parseBlockValue()); 
 	};
 
@@ -152,12 +162,77 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		++curr;
 
 		/*
+		 +++++ Get List from ast_t +++++
+		 */
+
+		AST<List> &paramList = std::get< AST<List> >(paramListAST);
+
+		/*
 		 +++++ Recursively parse Block value and Instantiate a Block. Then Instanstiat AST<Block> emplace +++++
 		 */
-		AST<List> &paramList = std::get< AST<List> >(paramListAST);
+		
 
 		astVecPtr->emplace_back(Block(parseBlockValue())); 
 		
+	}
+
+	/*
+	 +++++ Function Parameter List +++++
+	 */
+
+	else if(tokensVec[curr] == Token::BAR && !tokensVec[curr].closing) {
+
+		/*
+		 +++++ Used to stop loop. When called, checks if iterator is at end of List range in tokensVec +++++ 
+		 */
+
+		auto isEndOfList = endOfListAndBlockCallable();
+
+		/*
+		 +++++ Shift iterator to Enter the List +++++
+		 */
+
+		++curr;
+
+
+		auto getVecOfParsedListVal = (*this)();
+
+
+		/*
+		 +++++ TODO: Maybe listVal should not be ast_t and have its own since you cant have some types in a List +++++
+		 */
+
+		std::vector<ast_t> &listVal = getVecOfParsedListVal(isEndOfList);
+
+		/*
+		 +++++ Shift iterator to Skip Closing Token of List +++++
+		 */
+
+		++curr;
+
+		/*
+		 +++++ TODO: Maybe check if next Token is ARROW. Otherwise syntax error +++++
+		 */
+
+		/*
+		 +++++ Shift iterator to Skip ARROW +++++
+		 */
+
+		++curr;
+
+		/*
+		 +++++ TODO: Maybe check if next Token is LHANDLE. Otherwise syntax error +++++
+		 */
+
+
+		/*
+		 +++++ Parse Function Body +++++
+		 */
+		std::vector<ast_t> &blockVal = parseBlockValue();
+
+
+		astVecPtr->emplace_back(std::in_place_type< AST<Func> >, listVal, blockVal);
+
 	}
 
 
@@ -171,7 +246,7 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		* For array LIST and function parameter LIST.
 		*
 	*/
-	else if(tokensVec[curr] == Token::LBRACKET || (tokensVec[curr] == Token::BAR && !tokensVec[curr].closing)) {
+	else if(tokensVec[curr] == Token::LBRACKET) {
 
 		/*
 			*

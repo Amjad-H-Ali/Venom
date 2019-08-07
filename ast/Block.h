@@ -17,8 +17,8 @@ public:
 	Block(const std::vector<ast_t> &blockValue)
 
 		:value(blockValue)
-		
-	{};
+
+	{}
 
 
 }; // Block
