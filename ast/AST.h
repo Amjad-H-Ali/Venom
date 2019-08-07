@@ -9,11 +9,19 @@ class AST {
 
 private:
 
-	const T &value;
+	T value;
 
 public:
+	/*
+	 +++++ Construct T object emplace +++++
+	 */
+	template<typename ... Params>
 
-	AST(const T &tObject);
+	AST(Params&& ... argsOfT)
+
+		:T(std::forward<Params>(argsOfT)...)
+
+	{};
 
 };
 

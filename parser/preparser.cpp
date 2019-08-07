@@ -15,7 +15,7 @@ Preparser::Preparser(const std::vector<Token> &tokensVec_Param)
 	* Lambda wrapped in function for reuse by LIST and BLOCK.
 	*
 */
-auto Preparser::isAtEndOfListOrBlock() {
+auto Preparser::endOfListAndBlockCallable() {
 
 	const Token *matchingPair = tokensVec[curr].matchingPair;
 
@@ -45,7 +45,7 @@ std::vector<ast_t> &Preparser::parseBlockValue() {
 		* Conditional for parsing the range of tokens that is the Block.
 		*
 	*/
-	auto isEndOfBlock = isAtEndOfListOrBlock();
+	auto isEndOfBlock = endOfListAndBlockCallable();
 
 	/*
 	 +++++ Shift pointer to enter Block +++++
@@ -58,9 +58,9 @@ std::vector<ast_t> &Preparser::parseBlockValue() {
 		* Returns a Lambda that parses the tokensVec data member .
 		*
 	*/
-	auto getVectorWithParsedBlockVal = (*this)();
+	auto getVecOfParsedBlockVal = (*this)();
 
-	return getVectorWithParsedBlockVal(isEndOfBlock);
+	return getVecOfParsedBlockVal(isEndOfBlock);
 }
 
 /*
@@ -80,11 +80,11 @@ auto Preparser::operator()() {
 		* tokensVec member variable.
 		*
 	*/
-	return [astVecPtr](auto callFlagToEnd)->std::vector<ast_t>& {
+	return [astVecPtr](auto isEndOfRange)->std::vector<ast_t>& {
 
 
 
-		while(callFlagToEnd()) {
+		while(isEndOfRange()) {
 
 			/*
 				*
@@ -118,10 +118,10 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	if(tokensVec[curr] == Token::ID)
 
 		/*
-		 +++++ Steal string value from Token and create ID. Then create AST<ID> emplace. +++++
+		 +++++ Steal string value from Token and create ID. Vector creates AST<ID> emplace. AST creates ID emplace . +++++
 		 */
 
-		astVecPtr->emplace_back( ID( std::move(tokensVec[curr]) ) );
+		astVecPtr->emplace_back(std::in_place_type< AST<ID> >, std::move(tokensVec[curr]));
 
 	/*
 	 +++++ Start to Block +++++
@@ -131,7 +131,7 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		/*
 		 +++++ Recursively parse Block value and Instantiate a Block. Then Instanstiat AST<Block> emplace +++++
 		 */
-		astVecPtr->emplace_back(Block(parseBlockValue())); 
+		astVecPtr->emplace_back(std::in_place_type< AST<Block> >, parseBlockValue()); 
 	};
 
 	/*
@@ -143,16 +143,21 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 ++++ Must be a param list preceding ARROW. Retrieve from ast vector. +++++
 		 */
 
-		ast_t &paramList = *(--astVecPtr.end());
+		ast_t &paramListAST = *(--astVecPtr.end());
 
 		/*
-		 +++++ Shift from ARROW to next Token, which should be start to Block +++++
+		 +++++ Shift from ARROW to the next Token, which should be start to Block +++++
 		 */
 
 		++curr;
 
+		/*
+		 +++++ Recursively parse Block value and Instantiate a Block. Then Instanstiat AST<Block> emplace +++++
+		 */
+		AST<List> &paramList = std::get< AST<List> >(paramListAST);
 
-		parseBlock()
+		astVecPtr->emplace_back(Block(parseBlockValue())); 
+		
 	}
 
 
