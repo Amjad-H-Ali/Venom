@@ -2,7 +2,6 @@
 
 #define PARSER_H
 
-#include "AST.h"
 
 template<typename ... Types> struct AstOverloads : Types ... {using Types::operator() ...;};
 template<typename ... Types> AstOverloads(Types ...) -> AstOverloads<Types ...>;
@@ -17,7 +16,7 @@ namespace parser {
 	astPtr_t parse (AST *parent, Params&& ... params);
 	astPtr_t parseListContext(AST *parentOfList);
 
-}; // parser
+}; // Parser
 
 
 #endif

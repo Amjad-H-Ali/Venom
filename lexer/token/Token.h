@@ -21,7 +21,7 @@
 	T(ELSE, "else")									\
 	T(ELIF, "elif")									\
 	T(COMMA, ",")									\
-	T(ARROW, "->")									\
+	T(ARROW, "=>")									\
 	T(STRING, nullptr)								\
 	T(OUTPUT, "output")								\
 	T(NEWLINE, "\n")								\

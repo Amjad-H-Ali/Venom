@@ -15,7 +15,7 @@ Preparser::Preparser(const std::vector<Token> &tokensVec_Param)
 	* Lambda wrapped in function for reuse by LIST and BLOCK.
 	*
 */
-auto Preparser::callFlagForListAndBlock() {
+auto Preparser::isAtEndOfListOrBlock() {
 
 	const Token *matchingPair = tokensVec[curr].matchingPair;
 
@@ -34,6 +34,36 @@ auto Preparser::callFlagForListAndBlock() {
 
 
 /*
+ +++++ Recursively parses Block value that is used to construct a Block. +++++
+ +++++ A Block may be a body to a function, if statement, object, etc.   +++++
+ */
+
+std::vector<ast_t> &Preparser::parseBlockValue() {
+
+	/*
+		*
+		* Conditional for parsing the range of tokens that is the Block.
+		*
+	*/
+	auto isEndOfBlock = isAtEndOfListOrBlock();
+
+	/*
+	 +++++ Shift pointer to enter Block +++++
+	 */
+	++curr;
+
+	/*
+		*
+		* Call to this Functor.
+		* Returns a Lambda that parses the tokensVec data member .
+		*
+	*/
+	auto getVectorWithParsedBlockVal = (*this)();
+
+	return getVectorWithParsedBlockVal(isEndOfBlock);
+}
+
+/*
 	*
 	* Overload () operator. Creates a Queue of ast_t(s). 
 	* Return: Lambda that takes in a conditional and parses Queue of tokenPtr(s)
@@ -50,11 +80,11 @@ auto Preparser::operator()() {
 		* tokensVec member variable.
 		*
 	*/
-	return [astVecPtr](auto callableFlag)->std::vector<ast_t>& {
+	return [astVecPtr](auto callFlagToEnd)->std::vector<ast_t>& {
 
 
 
-		while(callableFlag()) {
+		while(callFlagToEnd()) {
 
 			/*
 				*
@@ -99,34 +129,31 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	else if(tokensVec[curr] == Token::LHANDLE) {
 
 		/*
-			*
-			* Conditional for parsing the range of tokens that is the Block.
-			*
-		*/
-		auto callFlag = callFlagForListAndBlock();
+		 +++++ Recursively parse Block value and Instantiate a Block. Then Instanstiat AST<Block> emplace +++++
+		 */
+		astVecPtr->emplace_back(Block(parseBlockValue())); 
+	};
+
+	/*
+	 +++++ Function Block +++++
+	 */
+	else if(tokensVec[curr] == Token::ARROW) {
 
 		/*
-		 +++++ Shift pointer to enter Block +++++
+		 ++++ Must be a param list preceding ARROW. Retrieve from ast vector. +++++
 		 */
+
+		ast_t &paramList = *(--astVecPtr.end());
+
+		/*
+		 +++++ Shift from ARROW to next Token, which should be start to Block +++++
+		 */
+
 		++curr;
 
-		/*
-			*
-			* Call to this Functor.
-			* Returns a Lambda that parses the tokensVec data member .
-			*
-		*/
-		auto parseBlock = (*this)();
 
-		
-
-		/*
-			*
-			* Recursively parsing block. 
-			*
-		*/
-		astVecPtr->emplace_back(Block(parseBlock(callFlag))); 
-	};
+		parseBlock()
+	}
 
 
 	else if(tokensVec[curr] == Token::IS)
