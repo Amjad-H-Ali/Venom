@@ -1,34 +1,31 @@
-#ifndef AST_FUNC_H
+#ifndef FUNC_H
 
-#define AST_FUNC_H
-
-#include "AST.h"
-#include "AST_Node.h"
-#include "AST_List.h"
-#include "AST_Block.h"
+#define FUNC_H
 
 
-
-class AST_Func : public AST_Node {
+class Func {
 
 private:
 
-	AST  *params;
+	List  params;
 
-	AST *body;
+	Block body;
 
 
 public:
 
-	AST_Func(ast::AST_SYMBOL type, AST_List &&params, AST *body);
+	template<typename ListArgs, typename BlockArgs>
 
-	void setValue(AST *params, AST *body);
+	/*
+	 +++++ Forward arguments to List and Block to construct params and body emplace +++++
+	 */
 
-	AST *getBody() const;
+	Func(ListArg&& listVal, BlockArg&& blockVal)
 
+		:params(std::forward<ListArg>(listVal)), body(std::forward<BlockArgs>(blockVal))
+	{}
 
-
-}; // AST_Func
+}; // Func
 
 
 
