@@ -25,6 +25,11 @@ public:
 		:params(std::forward<ListArg>(listVal)), body(std::forward<BlockArgs>(blockVal))
 	{}
 
+	Func(Func&& funcObj)
+
+		:params(std::move(funcObj.params)), body(std::move(funcObj.body)) 
+	{}
+
 }; // Func
 
 

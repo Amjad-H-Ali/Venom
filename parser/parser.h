@@ -1,22 +1,22 @@
-#ifndef PARSER_H
+// #ifndef PARSER_H
 
-#define PARSER_H
-
-
-template<typename ... Types> struct AstOverloads : Types ... {using Types::operator() ...;};
-template<typename ... Types> AstOverloads(Types ...) -> AstOverloads<Types ...>;
+// #define PARSER_H
 
 
-
-namespace parser {
-
-	AST *_main(AST *astHead);
-
-	template<typename ... Params>
-	astPtr_t parse (AST *parent, Params&& ... params);
-	astPtr_t parseListContext(AST *parentOfList);
-
-}; // Parser
+// template<typename ... Types> struct AstOverloads : Types ... {using Types::operator() ...;};
+// template<typename ... Types> AstOverloads(Types ...) -> AstOverloads<Types ...>;
 
 
-#endif
+
+// namespace parser {
+
+// 	AST *_main(AST *astHead);
+
+// 	template<typename ... Params>
+// 	astPtr_t parse (AST *parent, Params&& ... params);
+// 	astPtr_t parseListContext(AST *parentOfList);
+
+// }; // Parser
+
+
+// #endif

@@ -3,7 +3,7 @@
  +++++ Main C'Tor +++++
  */
 
-Preparser::Preparser(const std::vector<Token> &tokensVec_Param)
+Parser::Parser(const std::vector<Token> &tokensVec_Param)
 	:tokensVec(tokensVec_Param), curr(0)
 {};
 
@@ -15,7 +15,7 @@ Preparser::Preparser(const std::vector<Token> &tokensVec_Param)
 	* Lambda wrapped in function for reuse by LIST and BLOCK.
 	*
 */
-auto Preparser::endOfListAndBlockCallable() {
+auto Parser::endOfListAndBlockCallable() {
 
 	const Token *matchingPairPtr = tokensVec[curr].matchingPair;
 
@@ -38,7 +38,7 @@ auto Preparser::endOfListAndBlockCallable() {
  +++++ or List. May be body to a function, param list, object, array, etc.      +++++
  */
 
-std::vector<ast_t> &Preparser::parseRange() {
+std::vector<ast_t> &Parser::parseRange() {
 
 	/*
 		*
@@ -75,7 +75,7 @@ std::vector<ast_t> &Preparser::parseRange() {
 	* and pushes parsed items into Queue of ast_t(s).
 	*
 */
-auto Preparser::operator()() {
+auto Parser::operator()() {
 
 	std::vector<ast_t> *astVecPtr = new std::vector<ast_t>;
 
@@ -117,7 +117,7 @@ auto Preparser::operator()() {
 	* Parse token object and return an ast_t.
 	*
 */
-void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
+void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 
 	if(tokensVec[curr] == Token::ID)
@@ -306,7 +306,7 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 	return;
 
-}; // parserToken
+}; // Parser
 
 
 

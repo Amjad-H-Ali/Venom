@@ -1,110 +1,110 @@
 
-/*
+// /*
 
-[AST<ID>, AST<IS>, AST<Func>]
+// [AST<ID>, AST<IS>, AST<Func>]
 
-foo is |name| => :| |:
+// foo is |name| => :| |:
 
-num is 1+2+3+4
+// num is 1+2+3+4
 
-[AST<ID>, AST<IS>, AST<NUM>, AST<ADD>, AST<NUM>, AST<ADD>, AST<NUM>, AST<ADD>, AST<NUM>]
-
-
-
-*/
-
-
-std::vector<ast_t> &astVec;
-
-Parser::Parser(std::vector<ast_t> &astVecParam)
-	:astVec(astVecParam)
-{}
-
-
-/*
- +++++ Creates new vector to store parsed elements. Takes in the Vector  +++++
- +++++ to parse. Returns Lambda that, when called, returns parsed vector +++++
- */
-auto Parser::operator()(std::vector<ast_t> &astVecToParse) {
-
-	std::vector<ast_t> *astVecPtr = new std::vector<ast_t>;
-
-	return [&astVecToParse](){
-
-		for(auto &astElem : astVecToParse)
-	}
-
-}
-
-
-OperatorStack *opStack = new OperatorStack;
-
-AST *parser::_main(AST *astHead) {
+// [AST<ID>, AST<IS>, AST<NUM>, AST<ADD>, AST<NUM>, AST<ADD>, AST<NUM>, AST<ADD>, AST<NUM>]
 
 
 
-	if(!astHead) return nullptr;
+// */
 
-	AST *head = _main(astHead->next);
 
-	ast_t astPtr = parser::parse(astHead, astHead->node);
+// std::vector<ast_t> &astVec;
 
-	if(!astPtr) return head;
+// Parser::Parser(std::vector<ast_t> &astVecParam)
+// 	:astVec(astVecParam)
+// {}
 
-	AST *newAST = new AST;
 
-	newAST->node = astPtr;
+// /*
+//  +++++ Creates new vector to store parsed elements. Takes in the Vector  +++++
+//  +++++ to parse. Returns Lambda that, when called, returns parsed vector +++++
+//  */
+// auto Parser::operator()(std::vector<ast_t> &astVecToParse) {
 
-	newAST->next = head;
+// 	std::vector<ast_t> *astVecPtr = new std::vector<ast_t>;
 
-	if(head) head->prev = newAST;
+// 	return [&astVecToParse]()-> std::vector<ast_t>& {
 
-	head = newAST;
+// 		for(auto &astElem : astVecToParse)
+// 	}
 
-	if(*newAST == ast::ASSIGN) opStack->push(newAST);
+// }
 
-	return head;
 
-};
+// OperatorStack *opStack = new OperatorStack;
 
-template<typename ... Params>
-ast_t &parser::parse (AST *parent, Params&& ... params) {
+// AST *parser::_main(AST *astHead) {
 
-	return std::visit(AstOverloads {
 
-		[parent](AST<List> *list)->ast_t &{return parseListContext(parent);},
 
-		[parent](AST_List *list, AST_Block *block)->ast_t &{
+// 	if(!astHead) return nullptr;
 
-			// Parsed block contents.
-			AST *funcBody = parser::_main(block->getValue());
+// 	AST *head = _main(astHead->next);
 
-			// Steal list contents for function parameter list.
-			return new AST_Func(ast::FUNC, std::move(*list), funcBody);
+// 	ast_t astPtr = parser::parse(astHead, astHead->node);
 
-		},
+// 	if(!astPtr) return head;
 
-		[parent](AST_List *list, auto)->ast_t &{return list;},
+// 	AST *newAST = new AST;
 
-		[parent](AST_BinOp *binOp)->ast_t &{return binOp;},
+// 	newAST->node = astPtr;
 
-		[parent](auto, auto)->ast_t &{return nullptr;},
+// 	newAST->next = head;
 
-		[parent](auto n)->ast_t &{return n;},
+// 	if(head) head->prev = newAST;
 
-		[parent](AST_Block *)->ast_t &{return nullptr;}
+// 	head = newAST;
 
-	}, std::forward<Params>(params)...);
+// 	if(*newAST == ast::ASSIGN) opStack->push(newAST);
 
-};
+// 	return head;
 
-ast_t  parser::parseListContext(AST *parentOfList) {
+// };
 
-  	AST *nextParent = parentOfList->prev;
+// template<typename ... Params>
+// ast_t &parser::parse (AST *parent, Params&& ... params) {
 
-  	return nextParent ? parser::parse(nextParent, parentOfList->node, nextParent->node) 
-		: parser::parse(nextParent, parentOfList->node, (ast_t) nullptr);
-};
+// 	return std::visit(AstOverloads {
+
+// 		[parent](AST<List> *list)->ast_t &{return parseListContext(parent);},
+
+// 		[parent](AST_List *list, AST_Block *block)->ast_t &{
+
+// 			// Parsed block contents.
+// 			AST *funcBody = parser::_main(block->getValue());
+
+// 			// Steal list contents for function parameter list.
+// 			return new AST_Func(ast::FUNC, std::move(*list), funcBody);
+
+// 		},
+
+// 		[parent](AST_List *list, auto)->ast_t &{return list;},
+
+// 		[parent](AST_BinOp *binOp)->ast_t &{return binOp;},
+
+// 		[parent](auto, auto)->ast_t &{return nullptr;},
+
+// 		[parent](auto n)->ast_t &{return n;},
+
+// 		[parent](AST_Block *)->ast_t &{return nullptr;}
+
+// 	}, std::forward<Params>(params)...);
+
+// };
+
+// ast_t  parser::parseListContext(AST *parentOfList) {
+
+//   	AST *nextParent = parentOfList->prev;
+
+//   	return nextParent ? parser::parse(nextParent, parentOfList->node, nextParent->node) 
+// 		: parser::parse(nextParent, parentOfList->node, (ast_t) nullptr);
+// };
 
 
 

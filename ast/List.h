@@ -9,13 +9,13 @@ class List {
 
 private:
 
-	const std::vector<ast_t> &value;
+	const std::vector<ast_t> *value;
 
 
 public:
 
 	List(const std::vector<ast_t> &listValue)
-		:value(listValue)
+		:value(&listValue)
 	{}
 
 	/*
@@ -23,7 +23,10 @@ public:
 	 */
 	List(List&& listObj)
 		:value(listObj.value)
-	{}
+	{
+
+		listObj.value = nullptr;
+	}
 
 
 }; // List

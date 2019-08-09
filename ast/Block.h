@@ -9,16 +9,23 @@ class Block {
 
 private:
 
-	const std::vector<ast_t> &value;
+	const std::vector<ast_t> *value;
 
 
 public:
 
 	Block(const std::vector<ast_t> &blockValue)
 
-		:value(blockValue)
+		:value(&blockValue)
 
 	{}
+
+	Block(Block&& blockObject)
+
+		:value(blockObject.value)
+	{
+		blockObject.value = nullptr;
+	}
 
 
 }; // Block

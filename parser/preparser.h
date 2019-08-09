@@ -1,9 +1,9 @@
-#ifndef PREPARSER_H
+#ifndef PARSER_H
 
-#define PREPARSER_H
+#define PARSER_H
 
 
-class Preparser {
+class Parser {
 
 private:
 
@@ -21,21 +21,21 @@ private:
 		* Lambda wrapped in function for reuse by LIST and BLOCK.
 		*
 	*/
-	auto Preparser::endOfListAndBlockCallable();
+	auto Parser::endOfListAndBlockCallable();
 
 	/*
 	 +++++ Recursively parses Block or List value that is used to construct a Block +++++
 	 +++++ or List. May be body to a function, param list, object, array, etc.      +++++
 	 */
 
-	std::vector<ast_t> &Preparser::parseRange();
+	std::vector<ast_t> &Parser::parseRange();
 
 public:
 
 	/*
 	 +++++ Main C'Tor +++++
 	 */
-	Preparser(const std::vector<Token> &tokensVec_Param);
+	Parser(const std::vector<Token> &tokensVec_Param);
 
 	/*
 		*
@@ -53,6 +53,6 @@ public:
 	*/
 	void fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr);
 
-}; // Preparser
+}; // Parser
 
 #endif

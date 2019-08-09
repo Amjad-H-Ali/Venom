@@ -7,23 +7,18 @@ class Assign {
 
 private:
 
-	AST<ID> *lValuePtr;
+	AST<ID> lValue;
 
-	ast_t   *rValuePtr;
+	ast_t   rValue;
 
 public:
 
-	Assign()
-	
-		:lValuePtr(nullptr), rValuePtr(nullptr)
+	Assign(AST<ID>&& lValueParam, ast_t&& rValueParam)
+
+		:lValue(std::move(lValueParam)), rValue(std::move(rValueParam))
 	{}
 
-	void setValue(AST<ID> *lValuePtrParam, ast_t *rValuePtrParam) {
-
-		lValuePtr = lValuePtrParam;
-
-		rValuePtr = rValuePtrParam;
-	}
+	
 
 
 
