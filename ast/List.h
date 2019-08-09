@@ -18,6 +18,13 @@ public:
 		:value(listValue)
 	{}
 
+	/*
+	 +++++ Move C'Tor +++++
+	 */
+	List(List&& listObj)
+		:value(listObj.value)
+	{}
+
 
 }; // List
 
