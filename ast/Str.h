@@ -19,6 +19,13 @@ public:
 		:value(std::move(token.value))
 	{}
 
+	/*
+	 +++++ Move C'Tor +++++
+	 */
+	Str(Str&& strObj)
+		:value(std::move(strObj.value))
+	{}
+
 
 }; // Str
 
