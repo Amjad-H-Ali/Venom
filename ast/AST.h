@@ -29,7 +29,7 @@ public:
 
 };
 
-typedef std::variant< AST<Str>, AST<ID>, AST<List> , AST<Block>, AST<Func>, AST<BinOp> > ast_t;
+typedef std::variant< AST<Str>, AST<ID>, AST<List> , AST<Block>, AST<Func>, AST<Assign>, AST<Add> > ast_t;
 
 #endif
 

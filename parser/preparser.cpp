@@ -217,9 +217,27 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 			 +++++ Recursively parse expression +++++
 			 */
 			fillAstVecWithParsedToken(astVecPtr);
+
+
+		/*
+		 +++++ Get left and right operands from ast vector. Last element is right operand of Assignment operator +++++
+		 */
+		ast_t &rOperand = *(--astVecPtr->end()),
+			  &lOperand = *(astVecPtr->end() - 2);
+
+		/*
+		 +++++ lOperand and rOperand are expiring (popped off or replaced). Move C'Truct values in ASSIGN. +++++
+		 +++++ AST creates ASSIGN emplace. Move Assign lOperand position to expiring AST<ASSIGN> object.   +++++   
+		 */
+		*(astVecPtr->end() - 2) = AST<Assign>(std::move(lOperand), std::move(rOperand));
+
+		/*
+		 +++++ Pop off rOperand +++++
+		 */	
+		astVecPtr->pop_back();
 	}
 	/*
-	 +++++ Addition operator +++++ // [ID, 2, 3]
+	 +++++ Addition operator +++++ // [ID, ADD(2,3)]
 	 */
 	else if(tokensVec[curr] == Token::ADD) {
 
@@ -237,16 +255,30 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 +++++ Get left and right operands from ast vector. Last element is right operand of ADD operator +++++
 		 */
 		ast_t &rOperand = *(--astVecPtr->end()),
-			  &lOperand = *(astVecPtr->end() - 3); 
+			  &lOperand = *(astVecPtr->end() - 2); 
 
-		*(astVecPtr->end() - 3) = AST<ADD>(std::move(lOperand), std::move(rOperand));
+		/*
+		 +++++ lOperand and rOperand are expiring (popped off or replaced). Move C'Truct values in ADD. +++++
+		 +++++ AST creates ADD emplace. Move Assign lOperand position to expiring AST<ADD> object.      +++++   
+		 */
+		*(astVecPtr->end() - 2) = AST<ADD>(std::move(lOperand), std::move(rOperand));
 
-		astVecPtr->emplace_back(std::in_place_type< AST<ADD> >, std::move(rOperand ))
+		/*
+		 +++++ Pop off rOperand +++++
+		 */	
+		astVecPtr->pop_back();
 
+		/*
+		 +++++ Check if rOperand is part of expression +++++
+		 */
+		if(tokensVec[++curr] && tokensVec[curr] == Token::ADD) // TODO: Make it work for all operators.
 
+			/*
+			 +++++ Recursively parse expression +++++
+			 */
+			fillAstVecWithParsedToken(astVecPtr);
 
 	}
-
 
 
 
