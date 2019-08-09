@@ -17,11 +17,15 @@ public:
 	 */
 	template<typename ... Params>
 
-	AST(Params&& ... argsOfT)
+	AST<T>(Params&& ... argsOfT)
 
-		:T(std::forward<Params>(argsOfT)...)
+		:value(std::forward<Params>(argsOfT)...)
 
-	{};
+	{}
+
+	AST<T>(AST<T>&& astObj)
+		:value(std::move(astObj.value))
+	{}
 
 };
 

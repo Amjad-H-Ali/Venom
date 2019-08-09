@@ -218,8 +218,37 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 			 */
 			fillAstVecWithParsedToken(astVecPtr);
 	}
+	/*
+	 +++++ Addition operator +++++ // [ID, 2, 3]
+	 */
+	else if(tokensVec[curr] == Token::ADD) {
 
-	else if(tokensVec[curr] == Token::ADD)
+		/*
+		 +++++ Shift tokensVec ptr to right value +++++
+		 */
+		++curr;
+
+		/*
+		 +++++ Insert parsed right value token to the astVec. +++++
+		 */
+		fillAstVecWithParsedToken(astVecPtr);
+
+		/*
+		 +++++ Get left and right operands from ast vector. Last element is right operand of ADD operator +++++
+		 */
+		ast_t &rOperand = *(--astVecPtr->end()),
+			  &lOperand = *(astVecPtr->end() - 3); 
+
+		*(astVecPtr->end() - 3) = AST<ADD>(std::move(lOperand), std::move(rOperand));
+
+		astVecPtr->emplace_back(std::in_place_type< AST<ADD> >, std::move(rOperand ))
+
+
+
+	}
+
+
+
 
 	/*
 		*
