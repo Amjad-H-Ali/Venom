@@ -1,18 +1,40 @@
-#include <iostream>
-#include <variant>
-#include "AST.h"
-#include "AST_Node.h"
-#include "AST_STR.h"
-#include "AST_List.h"
-#include "AST_ID.h"
-#include "AST_Block.h"
-#include "AST_BinOp.h"
-#include "AST_Func.h"	
-#include "parser.h"
-#include "OperatorStack.h"
+
+/*
+
+[AST<ID>, AST<IS>, AST<Func>]
+
+foo is |name| => :| |:
+
+num is 1+2+3+4
+
+[AST<ID>, AST<IS>, AST<NUM>, AST<ADD>, AST<NUM>, AST<ADD>, AST<NUM>, AST<ADD>, AST<NUM>]
 
 
 
+*/
+
+
+std::vector<ast_t> &astVec;
+
+Parser::Parser(std::vector<ast_t> &astVecParam)
+	:astVec(astVecParam)
+{}
+
+
+/*
+ +++++ Creates new vector to store parsed elements. Takes in the Vector  +++++
+ +++++ to parse. Returns Lambda that, when called, returns parsed vector +++++
+ */
+auto Parser::operator()(std::vector<ast_t> &astVecToParse) {
+
+	std::vector<ast_t> *astVecPtr = new std::vector<ast_t>;
+
+	return [&astVecToParse](){
+
+		for(auto &astElem : astVecToParse)
+	}
+
+}
 
 
 OperatorStack *opStack = new OperatorStack;

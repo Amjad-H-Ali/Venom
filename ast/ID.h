@@ -19,6 +19,13 @@ public:
 		:value(std::move(token.value))
 	{}
 
+	/*
+	 +++++ Move C'Tor +++++
+	 */
+	ID(ID&& idObj)
+		:value(std::move(idObj.value))
+	{}
+
 
 }; // ID
 

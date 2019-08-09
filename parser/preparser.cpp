@@ -17,9 +17,9 @@ Preparser::Preparser(const std::vector<Token> &tokensVec_Param)
 */
 auto Preparser::endOfListAndBlockCallable() {
 
-	const Token *matchingPair = tokensVec[curr].matchingPair;
+	const Token *matchingPairPtr = tokensVec[curr].matchingPair;
 
-	return [this, matchingPair] {
+	return [this, matchingPairPtr] {
 
 		return (
 
@@ -27,7 +27,7 @@ auto Preparser::endOfListAndBlockCallable() {
 			 +++++ Check if end of Block or List has been reached. +++++
 			 */
 
-			&tokensVec[curr] != matchingPair;
+			&tokensVec[curr] != matchingPairPtr;
 		);
 	};
 };
@@ -62,14 +62,8 @@ std::vector<ast_t> &Preparser::parseRange() {
 
 
 
-	std::vector<ast_t> &parsedRange = getVecOfParsedRange(isEndOfRange);
 
-	/*
-	 +++++ Shift pointer to exit Block or List +++++
-	 */
-	++curr;
-
-	return parsedRange;
+	return getVecOfParsedRange(isEndOfRange);
 }
 
 
@@ -137,14 +131,13 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	/*
 	 +++++ Start to Block +++++
 	 */
-	else if(tokensVec[curr] == Token::LHANDLE) {
+	else if(tokensVec[curr] == Token::LHANDLE) 
 
 		/*
 		 +++++ Recursively parse Block value as vector. Vector creates AST<Block> emplace. AST creates Block emplace. +++++
 		 */
 
 		astVecPtr->emplace_back(std::in_place_type< AST<Block> >, parseRange()); 
-	};
 
 
 	/*
@@ -193,8 +186,11 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 	}
 
+	/*
+	 +++++ Assignment operator +++++
+	 */
 
-	else if(tokensVec[curr] == Token::IS)
+	else if(tokensVec[curr] == Token::IS) {
 
 		/*
 		 +++++ Assign values set later in Parser +++++
@@ -202,6 +198,28 @@ void Preparser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 		astVecPtr->emplace_back(std::in_place_type< AST<Assign> >); 
 
+		/*
+		 +++++ Shift tokensVec ptr to rValue +++++
+		 */
+		++curr;
+
+		/*
+		 +++++ Insert parsed rValue token to the astVec. +++++
+		 */
+		fillAstVecWithParsedToken(astVecPtr);
+
+		/*
+		 +++++ Check if rValue is part of expression +++++
+		 */
+		if(tokensVec[++curr] && tokensVec[curr] == Token::ADD) // TODO: Make it work for all operators.
+
+			/*
+			 +++++ Recursively parse expression +++++
+			 */
+			fillAstVecWithParsedToken(astVecPtr);
+	}
+
+	else if(tokensVec[curr] == Token::ADD)
 
 	/*
 		*
