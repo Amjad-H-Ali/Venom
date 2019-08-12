@@ -1,5 +1,7 @@
 
+#include <iostream>
 #include "Trie.h"
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                     *
  * Trie structure that supports strings and ints as    *
@@ -10,8 +12,8 @@
 /*
  +++++ Node for creating paths to the data +++++
  */
-
-struct Trie::Node {
+template<typename T>
+struct Trie<T>::Node {
 
     /*
      +++++ Ptr to T object. +++++
@@ -43,8 +45,8 @@ struct Trie::Node {
 /*
  ++++ Returns unique key ++++
  */
-
-inline size_t Trie::hash(char letter) const {
+template<typename T>
+inline size_t Trie<T>::hash(char letter) const {
 
     return letter - '!';
 }
@@ -55,8 +57,8 @@ inline size_t Trie::hash(char letter) const {
 /*
  +++++ Returns the destination Node +++++
  */
-
-SharedPtr<Node> Trie::goTo(size_t indx) const {
+template<typename T>
+SharedPtr<typename Trie<T>::Node> Trie<T>::goTo(size_t indx) const {
 
     /*
     +++++ If linked-list is empty +++++
@@ -102,8 +104,8 @@ SharedPtr<Node> Trie::goTo(size_t indx) const {
 /*
  +++++ Returns the destination Node +++++
  */
-
-SharedPtr<Node> Trie::goTo(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) const {
+template<typename T>
+SharedPtr<typename Trie<T>::Node> Trie<T>::goTo(const std::string &data,  std::string::size_type start, std::string::size_type end) const {
     
     /*
     +++++ If linked-list is empty +++++
@@ -141,13 +143,11 @@ SharedPtr<Node> Trie::goTo(const std::string &data,  std::string::size_type star
 
 
 
-
-
 /*
  +++ Main C'tor +++
  */
-
-Trie::Trie()
+template<typename T>
+Trie<T>::Trie()
 
     :head(nullptr)
 {}
@@ -156,23 +156,26 @@ Trie::Trie()
 
 
 
-/*
- +++++ Stores data at the destination mapped with str. +++++
+/* 
+ +++++ Stores data at the destination mapped with str. Params are forwarded to type T C'tor to create the data +++++
  */
+template<typename T>
+template<typename ... Params>
+void Trie<T>::push(const std::string &str, Params&& ... params) {
 
-void Trie::push(const std::string &str, const SharedPtr<T> &data) {
 
-    /*
-     +++++ If linked-list is empty +++++
-     */
+   /*
+    +++++ If linked-list is empty +++++
+    */
 
     if(!head) head = SharedPtr<Node>(new Node);
+
 
     SharedPtr<Node> current = head;
 
     /* 
-     ++++ Hash each letter and map to the destination where data will be stored ++++
-     */
+    ++++ Hash each letter and map to the destination where data will be stored ++++
+    */
 
     for(char letter : str) {
 
@@ -184,29 +187,10 @@ void Trie::push(const std::string &str, const SharedPtr<T> &data) {
     }
 
     /*
-     ++++ Store data at destination. ++++
-     */
-
-    current->tPtr = data;
-
-}
-
-
-/* 
- +++++ Stores data at the destination mapped with str, but params are forwarded to type T C'tor to create the data +++++
- */
-
-template<typename ... Params>
-
-void Trie::push(const std::string &str, Params&& ... params) {
-
-    /*
      +++++ Construct T object with params passed in and Create SharedPtr to T object. +++++
      */
 
-    SharedPtr<T> tPtr(new T(std::forward<Params>(params)...));
-
-    push(str, tPtr);
+    current->tPtr = SharedPtr<T>(new T(std::forward<Params>(params)...));
 
 };
 
@@ -214,8 +198,8 @@ void Trie::push(const std::string &str, Params&& ... params) {
 /*
  +++++ Stores data at a destination that was mapped using index. +++++
  */
-
-void Trie::push(size_t indx, const SharedPtr<T> &data) {
+template<typename T>
+void Trie<T>::push(size_t indx, const SharedPtr<T> &data) {
 
     /*
     +++++ If linked-list is empty +++++
@@ -264,10 +248,19 @@ void Trie::push(size_t indx, const SharedPtr<T> &data) {
 /*
  +++++ Finds corresponding data of string in O(1) time complexity. Range of string is allowed ++++++
  */
+template<typename T>
+inline SharedPtr<T> Trie<T>::map(const std::string &data,  std::string::size_type start, std::string::size_type end) const {
 
-inline SharedPtr<T> Trie::map(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) const {
+    /*
+     +++++ Check if Node exist before dereferencing pointer +++++
+     */ 
+    if(SharedPtr<Node> nodePtr = goTo(data, start, end))
+        /*
+         +++++ Return pointer to T in Node +++++
+         */
+        return nodePtr->tPtr;
 
-    return goTo(data, start, end)->tPtr;
+    return nullptr;
 
 };
 
@@ -277,19 +270,27 @@ inline SharedPtr<T> Trie::map(const std::string &data,  std::string::size_type s
 /*
  +++++ Uses indx to map to destination and returns the data found there +++++
  */ 
+template<typename T>
+inline SharedPtr<T> Trie<T>::map(size_t indx) const {
 
-inline SharedPtr<T> Trie::map(size_t indx) const {
+    /*
+     +++++ Check if Node exist before dereferencing pointer +++++
+     */ 
+    if(SharedPtr<Node> nodePtr = goTo(indx))
+        /*
+         +++++ Return pointer to T in Node +++++
+         */
+        return nodePtr->tPtr;
 
-    
-    return goTo(indx)->tPtr;
+    return nullptr;
 
 }
 
 /*
  +++++ Goes to destination and sets data to nullptr +++++
  */
-
-inline void Trie::eraseData(size_t indx) {
+template<typename T>
+inline void Trie<T>::eraseData(size_t indx) {
     goTo(indx)->tPtr = nullptr;
 }
 
@@ -298,8 +299,8 @@ inline void Trie::eraseData(size_t indx) {
 /*
  +++++ Goes to destination and sets data to nullptr +++++
  */
-
-inline void Trie::eraseData(const std::string &str) {
+template<typename T>
+inline void Trie<T>::eraseData(const std::string &str) {
     goTo(str)->tPtr = nullptr;
 }
 
@@ -310,8 +311,8 @@ inline void Trie::eraseData(const std::string &str) {
  +++++ Finds the position of input string where mapping broke off. +++++
  +++++ ie:  Map In Trie -> "HELLO",  Input -> "HEL", Output -> 3   +++++
  */
-
-std::string::size_type Trie::getBreakPoint(const std::string &data, std::string::size_type start = 0) const {
+template<typename T>
+std::string::size_type Trie<T>::getBreakPoint(const std::string &data, std::string::size_type start) const {
 
     /*
      +++++ If linked-list is empty +++++

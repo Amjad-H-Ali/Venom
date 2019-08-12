@@ -2,9 +2,8 @@
 
 #define DIMENSION_H
 
-#include "Token.h"
-
-#include <iostream>
+#include <vector>
+#include "../lexer/token/Token.h"
 
 class Dimension {
 
@@ -15,18 +14,13 @@ protected:
      +++++ Stack of ptrs to Token Objects that represent Openings to arrays, param lists, and blocks +++++++
 	 */
 
-	std::vector<Token *> openStack;
+	std::vector<std::vector<Token>::size_type> openStack;
 
 	/*
 	 +++++ Stack "pointer" to current top ++++
 	 */
 
 	decltype(openStack.size()) sp;
-
-
-
-	// Dimension
-	unsigned int D = 0;
 
 
 
@@ -41,13 +35,13 @@ public:
 	 +++++++ Inserts Token Ptr, that represents an open to a dimension, onto openStack +++++++++++
 	 */
 
-	void insertOpen(Token &openingToken);
+	void insertOpen(std::vector<Token> &tokensVec);
 
 	/*
 	 ++++++++ Sets Opening/Closing Tokens' matching Opening/Closing, and pops off Open from openStack ++++++++++
 	 */
 
-	void Dimension::insertClose(Token &closingToken);
+	void insertClose(std::vector<Token> &tokensVec);
 
 	// Accessor
 	unsigned getD() const;
@@ -65,7 +59,6 @@ public:
 
 	bool operator>(int i)   const;
 
-	unsigned operator>>(unsigned &i)  const;
 	
 
 }; // Dimension

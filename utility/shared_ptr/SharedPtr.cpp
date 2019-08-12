@@ -1,3 +1,4 @@
+
 #include "SharedPtr.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * *
@@ -11,8 +12,8 @@
 /* 	
  +++++ Main C'tor +++++
  */
-
-explicit SharedPtr::SharedPtr(T *tPtr = nullptr) 
+template<typename T>
+SharedPtr<T>::SharedPtr(T *tPtr) 
     :sharedBy(nullptr)
 {
     
@@ -28,8 +29,8 @@ explicit SharedPtr::SharedPtr(T *tPtr = nullptr)
 /*
  +++++ C'tor for Initialization to nullptr +++++
  */
-
-SharedPtr::SharedPtr(const std::nullptr_t &nullObj) 
+template<typename T>
+SharedPtr<T>::SharedPtr(const std::nullptr_t &nullObj) 
     :ptr(nullptr), sharedBy(nullptr)
 {}
 
@@ -44,8 +45,8 @@ SharedPtr::SharedPtr(const std::nullptr_t &nullObj)
 /* 1	
  +++++++ Copy C'tor +++++++
  */
-
-SharedPtr::SharedPtr(const SharedPtr &sharedPtrObj) {
+template<typename T>
+SharedPtr<T>::SharedPtr(const SharedPtr &sharedPtrObj) {
 
     
     /*	
@@ -69,8 +70,8 @@ SharedPtr::SharedPtr(const SharedPtr &sharedPtrObj) {
 /* 2
  ++++++ Destructor ++++++
  */
-
-SharedPtr::~SharedPtr() {
+template<typename T>
+SharedPtr<T>::~SharedPtr() {
 
     
 
@@ -87,8 +88,8 @@ SharedPtr::~SharedPtr() {
 /* 3
  ++++++ Move C'tor ++++++
  */
-
-SharedPtr::SharedPtr(SharedPtr&& ptrObj) {
+template<typename T>
+SharedPtr<T>::SharedPtr(SharedPtr&& ptrObj) {
 
     
 
@@ -116,8 +117,8 @@ SharedPtr::SharedPtr(SharedPtr&& ptrObj) {
 /* 4
  ++++++ Copy Assignment ++++++
  */
-
-SharedPtr& SharedPtr::operator =(const SharedPtr &ptrObj) {
+template<typename T>
+SharedPtr<T>& SharedPtr<T>::operator =(const SharedPtr &ptrObj) {
 
     /*
      +++++ sharedBy is decremented. Resource is deleted   +++++
@@ -148,8 +149,8 @@ SharedPtr& SharedPtr::operator =(const SharedPtr &ptrObj) {
 /* 5
  +++++ Move Assignment +++++
  */
-
-SharedPtr& SharedPtr::operator =(SharedPtr&& ptrObj) {
+template<typename T>
+SharedPtr<T>& SharedPtr<T>::operator =(SharedPtr&& ptrObj) {
 
     
 
@@ -187,8 +188,8 @@ SharedPtr& SharedPtr::operator =(SharedPtr&& ptrObj) {
 /*
  +++++ Assignment to nullptr +++++
  */
-
-SharedPtr& SharedPtr::operator= (const std::nullptr_t &nullObj) {
+template<typename T>
+SharedPtr<T>& SharedPtr<T>::operator= (const std::nullptr_t &nullObj) {
 
     /*
      +++++ sharedBy is decremented. Resource is deleted   +++++
@@ -215,44 +216,44 @@ SharedPtr& SharedPtr::operator= (const std::nullptr_t &nullObj) {
 /*
  +++++ Overload Dereference Operator. +++++
  */
-
-inline T& SharedPtr::operator* () const {
+template<typename T>
+inline T& SharedPtr<T>::operator* () const {
     return *ptr;
 };
 
 /*
  +++++ Overload Arrow Operator. +++++
  */
-
-inline T* SharedPtr::operator-> () const {
+template<typename T>
+inline T* SharedPtr<T>::operator-> () const {
     return ptr;
 };
 
 /*
  +++++ Overload Comparison Operator. +++++
  */
-
-inline bool SharedPtr::operator== (const std::nullptr_t &nullObj) const {
+template<typename T>
+inline bool SharedPtr<T>::operator== (const std::nullptr_t &nullObj) const {
     return (ptr == nullptr); 
 }
-
-inline bool operator== (const SharedPtr &ptrObj) const {
+template<typename T>
+inline bool SharedPtr<T>::operator== (const SharedPtr &ptrObj) const {
     return (ptr == ptrObj.ptr);
 }
 
 /*
  +++++ Overload Not Comparison Operator. +++++
  */
-
-inline bool SharedPtr::operator!= (const std::nullptr_t &nullObj) const {
+template<typename T>
+inline bool SharedPtr<T>::operator!= (const std::nullptr_t &nullObj) const {
     return !(ptr == nullptr); 
 }
 
 /*
  +++++ Bool Convesion +++++
  */
-
-inline operator bool() const {
+template<typename T>
+inline SharedPtr<T>::operator bool() const {
     return ptr != nullptr;
 }
 
@@ -262,8 +263,8 @@ inline operator bool() const {
  ++++++ Deletes resource and sharedBy counter if this  ++++++
  ++++++ instance is the only one sharing that resource.++++++
 */
-
-inline void SharedPtr::cleanUp() { 
+template<typename T>
+inline void SharedPtr<T>::cleanUp() { 
 
     /*
      +++++ sharedBy is decremented. Resource is deleted   +++++

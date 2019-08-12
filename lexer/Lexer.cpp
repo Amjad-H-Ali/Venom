@@ -1,3 +1,7 @@
+#include <iostream>
+#include "Lexer.h"
+#include "../utility/shared_ptr/SharedPtr.h"
+
 /* 
 	*
 	* Gets the index of the stream where it no longer can be 
@@ -5,7 +9,7 @@
 	* Params: start position to read the stream (defualt to beginning).
 	*
 */
-std::string::size_type Lexer::getIdentifierBreakPoint(std::string::size_type start = 0) {
+std::string::size_type Lexer::getIdentifierBreakPoint(std::string::size_type start) {
 	
 	decltype(start) beginning = start;
 
@@ -34,7 +38,7 @@ std::string::size_type Lexer::getIdentifierBreakPoint(std::string::size_type sta
 	* Params: start position to read the stream (defualt to beginning).
 	*
 */
-std::string::size_type Lexer::getStrBreakPoint(std::string::size_type start = 0) {
+std::string::size_type Lexer::getStrBreakPoint(std::string::size_type start) {
 
 	/*
 		*
@@ -54,7 +58,7 @@ std::string::size_type Lexer::getStrBreakPoint(std::string::size_type start = 0)
 	* Tokenizes data from stream and places it in tokensVecPtr
 	*
 */
-void Lexer::generateTokensInVec(std::string::size_type start = 0, std::string::size_type end = 0) {
+void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_type end) {
 
 	if(end == 0) end = stream.size();
 
@@ -67,7 +71,7 @@ void Lexer::generateTokensInVec(std::string::size_type start = 0, std::string::s
 		* paranthesis, comma, bracket, etc.
 		*
     */
-    if(Token::Symbol *tokenSymPtr = mapToSymbol.map(stream, start, end)) {
+    if(SharedPtr<Token::Symbol> tokenSymPtr = mapToSymbol.map(stream, start, end)) {
 
     	tokensVecPtr->emplace_back(*tokenSymPtr);
 
@@ -78,7 +82,9 @@ void Lexer::generateTokensInVec(std::string::size_type start = 0, std::string::s
 			* tokensVecPtr->end() returns SharedPtr to Token.
 			*
     	*/
-    	if(isDimensional(*tokenSymPtr)) insertDimension(*tokensVecPtr->end());
+    	if(isDimensional(*tokenSymPtr)) 
+
+    		insertDimension();
     
         
 
@@ -132,16 +138,16 @@ void Lexer::generateTokensInVec(std::string::size_type start = 0, std::string::s
 	        	*
 				* Check for possible match to keywords or other Symbols in Trie.
 				*
-	        */
-	        if( (symBreak > 0) && (symBreak >= aToZbreak) ) {
+	        */		             // TODO: REDUNDANCY HERE REGARDING mapToSymbol
+	        if( (symBreak > 0) && (symBreak >= aToZbreak) && mapToSymbol.map(stream, start, symBreak) ) {
 
 	        	/*
 	        		*
 	        		* Tokenize symbol using the main if statement above 
-	        		* and control retrurns here.
+	        		* 
 	        		*
 	        	*/
-	        	generateTokensInQ(start, symBreak);
+	        	generateTokensInVec(start, symBreak);
 
 	            start = symBreak;
 	        }
@@ -153,7 +159,7 @@ void Lexer::generateTokensInVec(std::string::size_type start = 0, std::string::s
 	        */
 	        else if(aToZbreak > 0) {
 
-	        	tokensVecPtr->emplace_back(stream.substr(start, aToZbreak), Token::IDENTIFIER); 
+	        	tokensVecPtr->emplace_back(stream.substr(start, aToZbreak), Token::ID); 
 
 	            start = aToZbreak;
 	        }
@@ -165,10 +171,10 @@ void Lexer::generateTokensInVec(std::string::size_type start = 0, std::string::s
 	        */
        	}
 
-        generateTokensInQ(start, end);
+        generateTokensInVec(start, end);
     }
     
-} // generateTokensInQ
+} // generateTokensInVec
 
 
 /*	
@@ -183,7 +189,7 @@ inline bool Lexer::isDimensional(Token::Symbol sym) {
 
 		sym == Token::LBRACKET || sym == Token::RBRACKET ||
 		sym == Token::LHANDLE  || sym == Token::RHANDLE  ||
-		sym == token::BAR 
+		sym == Token::BAR 
 	
 	);
 } 
@@ -194,13 +200,17 @@ inline bool Lexer::isDimensional(Token::Symbol sym) {
 	* parameter list.
 	*
 */
-void Lexer::insertDimension(const Token &token) {
+void Lexer::insertDimension() {
+
+
+    Token &token = *(--tokensVecPtr->end());
+
 
 	if(token == Token::LBRACKET) {
 
 		if(!arrayD) arrayD = ArrayDimension::getInstance();
 
-		arrayD->insertOpen(token);
+		arrayD->insertOpen(*tokensVecPtr);
 	}
 
 
@@ -208,32 +218,34 @@ void Lexer::insertDimension(const Token &token) {
 
 		if(!blockD) blockD = BlockDimension::getInstance();
 
-		blockD->insertOpen(token);
+		blockD->insertOpen(*tokensVecPtr);
 	}
 
 	
-	else if(*paramD == 0  && token == Token::BAR) {
-
+	else if(token == Token::BAR) {
+    
+    
 		if(!paramD) paramD = ParamDimension::getInstance();
 
-		paramD->insertOpen(token);
+    	if(*paramD == 0)
+
+        	paramD->insertOpen(*tokensVecPtr);
+
+    	else
+        	paramD->insertClose(*tokensVecPtr);
+	
 	}
 	
 
 	else if(token == Token::RBRACKET) 
 
-		arrayD->insertClose(token);
+		arrayD->insertClose(*tokensVecPtr);
 
 
 	else if(token == Token::RHANDLE)
 
-		blockD->insertClose(token);
+		blockD->insertClose(*tokensVecPtr);
 
-
-	else if(token == Token::BAR) 
-		
-		paramD->insertClose(token);
-	
 };
 
 /*
@@ -250,7 +262,7 @@ Trie<Token::Symbol> Lexer::mapToSymbol;
 Lexer::Lexer(const char *fileName)
 
 	:
-		inFile(fileName), stream(nullptr), tokensVecPtr(new std::vector<Token>), 
+		inFile(fileName), tokensVecPtr(new std::vector<Token>), 
 		arrayD(nullptr), blockD(nullptr) , paramD(nullptr)
 {
 
@@ -258,7 +270,7 @@ Lexer::Lexer(const char *fileName)
  +++++ Load Trie with token symbols from TOKEN_LIST ++++++
  */
 
-#define T(symbol, name) mapToSymbol.push(name, Token::symbol);
+#define T(symbol, name) if(name) mapToSymbol.push(name, Token::symbol);
 	
 	TOKEN_LIST(T)
 
@@ -268,7 +280,7 @@ Lexer::Lexer(const char *fileName)
 
 std::vector<Token> &Lexer::operator ()(){
 
-	while(inFile >> stream) generateTokensInQ();
+	while(inFile >> stream) generateTokensInVec();
 
 	return *tokensVecPtr;
 };

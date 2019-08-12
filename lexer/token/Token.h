@@ -3,6 +3,9 @@
 #define TOKEN_H
 
 
+#include <string>
+#include <vector>
+
 
 
 /*
@@ -15,8 +18,9 @@
 	T(IS, "is")									    \
 	T(IF, "if")										\
 	T(EQ, "=")										\
+	T(ADD, "+")										\
 	T(BAR, "|")										\
-	T(TAB, "\t")									\
+	T(TAB, "\\t")									\
 	T(EQEQ, "==")									\
 	T(ELSE, "else")									\
 	T(ELIF, "elif")									\
@@ -24,7 +28,7 @@
 	T(ARROW, "=>")									\
 	T(STRING, nullptr)								\
 	T(OUTPUT, "output")								\
-	T(NEWLINE, "\n")								\
+	T(NEWLINE, "\\n")								\
 	T(LBRACKET, "[")								\
 	T(RBRACKET, "]")								\
 	T(LHANDLE, ":|")								\
@@ -100,7 +104,7 @@ public:
 		* Gets the Token's symbol type in string form.
 		*
 	*/
-	static const char *getTypeName();
+	const char *getTypeName() const;
 
 	/*
 		*
@@ -109,7 +113,12 @@ public:
 	*/
 	bool isClosing() const;
 
-	Token &getMatchingPair() const;
+	std::vector<Token>::size_type getMatchingPair() const;
+
+	/*
+	 +++++ For Token::STRING or Token::ID Tokens. Everything else returns nullptr +++++
+	 */
+	std::string &getValue();
 
 
 	/*
@@ -122,7 +131,7 @@ public:
 	void setClosing(bool isClosing);
 
 
-	void setMatchingPair(Token *otherPair);
+	void setMatchingPair(std::vector<Token>::size_type otherPairIndx);
 
 
 	/*
@@ -162,7 +171,8 @@ private:
 		* array, block, or parameter list. Otherwise, set to nullptr.
 		*
 	*/
-	Token *matchingPair;
+	std::vector<Token>::size_type matchingPair;
+
 
 
 	Symbol type; 

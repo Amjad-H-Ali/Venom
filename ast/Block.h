@@ -1,6 +1,10 @@
+
 #ifndef BLOCK_H
 
 #define BLOCK_H
+
+#include <vector>
+#include "ast_t.h"
 
 
 
@@ -14,22 +18,13 @@ private:
 
 public:
 
-	Block(const std::vector<ast_t> &blockValue)
+	Block(const std::vector<ast_t> *blockValue);
 
-		:value(&blockValue)
+	Block(Block&& blockObject);
 
-	{}
-
-	Block(Block&& blockObject)
-
-		:value(blockObject.value)
-	{
-		blockObject.value = nullptr;
-	}
+	~Block();
 
 
 }; // Block
-
-
 
 #endif

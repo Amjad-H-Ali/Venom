@@ -2,6 +2,14 @@
 
 #define AST_H
 
+#include "Str.h"
+#include "ID.h"
+#include "List.h"
+#include "Block.h"
+#include "Func.h"
+#include "Assign.h"
+#include "Add.h"
+
 
 template<typename T>
 
@@ -12,24 +20,25 @@ private:
 	T value;
 
 public:
+
+
 	/*
 	 +++++ Construct T object emplace +++++
 	 */
 	template<typename ... Params>
 
-	AST<T>(Params&& ... argsOfT)
+	AST(Params&& ... argsOfT);
 
-		:value(std::forward<Params>(argsOfT)...)
+	AST(AST&& astObj);
 
-	{}
+	AST& operator=(AST&& astObj);
 
-	AST<T>(AST<T>&& astObj)
-		:value(std::move(astObj.value))
-	{}
+}; // AST
 
-};
 
-typedef std::variant< AST<Str>, AST<ID>, AST<List> , AST<Block>, AST<Func>, AST<Assign>, AST<Add> > ast_t;
+
+
+
 
 #endif
 

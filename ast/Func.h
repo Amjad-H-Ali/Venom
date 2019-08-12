@@ -2,6 +2,10 @@
 
 #define FUNC_H
 
+#include "ast_t.h"
+#include "List.h"
+#include "Block.h"
+
 
 class Func {
 
@@ -14,25 +18,17 @@ private:
 
 public:
 
-	template<typename ListArgs, typename BlockArgs>
+	template<typename ListArg, typename BlockArg>
 
 	/*
 	 +++++ Forward arguments to List and Block to construct params and body emplace +++++
 	 */
 
-	Func(ListArg&& listVal, BlockArg&& blockVal)
+	Func(ListArg&& listVal, BlockArg&& blockVal);
 
-		:params(std::forward<ListArg>(listVal)), body(std::forward<BlockArgs>(blockVal))
-	{}
 
-	Func(Func&& funcObj)
-
-		:params(std::move(funcObj.params)), body(std::move(funcObj.body)) 
-	{}
+	Func(Func&& funcObj);
 
 }; // Func
 
-
-
 #endif
-

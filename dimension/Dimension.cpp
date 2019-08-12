@@ -12,17 +12,19 @@ Dimension::Dimension()
  +++++++ Inserts Token Ptr, that represents an open to a dimension, onto openStack +++++++++++
  */
 
-void Dimension::insertOpen(Token &openingToken) {
+void Dimension::insertOpen(std::vector<Token> &tokensVec) {
+
+	decltype(tokensVec.size()) indxOfToken =  tokensVec.size() - 1;
+
 
 	/*
 	 ++++++ Insert ptr to Token into stack. ++++++++++
 	 */
 
-	openStack.push_back(&openingToken);
+	openStack.push_back(indxOfToken);
 
-	++sp; // Increment stack pointer.
+	++sp; // Increment stack pointer (Dimension).
 
-	++D;  // Increment Dimension
 
 };
 
@@ -30,14 +32,18 @@ void Dimension::insertOpen(Token &openingToken) {
  ++++++++ Sets Opening/Closing Tokens' matching Opening/Closing, and pops off Open from openStack ++++++++++
  */
 
-void Dimension::insertClose(Token &closingToken) {
+void Dimension::insertClose(std::vector<Token> &tokensVec) {
+
+	decltype(tokensVec.size()) indxOfToken =  tokensVec.size() - 1;
+
 
 	/*
 		*
 		* This Token node closes a Dimension.
 		*
 	*/
-	closingToken.setClosing(true);
+	tokensVec[indxOfToken].setClosing(true);
+
 
 	/*
 		*
@@ -46,21 +52,19 @@ void Dimension::insertClose(Token &closingToken) {
 	*/
 
 
-	closingToken->setMatchingPair(openStack[sp-1]); // Setting closing Token's matching pair.
+	tokensVec[indxOfToken].setMatchingPair(openStack[sp-1]); // Setting closing Token's matching pair.
 
-	openStack[sp-1]->setMatchingPair(closingToken); // Setting opening Token's matching pair.
+	tokensVec[openStack[sp-1]].setMatchingPair(indxOfToken); // Setting opening Token's matching pair.
 
 
-	--sp; // Decrement stack pointer.
-
-	--D;  // Decrement Dimension
+	--sp; // Decrement stack pointer (Dimension).
 
 };
 
 
 // Accessor
 unsigned Dimension::getD() const {
-	return D;
+	return sp;
 };
 
 
@@ -68,27 +72,22 @@ unsigned Dimension::getD() const {
 // Overload operators
 
 bool Dimension::operator==(int i)  const {
-	return (D == i);
+	return (sp == i);
 };
 
 bool Dimension::operator<=(int i)  const {
-	return (D <= i);
+	return (sp <= i);
 };
 
 bool Dimension::operator>=(int i)  const {
-	return (D >= i);
+	return (sp >= i);
 };
 
 bool Dimension::operator<(int i)   const {
-	return (D < i);
+	return (sp < i);
 };
 
 bool Dimension::operator>(int i)   const {
-	return (D > i);
+	return (sp > i);
 };
 
-unsigned Dimension::operator>>(unsigned &i)  const {
-	i = D;
-
-	return i;
-};

@@ -1,11 +1,11 @@
-#ifndef ParamDIMENSION_H
+#ifndef PARAM_DIMENSION_H
 
-#define ParamDIMENSION_H
+#define PARAM_DIMENSION_H
 
 #include "Dimension.h"
 
 
-#include <iostream>
+
 
 
 

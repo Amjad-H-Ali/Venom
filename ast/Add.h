@@ -3,30 +3,28 @@
 #define ADD_H
 
 
+#include "ast_t.h"
+
 
 
 class Add {
 
 private:
 
-	ast_t lOperand,
-		  rOperand;
+	ast_t *lOperand;
+
+	ast_t *rOperand;
 
 
 public:
 
 
-	Add(ast_t&& lOperandParam, ast_t&& rOperandParam)
+	Add(ast_t&& lOperandParam, ast_t&& rOperandParam);
 
-		:lOperand(std::move(lOperandParam)), rOperand(std::move(rOperandParam))
-
-	{}
-
+	~Add();
 
 
 
 }; // Add
-
-
 
 #endif

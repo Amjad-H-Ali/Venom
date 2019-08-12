@@ -1,11 +1,9 @@
-#ifndef ARRAYDIMENSION_H
+#ifndef ARRAY_DIMENSION_H
 
-#define ARRAYDIMENSION_H
+#define ARRAY_DIMENSION_H
 
 #include "Dimension.h"
 
-
-#include <iostream>
 
 
 

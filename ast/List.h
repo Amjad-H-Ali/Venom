@@ -1,8 +1,10 @@
+
 #ifndef LIST_H
 
 #define LIST_H
 
-
+#include <vector>
+#include "ast_t.h"
 
 
 class List {
@@ -14,23 +16,16 @@ private:
 
 public:
 
-	List(const std::vector<ast_t> &listValue)
-		:value(&listValue)
-	{}
+	List(const std::vector<ast_t> *listValue);
 
 	/*
 	 +++++ Move C'Tor +++++
 	 */
-	List(List&& listObj)
-		:value(listObj.value)
-	{
+	List(List&& listObj);
 
-		listObj.value = nullptr;
-	}
+	~List();
 
 
 }; // List
-
-
 
 #endif

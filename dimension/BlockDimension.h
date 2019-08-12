@@ -1,12 +1,11 @@
-#ifndef BLOCKDIMENSION_H
+#ifndef BLOCK_DIMENSION_H
 
-#define BLOCKDIMENSION_H
+#define BLOCK_DIMENSION_H
 
 
 #include "Dimension.h"
 
 
-#include <iostream>
 
 
 

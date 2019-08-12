@@ -1,30 +1,12 @@
 #include <iostream>
-
-
-
-/*
-	*
-	* Used to map input file text (C-Style strings)  
-	* to their corresponding Symbol in O(1) time complexity.
-	*
-*/
-Trie< Token::Symbol > Token::mapToSymbol;
-
-
-
-
-
-
-
-
-
+#include "Token.h"
 /*
  +++++ Array of const char *, which is all Token symbols in string form +++++
  */
 
 #define T(symbol, name) #symbol,
 
-   const char *Token::typeName[NUM_OF_TOKENS] = {LIST(T)};
+   const char *Token::typeName[NUM_OF_TOKENS] = {TOKEN_LIST(T)};
 
 #undef T
 
@@ -42,7 +24,7 @@ Trie< Token::Symbol > Token::mapToSymbol;
 	*
 */
 Token::Token(const std::string &stream, Symbol symType) 
-	:value(stream), type(symType), closing(false), matchingPair(nullptr)
+	:value(stream), type(symType), closing(false)
 {}
 
 /*
@@ -52,7 +34,7 @@ Token::Token(const std::string &stream, Symbol symType)
 */
 Token::Token(Symbol symType)
 
-	:value(nullptr), type(symType), closing(false), matchingPair(nullptr)
+	:type(symType), closing(false)
 {}
 
 
@@ -70,7 +52,7 @@ Token::Token(Symbol symType)
 	* Gets the Token's symbol type in string form.
 	*
 */
-static const char *Token::getTypeName() {
+const char *Token::getTypeName() const {
 
 	return typeName[type];
 };
@@ -80,13 +62,21 @@ static const char *Token::getTypeName() {
 	* Does this Token close off an array, block, or parameter list?
 	*
 */
-bool isClosing() const {
+bool Token::isClosing() const {
 	return closing;
 };
 
-Token &getMatchingPair() const {
-	return *matchingPair;
+std::vector<Token>::size_type Token::getMatchingPair() const {
+	return matchingPair;
 }; 
+
+/*
+ +++++ For Token::STRING or Token::ID Tokens. Everything else returns nullptr +++++
+ */
+std::string &Token::getValue(){
+
+	return value;
+}
 
 
 /*
@@ -96,14 +86,14 @@ Token &getMatchingPair() const {
 
 */
 
-void setClosing(bool isClosing) {
+void Token::setClosing(bool isClosing) {
 	closing = isClosing;
 };
 
 
 
-void setMatchingPair(Token *otherPair) {
-	matchingPair = otherPair;
+void Token::setMatchingPair(std::vector<Token>::size_type otherPairIndx) {
+	matchingPair = otherPairIndx;
 };
 
 /*

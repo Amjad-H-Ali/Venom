@@ -2,6 +2,8 @@
 
 #define SHARED_PTR_H
 
+#include <iostream>
+
 /* * * * * * * * * * * * * * * * * * * * * * * *
  *											   *
  * 	Smart pointer that keeps track of shared   *
@@ -11,7 +13,6 @@
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 template<typename T>
-
 class SharedPtr {
 
 public:
@@ -116,7 +117,7 @@ public:
      +++++ Bool Convesion +++++
      */
 
-    operator bool() const;
+    explicit operator bool() const;
 
 
 private:
@@ -143,5 +144,6 @@ private:
     void cleanUp();
 
 }; // SharedPtr
+
 
 #endif

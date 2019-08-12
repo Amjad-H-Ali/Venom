@@ -2,6 +2,11 @@
 
 #define TRIE_H
 
+#include <string>
+#include "../shared_ptr/SharedPtr.h"
+
+
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                     *
  * Trie structure that supports strings and ints as    *
@@ -57,6 +62,7 @@ private:
     SharedPtr<Node> goTo(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) const;
 
 
+
 public:
    
 
@@ -67,14 +73,8 @@ public:
 
     Trie();
 
-    /*
-     +++++ Stores data at the destination mapped with str. +++++
-     */
-
-    void push(const std::string &str, const SharedPtr<T> &data);
-
     /* 
-     +++++ Stores data at the destination mapped with str, but params are forwarded to type T C'tor to create the data +++++
+     +++++ Stores data at the destination mapped with str. Params are forwarded to type T C'tor to create the data +++++
      */
 
     template<typename ... Params>

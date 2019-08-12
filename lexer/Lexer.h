@@ -3,6 +3,19 @@
 #define LEXER_H
 
 
+#include <string>
+#include <fstream>
+#include <vector>
+#include "../dimension/Dimension.h"
+#include "../dimension/ArrayDimension.h"
+#include "../dimension/BlockDimension.h"
+#include "../dimension/ParamDimension.h"
+#include "./token/Token.h"
+#include "../utility/trie/Trie.h"
+
+
+
+
 
 class Lexer {
 
@@ -24,21 +37,21 @@ private:
 		* Represents Dimensions of an array.
 		*
 	*/
-	ArrayDimension *const arrayD;
+	ArrayDimension *arrayD;
 
 	/*	
 		*
 		* Represents Dimension of a block.
 		*
 	*/
-	BlockDimension *const blockD;
+	BlockDimension *blockD;
 
 	/*
 		*
 		* Represents Dimension of a parameter list.
 		*
 	*/
-	ParamDimension *const paramD;
+	ParamDimension *paramD;
 
 	/*
 	 +++++ Finds corresponding Token symbol of a string from input stream in O(1) time-complexity. +++++
@@ -85,7 +98,7 @@ private:
 		* parameter list.
 		*
 	*/
-	void insertDimension(const Token &token);
+	void insertDimension();
 
 
 public:
