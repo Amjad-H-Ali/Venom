@@ -15,11 +15,48 @@ private:
 
 public:
 
-	Assign(ast_t&& lValueParam, ast_t&& rValueParam);	
+	/*
+	 +++++ MAIN C'TOR +++++
+	 */
+	Assign::Assign(ast_t&& lValueParam, ast_t&& rValueParam);
 
 
-	~Assign();
+	/*
+	 +++++ RULE OF FIVE +++++
+	 */
 
+
+
+	/* 1
+	 +++++ COPY C'TOR +++++
+	 */
+
+	Assign(const Assign& assignObj);
+
+	/* 2
+	 +++++ MOVE C'TOR +++++
+	 */
+
+	Assign(Assign&& assignObj);
+
+	/* 3
+	 +++++ COPY ASSIGN +++++
+	 */
+
+	Assign& operator=(const Assign& assignObj);
+
+	/* 4
+	 +++++ MOVE ASSIGN +++++
+	 */
+
+	Assign& operator=(Assign&& assignObj);
+
+	/* 5
+	 +++++ DESTRUCTOR +++++
+	 */
+	Assign::~Assign();
+
+	
 }; // Assign
 
 #endif
