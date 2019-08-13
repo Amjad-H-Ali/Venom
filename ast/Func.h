@@ -18,6 +18,10 @@ private:
 
 public:
 
+
+	/*
+	 +++++ MAIN C'TOR +++++
+	 */
 	template<typename ListArg, typename BlockArg>
 
 	/*
@@ -29,8 +33,23 @@ public:
 		:params(std::forward<ListArg>(listVal)), body(std::forward<BlockArg>(blockVal))
 	{}
 
+	/*
+	 +++++ Move C'tors for calling Move C'tors of List and Block type data members +++++
+	 */
+
+	/* 
+	 +++++ MOVE C'TOR +++++
+	 */
 
 	Func(Func&& funcObj);
+
+
+	/* 
+	 +++++ MOVE ASSIGN +++++
+	 */
+
+	Func& operator=(Func&& funcObj);
+
 
 }; // Func
 

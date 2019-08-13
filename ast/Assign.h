@@ -18,7 +18,7 @@ public:
 	/*
 	 +++++ MAIN C'TOR +++++
 	 */
-	Assign::Assign(ast_t&& lValueParam, ast_t&& rValueParam);
+	Assign(ast_t&& lValueParam, ast_t&& rValueParam);
 
 
 	/*
@@ -54,9 +54,9 @@ public:
 	/* 5
 	 +++++ DESTRUCTOR +++++
 	 */
-	Assign::~Assign();
+	~Assign();
 
-	
+
 }; // Assign
 
 #endif
