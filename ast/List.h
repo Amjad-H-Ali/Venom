@@ -28,7 +28,7 @@ public:
 	 +++++ COPY C'TOR +++++
 	 */
 
-	List(const List& listObj);
+	List(const List& listObj) = delete;
 
 	/* 2
 	 +++++ MOVE C'TOR +++++
@@ -36,12 +36,12 @@ public:
 	List(List&& listObj);
 
 	/* 3
-	 +++++ COPY C'TOR +++++
+	 +++++ COPY ASSIGN +++++
 	 */
-	List& operator=(const List& listObj);
+	List& operator=(const List& listObj) = delete;
 
 	/* 4
-	 +++++ MOVE C'TOR +++++
+	 +++++ MOVE ASSIGN +++++
 	 */
 
 	List& operator=(List&& listObj);

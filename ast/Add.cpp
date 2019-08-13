@@ -19,10 +19,10 @@ Add::Add(ast_t&& lOperandParam, ast_t&& rOperandParam)
  +++++ COPY C'TOR +++++
  */
 
-Add::Add(const Add& addObj)
+// Add::Add(const Add& addObj)
 
-	:lOperand(new lOperand(addObj.lOperand)), rOperand(new rOperand(addObj.rOperand))
-{}
+// 	:lOperand(new ast_t(*addObj.lOperand)), rOperand(new ast_t(*addObj.rOperand))
+// {}
 
 /* 2
  +++++ MOVE C'TOR +++++
@@ -41,14 +41,14 @@ Add::Add(Add&& addObj)
  +++++ COPY ASSIGN +++++
  */
 
-Add& Add::operator=(const Add& addObj) {
+// Add& Add::operator=(const Add& addObj) {
 
-	lOperand = new lOperand(addObj.lOperand);
+// 	lOperand = new ast_t(*addObj.lOperand);
 
-	rOperand = new rOperand(addObj.rOperand);
+// 	rOperand = new ast_t(*addObj.rOperand);
 
-	return *this;
-};
+// 	return *this;
+// };
 
 /* 4
  +++++ MOVE ASSIGN +++++

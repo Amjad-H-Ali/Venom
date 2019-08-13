@@ -21,7 +21,7 @@ public:
 	/*
 	 +++++ MAIN C'TOR +++++
 	 */
-	
+
 	Add(ast_t&& lOperandParam, ast_t&& rOperandParam);
 
 	/*
@@ -32,7 +32,7 @@ public:
 	 +++++ COPY C'TOR +++++
 	 */
 
-	Add(const Add& addObj);
+	Add(const Add& addObj) = delete;
 
 	/* 2
 	 +++++ MOVE C'TOR +++++
@@ -44,7 +44,7 @@ public:
 	 +++++ COPY ASSIGN +++++
 	 */
 
-	Add& operator=(const Add& addObj);
+	Add& operator=(const Add& addObj) = delete;
 
 	/* 4
 	 +++++ MOVE ASSIGN +++++

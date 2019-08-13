@@ -23,10 +23,10 @@ Block::Block(const std::vector<ast_t> *blockValue)
  +++++ COPY C'TOR +++++
  */
 
-Block::Block(const Block& blockObj) 
+// Block::Block(const Block& blockObj) 
 
-	:value(new value(blockObj.value))
-{}
+// 	:value(new std::vector<ast_t>(*blockObj.value))
+// {}
 
 /* 2
  +++++ MOVE C'TOR +++++
@@ -40,15 +40,15 @@ Block::Block(Block&& blockObj)
 }
 
 /* 3
- +++++ COPY Block +++++
+ +++++ COPY ASSIGN +++++
  */
 
-Block& Block::operator=(const Block& blockObj) {
+// Block& Block::operator=(const Block& blockObj) {
 
-	value = new value(blockObj.value);
+// 	value = new std::vector<ast_t>(*blockObj.value);
 
-	return *this;
-}
+// 	return *this;
+// }
 
 /* 4
  +++++ MOVE Block +++++

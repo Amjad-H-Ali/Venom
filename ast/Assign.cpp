@@ -20,10 +20,10 @@ Assign::Assign(ast_t&& lValueParam, ast_t&& rValueParam)
  +++++ COPY C'TOR +++++
  */
 
-Assign::Assign(const Assign& assignObj)
+// Assign::Assign(const Assign& assignObj)
 
-	lValue(new lValue(assignObj.lValue)), rValue(new rValue(assignObj.rValue))
-{}
+// 	:lValue(new ast_t(*assignObj.lValue)), rValue(new ast_t(*assignObj.rValue))
+// {}
 
 /* 2
  +++++ MOVE C'TOR +++++
@@ -42,14 +42,14 @@ Assign::Assign(Assign&& assignObj)
  +++++ COPY ASSIGN +++++
  */
 
-Assign& Assign::operator=(const Assign& assignObj) {
+// Assign& Assign::operator=(const Assign& assignObj) {
 
-	lValue = new lValue(assignObj.lValue);
+// 	lValue = new ast_t(*assignObj.lValue);
 
-	rValue = new rValue(assignObj.rValue);
+// 	rValue = new ast_t(*assignObj.rValue);
 
-	return *this;
-};
+// 	return *this;
+// };
 
 /* 4
  +++++ MOVE ASSIGN +++++

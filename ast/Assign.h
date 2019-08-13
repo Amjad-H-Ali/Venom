@@ -31,7 +31,7 @@ public:
 	 +++++ COPY C'TOR +++++
 	 */
 
-	Assign(const Assign& assignObj);
+	Assign(const Assign& assignObj) = delete;
 
 	/* 2
 	 +++++ MOVE C'TOR +++++
@@ -43,7 +43,7 @@ public:
 	 +++++ COPY ASSIGN +++++
 	 */
 
-	Assign& operator=(const Assign& assignObj);
+	Assign& operator=(const Assign& assignObj) = delete;
 
 	/* 4
 	 +++++ MOVE ASSIGN +++++

@@ -36,7 +36,7 @@ public:
 	 +++++ COPY C'TOR +++++
 	 */
 
-	Block(const Block& blockObj);
+	Block(const Block& blockObj) = delete;
 
 	/* 2
 	 +++++ MOVE C'TOR +++++
@@ -48,7 +48,7 @@ public:
 	 +++++ COPY ASSIGN +++++
 	 */
 
-	Block& operator=(const Block& blockObj);
+	Block& operator=(const Block& blockObj) = delete;
 
 	/* 4
 	 +++++ MOVE ASSIGN +++++

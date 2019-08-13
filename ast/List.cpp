@@ -16,9 +16,9 @@ List::List(const std::vector<ast_t> *listValue)
  +++++ COPY C'TOR +++++
  */
 
-List::List(const List& listObj)
-	:value(new std::vector<ast_t>(*listObj.value))
-{}
+// List::List(const List& listObj)
+// 	:value(new std::vector<ast_t>(*listObj.value))
+// {}
 
 /* 2
  +++++ MOVE C'TOR +++++
@@ -31,15 +31,17 @@ List::List(List&& listObj)
 }
 
 /* 3
- +++++ COPY C'TOR +++++
+ +++++ COPY ASSIGN +++++
  */
-List& List::operator=(const List& listObj) {
+// List& List::operator=(const List& listObj) {
 
-	value = new std::vector<ast_t>(*listObj.value);
-}
+// 	value = new std::vector<ast_t>(*listObj.value);
+
+// 	return *this;
+// }
 
 /* 4
- +++++ MOVE C'TOR +++++
+ +++++ MOVE ASSIGN +++++
  */
 
 List& List::operator=(List&& listObj) {
@@ -47,6 +49,8 @@ List& List::operator=(List&& listObj) {
 	value = listObj.value;
 
 	listObj.value = nullptr;
+
+	return *this;
 }
 
 /* 5

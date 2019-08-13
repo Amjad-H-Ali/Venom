@@ -23,7 +23,12 @@ public:
 	/*
 	 +++++ C'Tor for moving std::string value from token to ID +++++
 	*/
-	ID(Token &&token);
+	ID(Token&& token);
+
+	/*
+	 +++++ COPY C'TOR +++++
+	 */
+	ID(const ID &idObj) = delete;
 
 	/*
 	 +++++ Moves for calling std::string move C'tor +++++

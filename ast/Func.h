@@ -33,6 +33,13 @@ public:
 		:params(std::forward<ListArg>(listVal)), body(std::forward<BlockArg>(blockVal))
 	{}
 
+	/* 
+	 +++++ COPY C'TOR +++++
+	 */
+
+	Func(const Func& funcObj) = delete;
+
+
 	/*
 	 +++++ Move C'tors for calling Move C'tors of List and Block type data members +++++
 	 */

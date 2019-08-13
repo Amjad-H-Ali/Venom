@@ -27,11 +27,17 @@ public:
 	 +++++ C'Tor for moving std::string value from token to Str +++++
 	 */
 
-	Str(Token &&token);
+	Str(Token&& token);
+
+	/*
+	 +++++ COPY C'TOR +++++
+	 */
+	Str(const Str &strObj) = delete;
 
 	/*
 	 +++++ Moves for calling std::string move C'tor +++++
 	 */
+
 	/*
 	 +++++ MOVE C'TOR +++++
 	 */

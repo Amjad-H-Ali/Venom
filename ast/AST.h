@@ -21,7 +21,9 @@ private:
 
 public:
 
-
+	/*
+	 +++++ MAIN C'TOR +++++
+	 */
 	/*
 	 +++++ Construct T object emplace +++++
 	 */
@@ -31,11 +33,26 @@ public:
 		:value(std::forward<Params>(argsOfT)...)
 	{}
 
+	/*
+	 +++++ COPY C'TOR  +++++
+	 */
+	AST(const AST& astObj) = delete;
+	// 	:value(astObj.value)
+	// {}
+
+	/*
+	 +++++ MOVE C'TOR  +++++
+	 */
 	AST(AST&& astObj)
 		
 		:value(std::move(astObj.value))
 	{}
 
+
+
+	/*
+	 +++++ MOVE ASSIGN  +++++
+	 */
 	AST& operator=(AST&& astObj) {
 
 		value = std::move(astObj.value);

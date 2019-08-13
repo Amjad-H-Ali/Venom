@@ -7,9 +7,18 @@
 /*
  +++++ C'Tor for moving std::string value from token to ID +++++
  */
-ID::ID(Token &&token)	
+ID::ID(Token&& token)	
 	:value(std::move(token.getValue()))
 {}
+
+
+
+/*
+ +++++ COPY C'TOR +++++
+ */
+// ID::ID(const ID &idObj)
+// 	:value(idObj.value)
+// {}
 
 
 /*
@@ -28,4 +37,6 @@ ID::ID(ID&& idObj)
  */
 ID& ID::operator=(ID&& idObj) {
 	value = std::move(idObj.value);
+
+	return *this;
 }
