@@ -1,1 +1,6 @@
-foo is|name|=>:||:
+foo is|name|=>
+
+:|
+
+	name+name
+|:
