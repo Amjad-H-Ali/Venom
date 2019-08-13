@@ -26,12 +26,23 @@ public:
 	 +++++ Construct T object emplace +++++
 	 */
 	template<typename ... Params>
+	AST(Params&& ... argsOfT)
 
-	AST(Params&& ... argsOfT);
+		:value(std::forward<Params>(argsOfT)...)
+	{}
 
-	AST(AST&& astObj);
+	AST(AST&& astObj)
+		
+		:value(std::move(astObj.value))
+	{}
 
-	AST& operator=(AST&& astObj);
+	AST& operator=(AST&& astObj) {
+
+		value = std::move(astObj.value);
+
+		return *this;
+	}
+
 
 }; // AST
 

@@ -24,7 +24,10 @@ public:
 	 +++++ Forward arguments to List and Block to construct params and body emplace +++++
 	 */
 
-	Func(ListArg&& listVal, BlockArg&& blockVal);
+	Func(ListArg&& listVal, BlockArg&& blockVal)
+
+		:params(std::forward<ListArg>(listVal)), body(std::forward<BlockArg>(blockVal))
+	{}
 
 
 	Func(Func&& funcObj);
