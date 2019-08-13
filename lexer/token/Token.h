@@ -62,11 +62,7 @@ public:
 
 	
 
-	/*
-	 +++++ Array of const char *, which is all Token symbols in string form +++++
-	 */
 
-	static const char *typeName[NUM_OF_TOKENS];
 
 	
 
@@ -150,6 +146,12 @@ public:
 
 
 private:
+
+	/*
+	 +++++ Array of const char *, which is all Token symbols in string form +++++
+	 */
+
+	static const char *typeName[NUM_OF_TOKENS];
 
 	/*
 		*

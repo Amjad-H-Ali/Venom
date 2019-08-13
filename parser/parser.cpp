@@ -5,6 +5,10 @@
 
 
 
+
+
+
+
 /*
  +++++ Main C'Tor +++++
  */
@@ -14,49 +18,15 @@ Parser::Parser(std::vector<Token> &tokensVec_Param)
 {};
 
 
-
 /*
-	*
-	* Overload () operator. Creates a Queue of ast_t(s). 
-	* Return: Lambda that takes in a conditional and parses Queue of tokenPtr(s)
-	* and pushes parsed items into Queue of ast_t(s).
-	*
-*/
-decltype(auto) Parser::operator()() {
+ +++++ ACCESSORS +++++
+ */
 
-	std::vector<ast_t> *astVecPtr = new std::vector<ast_t>;
-
-	/*
-		*
-		* callableFlag: conditional to know when to stop iterating through
-		* tokensVec member variable.
-		*
-	*/
-	return [this, astVecPtr](auto &&isEndOfRange)->std::vector<ast_t>& {
+std::vector<Token>::size_type Parser::getCurr() {
+	return curr;
+}
 
 
-
-		while(isEndOfRange()) {
-
-			/*
-				*
-				* Parse token and push ast_t in container.
-				*
-			*/
-			fillAstVecWithParsedToken(astVecPtr);
-
-			/*
-				*
-				* Shift "current" pointer one step ahead in tokensVec.
-				*
-			*/
-
-			++curr;
-		};
-
-		return *astVecPtr;
-	};
-};
 
 
 /*	
@@ -330,7 +300,10 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 	return;
 
-}; // Parser
+}; // fillAstVecWithParsedToken
+
+
+
 
 
 
