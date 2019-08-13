@@ -18,6 +18,10 @@ private:
 	std::string value;
 
 public:
+
+	/*
+	 +++++ MAIN C'TOR +++++
+	 */
 	
 	/*
 	 +++++ C'Tor for moving std::string value from token to Str +++++
@@ -26,9 +30,17 @@ public:
 	Str(Token &&token);
 
 	/*
-	 +++++ Move C'Tor +++++
+	 +++++ Moves for calling std::string move C'tor +++++
+	 */
+	/*
+	 +++++ MOVE C'TOR +++++
 	 */
 	Str(Str&& strObj);
+
+	/*
+	 +++++ MOVE ASSIGN +++++
+	 */
+	Str& operator=(Str&& strObj);
 
 
 }; // Str

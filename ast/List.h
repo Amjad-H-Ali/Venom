@@ -15,14 +15,40 @@ private:
 
 
 public:
-
+	/*
+	 +++++ MAIN C'TOR +++++
+	 */
 	List(const std::vector<ast_t> *listValue);
 
-	/*
-	 +++++ Move C'Tor +++++
+	/* 
+	 +++++ RULE OF FIVE +++++
+	 */
+
+	/* 1
+	 +++++ COPY C'TOR +++++
+	 */
+
+	List(const List& listObj);
+
+	/* 2
+	 +++++ MOVE C'TOR +++++
 	 */
 	List(List&& listObj);
 
+	/* 3
+	 +++++ COPY C'TOR +++++
+	 */
+	List& operator=(const List& listObj);
+
+	/* 4
+	 +++++ MOVE C'TOR +++++
+	 */
+
+	List& operator=(List&& listObj);
+
+	/* 5
+	 +++++ D'TOR +++++
+	 */
 	~List();
 
 
