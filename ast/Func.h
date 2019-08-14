@@ -18,6 +18,14 @@ private:
 
 public:
 
+	const List& tempGetParams() const {
+		return params;
+	}
+
+	const Block& tempGetBody() const {
+		return body;
+	}
+
 
 	/*
 	 +++++ MAIN C'TOR +++++

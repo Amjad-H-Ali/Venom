@@ -42,6 +42,9 @@ decltype(auto) Parser::endOfListAndBlockCallable() {
 	 */
     decltype(tokensVec.size()) matchingIndx = tokensVec[curr].getMatchingPair();
 
+	std::cout << "matchingIndx " << matchingIndx << std::endl << std::endl;
+
+
 	const Token &matchingPair = tokensVec[matchingIndx];
 
 	return [this, &matchingPair] {
@@ -65,6 +68,7 @@ decltype(auto) Parser::endOfListAndBlockCallable() {
 
 std::vector<ast_t> &Parser::parseRange() {
 
+
 	/*
 		*
 		* Conditional for parsing the range of tokens that is the Block.
@@ -76,6 +80,8 @@ std::vector<ast_t> &Parser::parseRange() {
 	 +++++ Shift pointer to enter Block or List +++++
 	 */
 	++curr;
+	std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 	/*
 		*
@@ -137,12 +143,19 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 +++++ Parse parameter list +++++
 		 */
 
+		std::cout << "Entering List Range " << std::endl << std::endl;
+
 		std::vector<ast_t> *listValPtr = &parseRange();
+
+		std::cout << "Exiting List Range " << std::endl << std::endl;
+
 
 		/*
 		 +++++ Shift pointer to skip closing Bar Token +++++
 		 */
 		++curr;
+		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 
 		/*
@@ -154,6 +167,8 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 */
 
 		++curr;
+		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 		/*
 		 +++++ TODO: Maybe check if next Token is LHANDLE. Otherwise syntax error +++++
@@ -163,7 +178,11 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		/*
 		 +++++ Parse Function Body +++++
 		 */
+		std::cout << "Entering Block Range " << std::endl << std::endl;
+
 		std::vector<ast_t> *blockValPtr = &parseRange();
+		std::cout << "Exiting Block Range " << std::endl << std::endl;
+
 
 		/*
 		 +++++ Push AST<Func> in vector. Vector creates AST<Func> emplace. AST creates  +++++
@@ -174,21 +193,28 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 	}
 
-	/*
-	 +++++ Assignment operator +++++
+	/*                                                                                                             __
+	 +++++ Assignment operator +++++ [ID, IS, BAR, ID, BAR, ARROW, LHAND, ID, IS, BAR, ID, BAR, LHAND, ID, +, ID, RHAND, RHAND]
+	 [ID, ]
 	 */
 
-	else if(tokensVec[curr] == Token::IS) {
+	else if(tokensVec[curr] == Token::IS) { 
 
 		/*
 		 +++++ Shift tokensVec ptr to rValue +++++
 		 */
 		++curr;
+		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 		/*
 		 +++++ Insert parsed rValue token in the astVec. +++++
 		 */
+		std::cout << "Parsing r op of IS " << std::endl << std::endl;
+
 		fillAstVecWithParsedToken(astVecPtr);
+		std::cout << "Done Parsing r op of IS " << std::endl << std::endl;
+
 
 		/*
 		 +++++ Check if rValue is part of expression +++++
@@ -199,11 +225,18 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 			 +++++ Shift pointer to operator Token +++++
 			 */
 			++curr;
+			std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 			/*
 			 +++++ Recursively parse expression +++++
 			 */
+			std::cout << "Parsing ADD for IS" << std::endl << std::endl;
+
 			fillAstVecWithParsedToken(astVecPtr);
+			std::cout << "Done Parsing ADD for IS " << std::endl << std::endl;
+
+
 		}
 
 
@@ -233,11 +266,16 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 +++++ Shift tokensVec ptr to right value +++++
 		 */
 		++curr;
+		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 		/*
 		 +++++ Insert parsed right value token to the astVec. +++++
 		 */
+		std::cout << "Parsing r op of ADD " << std::endl << std::endl;
+
 		fillAstVecWithParsedToken(astVecPtr);
+		std::cout << "Done Parsing r op of ADD " << std::endl << std::endl;
 
 		/*
 		 +++++ Get left and right operands from ast vector. Last element is right operand of ADD operator +++++
@@ -264,11 +302,17 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 			 +++++ Shift pointer to operator Token +++++
 			 */
 			++curr;
+			std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 
 			/*
 			 +++++ Recursively parse expression +++++
 			 */
+			std::cout << "Parsing ADD for ADD" << std::endl << std::endl;
+
 			fillAstVecWithParsedToken(astVecPtr);
+			std::cout << "Done Parsing ADD for ADD" << std::endl << std::endl;
+
 
 		}
 	}

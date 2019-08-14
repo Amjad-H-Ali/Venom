@@ -21,6 +21,10 @@ private:
 
 public:
 
+	const T& tempGetVal() const {
+		return value;
+	}
+
 	/*
 	 +++++ MAIN C'TOR +++++
 	 */

@@ -56,6 +56,10 @@ void Dimension::insertClose(std::vector<Token> &tokensVec) {
 
 	tokensVec[openStack[sp-1]].setMatchingPair(indxOfToken); // Setting opening Token's matching pair.
 
+	/*
+	 +++++ Open Block or List has been closed. Pop Open indx off Stack. +++++
+	 */
+	openStack.pop_back();
 
 	--sp; // Decrement stack pointer (Dimension).
 

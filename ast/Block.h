@@ -18,6 +18,10 @@ private:
 
 public:
 
+	const std::vector<ast_t>& tempGetVal() const {
+		return *value;
+	}
+
 	/*
 	 +++++ MAIN C'TOR +++++
 	 */

@@ -89,6 +89,9 @@ public:
 				*/
 
 				++curr;
+
+				std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+
 			};
 
 			return *astVecPtr;

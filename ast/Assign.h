@@ -15,6 +15,14 @@ private:
 
 public:
 
+	const ast_t& tempGetLeftVal() const {
+		return *lValue; 
+	}
+
+	const ast_t& tempGetRightVal() const {
+		return *rValue; 
+	}
+
 	/*
 	 +++++ MAIN C'TOR +++++
 	 */

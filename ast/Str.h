@@ -19,6 +19,11 @@ private:
 
 public:
 
+	const std::string& tempGetVal() const {
+		return value;
+	}
+
+
 	/*
 	 +++++ MAIN C'TOR +++++
 	 */

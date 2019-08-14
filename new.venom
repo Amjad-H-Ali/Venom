@@ -1,6 +1,8 @@
 foo is|name|=>
 
 :|
-
-	name+name
+	bar is|name|=> 
+	:|
+		name+name
+	|:
 |:
