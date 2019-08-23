@@ -23,6 +23,11 @@ public:
 	}
 
 	/*
+	 +++++ Accessors +++++
+	 */
+	const std::vector<ast_t>& getValue() const;
+	
+	/*
 	 +++++ MAIN C'TOR +++++
 	 */
 

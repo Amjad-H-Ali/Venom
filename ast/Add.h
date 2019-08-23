@@ -27,6 +27,13 @@ public:
 	}
 
 	/*
+	 +++++ Accessors +++++
+	 */
+	const ast_t& getLeftOperand() const;
+
+	const ast_t& getRightOperand() const;
+
+	/*
 	 +++++ MAIN C'TOR +++++
 	 */
 

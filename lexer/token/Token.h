@@ -10,7 +10,9 @@
 
 /*
  +++++ TOKEN_LIST takes in a Token Macro (T). Each Macro has the same +++++
+ *
  +++++ signature M(type, name), where type is a unique symbol for the +++++
+ *
  +++++ Token and nameis a string containing the Token. T: Token macro +++++
  */
  
@@ -34,7 +36,15 @@
 	T(LHANDLE, ":|")								\
 	T(RHANDLE, "|:")								\
 	T(BACKTICK, "`")								\
-	T(ID, nullptr)						    
+	T(ID, nullptr)									\
+	T(NUMBER, nullptr)								\
+	T(LPAREN, "(")									\
+	T(RPAREN, ")")									\
+	T(WRITE, "write")																												    
+
+
+
+
 								
 
 
@@ -80,11 +90,18 @@ public:
 	Token(const std::string &stream, Symbol symType);
 
 	/*
+	 +++++ NUMBER C'Tor +++++
+	 */
+	Token(size_t num);
+
+
+	/*
 		*
 		* Constructor for Everything else like keywords, operators, etc,
 		*
 	*/
 	Token(Symbol symType);
+
 
 
 	/*
@@ -116,6 +133,14 @@ public:
 	 */
 	std::string &getValue();
 
+	/*
+	 ++++ TODO: MAKE THIS TEMPLATED METHOD
+	 */
+
+	/*
+	 +++++ For NUMBER type token +++++
+	 */
+	size_t getNumber() const;
 
 	/*
 		------------------
@@ -150,7 +175,6 @@ private:
 	/*
 	 +++++ Array of const char *, which is all Token symbols in string form +++++
 	 */
-
 	static const char *typeName[NUM_OF_TOKENS];
 
 	/*
@@ -159,6 +183,8 @@ private:
 		*
 	*/
 	std::string value;
+
+	size_t number;
 
 	/*
 		*

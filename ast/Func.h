@@ -28,6 +28,15 @@ public:
 
 
 	/*
+	 +++++ Accessors +++++
+	 */
+
+	const List& getParamList() const;
+
+	const Block& getBody() const;
+
+
+	/*
 	 +++++ MAIN C'TOR +++++
 	 */
 	template<typename ListArg, typename BlockArg>

@@ -21,6 +21,12 @@ public:
 	}
 
 	/*
+	 +++++ Accessors +++++
+	 */
+	const std::string& getName() const;
+
+
+	/*
 	 +++++ MAIN C'TOR +++++
 	 */
 	

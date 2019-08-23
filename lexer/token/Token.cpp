@@ -27,6 +27,14 @@ Token::Token(const std::string &stream, Symbol symType)
 	:value(stream), type(symType), closing(false)
 {}
 
+
+/*
+ +++++ NUM C'Tor +++++
+ */
+Token::Token(size_t num)
+	:number(num), type(NUMBER)
+{};
+
 /*
 	*
 	* Constructor for Everything else like keywords, operators, etc,
@@ -78,6 +86,13 @@ std::string &Token::getValue(){
 	return value;
 }
 
+/*
+ +++++ For NUMBER type token +++++
+ */
+size_t Token::getNumber() const {
+
+	return number;
+};
 
 /*
 	------------------

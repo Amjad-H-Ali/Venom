@@ -54,6 +54,19 @@ std::string::size_type Lexer::getStrBreakPoint(std::string::size_type start) {
 }
 
 /*
+ +++++ Get index of where number ends +++++
+ */
+std::string::size_type Lexer::getNumBreakPoint(std::string::size_type start) {
+
+	/*
+	 ++++ Loop until no number +++++
+	 */
+	for(decltype(start) len = stream.size(); start < len && (stream[start] >= '0' && stream[start] <= '9'); ++start);
+
+	return start;
+}
+
+/*
 	*
 	* Tokenizes data from stream and places it in tokensVecPtr
 	*
@@ -122,6 +135,25 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
 
         }
 
+        /*
+         +++++ Check for possible number +++++
+         */
+        else if(stream[start] >= '0' && stream[start] <= '9') {
+
+        	decltype(start) numBreak = getNumBreakPoint(start);
+
+        	/*
+        	 +++++ Convert number string to long long +++++
+        	 */
+        	size_t number = stoll(stream.substr(start, numBreak));
+
+        	
+
+        	tokensVecPtr->emplace_back(number);
+
+        	start = numBreak;
+        }
+
         else {
 
         	/*	
@@ -158,6 +190,8 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
 				*
 	        */
 	        else if(aToZbreak > 0) {
+
+	        	
 
 	        	tokensVecPtr->emplace_back(stream.substr(start, aToZbreak), Token::ID); 
 

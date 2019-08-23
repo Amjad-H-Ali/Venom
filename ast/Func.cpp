@@ -1,5 +1,19 @@
 #include "Func.h"
 
+
+
+/*
+ +++++ Accessors +++++
+ */
+
+const List& Func::getParamList() const {
+	return params;
+}
+
+const Block& Func::getBody() const {
+	return body;
+}
+
 /* 
  +++++ COPY C'TOR +++++
  */

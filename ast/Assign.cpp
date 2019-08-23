@@ -9,11 +9,20 @@ Assign::Assign(ast_t&& lValueParam, ast_t&& rValueParam)
 	:lValue(new ast_t(std::move(lValueParam))), rValue(new ast_t(std::move(rValueParam)))
 {}
 
+/*
+ +++++ Accessors +++++
+ */
+const ast_t& Assign::getLeftOperand() const {
+	return *lValue;
+}
+
+const ast_t& Assign::getRightOperand() const {
+	return *rValue;
+}
 
 /*
  +++++ RULE OF FIVE +++++
  */
-
 
 
 /* 1
@@ -24,6 +33,8 @@ Assign::Assign(ast_t&& lValueParam, ast_t&& rValueParam)
 
 // 	:lValue(new ast_t(*assignObj.lValue)), rValue(new ast_t(*assignObj.rValue))
 // {}
+
+
 
 /* 2
  +++++ MOVE C'TOR +++++

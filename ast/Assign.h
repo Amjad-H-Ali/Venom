@@ -24,6 +24,13 @@ public:
 	}
 
 	/*
+	 +++++ Accessors +++++
+	 */
+	const ast_t& getLeftOperand() const;
+
+	const ast_t& getRightOperand() const;
+
+	/*
 	 +++++ MAIN C'TOR +++++
 	 */
 	Assign(ast_t&& lValueParam, ast_t&& rValueParam);

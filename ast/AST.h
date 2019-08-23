@@ -9,6 +9,10 @@
 #include "Func.h"
 #include "Assign.h"
 #include "Add.h"
+#include "Output.h"
+#include "Call.h"
+#include "Num.h"
+#include "Write.h"
 
 
 template<typename T>
@@ -22,6 +26,13 @@ private:
 public:
 
 	const T& tempGetVal() const {
+		return value;
+	}
+
+	/*
+	 +++++ Accessor +++++
+	 */
+	const T& getValue() const {
 		return value;
 	}
 

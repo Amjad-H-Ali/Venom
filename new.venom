@@ -1,8 +1,7 @@
-foo is|name|=>
+foo is| num1, num2| => :|
 
-:|
-	bar is|name|=> 
-	:|
-		name+name
-	|:
+	output num1+num2
 |:
+
+
+write foo|9, 7|

@@ -8,6 +8,14 @@ List::List(const std::vector<ast_t> *listValue)
 	:value(listValue)
 {}
 
+/*
+ +++++ Accessors +++++
+ */
+const std::vector<ast_t>& List::getValue() const {
+	return *value;
+} 
+
+
 /* 
  +++++ RULE OF FIVE +++++
  */

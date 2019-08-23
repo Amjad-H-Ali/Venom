@@ -42,7 +42,7 @@ decltype(auto) Parser::endOfListAndBlockCallable() {
 	 */
     decltype(tokensVec.size()) matchingIndx = tokensVec[curr].getMatchingPair();
 
-	std::cout << "matchingIndx " << matchingIndx << std::endl << std::endl;
+	
 
 
 	const Token &matchingPair = tokensVec[matchingIndx];
@@ -80,7 +80,7 @@ std::vector<ast_t> &Parser::parseRange() {
 	 +++++ Shift pointer to enter Block or List +++++
 	 */
 	++curr;
-	std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+	
 
 
 	/*
@@ -130,7 +130,7 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 
 	/*
-	 +++++ Function +++++
+	 +++++ Function or Function Call +++++
 	 */
 
 	else if(tokensVec[curr] == Token::BAR) {
@@ -142,60 +142,73 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		/*
 		 +++++ Parse parameter list +++++
 		 */
-
-		std::cout << "Entering List Range " << std::endl << std::endl;
+		
 
 		std::vector<ast_t> *listValPtr = &parseRange();
 
-		std::cout << "Exiting List Range " << std::endl << std::endl;
+		
 
 
-		/*
-		 +++++ Shift pointer to skip closing Bar Token +++++
-		 */
-		++curr;
-		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
 
-
+		
 
 		/*
-		 +++++ TODO: Maybe check if next Token is ARROW. Otherwise syntax error +++++
+		 +++++ List Belongs to Function Param List. Parse Function Definition +++++
 		 */
+		if(tokensVec[curr+1] == Token::ARROW) {
+
+			/*
+			 +++++ Shift pointer to skip closing Bar and ARROW Tokens +++++
+			 */
+			curr = curr+2;
+
+
+			
+
+
+			/*
+			 +++++ TODO: Maybe check if next Token is LHANDLE. Otherwise syntax error +++++
+			 */
+
+
+			/*
+			 +++++ Parse Function Body +++++
+			 */
+			
+
+			std::vector<ast_t> *blockValPtr = &parseRange();
+			
+
+
+			/*
+			 +++++ Push AST<Func> in vector. Vector creates AST<Func> emplace. AST creates  +++++
+			 +++++     Func emplace. Func creates listValPtr and blockValPtr emplace.	    +++++
+			 */
+
+			astVecPtr->emplace_back(std::in_place_type< AST<Func> >, listValPtr, blockValPtr);
+		}
 
 		/*
-		 +++++ Shift iterator to Skip ARROW +++++
+		 +++++ Must be a Call List +++++
 		 */
+		else {
 
-		++curr;
-		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+			/*
+			 +++++ Get ID from astVec +++++
+			 */
+			ast_t &lOperand = *(--astVecPtr->end());
 
+			/*
+			 +++++ Construct Call object and store in astVec in place of AST<ID> +++++
+			 */
+			*(--astVecPtr->end()) = AST<Call>(std::move(lOperand), listValPtr);
 
-		/*
-		 +++++ TODO: Maybe check if next Token is LHANDLE. Otherwise syntax error +++++
-		 */
-
-
-		/*
-		 +++++ Parse Function Body +++++
-		 */
-		std::cout << "Entering Block Range " << std::endl << std::endl;
-
-		std::vector<ast_t> *blockValPtr = &parseRange();
-		std::cout << "Exiting Block Range " << std::endl << std::endl;
-
-
-		/*
-		 +++++ Push AST<Func> in vector. Vector creates AST<Func> emplace. AST creates  +++++
-		 +++++     Func emplace. Func creates listValPtr and blockValPtr emplace.	    +++++
-		 */
-
-		astVecPtr->emplace_back(std::in_place_type< AST<Func> >, listValPtr, blockValPtr);
+		}
 
 	}
 
 	/*                                                                                                             __
-	 +++++ Assignment operator +++++ [ID, IS, BAR, ID, BAR, ARROW, LHAND, ID, IS, BAR, ID, BAR, LHAND, ID, +, ID, RHAND, RHAND]
-	 [ID, ]
+	 +++++ Assignment operator +++++ 
 	 */
 
 	else if(tokensVec[curr] == Token::IS) { 
@@ -204,16 +217,16 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 +++++ Shift tokensVec ptr to rValue +++++
 		 */
 		++curr;
-		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+		
 
 
 		/*
 		 +++++ Insert parsed rValue token in the astVec. +++++
 		 */
-		std::cout << "Parsing r op of IS " << std::endl << std::endl;
+		
 
 		fillAstVecWithParsedToken(astVecPtr);
-		std::cout << "Done Parsing r op of IS " << std::endl << std::endl;
+		
 
 
 		/*
@@ -225,16 +238,16 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 			 +++++ Shift pointer to operator Token +++++
 			 */
 			++curr;
-			std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+			
 
 
 			/*
 			 +++++ Recursively parse expression +++++
 			 */
-			std::cout << "Parsing ADD for IS" << std::endl << std::endl;
+			
 
 			fillAstVecWithParsedToken(astVecPtr);
-			std::cout << "Done Parsing ADD for IS " << std::endl << std::endl;
+			
 
 
 		}
@@ -248,6 +261,7 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 
 		/*
 		 +++++ lOperand and rOperand are expiring (popped off or replaced). Move C'Truct values in ASSIGN. +++++
+		 *
 		 +++++ AST creates ASSIGN emplace. Move Assign lOperand position to expiring AST<ASSIGN> object.   +++++   
 		 */
 		*(astVecPtr->end() - 2) = AST<Assign>(std::move(lOperand), std::move(rOperand));
@@ -258,7 +272,7 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		astVecPtr->pop_back();
 	}
 	/*
-	 +++++ Addition operator +++++ // [ID, Func()]
+	 +++++ Addition operator +++++ 
 	 */
 	else if(tokensVec[curr] == Token::ADD) {
 
@@ -266,16 +280,16 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 +++++ Shift tokensVec ptr to right value +++++
 		 */
 		++curr;
-		std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+		
 
 
 		/*
 		 +++++ Insert parsed right value token to the astVec. +++++
 		 */
-		std::cout << "Parsing r op of ADD " << std::endl << std::endl;
+		
 
 		fillAstVecWithParsedToken(astVecPtr);
-		std::cout << "Done Parsing r op of ADD " << std::endl << std::endl;
+		
 
 		/*
 		 +++++ Get left and right operands from ast vector. Last element is right operand of ADD operator +++++
@@ -302,22 +316,59 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 			 +++++ Shift pointer to operator Token +++++
 			 */
 			++curr;
-			std::cout << "Incremented curr to " << curr << std::endl << std::endl;
+			
 
 
 			/*
 			 +++++ Recursively parse expression +++++
 			 */
-			std::cout << "Parsing ADD for ADD" << std::endl << std::endl;
+			
 
 			fillAstVecWithParsedToken(astVecPtr);
-			std::cout << "Done Parsing ADD for ADD" << std::endl << std::endl;
+			
 
 
 		}
 	}
+	/*
+	 +++++ Return statement +++++
+	 */
+	else if(tokensVec[curr] == Token::OUTPUT) {
 
+		/*
+		 +++++ Shift tokensVec ptr to output value +++++
+		 */
+		++curr;
 
+		/*
+		 +++++ Insert Parsed value into tokensVec +++++
+		 */
+		fillAstVecWithParsedToken(astVecPtr);
+
+		/*
+		 +++++ Check if value is part of an expression +++++
+		 */
+		if( (curr+1) < tokensVecLen && tokensVec[curr+1] == Token::ADD) { // TODO: REDUNDANT
+
+			/*
+			 +++++ Shift pointer to operator Token +++++
+			 */
+			++curr;
+
+			/*
+			 +++++ Recursively parse expression +++++
+			 */
+			fillAstVecWithParsedToken(astVecPtr);
+		}
+
+		/*
+		 +++++ Set output value to last object in astVec and replace it with output object +++++
+		 */
+		ast_t &value = *(--astVecPtr->end());
+
+		*(--astVecPtr->end()) = AST<Output>(std::move(value));
+
+	}
 
 	/*
 		*
@@ -333,7 +384,9 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		astVecPtr->emplace_back(std::in_place_type< AST<List> >, &parseRange()); 
 
 	}
-
+	/*
+	 +++++ Parse String ++++++
+	 */
 	else if(tokensVec[curr] == Token::STRING) {
 
 		/*
@@ -341,6 +394,55 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		 */
 		astVecPtr->emplace_back(std::in_place_type< AST<Str> >, std::move(tokensVec[curr]));
 	}
+	/*
+	 +++++ Parse Number ++++++
+	 */
+	else if(tokensVec[curr] == Token::NUMBER) {
+		
+
+		astVecPtr->emplace_back(std::in_place_type< AST<Num> >, tokensVec[curr]);
+	}
+	/*
+	 ++++ TODO: REDUNDANT (SIMILAR TO OUTPUT) +++++
+	 */
+	/*
+	 +++++ Print +++++
+	 */ 
+	else if(tokensVec[curr] == Token::WRITE) {
+		/*
+		 +++++ Shift tokensVec ptr to write value +++++
+		 */
+		++curr;
+
+		/*
+		 +++++ Insert Parsed value into tokensVec +++++
+		 */
+		fillAstVecWithParsedToken(astVecPtr);
+
+		/*
+		 +++++ Check if value is part of an expression +++++
+		 */
+		if( (curr+1) < tokensVecLen && (tokensVec[curr+1] == Token::ADD || tokensVec[curr+1] == Token::BAR )) { // TODO: REDUNDANT
+
+			/*
+			 +++++ Shift pointer to operator Token +++++
+			 */
+			++curr;
+
+			/*
+			 +++++ Recursively parse expression +++++
+			 */
+			fillAstVecWithParsedToken(astVecPtr);
+		}
+
+		/*
+		 +++++ Set write value to last object in astVec and replace it with write object +++++
+		 */
+		ast_t &value = *(--astVecPtr->end());
+
+		*(--astVecPtr->end()) = AST<Write>(std::move(value));
+	}
+
 
 	return;
 

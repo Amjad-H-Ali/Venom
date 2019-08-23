@@ -11,6 +11,12 @@ Block::Block(const std::vector<ast_t> *blockValue)
 
 {}
 
+/*
+ +++++ Accessors +++++
+ */
+const std::vector<ast_t>& Block::getValue() const {
+	return *value;
+} 
 
 
 /*

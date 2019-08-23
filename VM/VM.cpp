@@ -1,241 +1,244 @@
+#include "VM.h"
 
-// /*
-//  +++++ Registers to store information such as Function's return address, current stack frame, etc... +++++++++
-//  */
 
-// struct VM::Register {
+/*
+ +++++ {DECL, "foo", LOAD, 24, STORE, "foo", LOAD, 14, LOAD, 15, CALL, "foo"} +++++
+ *
+ +++++ 24::{PRAM, "num1", PRAM, "num2", EVAL, "num1", EVAL, "num2", ADD, RET} +++++
+ */
 
-// 	/*
-//      ++++++ Stack Pointer ++++++++
-// 	 */
+/*
+ +++++ Vector containing indices of free space in definitions vector +++++
+ */
+std::vector< std::vector<size_t>::size_type > VM::freeSpace;
 
-// 	Node<> *esp;
+/*
+ +++++ Global and Local variable definitions stored here +++++
+ */
+std::vector<VM::type_t> VM::memory;
+ 
 
-// 	/*
-//      ++++++ Base Pointer +++++++++
-// 	 */
 
-// 	Node<> *ebp;
+/*
+ +++++ Registers such as stack pointer, base pointer, instruction pointer, etc +++++
+ */
+struct VM::Register {
 
-// 	/*
-//      ++++ Instruction Pointer ++++
-// 	 */
+	/*
+	 ++++++ Stack Pointer ++++++++
+	 */
+	std::vector<size_t>::size_type esp;
 
-// 	Node<> *eip;
+	/*
+     ++++++ Base Pointer +++++++++
+	 */
+	std::vector<size_t>::size_type ebp;
 
-// 	/*
-// 	 ++++ Accumulator Register ++++
-// 	 */
+	/*
+     ++++ Instruction Pointer ++++
+	 */
+	std::vector<size_t>::size_type eip;
 
-// 	Node<> *eax;
+	/*
+	 ++++ Accumulator Register ++++
+	 */
+	std::vector<size_t>::size_type eax;
 
-// 	/*
-// 	 +++++ Data Register +++++
-// 	 */
+	/*
+	 +++++ Data Register +++++
+	 */
+	std::vector<size_t>::size_type edx;
 
-// 	Node<> *edx;
+	/*
+	 +++++ Main C'tor +++++++
+	 */
+	Register()
 
+		:esp(0), ebp(0), eip(0), eax(0), edx(0)
+	{}
 
+}; // Register
 
-// 	/*
-// 	 +++++ Main C'tor +++++++
-// 	 */
 
-// 	Register()
+/* 
+ ++++++ Main C'tor ++++++++
+ */
 
-// 		:esp(nullptr), ebp(nullptr), eip(nullptr), eax(nullptr), edx(nullptr)
-// 	{};
+VM::VM(std::vector<Bytecode>* bytecodeToExec)
 
-// }; // Register
+	:execVecPtr(bytecodeToExec)
+{};
 
 
-// /* 
-//  ++++++ Main C'tor ++++++++
-//  */
+/*
+ ++++++ Executes the ByteCode in execVecPtr +++++++++
+ */
 
-// VM::VM(Queue<> *byteCodeQ)
+void VM::operator()() {
 
-// 	:execQ(byteCodeQ)
-// {};
+	Register rgstr;
 
 
-// /*
-//  ++++++ Executes the ByteCode in execQ +++++++++
-// */
+	/*
+	 +++++ Iterate vector of Bytecode ++++++++
+	 */
+	while(rgstr.eip < execVecPtr->size()) {
 
-// void VM::operator()() {
+		std::vector<Bytecode>& execVec = *execVecPtr;
 
-// 	Register rgstr;
+		/*
+		 +++++ Declare variable (push to declTree) +++++++
+		 */
+		if(execVec[rgstr.eip].instruction == Bytecode::DECL) {			
 
-// 	/*
-// 	 +++++ Set eip register to first instruction in execQ. Loop till no more instructions. ++++++++
-// 	 */
+			declTree.push(*(execVec[rgstr.eip++].param1));     													// Declare name of variable.
 
-// 	for(rgstr.eip = execQ->begin(); rgstr.eip; ) {
+		
+		}											
 
-// 		/*
-// 		 +++++ Declare variable (push to declTree) +++++++
-// 		 */
+		/*
+	     +++++ Push value onto stack ++++++
+		 */
+		else if(execVec[rgstr.eip].instruction == Bytecode::LOAD) {
 
-// 		if(*rgstr.eip == DECL) {
+			stack[rgstr.esp++] = execVec[rgstr.eip++].param2;													// Push address of value onto stack.
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+		
 
-// 			declTree.push(*rgstr.eip);     					// Declare name of variable.
+		}	
 
-// 			rgstr.eip = (rgstr.eip)->next;	   				// Increment eip to next instruction.
-// 		}											
+		/*
+		 +++++ Store value on top of stack into variable. ++++++
+		 */			
+			// TODO: setValue() method for Trie.
+		else if(execVec[rgstr.eip].instruction == Bytecode::STORE) {
 
-// 		/*
-// 	     +++++ Push value onto stack ++++++
-// 		 */
+			declTree.setValue(*(execVec[rgstr.eip++].param1), stack[--rgstr.esp]);								// Map variable name and store value from top of stack.
 
-// 		else if(*rgstr.eip == LOAD) {
+		
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction.
+		}		
 
-// 			callStack.push(*rgstr.eip);						// Push value onto stack.
+		/*
+		+++++ Evaluate a variable +++++
+		*/		
 
-// 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+		else if(execVec[rgstr.eip].instruction == Bytecode::EVAL) {
+		
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction.
+		  	rgstr.edx = *declTree.map(*(execVec[rgstr.eip++].param1));											// Map to value in string. Temporarly store value.
 
-// 		}	
+		  	stack[rgstr.esp++] = rgstr.edx;																		// Push address of value onto stack.
 
-// 		/*
-// 		 +++++ Store value on top of stack into variable. ++++++
-// 		 */			
-// 			// TODO: setValue() method for Trie.
-// 		 else if(*rgstr.eip == STORE) {
+		
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+		}			
 
-// 			declTree.setValue(*rgstr.eip, *rgstr.esp);		// Map variable name and store value from top of stack.
+		/*
+		 +++++ Add +++++
+		 */ 
+		else if(execVec[rgstr.eip].instruction == Bytecode::ADD) {
 
-// 			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+		  	rgstr.eax = std::get<size_t>(VM::memory[stack[--rgstr.esp]]);										// Temporarly store value from stack into eax.
 
-// 			callStack.pop();								// Pop value off top of stack.
+			rgstr.eax += std::get<size_t>(VM::memory[stack[--rgstr.esp]]);										// Add value from stack to value in eax.
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+			stack[rgstr.esp++] = rgstr.eax;																		// Push summed value in eax onto stack.
 
+      		++rgstr.eip;																						// Increment eip to next instruction. 
+			
+		
 
-// 		 }		
+			
+		}
 
-// 		 /*
-// 		  +++++ Evaluate a variable +++++
-// 		  */		
+		/*
+		 +++++ Function Call +++++
+		 */
+		else if(execVec[rgstr.eip].instruction == Bytecode::CALL) {
 
-// 		  else if(*rgstr.eip == EVAL) {
+			rgstr.edx = *declTree.map(*(execVec[rgstr.eip].param1));											// Temporarly store function-to-call address.
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+			VM::memory.emplace_back(std::in_place_type< std::vector<Bytecode>* >, &execVec);					// Store current function in VM::memory.
 
-// 		  	rgstr.edx = declTree.map(*rgstr.eip)			// Map to value in string. Temporarly store value.
+			stack[rgstr.esp++] = execVec[rgstr.eip++].param2;													// Push number of arguments.
 
-// 		  	callStack.push(*rgstr.edx);						// Push value onto stack.
+			rgstr.eax = stack[rgstr.esp-1];																		// Store number of arguments in eax for PRAM.
 
-// 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+			stack[rgstr.esp++] = rgstr.ebp;																		// Push old base pointer.
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+			stack[rgstr.esp++] = VM::memory.size() - 1;															// Push address of current function on stack.	
+								
+			stack[rgstr.esp++] = rgstr.eip;																		// Push return address.
 
-// 		  }			
+			rgstr.ebp = rgstr.esp;																				// Store return address in ebp.
 
-		  
-// 		   +++++ Add to values +++++
-		   
+			execVecPtr = std::get< std::vector<Bytecode>* >(VM::memory[rgstr.edx]);								// Branch To Function Definition.
 
-// 		  else if(*rgstr.eip == ADD) {
+			rgstr.eip = 0;																						// Set instruction pointer to beginning of function definition.
 
-// 		  	rgstr.eax = *rgstr.esp;							// Temporarly store value from stack into eax.
+		
 
-// 			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+		}																								
 
-// 			callStack.pop();								// Pop value off top of stack.
+		/*
+		 +++++ Returning +++++
+		 */
 
-// 			rgstr.eax += (*rgstr.esp);						// Add value from stack to value in eax.
+		else if(execVec[rgstr.eip].instruction == Bytecode::RET) {
 
-// 			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
+		  	rgstr.edx = stack[--rgstr.esp]; 																	// Temporarly Store return value in edx.
 
-// 			callStack.pop();								// Pop value off top of stack.
+		  	rgstr.esp = rgstr.ebp;																				// Set stack pointer to return address stored in stack.
 
-// 			callStack.push(*rgstr.eax);						// Push summed value in eax onto stack.
+		  	rgstr.eip = stack[--rgstr.esp]; 																	// Restore instruction pointer.
 
-// 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+		  	execVecPtr = std::get< std::vector<Bytecode>* >(VM::memory[stack[--rgstr.esp]]);					// Restore to Caller function definition.
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+		  	rgstr.ebp = stack[--rgstr.esp];																		// Restore base pointer.
 
-// 		  }
+		  	rgstr.eax = stack[--rgstr.esp];																		// Store number of arguments.
 
-// 		  /*
-// 		   +++++ Function Call +++++
-// 		   */
+		  	rgstr.esp = rgstr.esp - rgstr.eax;																	// Pop arguments.
 
-// 		  else if(*rgstr.eip == CALL) {
+			stack[rgstr.esp++] = rgstr.edx;																		// Push return value onto stack.
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+		
 
-// 			rgstr.edx = rgstr.eip;							// Temporarly store function name.
+		
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
+		}
 
-// 			callStack.push(*rgstr.eip);						// Push number of arguments.
+		/*
+		 +++++ Function Parameters +++++
+		 */
+		else if(execVec[rgstr.eip].instruction == Bytecode::PRAM) {
 
-// 			rgstr.eip = (rgstr.eip)->next;       			// Increment eip to next instruction. 
 
-// 			callStack.push(rgstr.ebp);						// Push old base pointer.
+		
 
-// 			callStack.push(rgstr.eip);						// Push return address.
+			rgstr.edx = stack[(rgstr.ebp - 5) - (rgstr.eax--)];													// VM::Memory of Corresponding Argument .
 
-// 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
+			declTree.push(*(execVec[rgstr.eip++].param1), rgstr.edx);							            	// Map variable name and store argument in stack.
 
-// 			rgstr.ebp = rgstr.esp;							// Store return address in ebp.
 
-// 			rgstr.eip = declTree.map(*rgstr.edx);			// Map to function instructions.
+		}
 
-// 		  }
+		/*
+		 +++++ Printing to Standard Output +++++
+		 */
+		else if(execVec[rgstr.eip].instruction == Bytecode::PRINT) {
 
-// 		  /*
-// 		   +++++ Returning +++++
-// 		   */
+			std::cout << stack[--rgstr.esp] << std::endl;														// Print value on stack and pop
+		
+			++rgstr.eip;																						// Next instruction
+		}					
 
-// 		  else if(*rgstr.eip == RET) {
+	}
 
-// 		  	rgstr.edx = *rgstr.esp; 						// Temporarly Store return value in edx.
 
-// 		  	rgstr.esp = rgstr.ebp;							// Set stack pointer to return address stored in stack.
 
-// 		  	callStack.popTop(rgstr.esp); 					// Pop everything above stack pointer left on stack.
-
-// 		  	rgstr.eip = *rgstr.esp; 						// After returning to old address, Set next instruction.
-
-// 			rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
-
-// 		  	callStack.pop(); 								// Pop off return address from stack.
-
-// 		  	rgstr.ebp = rgstr.esp;							// Restore base pointer.
-
-// 		  	rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
-
-// 		  	callStack.pop(); 								// Pop off base pointer from stack.
-
-// 		  	rgstr.eax = *rgstr.esp;							// Store number of arguments.
-
-// 		  	rgstr.esp = (rgstr.esp)->next;					// Decrement stack pointer.
-
-// 		  	callStack.pop(); 								// Pop off number of arguments from stack.
-
-// 		  	callStack.popLoop(*rgstr.eax);					// Pop arguments off stack.
-
-// 			callStack.push(*rgstr.edx);						// Push return value onto stack.
-
-// 			rgstr.esp = callStack.getTop();					// Set stack ptr to top.
-
-// 		  }
-
-// 	}
-
-
-
-// };
+};
 
 
 

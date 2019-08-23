@@ -22,7 +22,15 @@ class Assign;
 
 class Add;
 
-typedef std::variant< AST<Str>, AST<ID>, AST<List> , AST<Block>, AST<Func>, AST<Assign>, AST<Add> > ast_t;
+class Output;
+
+class Num;
+
+class Call;
+
+class Write;
+
+typedef std::variant< AST<Str>, AST<ID>, AST<List> , AST<Block>, AST<Func>, AST<Assign>, AST<Add>, AST<Output>, AST<Num>, AST<Call>, AST<Write> > ast_t;
 
 
 #endif

@@ -123,7 +123,8 @@ private:
      */
 
     SharedPtr<Node> goTo(const std::string &data,  std::string::size_type start = 0, std::string::size_type end = 0) const {
-    
+        
+
         /*
         +++++ If linked-list is empty +++++
         */
@@ -144,9 +145,11 @@ private:
 
         while(start < end) {
 
+
             size_t indx = hash(data[start]);
 
             if(!current->paths[indx]) return nullptr;
+
 
             current = current->paths[indx];
 
@@ -156,6 +159,38 @@ private:
 
         return current;
     };
+
+    /*
+     +++++ Creates Path to Destination Using String as Key +++++
+     */
+
+    SharedPtr<Node> createPath(const std::string &str) {
+
+       /*
+        +++++ If linked-list is empty +++++
+        */
+
+        if(!head) head = SharedPtr<Node>(new Node);
+
+
+        SharedPtr<Node> current = head;
+
+        /* 
+        ++++ Hash each letter and map to the destination where data will be stored ++++
+        */
+
+        for(char letter : str) {
+
+            size_t indx = hash(letter);
+
+            if(!current->paths[indx]) current->paths[indx] = SharedPtr<Node>(new Node);
+
+            current = current->paths[indx];
+        }
+
+        return current;
+
+    }
 
 
 
@@ -180,36 +215,21 @@ public:
 
     void push(const std::string &str, Params&& ... params) {
 
-
-       /*
-        +++++ If linked-list is empty +++++
-        */
-
-        if(!head) head = SharedPtr<Node>(new Node);
-
-
-        SharedPtr<Node> current = head;
-
-        /* 
-        ++++ Hash each letter and map to the destination where data will be stored ++++
-        */
-
-        for(char letter : str) {
-
-            size_t indx = hash(letter);
-
-            if(!current->paths[indx]) current->paths[indx] = SharedPtr<Node>(new Node);
-
-            current = current->paths[indx];
-        }
-
         /*
          +++++ Construct T object with params passed in and Create SharedPtr to T object. +++++
          */
 
-        current->tPtr = SharedPtr<T>(new T(std::forward<Params>(params)...));
+        createPath(str)->tPtr = SharedPtr<T>(new T(std::forward<Params>(params)...));
 
     };
+
+    /*
+     +++++ Creates Path to Destination and store nullptr there ++++
+     */
+    void push(const std::string &str) {
+
+        createPath(str)->tPtr = nullptr;
+    }
 
 
     /*
@@ -259,6 +279,22 @@ public:
     };
 
     /*
+     +++++ Store T object at Destination +++++
+     */
+    template<typename Key, typename ... Params>
+    bool setValue(Key&& key, Params&& ... params) {
+
+        if(SharedPtr<Node> nodePtr = goTo(std::forward<Key>(key)) ) {
+
+            nodePtr->tPtr = SharedPtr<T>(new T(std::forward<Params>(params)...));
+
+            return true;
+        }
+
+        return false;    
+    }
+
+    /*
      +++++ Finds corresponding data of string in O(1) time complexity. Range of string is allowed ++++++                          
      */
 
@@ -267,11 +303,12 @@ public:
         /*
          +++++ Check if Node exist before dereferencing pointer +++++
          */ 
-        if(SharedPtr<Node> nodePtr = goTo(data, start, end))
+        if(SharedPtr<Node> nodePtr = goTo(data, start, end)) {
             /*
              +++++ Return pointer to T in Node +++++
              */
             return nodePtr->tPtr;
+        }
 
         return nullptr;
 
@@ -299,21 +336,18 @@ public:
      +++++ Goes to destination and sets data to nullptr +++++
      */
 
-    void eraseData(size_t indx) {
-        goTo(indx)->tPtr = nullptr;
-    };
+    template<typename Key>
+    void eraseData(Key&& key) {
 
-    /*
-     +++++ Goes to destination and sets data to nullptr +++++
-     */
+        if(SharedPtr<Node> nodePtr = goTo(std::forward<Key>(key)) )
 
-    void eraseData(const std::string &str) {
-        goTo(str)->tPtr = nullptr;
+            nodePtr->tPtr = nullptr;
     };
 
 
     /*
      +++++ Finds the position of input string where mapping broke off. +++++
+     *
      +++++ ie:  Map In Trie -> "HELLO",  Input -> "HEL", Output -> 3   +++++
      */
 

@@ -1,5 +1,13 @@
 #include "Str.h"
 
+
+/*
+ +++++ Accessors +++++
+ */
+const std::string& Str::getValue() const {
+	return value;
+}
+
 /*
  +++++ MAIN C'TOR +++++
  */

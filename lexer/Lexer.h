@@ -77,6 +77,11 @@ private:
 	std::string::size_type getStrBreakPoint(std::string::size_type start = 0);
 
 	/*
+	 +++++ Get index of where number ends +++++
+	 */
+	std::string::size_type getNumBreakPoint(std::string::size_type start);
+
+	/*
 		*
 		* Tokenizes data from stream and places it in tokensQ.
 		*

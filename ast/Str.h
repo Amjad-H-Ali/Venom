@@ -23,6 +23,11 @@ public:
 		return value;
 	}
 
+	/*
+	 +++++ Accessors +++++
+	 */
+	const std::string& getValue() const;
+
 
 	/*
 	 +++++ MAIN C'TOR +++++

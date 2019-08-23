@@ -6,6 +6,8 @@
 #include "./ast/ast_t.h"
 #include "./ast/AST.h"
 #include "./parser/Parser.h"
+#include "./vm/bytecode/Bytecode.h"
+#include "./vm/bytecode/BytecodeCompiler.h"
 
 
 template<typename ... Params> struct AstOverloads : Params ... {using Params::operator()...;};
@@ -119,18 +121,45 @@ void log(const ast_t& ast_tObj) {
 } 
 
 
+/*
+
+    AST<ASSIGN>( AST<ID>(foo), AST<Func>( List(name,age), Block(ADD(name,age)) ) ) )
+
+    Fund Def:
+    
+        + Loop param list of AST<ID>(vector of ast_t)
+        + Compile AST<ID> into ByteCode:
+          + AST<ID> Compiles to:
+            + DECL {ID value} 
+        + Loop block (vector of ast_t)
+        + Compile AST<Add> into ByteCode:
+          + AST<Add> Compiles to:
+            +
+
+
+        
+
+
+
+
+
+*/
+
+
 int main(){
 
 
-   
+   /*
+    +++++ Tokenize ++++
+    */
     Lexer tokenize("new.venom");
 
     std::vector<Token>& tokenVec = tokenize();
 
-    for(const auto& token : tokenVec)
 
-        std::cout << token.getTypeName()  << std::endl;
-
+    /*
+     +++++ Parse Tokens into AST ++++
+     */
     Parser parser(tokenVec);
 
     decltype(auto) parse = parser();
@@ -144,8 +173,17 @@ int main(){
     );
 
 
-    for(const auto& elem : astVec)
-        log(elem);
+    /*
+     +++++ Compile AST vector into Bytecode +++++
+     */
+    std::vector<Bytecode>& bytecodeVec = BytecodeCompiler(astVec)();
+
+
+    VM vm(&bytecodeVec);
+
+    vm();
+
+
 
 };
 

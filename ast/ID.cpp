@@ -2,6 +2,13 @@
 
 
 /*
+ +++++ Accessors +++++
+ */
+const std::string& ID::getName() const {
+	return value;
+}
+
+/*
  +++++ MAIN C'TOR +++++
  */
 /*

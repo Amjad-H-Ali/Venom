@@ -10,6 +10,17 @@ Add::Add(ast_t&& lOperandParam, ast_t&& rOperandParam)
 	:lOperand(new ast_t(std::move(lOperandParam))), rOperand(new ast_t(std::move(rOperandParam)))
 {}
 
+/*
+ +++++ Accessors +++++
+ */
+const ast_t& Add::getLeftOperand() const {
+	return *lOperand;
+}
+
+const ast_t& Add::getRightOperand() const {
+	return *rOperand;
+}
+
 
 /*
  +++++ RULE OF FIVE +++++
