@@ -98,8 +98,6 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
     	if(isDimensional(*tokenSymPtr)) 
 
     		insertDimension();
-    
-        
 
     }
     
@@ -124,7 +122,7 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
         	decltype(start) strBreak = getStrBreakPoint(start);
 
 
-        	tokensVecPtr->emplace_back(stream.substr(start, strBreak), Token::STRING);
+        	tokensVecPtr->emplace_back(stream.substr(start, strBreak - start), Token::STRING);
 
         	/*
         		*
@@ -145,7 +143,7 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
         	/*
         	 +++++ Convert number string to long long +++++
         	 */
-        	size_t number = stoll(stream.substr(start, numBreak));
+        	size_t number = stoll(stream.substr(start, numBreak - start));
 
         	
 
@@ -162,7 +160,7 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
         		* than we have an identifier whom part of it happens to have the same name 
         		* as a symbol (ie. Symbol: is, Identifier: isFoo)
         		*
-	    	*/
+	    	*/	
 	        decltype(start) aToZbreak = getIdentifierBreakPoint(start),
 	                        symBreak  = mapToSymbol.getBreakPoint(stream, start);
 	    
@@ -193,8 +191,9 @@ void Lexer::generateTokensInVec(std::string::size_type start, std::string::size_
 
 	        	
 
-	        	tokensVecPtr->emplace_back(stream.substr(start, aToZbreak), Token::ID); 
+	        	tokensVecPtr->emplace_back(stream.substr(start, aToZbreak - start), Token::ID);
 
+ 
 	            start = aToZbreak;
 	        }
 

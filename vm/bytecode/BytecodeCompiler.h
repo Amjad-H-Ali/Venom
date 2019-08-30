@@ -163,6 +163,15 @@ private:
 
 					compileFuncBody(*funcDefPtr, *localsToDelPtr, astObj);
 
+				std::cout << "Bytecode:: { ";
+
+			    for(const Bytecode& b : *funcDefPtr) {
+			        std::cout << b.getTypeName() << std::endl;
+			    }
+			    std::cout << "Bytecode:: } ";
+
+
+
 			}, // Compile Function Definition
 
 
@@ -410,8 +419,11 @@ private:
 				 *
 				 +++++ {PRAM, "num1", PRAM, "num2", EVAL, "num1", EVAL, "num2"} +++++
 				 */
-				const std::string *leftIdName  = (--bytecodeVec.end())->param1,
-								  *rightIdName = (bytecodeVec.end()-2)->param1;
+
+
+				// const std::string *leftIdName  = (--bytecodeVec.end())->param1,
+				// 				  *rightIdName = (bytecodeVec.end()-2)->param1;
+
 
 				bytecodeVec.emplace_back(Bytecode::ADD);
 
@@ -485,7 +497,32 @@ private:
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(leftAstID));
 
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(rightAstID));
+				std::cout << "IN BYTE1:: " << *getIdNamePtr(leftAstID) << std::endl;
+				std::cout << "IN BYTE2:: " << *getIdNamePtr(rightAstID) << std::endl;
+
+
 			},
+
+			/*
+			 +++ When Left Operand is an Add Operator +++
+			 */
+			[this, &bytecodeVec](const AST<Add>& rightAstAdd, const AST<ID>& leftAstID) {
+
+				// TODO: REDUNDANT ... I'm in a hurry
+
+		  		std::cout << "HERE" << std::endl;
+
+
+				const Add& addObj = rightAstAdd.getValue();
+
+				compileAddOperands(bytecodeVec, addObj.getLeftOperand(), addObj.getRightOperand());
+
+				bytecodeVec.emplace_back(Bytecode::ADD);
+
+				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(leftAstID));
+				std::cout << "IN BYTE3:: " << *getIdNamePtr(leftAstID) << std::endl;
+
+			},	
 
 			[](const auto&) {/*TODO*/},
 
@@ -501,7 +538,9 @@ private:
 	void compileCallOperands(std::vector<Bytecode>& bytecodeVec, Params&& ... ast_tObjs) {
 
 		std::visit( Overloads {
-
+			/*
+			 +++ When Operand is a Number +++
+			 */
 			[this, &bytecodeVec](const AST<Num>& astNum) {
 
 				/*
@@ -515,6 +554,16 @@ private:
 				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 1);
 			},
 
+			/*
+			 +++ When Operand is an Add Operator +++
+			 */
+			[this, &bytecodeVec](const AST<Add>& astAdd) {
+
+			},
+
+			/*
+			 +++ When Operand is an Identifier +++
+			 */
 			[this, &bytecodeVec](const AST<ID>& astID) {
 
 				bytecodeVec.emplace_back(Bytecode::CALL, getIdNamePtr(astID));
