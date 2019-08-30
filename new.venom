@@ -1,5 +1,14 @@
-func is |num1 num2|=> :| output num1+num2 |: 
 
-write func|100+100,  300+300|
+
+
+foo is |n1 n2| => :|
+	
+	output n1 + n2
+|:
+
+
+someNum is 50
+
+write foo|someNum 9|
 
  
