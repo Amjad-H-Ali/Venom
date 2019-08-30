@@ -9,141 +9,67 @@
 #include "./vm/bytecode/Bytecode.h"
 #include "./vm/bytecode/BytecodeCompiler.h"
 
-
-template<typename ... Params> struct AstOverloads : Params ... {using Params::operator()...;};
-
-template<typename ... Params> AstOverloads(Params ...) -> AstOverloads<Params ...>;
+// template<typename ... Params> struct _Overloads : Params ... {using Params::operator()...;};
+// template<typename ... Params> _Overloads(Params...) -> _Overloads<Params...>;
 
 
-void log(const ast_t& ast_tObj) {
-
-    std::visit(AstOverloads {
-
-        [](const auto& astObj) {std::cout << "Don't Know!" <<std::endl;},
-
-        [](const AST<ID>& astObj) {
-            std::cout << "AST<ID>" <<std::endl;
-        },
-
-        [](const AST<Str>& astObj) {
-            std::cout << "AST<Str>" <<std::endl;
-        },
-
-        [](const AST<List>& astObj) {
-
-            std::cout << "AST<List>" <<std::endl;
-
-            const std::vector<ast_t>& list = astObj.tempGetVal().tempGetVal();
-
-            std::cout << "[" << std::endl;
-
-            for(const auto& astElem : list) {
-
-                std::cout << "  ";
-
-                log(astElem);
-            }
-
-            std::cout << "]" << std::endl;
-        },
-
-        [](const AST<Block>& astObj) {
-            std::cout << "AST<Block>" <<std::endl;
-
-            const std::vector<ast_t>& block = astObj.tempGetVal().tempGetVal();
-
-            std::cout << ":|" << std::endl;
-
-            for(const auto& astElem : block) {
-
-                std::cout << "  ";
-
-                log(astElem);
-            }
-
-            std::cout << "|:" << std::endl;
-        },
-
-        [](const AST<Assign>& astObj) {
-            std::cout << "AST<Assign>" <<std::endl;
-
-            log(astObj.tempGetVal().tempGetLeftVal());
-
-            std::cout << "=" <<std::endl;
-
-            log(astObj.tempGetVal().tempGetRightVal());
-
-        },
-
-        [](const AST<Add>& astObj) {
-            std::cout << "AST<Add>" <<std::endl;
-            
-            log(astObj.tempGetVal().tempGetLeftVal());
-
-            std::cout << "+" <<std::endl;
-
-            log(astObj.tempGetVal().tempGetRightVal());
-        },
-
-        [](const AST<Func>& astObj) {
-            std::cout << "AST<Func>" <<std::endl;
-
-            const std::vector<ast_t>& params = astObj.tempGetVal().tempGetParams().tempGetVal();
-
-            std::cout << "[" << std::endl;
-
-            for(const auto& astElem : params) {
-
-                std::cout << "  ";
-
-                log(astElem);
-            }
-
-            std::cout << "]" << std::endl;
 
 
-            const std::vector<ast_t>& block = astObj.tempGetVal().tempGetBody().tempGetVal();
+// template<typename ... Params>
+// void _log (Params&& ... params) {
+//     std::visit(_Overloads{
 
-            std::cout << ":|" << std::endl;
+//         [](const auto&){std::cout << "Auto" << std::endl;},
+//         [](const AST<Output>&n){
+//             std::cout << "Output" << std::endl;
+//             _log(n.getValue().getValue());
 
-            for(const auto& astElem : block) {
+//         },
 
-                std::cout << "  ";
+//         [](const AST<Add>&n){
 
-                log(astElem);
-            }
+//             std::cout << "Add" << std::endl;
+//             _log(n.getValue().getLeftOperand());
+//             _log(n.getValue().getRightOperand());
 
-            std::cout << "|:" << std::endl;
+//         },
+//         [](const AST<Func>&n){
 
-        }
+//             std::cout << "Func" << std::endl;
 
-    }, ast_tObj);
-} 
+//             for(const ast_t& a : n.getValue().getParamList().getValue())
+//                 _log(a);
+//             for(const ast_t& a : n.getValue().getBody().getValue())
+//                 _log(a);
+
+//         },
+//         [](const AST<Assign>&n){
+
+//             std::cout << "Assign" << std::endl;
+
+//             _log(n.getValue().getLeftOperand());
+//             _log(n.getValue().getRightOperand());
+
+//         },
+//         [](const AST<Call>&n){
+
+//             std::cout << "Call" << std::endl;
 
 
-/*
+//         },
+//         [](const AST<Write>&n){std::cout << "Write" << std::endl;},
 
-    AST<ASSIGN>( AST<ID>(foo), AST<Func>( List(name,age), Block(ADD(name,age)) ) ) )
-
-    Fund Def:
-    
-        + Loop param list of AST<ID>(vector of ast_t)
-        + Compile AST<ID> into ByteCode:
-          + AST<ID> Compiles to:
-            + DECL {ID value} 
-        + Loop block (vector of ast_t)
-        + Compile AST<Add> into ByteCode:
-          + AST<Add> Compiles to:
-            +
+//         [](const AST<Num>&n){std::cout << "Num" << std::endl;},
 
 
-        
+//         [](const AST<ID>&n){std::cout << "ID" << std::endl;}
 
 
 
 
 
-*/
+//     }, std::forward<Params>(params)...);
+// }
 
 
 int main(){
@@ -178,7 +104,7 @@ int main(){
      */
     std::vector<Bytecode>& bytecodeVec = BytecodeCompiler(astVec)();
 
-
+ 
     VM vm(&bytecodeVec);
 
     vm();

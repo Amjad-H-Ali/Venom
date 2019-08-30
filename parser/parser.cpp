@@ -276,6 +276,8 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	 */
 	else if(tokensVec[curr] == Token::ADD) {
 
+		  	
+
 		/*
 		 +++++ Shift tokensVec ptr to right value +++++
 		 */
@@ -292,7 +294,7 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		
 
 		/*
-		 +++++ Get left and right operands from ast vector. Last element is right operand of ADD operator +++++
+		 +++++ Get left and right operands from ast vector. Last element in astVec is right operand of ADD operator +++++
 		 */
 		ast_t &rOperand = *(--astVecPtr->end()),
 			  &lOperand = *(astVecPtr->end() - 2); 
@@ -309,8 +311,9 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		astVecPtr->pop_back();
 
 		/*
-		 +++++ Check if rOperand is part of expression +++++
+		 +++++ Check if rOperand is part of expression +++++			// TODO: REDUNDANT
 		 */
+		
 		if( (curr+1) < tokensVecLen  && tokensVec[curr+1] == Token::ADD) { // TODO: Make it work for all operators.
 			/*
 			 +++++ Shift pointer to operator Token +++++

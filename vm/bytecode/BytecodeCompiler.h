@@ -1,4 +1,9 @@
 
+
+/*
+ ++++ Lots of Redundancies. Will Fix later ++++
+ */
+
 #ifndef BYTECODE_COMPILER_H
 
 #define BYTECODE_COMPILER_H
@@ -78,12 +83,17 @@ private:
 				 */
 				const std::string *idNamePtr = (--bytecodeVec.end())->param1;
 
+			
+
 				/*
 				 +++++   Compile right operand      +++++
 				 *
 				 +++++ ie. AST<Func> -> {LOAD, 32}  +++++
 				 */
 				compile(bytecodeVec, assignObj.getRightOperand());
+
+			
+
 
 				/*
 				 +++++ Instruction for Assign Operator ++++
@@ -161,9 +171,30 @@ private:
 
 				for(const ast_t& astObj : astFunc.getValue().getBody().getValue())  // Compiling function body.
 
-					compileFuncBody(*funcDefPtr, *localsToDelPtr, astObj);
+					compileFuncBody(*funcDefPtr, *localsToDelPtr, astObj);			    
+
+
 
 			}, // Compile Function Definition
+
+			// /*
+			//  +++ When Operand is a Number +++
+			//  */
+			[this, &bytecodeVec](const AST<Num>& astNum) {
+
+				/*
+				 +++++ Store number in memory +++++
+				 */
+				VM::memory.emplace_back(std::in_place_type<size_t>, astNum.getValue().getValue() );
+
+
+				/*
+				 +++++ Insert Instruction and Parameter (the address of number) +++++
+				 */
+				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 1);
+
+
+			},
 
 
 			[this, &bytecodeVec](const AST<Call>& astCall) {
@@ -177,7 +208,7 @@ private:
 
 					compileCallOperands(bytecodeVec, astObj);
 
-				compileCallOperands(bytecodeVec, callObj.getLeftOperand());
+				compileCallLeftOperand(bytecodeVec, callObj.getLeftOperand());
 
 				/*
 				 +++++ Add Number of Arguments to instruction +++++
@@ -384,7 +415,7 @@ private:
 
 					compileCallOperands(bytecodeVec, astObj);
 
-				compileCallOperands(bytecodeVec, callObj.getLeftOperand());
+				compileCallLeftOperand(bytecodeVec, callObj.getLeftOperand());
 
 				/*
 				 +++++ Add Number of Arguments to instruction +++++
@@ -410,8 +441,11 @@ private:
 				 *
 				 +++++ {PRAM, "num1", PRAM, "num2", EVAL, "num1", EVAL, "num2"} +++++
 				 */
-				const std::string *leftIdName  = (--bytecodeVec.end())->param1,
-								  *rightIdName = (bytecodeVec.end()-2)->param1;
+
+
+				// const std::string *leftIdName  = (--bytecodeVec.end())->param1,
+				// 				  *rightIdName = (bytecodeVec.end()-2)->param1;
+
 
 				bytecodeVec.emplace_back(Bytecode::ADD);
 
@@ -485,7 +519,47 @@ private:
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(leftAstID));
 
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(rightAstID));
+
 			},
+
+			[this, &bytecodeVec](const AST<Num>& leftAstNum, const AST<Num>& rightAstNum) {
+
+				/*
+				 +++++ Store number in memory +++++
+				 */
+				VM::memory.emplace_back(std::in_place_type<size_t>, leftAstNum.getValue().getValue() );
+
+				VM::memory.emplace_back(std::in_place_type<size_t>, rightAstNum.getValue().getValue() );
+
+				/*
+				 +++++ Insert Instruction and Parameter (the address of number) +++++
+				 */
+				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 2);
+
+				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 1);
+
+				
+
+			},
+
+			/*
+			 +++ When Left Operand is an Add Operator +++
+			 */
+			[this, &bytecodeVec](const AST<Add>& rightAstAdd, const AST<ID>& leftAstID) {
+
+				// TODO: REDUNDANT ... I'm in a hurry
+
+		
+				const Add& addObj = rightAstAdd.getValue();
+
+				compileAddOperands(bytecodeVec, addObj.getLeftOperand(), addObj.getRightOperand());
+
+				bytecodeVec.emplace_back(Bytecode::ADD);
+
+				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(leftAstID));
+				
+
+			},	
 
 			[](const auto&) {/*TODO*/},
 
@@ -494,6 +568,30 @@ private:
 		}, std::forward<Params>(ast_tObjs)...);
 	}
 
+	template<typename ... Params>
+	void compileCallLeftOperand(std::vector<Bytecode>& bytecodeVec, Params&& ... ast_tObjs) {
+
+		std::visit( Overloads {
+
+			/*
+			 +++ When Operand is an Identifier +++
+			 */
+			[this, &bytecodeVec](const AST<ID>& astID) {
+
+				bytecodeVec.emplace_back(Bytecode::CALL, getIdNamePtr(astID));
+			},
+
+			[](const auto&) {/*TODO*/},
+
+			[](const auto&, const auto&) {/*TODO*/}
+
+
+		}, std::forward<Params>(ast_tObjs)...);
+	}	
+
+		
+
+
 	/*
 	 +++++ Compile Argument List of Call operator +++++
 	 */
@@ -501,7 +599,9 @@ private:
 	void compileCallOperands(std::vector<Bytecode>& bytecodeVec, Params&& ... ast_tObjs) {
 
 		std::visit( Overloads {
-
+			/*
+			 +++ When Operand is a Number +++
+			 */
 			[this, &bytecodeVec](const AST<Num>& astNum) {
 
 				/*
@@ -515,9 +615,27 @@ private:
 				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 1);
 			},
 
+			/*
+			 +++ When Operand is an Add Operator +++
+			 */
+			[this, &bytecodeVec](const AST<Add>& astAdd) {
+
+				const Add& addObj = astAdd.getValue();
+				/*
+				 ++++  Produce Bytecode that will push result of "add" expression on stack. ++++ 
+				 */
+				compileAddOperands(bytecodeVec, addObj.getLeftOperand(), addObj.getRightOperand());
+
+				bytecodeVec.emplace_back(Bytecode::ADD);
+
+			},
+
+			/*
+			 +++ When Operand is an Identifier +++
+			 */
 			[this, &bytecodeVec](const AST<ID>& astID) {
 
-				bytecodeVec.emplace_back(Bytecode::CALL, getIdNamePtr(astID));
+				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(astID));
 			},
 
 			[](const auto&) {/*TODO*/},
@@ -528,6 +646,9 @@ private:
 	}
 
 
+
+
+	
 }; // BytecodeCompiler
 
 

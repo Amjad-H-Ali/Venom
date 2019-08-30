@@ -1,7 +1,0 @@
-foo is| num1, num2| => :|
-
-	output num1+num2
-|:
-
-
-write foo|9, 7|
