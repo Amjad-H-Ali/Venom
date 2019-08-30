@@ -161,14 +161,7 @@ private:
 
 				for(const ast_t& astObj : astFunc.getValue().getBody().getValue())  // Compiling function body.
 
-					compileFuncBody(*funcDefPtr, *localsToDelPtr, astObj);
-
-				std::cout << "Bytecode:: { ";
-
-			    for(const Bytecode& b : *funcDefPtr) {
-			        std::cout << b.getTypeName() << std::endl;
-			    }
-			    std::cout << "Bytecode:: } ";
+					compileFuncBody(*funcDefPtr, *localsToDelPtr, astObj);			    
 
 
 
@@ -497,9 +490,26 @@ private:
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(leftAstID));
 
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(rightAstID));
-				std::cout << "IN BYTE1:: " << *getIdNamePtr(leftAstID) << std::endl;
-				std::cout << "IN BYTE2:: " << *getIdNamePtr(rightAstID) << std::endl;
 
+			},
+
+			[this, &bytecodeVec](const AST<Num>& leftAstNum, const AST<Num>& rightAstNum) {
+
+				/*
+				 +++++ Store number in memory +++++
+				 */
+				VM::memory.emplace_back(std::in_place_type<size_t>, leftAstNum.getValue().getValue() );
+
+				VM::memory.emplace_back(std::in_place_type<size_t>, rightAstNum.getValue().getValue() );
+
+				/*
+				 +++++ Insert Instruction and Parameter (the address of number) +++++
+				 */
+				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 2);
+
+				bytecodeVec.emplace_back(Bytecode::LOAD, VM::memory.size() - 1);
+
+				
 
 			},
 
@@ -510,7 +520,7 @@ private:
 
 				// TODO: REDUNDANT ... I'm in a hurry
 
-		  		std::cout << "HERE" << std::endl;
+		  		
 
 
 				const Add& addObj = rightAstAdd.getValue();
@@ -520,7 +530,7 @@ private:
 				bytecodeVec.emplace_back(Bytecode::ADD);
 
 				bytecodeVec.emplace_back(Bytecode::EVAL, getIdNamePtr(leftAstID));
-				std::cout << "IN BYTE3:: " << *getIdNamePtr(leftAstID) << std::endl;
+				
 
 			},	
 
@@ -558,6 +568,14 @@ private:
 			 +++ When Operand is an Add Operator +++
 			 */
 			[this, &bytecodeVec](const AST<Add>& astAdd) {
+
+				const Add& addObj = astAdd.getValue();
+				/*
+				 ++++  Produce Bytecode that will push result of "add" expression on stack. ++++ 
+				 */
+				compileAddOperands(bytecodeVec, addObj.getLeftOperand(), addObj.getRightOperand());
+
+				bytecodeVec.emplace_back(Bytecode::ADD);
 
 			},
 

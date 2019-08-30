@@ -276,7 +276,7 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 	 */
 	else if(tokensVec[curr] == Token::ADD) {
 
-		  	std::cout << "PARSER:: ADD" << std::endl;
+		  	
 
 		/*
 		 +++++ Shift tokensVec ptr to right value +++++
@@ -313,7 +313,7 @@ void Parser::fillAstVecWithParsedToken(std::vector<ast_t> *astVecPtr) {
 		/*
 		 +++++ Check if rOperand is part of expression +++++			// TODO: REDUNDANT
 		 */
-		std::cout << tokensVec[curr+1].getTypeName() << std::endl;
+		
 		if( (curr+1) < tokensVecLen  && tokensVec[curr+1] == Token::ADD) { // TODO: Make it work for all operators.
 			/*
 			 +++++ Shift pointer to operator Token +++++
